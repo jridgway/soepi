@@ -1,0 +1,18 @@
+- content_for :body_content_title do
+  = render :partial => '/surveys/title', :locals => {:survey => @survey}
+        
+= render :partial => '/surveys/toolbar'
+= render :partial => '/surveys/details'
+
+- content_for :body_content do  
+  = simple_form_for @survey, :html => {:novalidate => true, :class => 'survey ' + ((@survey.editable? and @survey.member == current_member) ? 'editable' : 'uneditable')} do |f|
+    - unless @survey.errors.empty?
+      #error_explanation
+        %h2 Fields with errors:
+        %ul
+          = @survey.errors.full_messages.map { |msg| content_tag(:li, msg) }.join.html_safe
+    = render :partial => '/surveys/form', :locals => {:f => f}
+    .actions
+      = f.submit 'Update', :class => 'button'
+      
+= render :partial => "/shared/content_page"

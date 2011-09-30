@@ -1,0 +1,18 @@
+= render :partial => 'common'
+
+- content_for :body_content_left do
+  %ul#conversation.listing.reset
+    = render :partial => 'message', :locals => {:message => @message}  
+    - @message.responses.each do |response|
+      = render :partial => 'message', :locals => {:message => response}
+    %li#response
+      = avatar(current_member, 20)
+      .inner
+        %a{:name => 'new'}
+        = simple_form_for(@new_message, :html => {:novalidate => true, :class => 'response', :remote => true}) do |f|
+          = f.hidden_field :message_id
+          = f.input_field :body, :label => 'Message'
+          .right-actions
+            = f.submit 'Send Response', :class => 'button'
+    
+= render :partial => "/shared/content_page"

@@ -1,0 +1,29 @@
+- content_for :body_content_title do 
+  Sign up
+
+- content_for :body_content_left do
+  - if session[:omniauth].nil?
+    %h2 Sign up through:
+    = render :partial => '/members/shared/auth_providers' 
+    %h2 Or, use the form below:
+  
+  = simple_form_for(resource, :html => {:multipart => true, :novalidate => true, :class => 'validate'}, :as => resource_name, :url => registration_path(resource_name)) do |f|
+    - if session[:omniauth].nil?
+      = devise_error_messages!
+    - elsif not @member.errors.empty?
+      #error_explanation
+        %h2 
+          Only one more step! Fill out the missing fields below and click Sign Up. 
+          When you're finished, you'll be able to log in using 
+          = "#{session[:omniauth]['provider'].to_s.humanize.titleize}."
+        %h3 Fields missing:
+        %ul
+          = @member.errors.full_messages.map { |msg| content_tag(:li, msg) }.join.html_safe
+    = render :partial => '/members/accounts/form', :locals => {:f => f}
+    .actions
+      = f.submit 'Sign Up', :class => 'button'
+      
+- content_for :body_content_right do 
+  = render :partial => '/members/accounts/sign_up_incentives'
+      
+= render :partial => "/shared/content_page"

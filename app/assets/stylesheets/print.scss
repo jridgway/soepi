@@ -1,0 +1,7 @@
+@import "blueprint";
+@include blueprint-print;
+
+body.two-column 
+  {
+  @include blueprint-print(true); 
+  }

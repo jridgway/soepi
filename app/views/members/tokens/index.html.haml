@@ -1,0 +1,25 @@
+= render :partial => "/members/accounts/common"
+
+- content_for :body_content do
+  %fieldset
+    %legend You can sign in to this account using:  
+    .authentications  
+      - @member_tokens.each do |token| 
+        .authentication
+          = link_to image_tag("social-icons/#{token.provider}_32.png", :alt => "Sign in with #{token.provider.to_s.titleize}"), member_omniauth_authorize_path(token.provider)
+          .provider
+            = token.provider_name  
+          .uid
+            = token.uid
+          = link_to "X", token, :confirm => 'Are you sure you want to remove this sign in token?', :method => :delete, :class => 'remove' 
+     
+  %fieldset
+    %legend Add another service to sign in with:  
+    %ul.auth_providers.clearfix
+      - used_tokens = @member_tokens.collect(&:provider)
+      - Member.omniauth_providers.each do |provider| 
+        - unless used_tokens.include? provider.to_s 
+          %li
+            = link_to image_tag("social-icons/#{provider}_64.png", :alt => "Sign in with #{provider.to_s.titleize}"), member_omniauth_authorize_path(provider)
+      
+= render :partial => "/shared/content_page"

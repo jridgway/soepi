@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/Fixtures.html
+
+one:
+  name: MyString
+  body: MyText
+  url_regex: MyString
+  css: MyText
+  javascript: MyText
+  state: MyString
+  show_at: 2011-09-10 11:06:51
+  hide_at: 2011-09-10 11:06:51
+
+two:
+  name: MyString
+  body: MyText
+  url_regex: MyString
+  css: MyText
+  javascript: MyText
+  state: MyString
+  show_at: 2011-09-10 11:06:51
+  hide_at: 2011-09-10 11:06:51

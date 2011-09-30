@@ -1,0 +1,52 @@
+:ruby
+  sections = {
+    :body_content_title => (@page.present? ? @page.title.to_s.html_safe : nil),
+    :body_content_toolbar => nil,
+    :body_content_details => nil,
+    :body_content_more_details => nil,
+    :body_content => nil,
+    :body_content_left => (@page.present? ? @page[:Body].to_s.html_safe : nil),
+    :body_content_right => (@page.present? ? @page[:"Side Body"].to_s.html_safe : nil),
+  }
+  sections.each_pair do |sym, html|
+    html_2 = yield(sym).html_safe
+    sections[sym] = html_2 unless html_2.blank?
+  end
+
+- unless sections[:body_content_title].blank? and sections[:body_content_toolbar].blank?
+  #content-top
+    - unless sections[:body_content_toolbar].blank?
+      #toolbar
+        = sections[:body_content_toolbar]
+    - unless sections[:body_content_title].blank?
+      %h1#page-title
+        = sections[:body_content_title]
+    - unless sections[:body_content_details].blank?
+      #details
+        = sections[:body_content_details]
+    - unless sections[:body_content_more_details].blank?
+      #more-details.highlight
+        = sections[:body_content_more_details]
+
+- if sections[:body_content].blank?
+  %section#body_content_left
+    - if not defined?(with_inner_content_div) or with_inner_content_div
+      .inner
+        = sections[:body_content_left]
+    - else
+      = sections[:body_content_left]
+      
+  %section#body_content_right
+    #sidebar
+      = sections[:body_content_right]
+      .block
+        = render :partial => '/shared/tags'
+- else
+  %section#body_content
+    - if not defined?(with_inner_content_div) or with_inner_content_div
+      .inner
+        = sections[:body_content]
+    - else
+      = sections[:body_content]
+        
+= render :partial => '/shared/draft_page_message' unless @page.nil? or @page.live?

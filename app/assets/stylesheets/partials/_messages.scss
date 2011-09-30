@@ -1,0 +1,123 @@
+.bp 
+  { 
+  #members.block h3 span.ui-icon.ui-icon-comment
+    {
+    margin: 2px 2px 0 0;
+    float: left;
+    }
+    
+  ul#conversation
+    { 
+    li 
+      {
+      .inner
+        {
+        width: 650px;
+        }
+      }
+    
+    li#response
+      {
+      padding: 2px 5px 5px 20px;
+      margin: 10px 0 10px 0;
+      border-top: 1px solid $dark_gray;
+      
+      img
+        {
+        width: 20px;
+        height: 20px;
+        }
+      
+      .inner
+        {
+        width: 645px;
+        
+        form.simple_form.response textarea
+          {
+          max-width: 633px;
+          width: 633px;
+          height: 20px;
+          }
+        }
+      }
+    }
+
+  .listing#messages li a 
+    {
+    padding: 5px 10px 10px 10px;
+    border: 1px solid #fff;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    border: 1px solid #DDD;
+    color: inherit;
+    display: block;
+    @include clearfix;
+    
+    &.unseen
+      {
+      color: #fff;
+      }  
+      
+    &.unseen:hover 
+      {
+      border: 1px solid $blue;
+      }
+      
+    &:hover 
+      {
+      border: 1px solid $blue;
+      text-decoration: none;
+      }
+      
+    img 
+      {
+      margin: 0;
+      }
+  
+    p.subject
+      {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      -o-text-overflow: ellipsis;
+      -moz-binding: url(/xml/ellipsis.xml#ellipsis);
+      margin: 0 0 5px 0;
+      }
+    
+    ul.members
+      {
+      float: left;
+      
+      li 
+        {
+        float: left;
+        margin: 0 2px 0 0;
+        padding: 0;
+        border: none;
+        background: none;
+        
+        &:hover
+          {
+          border: none;
+          background: none;
+          padding: 0;
+          }
+          
+        img 
+          {
+          width: 20px;
+          height: 20px;
+          margin: 5px 5px 0 0;
+          }
+        
+        span
+          {
+          margin: 4px 7px 0 0;
+          display: block;
+          float: left;
+          }
+        }
+      }
+    }
+  }  

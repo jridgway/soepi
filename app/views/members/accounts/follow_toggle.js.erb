@@ -1,0 +1,10 @@
+<% if @followable %>
+  if($('#follow-toggle').attr('data-remote')) {
+    enable_button($('#follow-toggle'));
+  }
+  <% if @following %>
+    $('#follow-toggle').find('span').text('Unfollow');
+  <% else %>
+    $('#follow-toggle').find('span').text('Follow');
+  <% end %>
+<% end %>

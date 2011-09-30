@@ -1,0 +1,8 @@
+<%= @members.collect do |member|
+  {
+    :label => member.nickname,
+    :logo => avatar(member, 40, false),
+    :description => member.location,
+    :value => member.nickname
+  }
+end.to_json.html_safe %>

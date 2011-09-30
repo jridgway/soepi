@@ -1,0 +1,26 @@
+<% if @question.valid? %>
+  <% if @question.survey_question_choice_id.nil? %>
+    $('#root-questions').append('<%= escape_javascript render(:partial => 'question', :locals => {:question => @question}) %>');
+  <% else %>
+    if($('#nested-questions-<%= @question.survey_question_choice_id %>').length == 0) {
+      $('#survey_question_choice_<%= @question.survey_question_choice_id %>').append('<ol id="nested-questions-<%= @question.survey_question_choice_id %>"></ol>');
+    }
+    $('#nested-questions-<%= @question.survey_question_choice_id %>').append('<%= escape_javascript render(:partial => 'question', :locals => {:question => @question}) %>');
+  <% end %>
+  $('#survey_question_<%= @question.id %>').find('p:first').prepend('<strong class="q-tag">QUESTION</strong> <strong class="q-type-tag"><%= @question.qtype %></strong> <%= @question.required? ? ' <abbr class="r-tag" title="Required">*</abbr>'.html_safe : '' %> ');
+  $.scrollTo('#survey_question_<%= @question.id %>', 300, function() {
+    $('#survey_question_<%= @question.id %>').show('highlight', {color:'#0296d4'});
+  });
+  $('#new-question').html('<%= escape_javascript render(:partial => 'new', :locals => {:question => @question_2, :participant_response => @participant_response}) %>');
+  $('#new-question textarea').focus();
+<% else %>
+  $('#new-question').html('<%= escape_javascript render(:partial => 'new', :locals => {:question => @question, :participant_response => @participant_response}) %>');
+  $.scrollTo('#new-question', 300);
+<% end %>
+init_common_elements();
+init_choices();
+$('.question-type').change();
+no_questions_message();
+load_new_choice_options();
+$('.questions-count').html('<%= @question.survey.questions.count %>');
+$('#please-wait').remove();

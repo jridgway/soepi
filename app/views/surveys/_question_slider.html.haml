@@ -1,0 +1,7 @@
+#question-slider
+  .top
+    %h5#survey-title
+      #{@survey.member.nickname} / #{@survey.title}
+    #percent-complete
+      = render :partial => '/surveys/percent_complete'
+  .inner

@@ -1,0 +1,26 @@
+<% if @question.valid? %>
+  <% if @choice_changed %>
+    var old_ol = $('#survey_question_<%= @question.id %>').parent();
+    if($('#nested-questions-<%= @question.survey_question_choice_id %>').length == 0) {
+      $('#survey_question_choice_<%= @question.survey_question_choice_id %>').append('<ol id="nested-questions-<%= @question.survey_question_choice_id %>"></ol>');
+    }
+    $('#survey_question_<%= @question.id %>').detach().appendTo('#nested-questions-<%= @question.survey_question_choice_id %>');
+    if($(old_ol).find('li').length == 0) {
+      $(old_ol).remove();
+    }
+  <% end %>
+  $('#survey_question_<%= @question.id %>').replaceWith('<%= escape_javascript render(:partial => 'question', :locals => {:question => @question}) %>');
+  $('#survey_question_<%= @question.id %>').find('p:first').prepend('<strong class="q-tag">QUESTION</strong> <strong class="q-type-tag"><%= @question.qtype %></strong> <%= @question.required? ? ' <abbr class="r-tag" title="Required">*</abbr>'.html_safe : '' %>  &mdash; ');
+  $.scrollTo('#survey_question_<%= @question.id %>', 300, function() {
+    $('#survey_question_<%= @question.id %>').show('highlight', {color:'#0296d4'});
+  });
+  $('#edit-question:visible').hide('blind');
+<% else %>
+  $('#edit-question').html('<%= escape_javascript render(:partial => 'edit') %>');
+  init_choices();
+  $('.question-type').change();
+<% end %>
+init_common_elements();
+no_questions_message();
+load_new_choice_options();
+$('#please-wait').remove();

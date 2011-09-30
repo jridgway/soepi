@@ -1,0 +1,18 @@
+%p
+  Hi #{@survey.member.nickname},
+
+%p
+  This message is to confirm that your survey, #{link_to @survey.title, survey_url(@survey)}, has closed.
+
+%p
+  The next step is to publish the results of your survey. However, before we can publish the results, 
+  we need to review the results to make certain that in doing so no one's identity will be revealed. 
+  Depending on the size of the survey results, this process may take a day to a week or more. 
+
+%p
+  Please #{link_to 'contact us', page_url(:id => 'contact')} if you have any questions or comments.
+  
+%p
+  Thanks!
+  %br/
+  SoEpi

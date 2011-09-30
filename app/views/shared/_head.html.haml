@@ -1,0 +1,30 @@
+%head
+  %meta{:charset => 'utf-8'}/
+  %meta{:content => "IE=edge,chrome=1", "http-equiv" => "X-UA-Compatible"}/
+  %title= browser_title(yield(:title))
+  = csrf_meta_tag
+  - if @facebook_meta    
+    %meta{:property => "og:url", :content => @facebook_meta[:url]}/
+    %meta{:property => "og:title", :content => @facebook_meta[:title]}/
+    %meta{:name => 'description', :content => @facebook_meta[:description]}
+    %meta{:property => "og:image", :content => @facebook_meta[:image_url]}/
+    %meta{:property => "og:type", :content => @facebook_meta[:type]}/
+  - else
+    - if @meta and @meta.meta_description.present?
+      %meta{:name => 'description', :content => @meta.meta_description} 
+  - if @meta and @meta.meta_keywords.present?
+    %meta{:name => 'keywords', :content => @meta.meta_keywords}
+  = stylesheet_link_tag :screen, :media => 'screen, projection'
+  = stylesheet_link_tag :print, :media => 'print'
+  %link{:rel => "shortcut icon", :href => "/favicon.ico", :type => "image/x-icon"}
+  = javascript_tag %{var controller_name = '#{controller_name}'; var action_name = '#{action_name}';}
+  = javascript_tag %{var homepage = #{not @page.nil? and @page.home? ? true : false};}
+  %script{:src => 'https://maps.google.com/maps/api/js?sensor=false'}
+  = javascript_include_tag :application
+  = esi_render :partial => '/members/accounts/load_current_member.js'
+  - if (page_code = Setting.find_or_set(:analytics_page_code, 'UA-xxxxxx-x').to_s.strip) =~ /^(UA-xxxxxx-x)?$/
+    :javascript
+      var _gaq=[['_setAccount',' page_code '],['_trackPageview']];(function(d,t){
+      var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+      g.async=1;g.src='//www.google-analytics.com/ga.js';s.parentNode.insertBefore(g,s)
+      }(document,'script'))

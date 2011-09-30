@@ -1,0 +1,11 @@
+= render :partial => 'common'
+
+- content_for :body_content_left do
+  = simple_form_for(@message, :html => {:novalidate => true}) do |f|
+    = field_set_tag "Compose a Message" do
+      = f.input :recipient_nicknames, :label => 'To', :hint => 'Enter one or more nicknames delimited by a comma.'
+      = f.input :body, :label => 'Message'
+      .actions
+        = f.submit 'Send Message', :class => 'button'
+    
+= render :partial => "/shared/content_page"

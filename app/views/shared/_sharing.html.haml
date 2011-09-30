@@ -1,0 +1,13 @@
+- if @facebook_meta
+  .sharing
+    %span.st_facebook{:st_title => @facebook_meta[:title], :st_url => @facebook_meta[:url], :st_image => @facebook_meta[:image_url], :st_summary => @facebook_meta[:description]}
+    %span.st_twitter{:st_title => @facebook_meta[:title], :st_url => @facebook_meta[:url], :st_image => @facebook_meta[:image_url], :st_summary => @facebook_meta[:description]}
+    %span.st_yahoo{:st_title => @facebook_meta[:title], :st_url => @facebook_meta[:url], :st_image => @facebook_meta[:image_url], :st_summary => @facebook_meta[:description]}
+    %span.st_gbuzz{:st_title => @facebook_meta[:title], :st_url => @facebook_meta[:url], :st_image => @facebook_meta[:image_url], :st_summary => @facebook_meta[:description]}
+    %span.st_email{:st_title => @facebook_meta[:title], :st_url => @facebook_meta[:url], :st_image => @facebook_meta[:image_url], :st_summary => @facebook_meta[:description]}
+    %span.st_sharethis{:st_title => @facebook_meta[:title], :st_url => @facebook_meta[:url], :st_image => @facebook_meta[:image_url], :st_summary => @facebook_meta[:description]}
+  :javascript
+    var switchTo5x=true;
+  %script{:src => "https://ws.sharethis.com/button/buttons.js", :type => "text/javascript"}
+  :javascript
+    stLight.options({publisher: 'a8434776-7e47-4d40-8a73-3ac5d106f1f1', onhover: false});

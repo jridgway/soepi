@@ -1,0 +1,6 @@
+= simple_form_for(@question, :html => {:novalidate => true}, :url => survey_question_path(:survey_id => @question.survey, :id => @question.id), :remote => true) do |f|
+  = field_set_tag "Edit Question" do
+    = render :partial => 'form', :locals => {:question => @question, :f => f}
+    .actions
+      = f.submit 'Update', :class => 'button'
+      = link_to 'Cancel', survey_question_path(:survey_id => @question.survey, :id => @question.id), :remote => true, :class => 'cancel'

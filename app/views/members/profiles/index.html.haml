@@ -1,0 +1,17 @@
+- content_for :body_content_title do
+  - if action_name == 'by_tag'
+    Members tagged "#{@tag}"
+  - else
+    Members
+
+- content_for :body_content_left do 
+  - if @members.empty?
+    %p No members found.
+  - else
+    %ul#members.listing.reset
+      - @members.each do |member|
+        %li
+          = render :partial => '/members/member', :locals => {:member => member}
+    = paginate @members  
+
+= render :partial => "/shared/content_page"

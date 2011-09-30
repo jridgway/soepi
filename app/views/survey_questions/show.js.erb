@@ -1,0 +1,3 @@
+$('#survey_question_<%= @question.id %> .inner').html('<%= escape_javascript render(:partial => 'show') %>');
+init_common_elements();
+$.scrollTo('#survey_question_<%= @question.id %>', 300);

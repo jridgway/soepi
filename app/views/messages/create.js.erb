@@ -1,0 +1,6 @@
+$('#conversation li:last').prev().after('<%= escape_javascript render(:partial => 'message', :locals => {:message => @message}) %>');
+$('#message_<%= @message.id %>').show('slide');
+$('#message_body').focus().val('').css({height:'20px'});
+init_common_elements();
+enable_button($('#message_submit'));
+$.scrollTo('#message_<%= @message.id %>');

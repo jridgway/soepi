@@ -1,0 +1,8 @@
+= render :partial => '/surveys/title'
+= render :partial => '/surveys/toolbar'
+= render :partial => '/surveys/details'
+  
+- content_for :body_content do
+  = render :partial => '/shared/followed_by'
+    
+= render :partial => "/shared/content_page"

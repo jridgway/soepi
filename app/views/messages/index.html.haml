@@ -1,0 +1,10 @@
+= render :partial => 'common'
+
+- content_for :body_content do
+  = 'No messages found.' if @messages.empty?
+  %ol#messages.listing
+    - @messages.each do |message|
+      = render :partial => 'message_preview', :locals => {:message => message}
+  = paginate @messages
+    
+= render :partial => "/shared/content_page"

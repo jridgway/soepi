@@ -1,0 +1,217 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    / Facebook sharing information tags
+    %meta{:content => @subject, :property => "og:title"}/
+    %title #{@subject}
+    :css
+      /* Client-specific Styles */
+      #outlook a{padding:0;} /* Force Outlook to provide a "view in browser" button. */
+      body{width:100% !important;} /* Force Hotmail to display emails at full width */
+      body{-webkit-text-size-adjust:none;} /* Prevent Webkit platforms from changing default text sizes. */
+
+      /* Reset Styles */
+      body{margin:0; padding:0;}
+      img{border:none; font-size:14px; font-weight:bold; height:auto; line-height:100%; outline:none; text-decoration:none; text-transform:capitalize;}
+      #backgroundTable{height:100% !important; margin:0; padding:0; width:100% !important;}
+
+      body, #backgroundTable{
+        background-color:#FAFAFA;
+      }
+      
+      #templateContainer{
+        border: 1px solid #DDDDDD;
+      }
+      
+      #templatePreheader{
+        background-color:#FAFAFA;
+      }
+      
+      .preheaderContent div{
+        color:#505050;
+        font-family:Helvetica;
+        font-size:11px;
+        line-height:100%;
+      }
+      
+      .preheaderContent div a:link, .preheaderContent div a:visited{
+        color:#336699;
+        font-weight:normal;
+        text-decoration:underline;
+      }
+      
+      #templateHeader{
+        background-color:#fff;
+        border-bottom:0;
+      }
+      
+      .headerContent{
+        color:#505050;
+        font-family:Helvetica;
+        font-size:13px;
+        line-height:125%;
+        padding:15px 15px 5px 15px;
+        vertical-align:middle;
+      }
+      
+      .headerContent a:link, .headerContent a:visited{
+        color:#336699;
+        font-weight:normal;
+        text-decoration:underline;
+      }
+
+      #headerImage{
+        height:auto;
+      }
+      
+      #templateContainer, .bodyContent{
+        background-color:#FDFDFD;
+      }
+      
+      .bodyContent div{
+        color:#505050;
+        font-family:Helvetica;
+        font-size:14px;
+        line-height:150%;
+        text-align:left;
+      }
+      
+      .bodyContent div a:link, .bodyContent div a:visited{
+        color:#336699;
+        font-weight:normal;
+        text-decoration:underline;
+      }
+
+      .bodyContent img{
+        display:inline;
+        height:auto;
+      }
+      
+      #templateFooter{
+        background-color:#FDFDFD;
+        border-top:0;
+      }
+      
+      .footerContent div{
+        color:#707070;
+        font-family:Helvetica;
+        font-size:12px;
+        line-height:125%;
+        text-align:center;
+      }
+
+      .footerContent div a:link, .footerContent div a:visited{
+        color:#336699;
+        font-weight:normal;
+        text-decoration:underline;
+      }
+
+      .footerContent img{
+        display:inline;
+      }
+      
+      #utility{
+        background-color:#FDFDFD;
+        border:0;
+      }
+      
+      #utility div{
+        text-align:center;
+      }
+      
+      a 
+        {
+        text-decoration: none;
+        color: #0296d4;
+        }
+      a:hover
+        {
+        text-decoration: underline;
+        }
+      p {margin-top: 0; margin-bottom: 1em;}
+      h1#page-title
+        {
+        border-bottom: 1px solid #DDDDDD;
+        font-size: 1.5em;
+        color: #663300;
+        margin: 15px 0 15px 0;
+        z-index: 9;
+        }
+      h1, h2, h3, h4, h5 
+        {
+        margin: 0 0 10px 0; 
+        padding: 0 0 5px 0;
+        color: #000;
+        font-weight: 400;
+        }
+      h1 {font-size: 1.8em;}
+      h2 {font-size: 1.4em;}
+      h3 {font-size: 1.275em;}
+      h4 {font-size: 1.15em;}
+      h5 {font-size: 1.1em;}
+      h6 {font-size: 1.05em;}       
+      .text-align-left {text-align: left;}
+      .text-align-center {text-align: center;}
+      .text-align-right {text-align: right;}
+      .text-align-justify {text-align: justify;}
+      .image-align-left {margin: 5px 7px 5px 0; float: left; }
+      .image-align-right {margin: 5px 7px 5px 0; float: right; }
+      .font-size-small {font-size:10px;}
+      .font-size-normal {}
+      .font-size-large {font-size:20px;}
+      ol,  ul {margin-left: 1.4em;padding: 0;background-image:none;}
+      ol ol,  ul ul {margin-left: .5em;}
+      ol li,  ul li {margin-left: 1.4em;padding: 0;background-image: none;}
+      ol ol li,  ul ul li {margin-left: 1.4em;}
+      ul li {list-style-type: disc;}
+      ol li {list-style-type: hebrew;}
+      ol li {list-style-type: decimal;}
+      ol ol li {list-style-type: lower-alpha;}
+      ol ol ol li {list-style-type: lower-roman;}
+      ol ol ol ol li {list-style-type: lower-alpha;}
+      ol ol ol ol ol li {list-style-type: decimal;}
+      
+  %body{:leftmargin => "0", :marginheight => "0", :marginwidth => "0", :offset => "0", :topmargin => "0"}
+    %center
+      %table#backgroundTable{:border => "0", :cellpadding => "0", :cellspacing => "0", :height => "100%", :width => "100%"}
+        %tr
+          %td{:align => "center", :valign => "top"}
+            %table#templateContainer{:border => "0", :cellpadding => "0", :cellspacing => "0", :width => "600"}
+              %tr
+                %td{:align => "center", :valign => "top"}
+                  %table#templateBody{:border => "0", :cellpadding => "0", :cellspacing => "0", :width => "600"}
+                    %tr
+                      %td.bodyContent{:valign => "top"}
+                        %table{:border => "0", :cellpadding => "5", :cellspacing => "0", :width => "100%"}
+                          %tr
+                            %td{:valign => "top"}
+                              %a{:href => '/', :title => 'SoEpi : Home'}
+                                = image_tag attachments['header.png'].url, :title => 'SoEpi', :alt => 'SoEpi', :id => 'headerImage'
+              %tr
+                %td{:align => "center", :valign => "top"}
+                  %table#templateBody{:border => "0", :cellpadding => "0", :cellspacing => "0", :width => "600"}
+                    %tr
+                      %td.bodyContent{:valign => "top"}
+                        %table{:border => "0", :cellpadding => "5", :cellspacing => "0", :width => "100%"}
+                          %tr
+                            %td{:valign => "top"}
+                              = yield
+              %tr
+                %td{:align => "center", :valign => "top"}
+                  %table#templateFooter{:border => "0", :cellpadding => "5", :cellspacing => "0", :width => "600"}
+                    %tr
+                      %td.footerContent{:valign => "top"}
+                        %table{:border => "0", :cellpadding => "5", :cellspacing => "0", :width => "100%"}
+                          %tr
+                            %td{:valign => "top"}
+                              %br/
+                              .std_footer
+                                %em Copyright © #{Time.now.year} SoEpi LLC, All rights reserved.
+                                %br/
+                                Our mailing address is: P.O. Box , Princeton, NJ 08540
+                                %br/
+                                %br/
+                                = link_to 'update subscription preferences', member_subscriptions_url
+                              %br/
+            %br/

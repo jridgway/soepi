@@ -1,0 +1,2 @@
+.progressbar{'data-value' => ((@question.position.to_f / (@question.survey.questions.count.to_f)) * 100.0).round}
+%span #{((@question.position.to_f / (@question.survey.questions.count.to_f)) * 100).round}% Complete

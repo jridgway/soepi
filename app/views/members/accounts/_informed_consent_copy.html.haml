@@ -1,0 +1,34 @@
+#informed-consent.copy{:style => 'display:none', :title => 'Informed Consent'}
+  - if (informed_consent = Page.find_by_title('Informed Consent')) and !informed_consent[:"Body"].blank?
+    = informed_consent[:"Body"].html_safe
+  - else
+    :markdown
+      ## Purpose of SoEpi:
+      SoEpi's mission is to empower the general public in understanding environmental health issues and taking action to solve them. 
+      SoEpi does this by utilizing online technologies and social media to: (1) bring unprecedented participation in professional 
+      epidemiological studies and surveys, (2) open survey results in anonymous form for public consumption, and (3) connect 
+      participants with one another through social media and participant-created surveys and petitions. Whereas marketers 
+      have long enjoyed the efficiencies and low costs of online surveys, health researchers have only begun the transition from 
+      traditional channels. SoEpi paves the way for health researchers online, so they can focus on the problems at hand and enjoy 
+      the benefits of online technologies.
+      ## If you participate in SoEpi, it is our hope that you will:
+      (1) complete surveys, (2) launch your own surveys, (3) build charts based on survey results, (4) sign petitions, 
+      (5) launch your own petitions, (6) participate in the forums, and (7) maintain accurate demographic information in your account.
+      ## Time required for participation:
+      Your participation in SoEpi is voluntary and ongoing only to the extent that you continue to volunteer. 
+      ## Risks:
+      We have taken every step to secure and anonymize our system and database. First, it is our goal that our system
+      is never compromised. Second, even if our system is compromised, it is our goal that survey results cannot be associated with 
+      our members, due to steps we've taken to anonymize survey results. However, this goal can never be achieved completely. 
+      In the event that our database falls into the wrong hands, it is possible through reverse engineering techniques 
+      that some small fraction of survey results can be associated with members. 
+      ## Benefits: 
+      By participating in SoEpi, we hope that you will: (1) work with researchers and others to better understand health issues, 
+      (2) communicate with others that share the same concerns as you, and (3) take action with others by participating in petitions.
+      ## How confidentiality will be maintained:
+      The key to keeping survey results anonymous is in the PIN that we assign you when you join SoEpi. We use your PIN to generate 
+      a one-way encrypted participant ID, which we then use to associate your demographic information with your survey results. 
+      We do not store your PIN anywhere in our system. Your PIN is only available to us as you use our website. The moment you 
+      leave our website, we no longer have access to your PIN. If you ever lose your PIN, it will essentially be as if you never 
+      completed a survey. Finally, we will never sell any portion of our database, and we will never compromise the anonyminity 
+      that you expect from us. 

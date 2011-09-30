@@ -1,0 +1,8 @@
+- content_for :body_content_title do
+  = page_entries_info @results, :model => 'results'
+  for "#{@q}"
+
+- content_for :body_content_left do
+  = render :partial => 'results'   
+  
+= render :partial => "/shared/content_page"

@@ -1,0 +1,105 @@
+<%= javascript_tag do %>
+  $(document).ready(function () {
+    <% if current_member %>
+      current_member = {
+          authenticated: true,
+          id: <%= current_member.id %>,
+          name: '<%= current_member.name %>',
+          nickname: '<%= current_member.nickname %>',
+          nickname_linked: '<%= link_to current_member.nickname, member_path(current_member) %>',
+          pic: '<%= escape_javascript avatar(current_member) %>',
+          unseen_messages_count: '<%= Message.involving_member_unseen(current_member.id).count %>'
+        }
+      $('.members-only').show();
+      $('.visitors-only').hide();
+      $('.owner-only[data-member-id=<%= current_member.id %>]').show();
+      $('.owner-only-not-admins[data-member-id=<%= current_member.id %>]').show();
+      $('.not-owner[data-member-id=<%= current_member.id %>]').hide();
+      $('.not-owner[data-member-id!=<%= current_member.id %>]').show();
+      set_followable_toggle();
+    <% else %>
+      current_member = {
+          authenticated: false,
+          id: -1,
+          name: 'Visitor',
+          nickname: '',
+          nickname_linked: '',
+          pic: '',
+          unseen_messages_count: '0'
+        }
+      $('.members-only').hide();
+      $('.visitors-only').show();
+      $('.owner-only').hide();
+      $('.not-owner').show();
+      restrict_to_members();
+    <% end %>
+    <% if current_member and current_member.admin? %>
+      $('.owner-only').show();
+      $('.owner-only-not-admins[data-member-id!=<%= current_member.id %>]').hide();
+      $('.admins-only').show();
+      $('.not-admin').hide();
+    <% else %>
+      $('.admins-only').hide();
+      $('.not-admin').show();
+    <% end %>
+    init_sign_in_links();
+    select_details_menu_item();
+    $('.current-member-name').html(current_member['name']);
+    $('.current-member-nickname').html(current_member['nickname']);
+    $('.current-member-nickname-linked').html(current_member['nickname_linked']);
+    $('.current-member-pic').html(current_member['pic']);
+    $('.current-member-unseen-messages-count').html(current_member['unseen_messages_count']);
+    $('body').append("<%= escape_javascript(render(:partial => '/members/accounts/flash')) %>");
+    $('.alert').dialog({modal:true, zIndex:9, minWidth:350}).show('blind');
+  });
+  
+  <% if current_member %>  
+    function set_followable_toggle() {
+      <% unless (@followable and @followable.is_a?(Member) and current_member.id == @followable.id) or 
+      (@followable and not @followable.is_a?(Member) and @followable.member_id == current_member.id) %>
+        <% if @followable and current_member.following?(@followable) %>
+          $('#follow-toggle').find('span').text('Unfollow');
+        <% else %>
+          $('#follow-toggle').find('span').text('Follow');
+        <% end %>
+        $('#follow-toggle').show();
+        if($('#follow-toggle').attr('data-remote')) {
+          $('#follow-toggle').click(function() {
+            setTimeout("disable_button($('#follow-toggle'));", 100);
+          });
+        }
+      <% end %>
+    }
+  <% else %>
+    $('#follow-toggle').show();
+      
+    function restrict_to_members() {
+      $('.restrict-to-members').unbind('click');
+      $('.restrict-to-members').click(function(e) {
+        e.preventDefault();
+        sign_in_dialog($(this).attr('href'));
+        return false;
+      });
+    }
+  <% end %>
+  
+  function select_details_menu_item() {
+    var relative = jQuery.url.attr('relative').replace(/\?.*/, '').replace(/#.*/, '').replace(/\/+$/, '');
+    var available_items = 0;
+    $('#details ul.menu li').each(function(index, value) {
+      if($(this).css('display') != 'none') {
+        available_items += 1;
+      }
+    });
+    if(available_items == 0) {
+      $('#details').hide();
+    } else {
+      $('#details').show();
+      $('#details ul.menu li a').each(function() {
+        if($(this).attr('href') == relative || $(this).attr('href') == unescape(relative)) {
+          $(this).addClass('active');
+        }
+      });
+    }
+  }
+<% end %>

@@ -1,0 +1,36 @@
+- content_for :body_content_title do
+  = render :partial => '/surveys/title', :locals => {:survey => @survey}
+        
+= render :partial => '/surveys/toolbar'
+= render :partial => '/surveys/details'
+
+- content_for :body_content_left do
+  %p#no-questions.text-align-center{:style => 'display:none'} You have not added any questions yet. Click "Add a Question" to the right to begin.
+  #root-questions-container.not-ordering
+    %ol#root-questions
+      - @questions.each do |question|
+        = render :partial => 'question', :locals => {:question => question}
+        
+- content_for :body_content_right do 
+  %input{:type => 'text', :value => 'Find a question', :id => 'question-search', :class => 'default'} 
+  - if @survey.editable?
+    .owner-only-not-admins{:'data-member-id' => @survey.member_id}
+      %button{:id => 'order-questions', :class => 'button', :icon => 'ui-icon-arrow-4'} Order Questions
+      %button{:id => 'done-ordering-questions', :class => 'button', :icon => 'ui-icon-check', :style => 'display:none'} Done Ordering Questions
+      %button{:id => 'cancel-ordering-questions', :class => 'button', :icon => 'ui-icon-close', :style => 'display:none'} Cancel Ordering Questions
+      #done-ordering-questions-alert{:style => 'display:none; margin-top:10px'}
+        %p 
+          Drag and drop questions to: (1) sort them and (2) to make them dependent on other 
+          questions/choices (i.e. skip patterns).
+        %p
+          Click 
+          %strong Done Ordering Questions
+          to save your changes or 
+          %strong Cancel Ordering Questions
+          to cancel your changes.
+      %button{:id => 'add-question', :class => 'button', :icon => 'ui-icon-plus'} Add a Question
+      #new-question{:style => 'display:none'}
+        = render :partial => 'new', :locals => {:question => @question}
+      #edit-question{:style => 'display:none'}
+    
+= render :partial => "/shared/content_page"

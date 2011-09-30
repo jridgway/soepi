@@ -1,0 +1,15 @@
+= render :partial => '/surveys/title'        
+= render :partial => '/surveys/toolbar'
+= render :partial => '/surveys/details'
+  
+- content_for :body_content do
+  - if @forks.empty?
+    %p No forks found.
+  - else
+    %ul#surveys.listing.reset
+      - @forks.each do |survey|
+        %li
+          = render :partial => 'survey', :locals => {:survey => survey}
+    = paginate @forks
+    
+= render :partial => "/shared/content_page"

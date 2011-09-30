@@ -1,0 +1,11 @@
+<% content_for :body_content_left do %>
+  <ul id="petitions">
+    <% @petitions.each do |petition| %>
+      <li>
+        <%= link_to petition.title, petition_url(petition) %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
+
+<%= render :partial => "/shared/content_page" %>

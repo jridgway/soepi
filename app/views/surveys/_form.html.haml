@@ -1,0 +1,97 @@
+.tabs
+  %ul
+    %li
+      %a{:href => '#descriptions'} Descriptions
+    %li
+      %a{:href => '#targeting'} Targeting
+    %li
+      %a{:href => '#irb'} IRB
+    %li
+      %a{:href => '#organization'} Organization
+    %li
+      %a{:href => '#schedule'} Schedule
+    %li
+      %a{:href => '#closing'} Closing
+      
+  #descriptions
+    = f.input :title, :hint => 'Give a clear, descriptive yet enticing title.'
+    = f.input :description, :hint => 'Describe your survey in full. If your title hooks visitors, your description is what you\'ll pull them in with.'
+    = f.input :tag_list, :label => 'Tags', :input_html => {:class => 'tags', :"data-seperator" => ','}, :hint => 'Categorize this survey with any words you want. Hit Enter or type a comma to delimit each tag.'
+    = f.input :purpose_of_survey, :hint => 'What is the purpose of this survey? Be concise.'
+    = f.input :uses_of_results, :hint => 'How will you use the results? Be concise.'
+    = f.input :time_required_in_minutes, :as => :select, :collection => Survey.time_required_options, :label => 'Estimated time required', :hint => 'How long will it take for participants to complete this survey?'
+  #targeting
+    = f.fields_for :target do |f2|
+      .target
+        = f2.input :target_by_location, :input_html => {:class => 'check'}
+        .inner
+          .input
+            %label Location
+            = f2.input :location_target_by_address, :as => :hidden
+            .tabs
+              %ul
+                %li
+                  %a{:href => '#by-address'} 
+                    %span.ui-icon &nbsp;
+                    By Address
+                %li
+                  %a{:href => '#by-vicinity'} 
+                    %span.ui-icon &nbsp;
+                    By Vicinity
+              #by-address
+                = f2.input :city
+                = f2.input :region
+                = f2.input :postal_code
+                = f2.input :country, :priority => priority_countries, :include_blank => true
+              #by-vicinity
+                #map-canvas
+                = f2.input :approximate_address, :label => 'Address', :hint => 'Enter an approximate address. Coordinates will be generated based on your input.'
+                = f2.input :lat, :label => 'Latitude', :hint => 'Enter the latitude of the marker in the map, or drag the marker itself.'
+                = f2.input :lng, :label => 'Longitude', :hint => 'Enter the longitude of the marker in the map, or drag the marker itself.'
+                = f2.input :radius, :hint => 'Enter the radius of the circle in the map, or drag the icon in the border of the circle.'
+      .target
+        = f2.input :target_by_age_group, :input_html => {:class => 'check'}
+        .inner
+          = f2.association :age_groups, :label => 'Age Groups', :collection => AgeGroup.all.collect {|i| [i.label, i.id]}, :as => :check_boxes
+      .target
+        = f2.input :target_by_gender, :input_html => {:class => 'check'}
+        .inner
+          = f2.association :genders, :label => 'Genders', :collection => Gender.all.collect {|i| [i.label, i.id]}, :as => :check_boxes
+      .target
+        = f2.input :target_by_ethnicity, :input_html => {:class => 'check'}
+        .inner
+          = f2.association :ethnicities, :label => 'Ethnicities', :collection => Ethnicity.all.collect {|i| [i.label, i.id]}, :as => :check_boxes, :label => 'Hispanic, Latino, or Spanish origin?'
+      .target
+        = f2.input :target_by_race, :input_html => {:class => 'check'}
+        .inner
+          = f2.association :races, :label => 'Races', :collection => Race.all.collect {|i| [i.label, i.id]}, :as => :check_boxes
+      .target
+        = f2.input :target_by_occupation, :input_html => {:class => 'check'}
+        .inner
+          = f2.association :occupations, :label => 'Occupations', :collection => Occupation.all.collect {|i| [i.label, i.id]}, :as => :check_boxes
+      .target
+        = f2.input :target_by_education, :input_html => {:class => 'check'}
+        .inner
+          = f2.association :educations, :label => 'Educations', :collection => Education.all.collect {|i| [i.label, i.id]}, :as => :check_boxes
+  #irb
+    = f.input :irb, :label => 'This survey was certified by an <a hint="An institutional review board (IRB), also known as an independent ethics committee (IEC) or ethical review board (ERB), is a committee that has been formally designated to approve, monitor, and review biomedical and behavioral research involving humans with the aim to protect the rights and welfare of the research subjects. [Source: Wikipedia]">Institutional Review Board (IRB)</a>.'.html_safe
+    #irb-inner
+      = f.input :irb_name, :label => 'IRB Name', :hint => 'If your survey was certified by an IRB, please specify the name of the IRB.'
+      = f.input :irb_phone, :label => 'IRB Phone', :hint => 'If your survey was certified by an IRB, please specify the phone of the IRB.'
+      = f.input :irb_email, :label => 'IRB Email', :hint => 'If your survey was certified by an IRB, please specify the email of the IRB.'
+  #organization
+    = f.input :organization, :label => 'I am publishing this survey on behalf of an organization that I am representing.'
+    #organization-inner
+      = f.input :organization_name, :hint => 'If you are affiliated with an organization, please specify it\'s name.'
+      = f.input :organization_phone, :hint => 'If you are affiliated with an organization, please specify it\'s phone.'
+      = f.input :organization_email, :hint => 'If you are affiliated with an organization, please specify it\'s email.'
+  #schedule
+    = f.input :cohort, :label => 'I intend to survey participants of this survey reguarly on an ongoing basis.'
+    #cohort-inner
+      = f.input :cohort_interval_in_days, :label => 'Frequency', :as => :select, :collection => Survey.cohort_interval_options, :hint => 'How often will you survey participants of this survey?'
+      = f.input :cohort_range_in_days, :label => 'Range', :as => :select, :collection => Survey.cohort_range_options, :hint => 'How long will you survey participants of this survey?'
+  #closing
+    = f.input :minimum_completes_needed, :hint => 'Keep the survey open until minimum completes needed are met.', :input_html => {:step => 100, :min => 300}
+    = f.input :maximum_completes_needed, :hint => 'Close the survey when maximum completes needed are met, regardless of closing dates/times.', :input_html => {:step => 100, :min => 300}
+    = f.input :closes_soft_at, :as => :datetime_picker, :hint => 'If minimum completes are met, close the survey at this date/time.'
+    = f.input :closes_hard_at, :as => :datetime_picker, :hint => 'Regardlesss of minimum and maximum completes needed, close the survey at this date/time.'

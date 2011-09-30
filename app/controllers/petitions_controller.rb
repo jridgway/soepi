@@ -1,0 +1,3 @@
+class PetitionsController < ApplicationController
+
+end

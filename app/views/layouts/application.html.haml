@@ -1,0 +1,12 @@
+!!!
+= render :partial => "/shared/html_tag"
+= render :partial => "/shared/head"
+%body.bp.two-column
+  #root
+    %header#header
+      = render :partial => "/shared/header"
+    #container
+      = yield
+    #root-footer
+  %footer#footer
+    = render :partial => "/shared/footer"

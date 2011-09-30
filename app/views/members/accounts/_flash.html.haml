@@ -1,0 +1,9 @@
+- unless alert.blank? and notice.blank?
+  .alert{:style => 'display:none', :title => 'Alert'}
+    - if member_signed_in?
+      %p
+        = alert || notice       
+    - else
+      %p
+        = alert || notice  
+      = render :partial => '/members/shared/links'

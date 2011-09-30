@@ -1,0 +1,6 @@
+%h3
+  = link_to page.title, page
+%p #{truncate(strip_tags(page.parts.first.body), :length => 200)}
+%p 
+  Page last updated 
+  = timeago page.created_at

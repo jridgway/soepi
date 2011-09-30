@@ -1,0 +1,9 @@
+%h3
+  = link_to petition.title, petition
+%p #{truncate(petition.description, :length => 200)}
+%p
+  Petition posted 
+  = timeago petition.created_at
+  by #{petition.posted_by} 
+%p
+  Tagged: #{tag_list_links(petition)}

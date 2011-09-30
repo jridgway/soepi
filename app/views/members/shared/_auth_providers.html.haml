@@ -1,0 +1,5 @@
+- icon = (defined?(icons) and icons == :small) ? '32' : '64'
+%ul.auth_providers.clearfix
+  - Member.omniauth_providers.each do |provider| 
+    %li
+      = link_to image_tag("social-icons/#{provider}_#{icon}.png", :alt => "Sign in with #{provider.to_s.titleize}"), member_omniauth_authorize_path(provider), :method => 'post'

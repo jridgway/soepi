@@ -1,0 +1,33 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/Fixtures.html
+
+one:
+  title: MyString
+  body: MyText
+  css: MyText
+  javascript: MyText
+  browser_title: MyString
+  custom_title: MyString
+  use_custom_title: false
+  meta_keywords: MyString
+  meta_description: MyString
+  lft: 1
+  rgt: 1
+  parent_id: 1
+  redirect_url: MyString
+  state: MyString
+
+two:
+  title: MyString
+  body: MyText
+  css: MyText
+  javascript: MyText
+  browser_title: MyString
+  custom_title: MyString
+  use_custom_title: false
+  meta_keywords: MyString
+  meta_description: MyString
+  lft: 1
+  rgt: 1
+  parent_id: 1
+  redirect_url: MyString
+  state: MyString

@@ -1,0 +1,6 @@
+= simple_form_for(question, :remote => true, :html => {:novalidate => true}) do |f|
+  = field_set_tag "New Question" do
+    = render :partial => 'form', :locals => {:question => question, :f => f}
+    .actions
+      = f.submit 'Add', :class => 'button'
+      %a{:href => '#', :id => 'cancel-new-question'} Cancel

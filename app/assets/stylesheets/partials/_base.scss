@@ -1,0 +1,26 @@
+$blueprint-grid-columns: 24;
+$blueprint-container-size: 950px;
+$blueprint-grid-margin: 30px;
+$blueprint-grid-width: ($blueprint-container-size + $blueprint-grid-margin) / $blueprint-grid-columns - $blueprint-grid-margin;
+
+$content-columns-left: 18;
+$content-columns-right: 6;
+$footer-height: 70px;
+
+$blueprint-font-size: 16px;
+$blueprint-font-family: "Lucida Grande", Arial, Helvetica, sans-serif;
+
+$lightest_gray: #f6f6f6;
+$light_gray: #eeeeee;
+$gray: #ededed;
+$dark_gray: #cccccc;
+$darkest_gray: #999999;
+$brown: #843c02;
+$dark_brown: #663300;
+$light_brown: #f0e1d3;
+$blue: #49c4f7;
+$light_blue: #68cdf7;
+$dark_blue: #0381b5;
+$orange: #ef8c08;
+$light_orange: #fdd693;
+$dark_red: #990000;

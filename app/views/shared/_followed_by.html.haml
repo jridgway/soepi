@@ -1,0 +1,6 @@
+= 'Not followed by anyone.' if @followings.empty?
+%ul#members.listing.reset
+  - @followings.each do |follow|
+    %li
+      = render :partial => '/members/member', :locals => {:member => follow.follower}
+= paginate @followings

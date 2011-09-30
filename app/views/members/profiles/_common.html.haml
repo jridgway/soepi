@@ -1,0 +1,22 @@
+- content_for :body_content_title do
+  = avatar(@member, 80)
+  %strong= @member.nickname
+  %ul.attributes
+    - unless @member.privacy_dont_show_location?
+      %li Location: #{@member.location}
+    - unless @member.tags.empty?
+      %li Tagged: #{tag_list_links(@member)}
+
+- content_for :body_content_toolbar do
+  = link_to 'Message', message_members_path(@member), :class => 'button restrict-to-members not-owner', :'data-member-id' => @member.id, :icon => 'ui-icon-mail-closed'
+  = followable_link @member
+  = render :partial => '/shared/sharing'
+  
+- content_for :body_content_details do
+  %ul.menu
+    %li
+      = link_to "Surveys (#{@member.surveys_posted.live.count})", member_path(@member)
+    %li
+      = link_to "Following (#{@member.follows.count})", following_member_path(@member)
+    %li
+      = link_to "Followed By (#{@member.followings.count})", followed_by_member_path(@member)

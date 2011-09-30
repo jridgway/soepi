@@ -1,0 +1,49 @@
+.bp .listing
+  {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+      
+  li 
+    {  
+    margin: 0 0 15px 0;
+    padding: 0;
+    list-style-type: none;
+    @include clearfix; 
+    
+    img 
+      {
+      float: left;
+      margin: 5px 10px 2px 0;
+      }
+    
+    .inner
+      {
+      display: block;
+      float: right;
+      width: 630px;
+      }
+      
+    h3
+      {
+      margin: 0 0 5px 0;
+      padding: 0;
+      }
+      
+    p 
+      {
+      margin: 2px 0 10px 0;
+      }
+    }
+  }
+
+.bp.two-column-wide .listing li .inner
+  {
+  width: 505px;  
+  }
+
+.bp.one-column .listing li .inner
+  {
+  width: 875px;  
+  }
+  

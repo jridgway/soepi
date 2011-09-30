@@ -1,0 +1,11 @@
+= render :partial => "/members/accounts/common"
+
+- content_for :body_content do
+  %h2
+    Cancelling your account is permanent and cannot be undone:
+  %p
+    = link_to "Cancel My Account", registration_path(resource_name), :confirm => "Are you sure?", :method => :delete, :class => 'button'
+    or
+    = link_to "Back", :back
+      
+= render :partial => "/shared/content_page"

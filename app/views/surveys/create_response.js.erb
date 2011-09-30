@@ -1,0 +1,4 @@
+$('#question-slider .inner').html("<%= escape_javascript(render(:partial => '/surveys/question')) %>");
+$('.question').show();
+$('#please-wait').remove();
+init_common_elements();

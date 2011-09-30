@@ -1,0 +1,9 @@
+= render :partial => "/members/accounts/common"
+
+- content_for :body_content do
+  - simple_form_for resource, :html => {:method => :put}, :url => member_update_subscriptions_path  do |f|
+    = render :partial => '/members/accounts/subscriptions_form', :locals => {:f => f}    
+    .actions
+      = f.submit 'Update', :class => 'button'
+      
+= render :partial => "/shared/content_page"

@@ -1,0 +1,6 @@
+$('#edit-question').html('<%= escape_javascript render(:partial => 'edit') %>');
+init_common_elements();
+init_choices();
+$('.question-type').change();
+$('#edit-question').show('highlight', {color:'#0296d4'});
+enable_button($('#survey_question_<%= @question.id %> .button.edit'));

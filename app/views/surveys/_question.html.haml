@@ -1,0 +1,27 @@
+.question{:style => 'display:none;'}
+  = simple_form_for @participant_response, :url => create_response_survey_path(@survey), :remote => true do |f|
+    = f.hidden_field :question_id
+    = field_set_tag "Question #{@question.position + 1} - #{@question.required? ? '<strong>Required</strong>' : '<strong>Optional</strong>'}".html_safe do
+      = simple_format @question.body
+      %h5 Your Response
+      - case @question.qtype
+      - when 'Select One' then 
+        %ul.choices.reset
+          - @question.choices.each do |choice|
+            %li
+              = content_tag :button, :name => "participant_response[single_choice_id]", :value => choice.id, :class => 'button full', :type => 'submit' do
+                #{choice.label}
+      - when 'Select Multiple' then
+        = f.association :multiple_choices, :as => :check_boxes, :collection => @question.choices.collect{|c| [c.label, c.id]}, :label => false
+      - when 'Text' then
+        = f.input :text_response, :as => :text, :label => false
+      - when 'Date' then
+        = f.input :datetime_response, :as => :date_picker, :label => false
+      - when 'Date/Time' then
+        = f.input :datetime_response, :as => :datetime_picker, :label => false
+      - when 'Time' then
+        = f.input :datetime_response, :as => :time_picker, :label => false
+      - when 'Numeric' then 
+        = f.input :numeric_response, :label => false, :hint => 'Must be a number. Periods and commas are not allowed.'
+      = f.submit 'Submit', :class => 'button' unless @question.qtype == 'Select One'
+  

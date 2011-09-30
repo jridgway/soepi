@@ -1,0 +1,21 @@
+- unless request.xhr?
+  - content_for :body_content_title do 
+    Sign in
+
+- content_for :body_content_left do 
+  %h2 Sign in through:
+  = render :partial => 'members/shared/auth_providers'
+
+  %h2 Or, use your email and password:
+  = simple_form_for(:member, :as => resource_name, :url => session_path(resource_name), :html => {:class => 'sign_in_form'}) do |f|
+    = devise_error_messages!
+    = f.input :email
+    = f.input :password
+    = f.input :remember_me, :as => :boolean
+    .actions
+      = f.submit "Sign in", :class => 'button'
+
+- content_for :body_content_right do     
+  = render :partial => "/members/shared/links"
+
+= render :partial => "/shared/content_page"

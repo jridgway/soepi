@@ -1,0 +1,10 @@
+%ul
+  %li= link_to 'Privacy', '/privacy'
+  %li= link_to 'Terms', '/terms'
+  %li= link_to 'Donate', '/donate'
+  %li= link_to 'Volunteer', '/volunteer'
+  %li= link_to 'About', '/about'
+  %li= link_to 'Contact', '/contact'
+.copyright
+  Copyright &copy; #{Time.now.year} #{Setting.find_or_set(:site_name, "SoEpi, Inc")} All Rights Reserved
+  

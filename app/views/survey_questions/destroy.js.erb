@@ -1,0 +1,7 @@
+$('#survey_question_<%= @question.id %>').hide('explode');
+$('#survey_question_<%= @question.id %>').remove();
+$('#edit_survey_question_<%= @question.id %>').remove();
+no_questions_message();
+load_new_choice_options();
+$('.questions-count').html('<%= @question.survey.questions.count %>');
+$('#please-wait').remove();
