@@ -77,6 +77,12 @@
       {
       margin: 0;
       border: 1px solid #aaa;
+      -moz-box-shadow: none !important;
+      -webkit-box-shadow: none !important;
+      -o-box-shadow: none !important;
+      box-shadow: none !important;
+      color: #222;
+      background: transparent !important;
       }
     
     label
