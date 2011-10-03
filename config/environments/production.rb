@@ -67,5 +67,5 @@ Soepi::Application.configure do
   config.middleware.use ExceptionNotifier,
     :email_prefix => "[Exception] ",
     :sender_address => %{"Exception Notifier" <errors@soepi.org>},
-    :exception_members => %w{joseph@comsoft155.com}
+    :exception_recipients => %w{joseph@comsoft155.com}
 end
