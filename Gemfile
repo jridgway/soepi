@@ -53,5 +53,4 @@ end
 
 group :production do
   gem 'dalli'
-  gem 'rack-ssl-enforcer'
 end
