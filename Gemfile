@@ -46,7 +46,6 @@ gem 'rails_autolink'
 gem 'thin'
 gem 'fog'
 gem 'jquery-rails'
-gem 'haml'
 
 group :development do
   gem 'rails-dev-tweaks', '~> 0.5.0'

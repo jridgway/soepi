@@ -287,7 +287,6 @@ DEPENDENCIES
   geokit
   geokit-rails3-1beta!
   gravatar_image_tag
-  haml
   indextank
   jquery-rails
   kaminari
