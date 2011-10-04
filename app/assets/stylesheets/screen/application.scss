@@ -8,7 +8,6 @@
 @include sticky-footer($footer-height, "#root", "#root-footer", "footer");
 
 @import "partials/jquery_ui_1_8_16_custom";
-@import "partials/misc";
 @import "partials/formatting";
 @import "partials/header";
 @import "partials/footer";

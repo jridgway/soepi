@@ -28,8 +28,4 @@ Soepi::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = false
-  
-  config.sass.tap do |config2|
-    config2.load_paths << "#{Gem.loaded_specs['compass'].full_gem_path}/frameworks/compass/stylesheets"
-  end
 end

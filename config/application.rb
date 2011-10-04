@@ -46,5 +46,7 @@ module Soepi
     config.assets.version = '1.0'
     
     config.middleware.insert 0, 'Dragonfly::Middleware', :images
+    
+    config.assets.precompile += ['screen.css', 'print.css']
   end
 end

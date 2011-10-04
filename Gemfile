@@ -1,14 +1,14 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.1.0'
+gem 'rails', '= 3.1.0'
 
 gem 'pg'
 
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'sass-rails', '~> 3.1.0'
-  gem 'coffee-rails', '~> 3.1.0'
+  gem 'sass-rails', '~> 3.1.4'
+  gem 'coffee-rails', '~> 3.1.1'
   gem 'uglifier'
   gem 'compass', :git => 'git://github.com/chriseppstein/compass.git'
 end
@@ -24,7 +24,7 @@ end
 gem 'kaminari'
 gem 'dragonfly', '~>0.9.8'
 gem 'rails_admin', :git => 'git://github.com/sferik/rails_admin.git'
-gem 'devise'
+gem 'devise', '= 1.4.5'
 gem 'omniauth', '= 0.2.6'
 gem 'state_machine', '= 1.0.0'
 gem 'us_states_select'
