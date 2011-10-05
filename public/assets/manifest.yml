@@ -245,3 +245,4 @@ rails_admin/activo/application.js: rails_admin/activo/application-55dcffac1aa82a
 rails_admin/application.js: rails_admin/application-86b74a504634fbaef2e39678668e63f4.js
 screen.css: screen-a5e07930de67c03d134260f86537d9d3.css
 print.css: print-fef5faf917ecade1d774b2185a774eb7.css
+rails_admin/rails_admin.css: rails_admin/rails_admin-21b5462e18bc64e47a7411133df9d49b.css
