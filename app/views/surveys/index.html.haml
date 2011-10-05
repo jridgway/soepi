@@ -7,7 +7,7 @@
       = link_to 'All', surveys_path
     - if action_name == 'by_tag'
       %li
-        = link_to %{Tagged "#{@tag}"}, request.request_uri
+        = link_to %{Tagged "#{@tag}"}, request.path
     %li.admins-only
       = link_to 'Drafting', drafting_surveys_path
     %li.admins-only
