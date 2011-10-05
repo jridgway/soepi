@@ -35,11 +35,15 @@ Soepi::Application.configure do
 
   # Use a different logger for distributed setups
   # config.logger = SyslogLogger.new
+  
+  $cache = Dalli::Client.new :namespace => "soepi-#{Time.now}", :expires_in => 1.day, :compress => true
 
   # Use a different cache store in production
   # config.cache_store = :mem_cache_store
-  config.cache_store = :dalli_store,
-    {:namespace => "soepi-#{Time.now}", :expires_in => 1.day, :compress => true}
+  config.cache_store = :dalli_store, $cache
+  
+  # Use Dalli as the rack-cache metastore
+  config.middleware.use ::Rack::Cache, :metastore => $cache, :entitystore => 'file:tmp/cache/entity'
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server
   # config.action_controller.asset_host = "http://assets.example.com"

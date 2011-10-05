@@ -2,6 +2,6 @@ class SurveysSweeper < ActionController::Caching::Sweeper
   observe Survey
 
   def after_save(survey)
-    expire_fragment %r{views/.*#{surveys_path}(/.*)?}
+    Rails.cache.write :surveys_cache_expirary_key, rand.to_s[2..-1]
   end
 end

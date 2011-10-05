@@ -11,7 +11,7 @@ class SurveysController < ApplicationController
   enable_esi
   
   caches_action :index, :drafting, :rejected, :you_created, :by_tag, :show, :edit, 
-    :cache_path => Proc.new {|controller| controller.params}
+    :cache_path => Proc.new {|controller| cache_expirary_key(controller.params)}
   cache_sweeper :surveys_sweeper, :only => [:create, :update, :destroy, :submit_for_review, :request_changes, 
     :launch, :reject, :close]
 
@@ -308,5 +308,9 @@ class SurveysController < ApplicationController
 
     def load_tags
       @tags = Survey.live.tag_counts :start_at => 2.months.ago, :limit => 100
+    end
+    
+    def cache_expirary_key(params)
+      params.merge :cache_expirary_key => Rails.cache.read(:surveys_cache_expirary_key)
     end
 end
