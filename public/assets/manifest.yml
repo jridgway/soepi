@@ -246,3 +246,4 @@ rails_admin/application.js: rails_admin/application-86b74a504634fbaef2e39678668e
 screen.css: screen-a5e07930de67c03d134260f86537d9d3.css
 print.css: print-fef5faf917ecade1d774b2185a774eb7.css
 rails_admin/rails_admin.css: rails_admin/rails_admin-21b5462e18bc64e47a7411133df9d49b.css
+rails_admin/rails_admin.js: rails_admin/rails_admin-fdc79b274c025dc6b7cc1d740f9b9575.js
