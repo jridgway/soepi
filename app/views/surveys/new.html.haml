@@ -3,11 +3,6 @@
       
 - content_for :body_content do  
   = simple_form_for @survey, :html => {:novalidate => true, :class => 'survey'} do |f|
-    - unless @survey.errors.empty?
-      #error_explanation
-        %h2 Fields with errors:
-        %ul
-          = @survey.errors.full_messages.map { |msg| content_tag(:li, msg) }.join.html_safe
     = render :partial => '/surveys/form', :locals => {:f => f}
     .actions
       = f.submit 'Submit', :class => 'button'
