@@ -20,6 +20,6 @@
       - Member.omniauth_providers.each do |provider| 
         - unless used_tokens.include? provider.to_s 
           %li
-            = link_to image_tag("social-icons/#{provider}_64.png", :alt => "Sign in with #{provider.to_s.titleize}"), member_omniauth_authorize_path(provider)
+            = link_to image_tag("social-icons/#{provider}_64.png", :alt => "Sign in with #{provider.to_s.titleize}"), member_omniauth_authorize_path(provider, :member_return_to => request.path)
       
 = render :partial => "/shared/content_page"

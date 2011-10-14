@@ -1,6 +1,43 @@
 module ApplicationHelper
   def browser_title(title)
-    title
+    if title.blank? and @page.present? 
+      if @page.browser_title.blank?
+        if @page.use_custom_title?
+          title = @page.custom_title
+        else
+          title = @page.title
+        end
+      else
+        title = @page.browser_title
+      end
+    end
+    if title.blank?
+      Setting.find_or_set(:site_name, 'SoEpi Inc')
+    else
+      "#{title} - #{Setting.find_or_set(:site_name, 'SoEpi Inc')}"
+    end
+  end
+  
+  def meta_description(description)
+    if description.blank? and @page.present? 
+      description = @page.meta_description
+    end
+    if description.blank?
+      Setting.find_or_set(:meta_description, '')
+    else
+      description
+    end
+  end
+  
+  def meta_keywords(keywords)
+    if keywords.blank? and @page.present? 
+      keywords = @page.meta_keywords
+    end
+    if keywords.blank?
+      Setting.find_or_set(:meta_keywords, '')
+    else
+      keywords
+    end
   end
 
   def priority_countries

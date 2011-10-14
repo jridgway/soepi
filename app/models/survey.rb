@@ -24,8 +24,9 @@ class Survey < ActiveRecord::Base
 
   acts_as_taggable
   acts_as_followable
-
-  has_friendly_id :title, :use_slug => true
+  
+  extend FriendlyId
+  friendly_id :title, :use => :slugged
 
   validates_presence_of :title, :description, :purpose_of_survey, :uses_of_results,
     :time_required_in_minutes, :minimum_completes_needed, :closes_soft_at, :member_id
@@ -166,20 +167,7 @@ class Survey < ActiveRecord::Base
     survey.member_id = nil
     survey.state = 'drafting'
     survey.forked_from_id = self.id
-    self.questions.each do |question|
-      new_question = survey.questions.build question.attributes
-      new_question.created_at = nil
-      new_question.updated_at = nil
-      new_question.survey_id = nil
-      if question.qtype == 'Select Multiple' or question.qtype = 'Select One'
-        question.choices.each do |choice|
-          new_choice = new_question.choices.build(choice.attributes)
-          new_choice.created_at = nil
-          new_choice.updated_at = nil
-          new_choice.survey_question_id = nil
-        end
-      end
-    end
+    survey.questions = self.questions.roots.collect {|question| clone_question(question)}.flatten
     unless survey.target.nil?
       new_target = survey.target.clone
       new_target.targetable_id = nil
@@ -195,6 +183,25 @@ class Survey < ActiveRecord::Base
       survey.target = new_target
     end
     survey
+  end
+  
+  def clone_question(question, question_choice=nil)
+    new_children_questions = []
+    new_question = SurveyQuestion.new question.attributes
+    new_question.created_at = nil
+    new_question.updated_at = nil
+    new_question.survey_id = nil
+    new_question.pending_question_choice = question_choice
+    if question.qtype == 'Select Multiple' or question.qtype = 'Select One'
+      question.choices.each do |choice|
+        new_choice = new_question.choices.build(choice.attributes)
+        new_choice.created_at = nil
+        new_choice.updated_at = nil
+        new_choice.survey_question = new_question
+        new_children_questions += choice.questions.collect {|question| clone_question(question)}
+      end
+    end
+    return new_question, new_children_questions
   end
 
   def state_human

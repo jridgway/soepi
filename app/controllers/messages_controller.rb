@@ -38,7 +38,7 @@ class MessagesController < ApplicationController
         @new_message = current_member.messages.build params[:message]
         @new_message.message_id = @message.id
         @message.mark_seen_by_member!(current_member.id)
-        render :layout => 'application'
+        render :layout => 'two_column'
       end
     else
       error_404

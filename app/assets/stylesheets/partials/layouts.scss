@@ -1,0 +1,64 @@
+@import "common";
+@import "blueprint/reset";
+@import "compass/layout/sticky-footer";
+
+@include sticky-footer($footer-height, "#root", "#root-footer", "footer");
+
+body.bp 
+  {  
+  background: #2F2F2F;
+  
+  #root
+    {
+    overflow: hidden;
+    }
+    
+  #container 
+    {
+    width: 950px;
+    margin: 0 auto;
+    @include pie-clearfix;
+    padding: 25px 30px 0 30px;
+    background: url(/assets/top-border.png) 0px -10px no-repeat;
+    overflow: visible;
+    }
+  }
+
+body.bp.two-column #container 
+  {            
+  min-height: 300px;
+  
+  #body_content_left 
+    {
+    @include column($content-columns-left); 
+    }
+  
+  #body_content_right
+    {
+    @include column($content-columns-right, true); 
+    }
+  }  
+
+body.bp.two-column-wide #container 
+  {            
+  #body_content_left 
+    {
+    @include column($content-columns-left - 3);
+    }
+  
+  #body_content_right
+    {
+    @include column($content-columns-right + 3, true); 
+    }
+  }  
+
+body.bp.one-column #container #body_content 
+  {
+  @include column(24, true);      
+  z-index: 2;
+  } 
+
+ 
+  
+
+  

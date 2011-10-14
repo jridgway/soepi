@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
-  layout Proc.new { |controller| controller.request.xhr? ? 'ajax' : 'application' }
+  layout Proc.new { |controller| controller.request.xhr? ? 'ajax' : 'two_column' }
   before_filter :authenticate, :set_member_return_to, :force_no_cache_control
   helper_method :cache_expirary, :cache_expirary_in_seconds, :current_participant, :current_member_pin, :member_return_to,
     :avatar_url, :member_contact_us_path,  :message_members_path

@@ -1,0 +1,85 @@
+@import "common";
+
+.bp
+  {
+  color: #C6C6C6;
+  font-weight: 200;
+  
+  abbr 
+    {
+    border-bottom: 1px dotted gray;
+    display: inline-block;
+    }
+  img
+    {
+    border: 1px solid #efefef;
+    }
+  a, a:visited
+    {
+    text-decoration: none;
+    color: $light_blue;
+    &:hover
+      {
+      text-decoration: underline;
+      color: $light_blue;
+      }
+    }
+  a.button
+    {
+    color: #fff;
+    }
+  a.button.ui-state-active
+    {
+    color: #222;
+    }
+  .button
+    {
+    font-weight: 600;
+    }
+  button 
+    {
+    margin: 0;
+    padding: 0;
+    }
+  p {margin-bottom: 1.2em;}
+  h1, h2, h3, h4, h5 
+    {
+    margin: 5px 0 5px 0; 
+    padding: 5px 0 5px 0;
+    color: #fff;
+    font-weight: 600;
+    line-height: 1.4em;
+    }
+  h1 {font-size: 1.3em;}
+  h2 {font-size: 1.25em;}
+  h3 {font-size: 1.15em;}
+  h4 {font-size: 1.05em;}
+  h5 {font-size: 1em;}   
+  ol,  ul {margin-left: 1.4em;padding: 0;background-image:none;}
+  ol ol,  ul ul {margin-left: .5em;}
+  ol li,  ul li {margin-left: 1.4em;padding: 0;background-image: none;}
+  ol ol li,  ul ul li {margin-left: 1.4em;}
+  ul li {list-style-type: disc;}
+  ol li {list-style-type: hebrew;}
+  ol li {list-style-type: decimal;}  
+  ol ol li {list-style-type: lower-alpha;} 
+  ol ol ol li {list-style-type: lower-roman;} 
+  ol ol ol ol li {list-style-type: lower-alpha;} 
+  ol ol ol ol ol li {list-style-type: decimal;}
+  ol.reset, ul.reset
+    {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    }
+  ol.reset li, ul.reset li, ol.reset li ul, ul.reset li ul
+    {
+    list-style-type: none;
+    margin: 3px 0;
+    padding: 0;
+    }
+  table {margin: 15px 0; border: 1px solid $dark_gray; border-right: none; border-bottom: none;}
+  table caption {font-weight: 500; background: none; margin: 0; padding: 0;}
+  table tr td {border-right: 1px solid $dark_gray; border-bottom: 1px solid $dark_gray;}
+  table tr:nth-child(odd) {background: $light_blue; }
+  }

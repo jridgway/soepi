@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '= 3.1.0'
+gem 'rails', '= 3.1.1'
 
 gem 'pg'
 
@@ -39,7 +39,7 @@ gem 'tanker'
 gem 'indextank'
 gem 'gravatar_image_tag'
 gem 'acts_as_followable'
-gem 'friendly_id'
+gem 'friendly_id', '~> 4.0.0.beta8'
 gem 'geokit-rails3-1beta', :git => 'git://github.com/bkether/geokit-rails3-1beta.git'
 gem 'geokit'
 gem 'rails_autolink'
@@ -47,6 +47,7 @@ gem 'thin'
 gem 'fog'
 gem 'jquery-rails'
 gem 'rack-cache'
+gem 'rack', '1.3.3'
 
 group :development do
   gem 'rails-dev-tweaks', '~> 0.5.0'

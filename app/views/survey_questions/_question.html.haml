@@ -14,6 +14,6 @@
             %strong.c-tag CHOICE
             = choice.label
           - unless choice.child_questions.empty?
-            %ol{:id => "nested-questions-#{choice.id}"}
+            %ol.nested-questions{:id => "nested-questions-#{choice.id}"}
               - choice.child_questions.each do |question2|
                 = render :partial => 'question', :locals => {:question => question2}

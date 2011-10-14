@@ -1,0 +1,5 @@
+= simple_form_for(@question, :remote => true, :html => {:novalidate => true}) do |f|
+  = render :partial => 'form', :locals => {:question => @question, :f => f}
+  .actions
+    = f.submit 'Add and Add Another', :class => 'button', :name => 'add_another'
+    = f.submit 'Add and Close', :class => 'button', :name => 'add_close'

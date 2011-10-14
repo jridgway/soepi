@@ -1,3 +1,4 @@
+$('.error2').qtip('destroy');
 <% if @question.valid? %>
   <% if @choice_changed %>
     var old_ol = $('#survey_question_<%= @question.id %>').parent();
@@ -11,16 +12,17 @@
   <% end %>
   $('#survey_question_<%= @question.id %>').replaceWith('<%= escape_javascript render(:partial => 'question', :locals => {:question => @question}) %>');
   $('#survey_question_<%= @question.id %>').find('p:first').prepend('<strong class="q-tag">QUESTION</strong> <strong class="q-type-tag"><%= @question.qtype %></strong> <%= @question.required? ? ' <abbr class="r-tag" title="Required">*</abbr>'.html_safe : '' %>  &mdash; ');
-  $.scrollTo('#survey_question_<%= @question.id %>', 300, function() {
-    $('#survey_question_<%= @question.id %>').show('highlight', {color:'#0296d4'});
-  });
-  $('#edit-question:visible').hide('blind');
+  <% if params[:update_edit] %>
+    $('.ui-widget-overlay').height($(document).height());
+  <% else %>
+    $('#edit-question-dialog').dialog('destroy');
+  <% end %>
 <% else %>
-  $('#edit-question').html('<%= escape_javascript render(:partial => 'edit') %>');
+  $('#edit-question-dialog').html('<%= escape_javascript render(:template => 'survey_questions/edit.html.haml') %>');
   init_choices();
   $('.question-type').change();
+  init_form_errors($('#edit-question-dialog .input'));
 <% end %>
 init_common_elements();
 no_questions_message();
 load_new_choice_options();
-$('#please-wait').remove();

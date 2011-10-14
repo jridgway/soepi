@@ -6,7 +6,7 @@
 .choice_labels
   = f.input :choices do  
     %ol.choices
-      - f.association :choices do |c|
+      = f.association :choices do |c|
         %li
           = c.input :id, :as => :hidden
           = c.input :_destroy, :input_html => {:class => '_destroy'}, :as => :hidden
@@ -14,6 +14,6 @@
           = c.input :label, :label => false
           %span.ui-icon.ui-icon-arrowthick-2-n-s Move 
           %span.ui-icon.ui-icon-close Remove
-    .new-choice-container
-      = text_field_tag :new_choice, 'Add a choice...', :class => 'new-choice'
-      %span.ui-icon.ui-icon-plus Plus
+      %li.new-choice-container
+        = text_field_tag :new_choice, 'Add a choice...', :class => 'new-choice'
+        %span.ui-icon.ui-icon-plus Plus

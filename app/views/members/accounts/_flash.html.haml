@@ -1,5 +1,5 @@
 - unless alert.blank? and notice.blank?
-  .alert{:style => 'display:none', :title => 'Alert'}
+  #alert{:style => 'display:none', :title => 'Alert'}
     - if member_signed_in?
       %p
         = alert || notice       

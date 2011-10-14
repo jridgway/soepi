@@ -92,7 +92,7 @@
     
       if(previousItem != null && !previousItem.hasClass('survey_question')) {
         if(previousItem[0].children[1] == null) {
-          $(previousItem[0]).append('<ol id="nested-questions-' + $(previousItem[0]).attr('data-choice-id') + '"></ol>');
+          $(previousItem[0]).append('<ol class="nested-questions" id="nested-questions-' + $(previousItem[0]).attr('data-choice-id') + '"></ol>');
         }
         previousItem[0].children[1].appendChild(this.placeholder[0]);
         this._trigger("change", event, this._uiHash());

@@ -50,7 +50,7 @@
     $('.current-member-pic').html(current_member['pic']);
     $('.current-member-unseen-messages-count').html(current_member['unseen_messages_count']);
     $('body').append("<%= escape_javascript(render(:partial => '/members/accounts/flash')) %>");
-    $('.alert').dialog({modal:true, zIndex:9, minWidth:350}).show('blind');
+    $('#alert').dialog({modal:true, zIndex:9, minWidth:400}).show('blind');
   });
   
   <% if current_member %>  

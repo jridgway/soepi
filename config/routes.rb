@@ -89,5 +89,4 @@ Soepi::Application.routes.draw do
    
   root :to => 'pages#home'
   
-  get '*path', :controller => 'pages', :action => 'show'
 end

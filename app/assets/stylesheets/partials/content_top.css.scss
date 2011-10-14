@@ -1,0 +1,131 @@
+@import "common";
+
+.bp #content-top
+  {
+  
+  #toolbar
+    {
+    float: right;
+    margin: 0 0 10px 30px;
+    max-width: 600px;
+    
+    .divider
+      {
+      float: right;
+      width: 10px;
+      display: block;
+      }
+    
+    div, button, a 
+      {
+      float: right;
+      }
+      
+    .button
+      {
+      margin: 2px;
+      color: #fff;
+      }
+    
+    .button.ui-state-active
+      {
+      color: #222;
+      }
+    
+    .sharing
+      {
+      display: block;
+      margin: 5px 0 0 0;
+      clear: both;
+      }
+    }
+    
+  h1#page-title
+    {   
+    margin: 0 0 10px 0;
+    padding: 0;
+    font-weight: 200;
+    
+    a
+      {
+      color: #fff;
+      }
+    
+    strong
+      {
+      font-weight: 600;
+      }
+    
+    img
+      {
+      display: inline;
+      margin: 4px 10px 0 0;
+      }
+      
+    img[width='80']
+      {
+      margin-bottom: 10px;
+      }
+        
+    ul.attributes
+      {
+      margin: 10px 0 0 0;
+      color: #C6C6C6;
+      
+      a 
+        {
+        color: $light_blue;
+        }
+      }
+    }
+  
+  #details
+    {
+    @include container;
+    width: 930px;
+    margin: 15px 0;
+    padding: 10px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    -moz-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
+    -webkit-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
+    -o-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
+    box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
+    background-color: rgba(0, 0, 0, 0.3);
+    
+    ul.menu 
+      {   
+      margin: 0;
+      padding: 0;
+         
+      li 
+        {
+        float: left;
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        
+        a 
+          {
+          padding: 5px 6px;
+          margin: 0 5px 0 0;
+          color: $blue;
+          }
+  
+        a:hover, a.active
+          {
+          color: $gray;
+          }
+        }
+      }
+    }
+  
+  #more-details
+    {
+    h1, h2, h3, h4, h5
+      {
+      color: #222;
+      }
+    }
+  }

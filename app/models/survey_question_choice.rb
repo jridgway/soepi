@@ -6,6 +6,6 @@ class SurveyQuestionChoice < ActiveRecord::Base
 
   default_scope order('position asc, created_at asc')
 
-
   validates_presence_of :label
+  validates_uniqueness_of :label, :scope => 'survey_question_id'
 end

@@ -6,7 +6,8 @@ class Chart < ActiveRecord::Base
   acts_as_taggable
   acts_as_followable
 
-  has_friendly_id :title, :use_slug => true
+  extend FriendlyId
+  friendly_id :title, :use => :slugged
 
   include Tanker
   tankit 'soepi' do

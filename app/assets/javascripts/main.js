@@ -1,5 +1,4 @@
 $(document).ready(function () {
-  $('.tabs').tabs();
   $('.accordian').accordion();
   $('.ui-widget-overlay').live('click', function () {
     $('.ui-dialog-content').dialog('close');
@@ -76,7 +75,7 @@ function sign_in_dialog(return_to) {
 
 function init_common_elements() {
   $('form.uneditable :input').attr("disabled", true);
-  $('form.uneditable .taglist a.delete').remove();
+  $('form.uneditable .tagit-close').remove();
   $('input.date_picker').datepicker({dateFormat:'MM d, yy', changeMonth:true, changeYear:true});
   $('input.datetime_picker').datetimepicker({dateFormat:'MM d, yy', changeMonth:true, changeYear:true, ampm:true});
   $('input.time_picker').timepicker({ampm:true});

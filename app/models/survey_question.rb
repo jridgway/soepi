@@ -6,12 +6,12 @@ class SurveyQuestion < ActiveRecord::Base
 
   accepts_nested_attributes_for :choices, :allow_destroy => true
 
-
   default_scope order('position asc, created_at asc')
 
   validates_presence_of :body, :qtype
   validates_length_of :choices, :minimum => 2, :if => proc {|a| ['Select One', 'Select Multiple'].include? a['qtype']},
     :message => 'you must provide at least 2 choices'
+  validate :uniq_choices
   validates_uniqueness_of :body, :message => 'you already added this question', :scope => :survey_id
 
   before_create :set_position
@@ -23,7 +23,7 @@ class SurveyQuestion < ActiveRecord::Base
   scope :roots, where('survey_question_choice_id is null or survey_question_choice_id = 0')
   scope :choice_qtype, where("qtype = 'Select One' or qtype = 'Select Multiple'")
 
-  def validate
+  def uniq_choices
     if choices.collect(&:label).uniq.length < choices.length
       errors.add :choices, 'duplicates are not allowed'
     end
@@ -48,9 +48,9 @@ class SurveyQuestion < ActiveRecord::Base
 
   def self.qtype_options
     [
-      ['Select',
-        [['One', 'Select One'],
-        ['Mutiple', 'Select Multiple']]
+      ['Multiple Choice',
+        [['Select One', 'Select One'],
+        ['Select Mutiple', 'Select Multiple']]
       ],
       ['Open Ended',
         [['Text','Text'],

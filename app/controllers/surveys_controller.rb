@@ -279,7 +279,7 @@ class SurveysController < ApplicationController
         :url => survey_url(@survey),
         :title => @survey.title,
         :description => @survey.description,
-        :image_url => "#{request.protocol}#{request.host_with_port}/assets/logo-v13.png",
+        :image_url => "#{request.protocol}#{request.host_with_port}/assets/soepi-logo-light-bg.png",
         :type => 'Survey'
       }
     end

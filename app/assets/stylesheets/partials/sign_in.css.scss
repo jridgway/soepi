@@ -1,0 +1,57 @@
+.bp 
+  {
+  .simple_form.sign_in_form 
+    {
+    .input input[type=text], .input input[type=password], .input input[type=email]
+      {
+      width: 300px !important;
+      margin: 0;
+      -moz-border-radius: 4px;
+      -webkit-border-radius: 4px;
+      border-radius: 4px;
+      }
+    
+    .input input[type=checkbox]
+      {
+      width: auto;
+      }
+      
+    .actions
+      {
+      margin: 10px 10px 10px 145px;
+      }
+    }
+  
+  #sign-in-dialog
+    {
+    font-size: 0.9em;
+    
+    h2, h3
+      {
+      font-size: 1.2em;
+      }
+    
+    #body_content_left
+      {
+      width: 600px;
+      float: left;
+      margin-right: 15px;
+      
+      .input input[type=text], .input input[type=password], .input input[type=email]
+        {
+        }
+      
+      label
+        {
+        font-size: 0.9em;
+        font-weight: normal;
+        }
+      }
+      
+    #body_content_right
+      {
+      width: 210px;
+      float: left;
+      }
+    }
+  }

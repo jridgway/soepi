@@ -1,7 +1,7 @@
 class Members::AccountsController < Devise::RegistrationsController
   prepend_before_filter :authenticate_scope!, :except => [:new, :create, :load_current_member]
   layout Proc.new { |controller| 
-    %w{new create}.include?(controller.action_name) ? 'application' : (controller.request.xhr? ? 'ajax' : 'one_column')
+    %w{new create}.include?(controller.action_name) ? 'two_column' : (controller.request.xhr? ? 'ajax' : 'one_column')
   }
 
   def create

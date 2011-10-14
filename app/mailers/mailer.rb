@@ -21,7 +21,7 @@ class Mailer < Devise::Mailer
   end
 
   def inline_layout_images(others={})
-    attachments.inline['header.png'] = File.read(Rails.root.join('app', 'assets', 'images', 'logo-v13.png'))
+    attachments.inline['header.png'] = File.read(Rails.root.join('app', 'assets', 'images', 'soepi-logo-light-bg.png'))
   end  
 
   def avatar_url(member, size=100)

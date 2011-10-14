@@ -1,0 +1,101 @@
+@import "common";
+
+.bp #body_content_right
+  {  
+  .block
+    {
+    margin-bottom: 15px;
+    @include clearfix;
+    }
+  
+  .button 
+    {
+    margin: 0 auto 15px auto;
+    display: block;
+    width: 213px;
+    margin: 3px 0;
+    }
+  
+  button.button
+    {
+    width: 215px;
+    }
+    
+  .ui-state-highlight
+    {
+    max-width: 195px;
+    
+    .button
+      {
+      width: 193px;
+      }
+    
+    button.button
+      {
+      width: 195px;
+      }
+    }
+      
+  .divider
+    {
+    background: $gray;
+    height: 1px;
+    margin: 10px 25px;
+    max-width: 163px;
+    }
+  
+  ul, ol 
+    {
+    margin: 10px 0;
+    padding: 0;
+    }
+  
+  ul#tags, ul#tags li
+    {
+    list-style-type: none;
+    margin: 0 0 2px 0;
+    padding: 0;
+    }
+  
+  form, fieldset
+    {
+    .button
+      {
+      width: auto !important;
+      display: inline-block !important;
+      }
+    }
+  }
+
+.bp.two-column-wide #body_content_right
+  {
+  .button 
+    {
+    width: 331px;
+    }
+  
+  button.button
+    {
+    width: 333px;
+    }
+    
+  .ui-state-highlight
+    {
+    max-width: 313px;
+    
+    .button
+      {
+      width: 311px;
+      }
+    }
+      
+  .divider
+    {
+    max-width: 285px;
+    }
+  }
+
+.bp .ui-state-highlight .ui-state-hover .ui-icon
+  {
+  background-image: url(/assets/ui-icons_ffffff_256x240.png);
+  }

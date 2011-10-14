@@ -1,0 +1,378 @@
+@import "common";
+  
+fieldset
+  {
+  margin: 0 0 20px 0;
+  padding: 15px;
+  border: 1px solid #666;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  
+  legend
+    {
+    font-weight: 200;
+    }
+  
+  .actions
+    {
+    margin-left: 143px;
+    }
+  }
+    
+.bp .tip.error2
+  {  
+  .ui-tooltip-content
+    {
+    border: none;
+    border-color: $dark_red !important;
+    background: $dark_red;
+    color: #fff;
+    
+    p 
+      {
+      margin: 0;
+      padding: 0;
+      }
+    }
+    
+  .ui-tooltip-tip
+    {
+    border: 5px solid $dark_red;
+    }
+  }
+
+.simple_form 
+  {    
+  label 
+    {
+    float: left;
+    width: 125px;
+    text-align: right;
+    margin: 2px 10px;
+    color: #C6C6C6;
+    font-weight: 200;
+    }
+  
+  div.input
+    {
+    @include clearfix;
+    margin-bottom: 10px;
+    float: left;
+    clear: both;
+    overflow: visible;
+    }
+    
+  div.input input[type=text], div.input input[type=tel], div.input input[type=email], 
+  div.input input[type=number], div.input input[type=password], div.input textarea, div.input select
+    {
+    width: 500px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    padding: 5px;
+    margin: 0 2px 0 0;
+    border: none;
+    -moz-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
+    -webkit-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
+    -o-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
+    box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
+    background-color: transparent;
+    color: #C6C6C6;
+    font-size: 1em;
+    }
+    
+  div.input input[type=email] 
+    {
+    width: 524px;
+    }
+  
+  div.input input[type=file]
+    {
+    color: #fff;
+    }
+  
+  div.input input[type=number]
+    {
+    width: 250px !important;
+    padding: 5px;
+    }
+    
+  div.input input.datetime_picker, div.input input.date_picker, div.input input.time_picker
+    {
+    width: 350px !important;
+    }
+  
+  div.input select
+    {
+    width: auto;
+    max-width: 500px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    margin: 0 2px 0 0; 
+    }
+    
+  div.input textarea
+    {
+    height: 50px;
+    max-width: 499px;
+    width: 499px;
+    margin: 0;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    }
+  
+  div.input.boolean
+    {
+    margin-left: 145px;
+    width: auto;
+    
+    input 
+      {
+      width: auto;
+      display: inline;
+      margin: 0 3px 0 0;
+      }
+    
+    label
+      {
+      float: none;
+      margin: 0;
+      }
+    }
+  
+  div.input.radio, div.input.check_boxes
+    {
+    
+    label.check_boxes, label.radio
+      {
+      margin: 2px 2px 2px 10px;
+      }
+    
+    span
+      {
+      display: block;
+      margin: 2px 0;
+      padding: 0 0 0 25px;
+      position: relative;
+      width: 378px;
+      float: right;
+    
+      input 
+        {
+        position: absolute;
+        left: 7px;
+        top: 5px;
+        margin: 0;
+        }
+      
+      label.collection_radio, label.collection_check_boxes
+        {
+        width: auto;
+        font-weight: normal;
+        float: none;
+        margin: 0;
+        }
+      }
+    }
+    
+  .hint 
+    {
+    clear: left;
+    margin-left: 145px;
+    font-size: 12px;
+    color: #555;
+    display: block;
+    }
+    
+  sup small 
+    {
+    font-weight: normal;
+    }
+    
+  .actions
+    {
+    margin: 5px 10px 15px 160px;
+    float: left;
+    width: 100%;
+    clear: both;
+    }
+  
+  .right-actions
+    {
+    float: right;
+    width: auto;
+    }
+  }
+
+.bp.two-column form.simple_form fieldset div.input.radio span, .bp.two-column form.simple_form fieldset div.input.check_boxes span
+  {
+  width: 495px;
+  }
+
+.bp.one-column form.simple_form
+  {
+  div.input input[type=text], div.input input[type=email]
+    {
+    width: 525px;
+    }
+  
+  div.input select
+    {
+    max-width: 525px;
+    }
+    
+  div.input textarea
+    {
+    max-width: 525px;
+    width: 525px;
+    }
+  
+  div.input.radio, div.input.check_boxes
+    {    
+    span
+      {
+      width: 735px;
+      }
+    }
+    
+  .tabs.ui-tabs.ui-widget.ui-widget-content.ui-corner-all .tabs
+    {
+    width: 745px;
+    }
+  
+  ul.tagit 
+    {
+    width: 530px;
+    }
+  }
+    
+#error_explanation
+  {
+  padding: 0;
+  }
+  
+.hint, .qtip
+  {
+  .private
+    {
+    font-weight: 500;
+    }
+    
+  .public
+    {
+    color: $dark_red;
+    font-weight: 500;
+    }
+  }
+
+.ui-datepicker
+  {
+  font-size: 0.85em;
+  
+  th
+    {
+    background: $light_gray;
+    }
+  
+  .ui-datepicker-other-month
+    {
+    background: #fff;
+    opacity: 100;
+    }
+    
+  a:hover 
+    {
+    color: #000;
+    }
+  }
+  
+fieldset ul.tagit 
+  {
+  width: 506px;
+  }
+  
+.bp ul.tagit 
+  {
+  border: 1px solid #bbb;
+  overflow: hidden;
+  cursor: text;
+  padding: 3px 2px 3px 3px;
+  margin: 0;
+  width: 531px;
+  float: left;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  border: none;
+  -moz-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
+  -webkit-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
+  -o-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
+  box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
+  background-color: transparent;
+  
+  li
+    {
+    display: block;
+  	float: left;
+  	margin: 2px 5px 2px 0;
+    }
+  
+  li.tagit-choice
+    {
+    padding: .2em 20px .2em .5em !important;
+    position: relative;
+    line-height: inherit;
+    background: #C6C6C6;
+    border: 1px solid #CCCCCC;
+    cursor: default;
+    padding: 1px 2px 1px 4px;
+    margin: 0 4px 3px 0;
+    font-size: 13px;
+    color: #000;
+    }
+
+  li.tagit-choice .tagit-label
+    {
+    cursor: pointer;
+  	text-decoration: none;
+  	color: #000;
+    }
+  
+  li.tagit-choice .tagit-close
+    {
+    cursor: pointer;
+    position: absolute;
+    right: .1em;
+    top: 50%;
+    margin-top: -8px;
+    }
+
+  li.tagit-choice .tagit-close .text-icon 
+    {
+    display: none;
+    }
+  
+  li.tagit-new
+    {
+  
+    input
+      {
+      display: block;
+    	float: left;
+    	margin: 2px 5px 2px 0;
+      border: medium none;
+      cursor: default;
+      outline: 0 none;  
+      -moz-box-shadow: none !important;
+      -webkit-box-shadow: none !important;
+      -o-box-shadow: none !important;
+      box-shadow: none !important;
+      color: #C6C6C6;
+      background: transparent !important;
+      }
+    }
+  }
+

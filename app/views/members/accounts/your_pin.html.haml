@@ -5,7 +5,7 @@
     - simple_form_for @member, :url => member_update_pin_path do |f|
       %fieldset
         %legend Enter Your PIN
-        %p
+        .input
           = f.text_field :pin, :hint => 'Your PIN is four alphanumeric characters.', :value => ''
           = f.error :pin
           = f.submit 'Submit', :class => 'button'

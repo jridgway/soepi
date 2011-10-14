@@ -23,7 +23,8 @@ class Member < ActiveRecord::Base
       exists (select * from charts where member_id = members.id)
     })
 
-  has_friendly_id :nickname, :use_slug => true
+  extend FriendlyId
+  friendly_id :nickname, :use => :slugged
 
   acts_as_mappable
   acts_as_taggable
@@ -104,7 +105,7 @@ class Member < ActiveRecord::Base
       self.pin.gsub!(i, chars.sample)
     end
     Participant.create :member => self
-    Mailer.deliver_pin!(self)
+    Mailer.pin(self).deliver
   end
 
   def apply_omniauth(omniauth, omniauth_user_hash)
