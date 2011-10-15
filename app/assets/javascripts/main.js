@@ -70,7 +70,7 @@ function sign_in_dialog(return_to) {
       init_common_elements();
     });
   } 
-  $('#sign-in-dialog').dialog({width:890, height:450, modal:true, zIndex:9, resizable:false}).show('blind');
+  $('#sign-in-dialog').dialog({width:800, height:350, modal:true, zIndex:9, resizable:false}).show('blind');
 }
 
 function init_common_elements() {

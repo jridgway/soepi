@@ -211,6 +211,19 @@ fieldset
   {
   width: 495px;
   }
+  
+.bp.two-column form.simple_form
+  {
+  div.input input[type=email]
+    {
+    width: 500px;
+    }
+  
+  ul.tagit 
+    {
+    width: 505px;
+    }
+  }
 
 .bp.one-column form.simple_form
   {
@@ -247,11 +260,6 @@ fieldset
     {
     width: 530px;
     }
-  }
-    
-#error_explanation
-  {
-  padding: 0;
   }
   
 .hint, .qtip

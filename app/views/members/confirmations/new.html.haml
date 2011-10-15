@@ -3,12 +3,8 @@
 
 - content_for :body_content_left do
 
-  = form_for(resource, :as => resource_name, :url => confirmation_path(resource_name), :html => { :method => :post }) do |f|
-    = devise_error_messages!
-    %p
-      = f.label :email
-      %br/
-      = f.text_field :email
+  = simple_form_for(resource, :as => resource_name, :url => confirmation_path(resource_name), :html => { :method => :post }) do |f|
+    = f.input :email
     .actions
       = f.submit "Resend confirmation instructions", :class => 'button'
 

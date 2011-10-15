@@ -35,7 +35,7 @@
     rather than the survey participants alone. These fields are crucial to generating significant survey results. 
     %string These fields do not appear on your profile.
   = f.input :gender_id, :as => :select, :collection => Gender.all.collect {|i| [i.label, i.id]}, :hint => '<strong class="public">Public</strong> &amp; <strong class="annonymous">Annonymous</strong> &mdash; Shown on your profile. Included in anonymous survey results.'.html_safe
-  = f.input :birthmonth do 
+  = f.input :birthmonth, :as => :select do 
     = f.date_select :birthmonth, :include_blank => true, :order => [:month, :year], :discard_day => true, :start_year => Date.today.year - 110, :end_year => Date.today.year - 14
     .hint
       %strong.private Private

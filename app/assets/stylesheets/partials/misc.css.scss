@@ -19,6 +19,17 @@
       -webkit-box-shadow: 0 7px 10px #222;
       box-shadow: 0 7px 10px #222;
       padding: 10px;
+      
+      p 
+        {
+        margin: 3px 0;
+        padding: 0;
+        }
+      
+      strong
+        {
+        color: inherit; 
+        }
       }
       
     .ui-tooltip-tip
