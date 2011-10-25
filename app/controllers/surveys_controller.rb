@@ -17,7 +17,7 @@ class SurveysController < ApplicationController
 
   def index
     @surveys = Survey.live.page(params[:page]).per(10)
-    render :layout => 'one_column'
+    render :layout => 'two_column'
   end
 
   def launched
@@ -172,10 +172,10 @@ class SurveysController < ApplicationController
               end
             end
           else
-            render :text => "alert('We are sorry, you do not qualify for this survey.'); enable_button($('#participate'));"
+            render :text => "alert('We are sorry, you do not qualify for this survey.'); enable_button($('#participate')); enable_button($('#participate2'));"
           end
         else
-          render :text => "alert('You cannot participate in your own survey.'); enable_button($('#participate'));"
+          render :text => "alert('You cannot participate in your own survey.');'));"
         end
       end
     else

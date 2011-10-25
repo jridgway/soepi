@@ -10,13 +10,13 @@
           pic: '<%= escape_javascript avatar(current_member) %>',
           unseen_messages_count: '<%= Message.involving_member_unseen(current_member.id).count %>'
         }
+      set_followable_toggle();
       $('.members-only').show();
       $('.visitors-only').hide();
       $('.owner-only[data-member-id=<%= current_member.id %>]').show();
       $('.owner-only-not-admins[data-member-id=<%= current_member.id %>]').show();
       $('.not-owner[data-member-id=<%= current_member.id %>]').hide();
       $('.not-owner[data-member-id!=<%= current_member.id %>]').show();
-      set_followable_toggle();
     <% else %>
       current_member = {
           authenticated: false,
@@ -62,7 +62,6 @@
         <% else %>
           $('#follow-toggle').find('span').text('Follow');
         <% end %>
-        $('#follow-toggle').show();
         if($('#follow-toggle').attr('data-remote')) {
           $('#follow-toggle').click(function() {
             setTimeout("disable_button($('#follow-toggle'));", 100);

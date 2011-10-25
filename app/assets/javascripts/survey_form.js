@@ -3,7 +3,6 @@ $(document).ready(function() {
   if(controller_name == 'survey_questions') {
     init_survey_question_form();
   }
-  init_participate();
   init_global_sidebar();
 });
 
@@ -32,55 +31,45 @@ function init_survey_form() {
   init_targeting();
 }
 
-function init_participate() {
-  $('#participate, #participate2').click(function() {
-    setTimeout("disable_button($('#participate'));", 100);
-    setTimeout("disable_button($('#participate2'));", 100);
-  });
-  $('#send-pin').live('click', function() {
-    disable_button($(this));
-  });
-}
-
 function init_global_sidebar() {
   $('#launch').click(function() {
-    $('#launch-message').dialog({width:500, height:250, modal:true, zIndex:9, resizable:false}).show('blind');
+    $('#launch-message').dialog({width:520, height:250, modal:true, zIndex:9, resizable:false}).show('blind');
   });
   $('#cancel-launch').click(function() {
     $('#launch-message').dialog('destroy');
   });
   $('#launch2').click(function() {
-    $('#launch2-message').dialog({width:500, height:175, modal:true, zIndex:9, resizable:false}).show('blind');
+    $('#launch2-message').dialog({width:520, height:175, modal:true, zIndex:9, resizable:false}).show('blind');
   });
   $('#cancel-launch2').click(function() {
     $('#launch2-message').dialog('destroy');
   });
   $('#request-changes').click(function() {
-    $('#request-changes-message').dialog({width:600, height:175, modal:true, zIndex:9, resizable:false}).show('blind');
+    $('#request-changes-message').dialog({width:620, height:175, modal:true, zIndex:9, resizable:false}).show('blind');
   });
   $('#cancel-request-changes').click(function() {
     $('#request-changes-message').dialog('destroy');
   });
   $('#reject').click(function() {
-    $('#reject-message').dialog({width:500, height:175, modal:true, zIndex:9, resizable:false}).show('blind');
+    $('#reject-message').dialog({width:520, height:175, modal:true, zIndex:9, resizable:false}).show('blind');
   });
   $('#cancel-reject').click(function() {
     $('#reject-message').dialog('destroy');
   });
   $('#delete').click(function() {
-    $('#delete-message').dialog({width:500, height:175, modal:true, zIndex:9, resizable:false}).show('blind');
+    $('#delete-message').dialog({width:520, height:175, modal:true, zIndex:9, resizable:false}).show('blind');
   });
   $('#cancel-delete').click(function() {
     $('#delete-message').dialog('destroy');
   });
   $('#close').click(function() {
-    $('#close-message').dialog({width:500, height:300, modal:true, zIndex:9, resizable:false}).show('blind');
+    $('#close-message').dialog({width:520, height:300, modal:true, zIndex:9, resizable:false}).show('blind');
   });
   $('#cancel-close').click(function() {
     $('#close-message').dialog('destroy');
   });
   $('#forkit').click(function() {
-    $('#forkit-message').dialog({width:500, height:200, modal:true, zIndex:9, resizable:false}).show('blind');
+    $('#forkit-message').dialog({width:520, height:200, modal:true, zIndex:9, resizable:false}).show('blind');
   });
   $('#cancel-forkit').click(function() {
     $('#forkit-message').dialog('destroy');

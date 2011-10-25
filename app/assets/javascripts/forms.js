@@ -1,5 +1,7 @@
 $(document).ready(function () {
   $('input.tags, textarea.tags').tagit({allowSpaces:true});
+  $('form.uneditable .tagit-close').remove();
+  $('form.uneditable .tagit input:visible').remove();
   $('#member_ethnicity_ids_1').change(function() {
     if($(this).attr('checked')) {
       $('#member_ethnicity_ids_2, #member_ethnicity_ids_3, ' +

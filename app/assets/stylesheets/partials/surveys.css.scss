@@ -10,7 +10,7 @@
     {
     width: 600px;
     float: left;
-    color: #777;
+    color: #ccc;
     }
   
   #percent-complete
@@ -19,14 +19,16 @@
     position: relative;
     width: 300px;
     margin: 10px 0 0 0;
+    background: #000;
     
     span
       {
       padding: 2px 5px 0 0;
       position: absolute;
-      top: 0;
+      top: -1px;
       right: 0;
       font-size: 0.9em;
+      color: $purple;
       }
     
     .ui-progressbar
@@ -36,6 +38,13 @@
       position: absolute;
       top: 0;
       right: 0;
+      border: 1px solid #ccc;
+      
+      .ui-progressbar-value.ui-widget-header
+        {
+        background: #ccc;
+        border: 1px solid #ccc;
+        }
       }
     }
   }
@@ -180,7 +189,7 @@
   
   .q-tag
     {
-    background: #9900ff;
+    background: $purple;
     color: #fff;
     padding: 2px 3px;
     margin: 0 1px 0 0;
@@ -374,6 +383,7 @@ form.participant_response
   button.full.ui-button.ui-widget.ui-state-default
     {
     width: 100%;
+    text-align: left;
     }
     
   .simple_form_error

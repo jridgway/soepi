@@ -7,6 +7,7 @@ class ParticipantResponse < ActiveRecord::Base
   validates_presence_of :participant, :question
   validates_uniqueness_of :question_id, :scope => :participant_id
   validates_numericality_of :numeric_response, :allow_blank => true, :only_integer => true
+  validate :question_required
 
   after_create :set_next_question
 
@@ -14,7 +15,7 @@ class ParticipantResponse < ActiveRecord::Base
     (multiple_choices + [single_choice]).compact
   end
 
-  def validate
+  def question_required
     if question.required?
       case question.qtype
         when 'Select One' then
@@ -38,10 +39,11 @@ class ParticipantResponse < ActiveRecord::Base
       questions_unanswered = question.survey.questions.where('position > ?', question.position)
       questions_unanswered.each do |question|
         if question.parent_choice
-          earlier_response = participant.responses.find_by_question_id question.parent_choice.question.id
-          if earlier_response.choices.collect(&:id).include? question.parent_choice.id
-            next_question = question
-            break
+          if earlier_response = participant.responses.find_by_question_id(question.parent_choice.question.id)
+            if earlier_response.choices.collect(&:id).include? question.parent_choice.id
+              next_question = question
+              break
+            end
           end
         else
           next_question = question

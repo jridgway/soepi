@@ -2,3 +2,5 @@ $('#question-slider .inner').html("<%= escape_javascript(render(:partial => '/su
 $('.question').show();
 $('#please-wait').remove();
 init_common_elements();
+init_form_tips();
+init_form_errors($('.participant_response .input'));
