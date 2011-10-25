@@ -127,5 +127,16 @@
       {
       color: #222;
       }
+        
+      a 
+        {
+        text-decoration: underline;
+        color: #000;
+        }
+
+      a:hover, a.active
+        {
+        color: #666;
+        }
     }
   }

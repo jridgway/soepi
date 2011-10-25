@@ -57,8 +57,8 @@ class Survey < ActiveRecord::Base
       live?
     end
   end
-  after_save :update_tank_indexes
-  after_destroy :delete_tank_indexes
+  #after_save :update_tank_indexes
+  #after_destroy :delete_tank_indexes
 
   def validate
     if drafting? and state_was == 'drafting'
@@ -159,51 +159,42 @@ class Survey < ActiveRecord::Base
     true unless live? or review_requested? or rejected?
   end
 
-  alias_method :original_clone, :clone
-  def clone
-    survey = self.original_clone
-    survey.created_at = nil
-    survey.updated_at = nil
-    survey.member_id = nil
-    survey.state = 'drafting'
-    survey.forked_from_id = self.id
-    survey.questions = self.questions.roots.collect {|question| clone_question(question)}.flatten
-    unless survey.target.nil?
-      new_target = survey.target.clone
-      new_target.targetable_id = nil
-      new_target.targetable_type = nil
-      new_target.created_at = nil
-      new_target.updated_at = nil
-      new_target.age_groups = survey.target.age_groups
-      new_target.genders = survey.target.genders
-      new_target.ethnicities = survey.target.ethnicities
-      new_target.races = survey.target.races
-      new_target.occupations = survey.target.occupations
-      new_target.educations = survey.target.educations
-      survey.target = new_target
+  def forkit!(member_id)
+    Survey.transaction do 
+      new_survey = self.dup :include => [:target]
+      new_survey.forked_from = self
+      new_survey.member = member 
+      new_survey.state = 'drafting'
+      new_survey.tag_list = tag_list
+      unless new_survey.target.nil?
+        new_survey.target.age_groups = self.target.age_groups
+        new_survey.target.genders = self.target.genders
+        new_survey.target.ethnicities = self.target.ethnicities
+        new_survey.target.races = self.target.races
+        new_survey.target.occupations = self.target.occupations
+        new_survey.target.educations = self.target.educations
+      end
+      new_survey.save!
+      forkit_questions_helper(new_survey, self.questions.roots)
+      return new_survey
     end
-    survey
   end
   
-  def clone_question(question, question_choice=nil)
-    new_children_questions = []
-    new_question = SurveyQuestion.new question.attributes
-    new_question.created_at = nil
-    new_question.updated_at = nil
-    new_question.survey_id = nil
-    new_question.pending_question_choice = question_choice
-    if question.qtype == 'Select Multiple' or question.qtype = 'Select One'
-      question.choices.each do |choice|
-        new_choice = new_question.choices.build(choice.attributes)
-        new_choice.created_at = nil
-        new_choice.updated_at = nil
-        new_choice.survey_question = new_question
-        new_children_questions += choice.questions.collect {|question| clone_question(question)}
+  def forkit_questions_helper(survey, questions, parent_choice=nil)
+    questions.each do |question|
+      new_question = question.dup :include => [:choices]
+      new_question.survey = survey
+      new_question.parent_choice = parent_choice
+      new_question.save!
+      if question.qtype == 'Select Multiple' or question.qtype = 'Select One'
+        question.choices.each_with_index do |choice, index|
+          new_choice = new_question.choices[index]
+          forkit_questions_helper(survey, choice.child_questions, new_choice)
+        end
       end
     end
-    return new_question, new_children_questions
   end
-
+  
   def state_human
     case state
       when 'drafting' then 'Drafting'

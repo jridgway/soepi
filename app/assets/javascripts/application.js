@@ -7,9 +7,9 @@
 //= require jquery
 //= require jquery_ujs
 //= require_tree ./jquery
-//= require tips
-//= require forms
 //= require main
+//= require forms
+//= require tips
 //= require survey_form
 //= require distance_widget
 //= require uservoice

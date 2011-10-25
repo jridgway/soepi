@@ -17,8 +17,8 @@ class SurveyQuestion < ActiveRecord::Base
   before_create :set_position
   after_create :set_positions_other_others
   after_save :clear_choices!, :unless => Proc.new {|q| ['Select One', 'Select Multiple'].include? q.qtype}
-  after_save Proc.new {|q| q.survey.update_tank_indexes}
-  after_destroy Proc.new {|q| q.survey.update_tank_indexes}
+  #after_save Proc.new {|q| q.survey.update_tank_indexes}
+  #after_destroy Proc.new {|q| q.survey.update_tank_indexes}
 
   scope :roots, where('survey_question_choice_id is null or survey_question_choice_id = 0')
   scope :choice_qtype, where("qtype = 'Select One' or qtype = 'Select Multiple'")

@@ -105,7 +105,7 @@ class SurveysController < ApplicationController
     if @survey.editable?
       @survey.destroy
       flash[:alert] = 'Your survey was deleted.'
-      redirect_to :action => 'you_created'
+      redirect_to root_path
     else
       flash[:alert] = 'You cannot delete this survey.'
       redirect_to survey_path(@survey)
@@ -247,8 +247,7 @@ class SurveysController < ApplicationController
   end
 
   def forkit
-    new_survey = @survey.clone
-    current_member.surveys_posted << new_survey
+    new_survey = @survey.forkit!(current_member.id)
     flash[:alert] = %{You forked survey, #{@survey.title}. You now have your own copy of the survey.
       You can make any edits you wish before launching it.}
     redirect_to survey_path(new_survey)

@@ -160,6 +160,9 @@ function init_survey_question_form() {
     $('#edit-question').hide('blind');
   });
   $('.question-type').live('change', function() {
+    root($(this)).find('.choice_labels .aria-describedby').each(function() {
+      $(this).qtip('destroy');
+    });
     if($(this).val() == 'Select One' || $(this).val() == 'Select Multiple') {
       root($(this)).find('.choice_labels').show();
     } else {

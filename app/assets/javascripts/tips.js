@@ -42,26 +42,19 @@ function init_form_tips() {
       event_show = 'mouseenter';
       event_hide = 'mouseleave';
     } else if($(this).children('.tagit').length > 0) {
-      console.log('sdasd');
-      target = $(this).children('.tagit-new input').first();
-      if($(target).attr('id') == undefined) {
-        if($(target).attr('for') == undefined) {
-          $(target).attr('id', 'rand_id_' + Math.random().toString().replace('.', ''));
-        } else {
-          $(target).attr('id', $(target).attr('for') + '_label');
-        }
-      }
+      target = $(this).find('.tagit .tagit-new input:visible');
     } else if($(this).find('input[type!="hidden"], select, textarea').length > 0) {
       target = $(this).find('input[type!="hidden"], select, textarea');
     } else {
       target = $(this);
     }
-    $(target).bind(event_show, function() {  
-      if((hints = $(target).closest('.input').children('.hint')).length == 0) {
+    $(target).bind(event_show, function() { 
+      var hints = $(target).closest('.input').children('.hint');
+      if(hints.length == 0) {
         hints = $(target).children('.hint');
       }
       if(hints.length > 0) {      
-        text = $(hints).map(function() {
+        var text = $(hints).map(function() {
           return $(this).html();
         }).toArray().join('<p/><p>') + '</p>';    
         $(this).qtip({
@@ -155,6 +148,12 @@ function init_form_errors(input_divs) {
       if($(this).hasClass('boolean')) {    
         $(this).find('input').change(function() {
           $(this).parents('.input').find('label').first().qtip('destroy');
+        });
+      }
+      if($(this).hasClass('select')) {    
+        $(this).find('select').change(function() {
+          $(this).qtip('destroy');
+          $(this).closest('.input').find('.error').remove();
         });
       }
     }
