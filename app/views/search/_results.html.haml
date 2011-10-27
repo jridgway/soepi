@@ -11,6 +11,4 @@
         = render :partial => '/members/member', :locals => {:member => result} 
       - when 'Page' then 
         = render :partial => '/pages/page', :locals => {:page => result} 
-      - when 'NewsItem' then
-        = render :partial => '/news_items/news_item', :locals => {:news_item => result} 
 = paginate @results

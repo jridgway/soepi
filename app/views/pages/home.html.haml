@@ -3,13 +3,50 @@
     = avatar(current_member, 20)
     Your Notifications
     
+  - content_for :body_content_toolbar do 
+    = link_to 'Create a Survey', new_survey_path, :class => 'restrict-to-members button', :icon => 'ui-icon-document'
+    = link_to 'Create a Chart', new_chart_path, :class => 'restrict-to-members button', :icon => 'ui-icon-document'  
+    = link_to 'Create a Petition', new_petition_path, :class => 'restrict-to-members button', :icon => 'ui-icon-document'   
+    
   - content_for :body_content_left do
-    %ul#notifications
+    %ul#notifications.listing
       - @notifications.each do |notification|
         %li
-          %strong= link_to notification.message, notification.notifiable
-          
+          %h3= "#{notification.message}:"
+          - case notification.notifiable.class.to_s when 'Survey' then
+            = render :partial => '/surveys/survey', :locals => {:survey => notification.notifiable}
+          - when 'Chart' then
+            = render :partial => '/charts/chart', :locals => {:chart => notification.notifiable}
+          - when 'Petition' then
+            = render :partial => '/petitions/petition', :locals => {:petition => notification.notifiable}        
+          - when 'Member' then
+            = render :partial => '/members/member', :locals => {:member => notification.notifiable} 
+          - when 'Page' then 
+            = render :partial => '/pages/page', :locals => {:page => notification.notifiable} 
+  
+  - content_for :body_content_right do
+    .accordian
+      %h3
+        %a{:href => '#your-surveys'} Your Surveys (#{@surveys.length})
+      #your-surveys
+        %ol
+          - @surveys.each do |survey|
+            %li= link_to survey.title, survey
+      %h3
+        %a{:href => '#your-follows'} You're Following (#{@follows.length})
+      #your-follows
+        %ol
+          - @follows.each do |follow|
+            %li= link_to follow.followable.human, follow.followable
+      %h3
+        %a{:href => '#your-followers'} Your Followers (#{@followers.length})
+      #your-followers
+        %ol
+          - @followers.each do |follower|
+            %li= link_to follower.nickname, follower
+    
   = render :partial => '/shared/content_page', :locals => {:with_inner_content_div => false}
+  
 - else
   - cache('home', :expires_in => cache_expirary) do
     = render :partial => "/shared/content_page", :locals => {:with_inner_content_div => false}

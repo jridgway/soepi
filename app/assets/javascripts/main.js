@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  $('.accordian').accordion();
+  $('.accordian').accordion({autoHeight: false, navigation: true, collapsible: true});
   $('.ui-widget-overlay').live('click', function () {
     $('.ui-dialog-content').dialog('close');
   });

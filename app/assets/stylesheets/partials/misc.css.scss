@@ -253,7 +253,38 @@
     display: none;
     }
   }
-
+  
+.bp 
+  {
+  h3.ui-accordion-header 
+    {
+    color: #fff;
+    border: 1px solid #444;
+    background: white url(/assets/ui-bg_flat_65_ffffff_40x100.png) 50% 50% repeat-x;
+    
+    a, a:hover
+      {
+      color: #000;
+      }
+      
+    .ui-icon
+      {
+      background-image: url(/assets/ui-icons_454545_256x240.png);
+      }
+    }
+    
+  h3.ui-accordion-header.ui-state-active a 
+    {
+    color: #000;
+    }
+  
+  .ui-accordion-content.ui-widget-content
+    {
+    background: transparent;
+    border: 1px solid #444;
+    }
+  }
+  
 .bp .ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all
   {
   -moz-box-shadow: 0 7px 10px #222;
