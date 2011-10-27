@@ -9,15 +9,22 @@ class Mailer < Devise::Mailer
     mail to: member.email
   end
 
-  def notification(member, message)
+  def notifications(member, notifications2)
     @member = member
-    @message = message
+    @notifications = notifications2
+    inline_layout_images
+    setup_mail(member, :notifications)
+  end
+
+  def message3(member, message2)
+    @member = member
+    @message = message2
     results = open avatar_url(@message.member, 60)
     @avatar_key = @message.member.nickname + '.' + results.content_type.split('/').last
     attachments.inline[@avatar_key] = results.read
     attachments.inline['respond.gif'] = File.read(Rails.root.join('app', 'assets', 'images', 'respond.gif'))
     inline_layout_images
-    setup_mail(member, :notification)
+    setup_mail(member, :message3)
   end
 
   def inline_layout_images(others={})

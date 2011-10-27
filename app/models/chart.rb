@@ -28,4 +28,8 @@ class Chart < ActiveRecord::Base
   def posted_by
     member.nickname if member
   end
+  
+  def human 
+    title
+  end
 end

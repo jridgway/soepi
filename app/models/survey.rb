@@ -8,7 +8,7 @@ class Survey < ActiveRecord::Base
   has_and_belongs_to_many :targets
   has_many :forks, :class_name => 'Survey', :foreign_key => :forked_from_id
   belongs_to :forked_from, :class_name => 'Survey'
-  has_many :notifications, :as => :notifiable, :class_name => 'Message'
+  has_many :notifications, :as => :notifiable
 
   accepts_nested_attributes_for :target
 
@@ -131,23 +131,27 @@ class Survey < ActiveRecord::Base
     end
 
     after_transition any => :review_requested do |survey, transition|
-      #setup_notification('Submitted a survey for review', member)
+      Member.admins.each {|m| m.notify!(survey, "#{survey.member.nickname} submitted a survey for review")}
     end
 
     after_transition any => :rejected do |survey, transition|
-      #SurveyNotification.deliver_rejected survey
+      survey.member.notify!(survey, 'Sorry, your survey was rejected.')
+      survey.member_followers.each {|m| m.notify!(self, "#{survey.member.nickname}'s survey was rejected")}
     end
 
     after_transition any => :launched do |survey, transition|
-      #SurveyNotification.deliver_launched survey
+      survey.member.notify!(survey, 'Yay, your survey has launched!')
+      survey.member_followers.each {|m| m.notify!(self, "#{survey.member.nickname}'s survey was opened for participation")}
     end
 
     after_transition any => :closed do |survey, transition|
-      #SurveyNotification.deliver_closed survey
+      Member.admins.each {|m| m.notify!(survey, "#{survey.member.nickname}'s survey was closed")}
+      survey.member_followers.each {|m| m.notify!(self, "#{survey.member.nickname}'s survey was closed")}
     end
 
     after_transition any => :published do |survey, transition|
-      #SurveyNotification.deliver_results_published survey
+      survey.member.notify!(survey, 'Yay, your survey results have been published')
+      survey.member_followers.each {|m| m.notify!(self, "#{survey.member.nickname}'s survey results have been published")}
     end
   end
 
@@ -163,7 +167,7 @@ class Survey < ActiveRecord::Base
     Survey.transaction do 
       new_survey = self.dup :include => [:target]
       new_survey.forked_from = self
-      new_survey.member = member 
+      new_survey.member_id = member_id 
       new_survey.state = 'drafting'
       new_survey.tag_list = tag_list
       unless new_survey.target.nil?
@@ -308,6 +312,10 @@ class Survey < ActiveRecord::Base
 
   def posted_by
     member.nickname if member
+  end
+  
+  def human 
+    title
   end
 
   protected

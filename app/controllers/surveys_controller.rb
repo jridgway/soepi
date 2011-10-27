@@ -263,14 +263,14 @@ class SurveysController < ApplicationController
   end
 
   def followed_by
-    @followings = @survey.followings.page(params[:page])
+    @followings = @survey.member_followers.page(params[:page])
     render :layout => 'one_column'
   end
 
   protected
 
     def load_survey
-      @survey = Survey.find(params[:id])
+      @survey = @followable = Survey.find(params[:id])
     end
 
     def load_facebook_meta

@@ -2,5 +2,5 @@
 %ul#members.listing.reset
   - @followings.each do |follow|
     %li
-      = render :partial => '/members/member', :locals => {:member => follow.follower}
+      = render :partial => '/members/member', :locals => {:member => follow}
 = paginate @followings

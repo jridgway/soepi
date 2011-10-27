@@ -283,6 +283,11 @@
     margin: 0;
     padding: 0;
     
+    h4
+      {
+      clear: none;
+      }
+    
     a 
       {
       color: #000;
@@ -296,11 +301,11 @@
       border-radius: 0px;
       text-decoration: none;
       background: $blue;
-      color: #fff;
+      color: #000;
       
       h4, small 
         {
-        color: #fff;
+        color: #000;
         }
       }
             

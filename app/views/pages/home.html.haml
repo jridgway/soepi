@@ -1,9 +1,14 @@
 - if member_signed_in?
   - content_for :body_content_title do 
     = avatar(current_member, 20)
-    Hi, #{current_member.nickname}
+    Your Notifications
+    
   - content_for :body_content_left do
-    Nothing here now...
+    %ul#notifications
+      - @notifications.each do |notification|
+        %li
+          %strong= link_to notification.message, notification.notifiable
+          
   = render :partial => '/shared/content_page', :locals => {:with_inner_content_div => false}
 - else
   - cache('home', :expires_in => cache_expirary) do

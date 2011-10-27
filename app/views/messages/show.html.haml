@@ -11,8 +11,9 @@
         %a{:name => 'new'}
         = simple_form_for(@new_message, :html => {:novalidate => true, :class => 'response', :remote => true}) do |f|
           = f.hidden_field :message_id
-          = f.input_field :body, :label => 'Message'
+          .input
+            = f.input_field :body, :label => 'Message'
           .right-actions
-            = f.submit 'Send Response', :class => 'button'
+            = f.submit 'Send Your Response', :class => 'button'
     
 = render :partial => "/shared/content_page"

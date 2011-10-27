@@ -44,7 +44,7 @@ class Members::ProfilesController < ApplicationController
   protected
 
     def load_member
-      @member = Member.find(params[:id])
+      @member = @followable = Member.find(params[:id])
     end
 
     def load_tags

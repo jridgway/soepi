@@ -7,4 +7,13 @@ class Setting < ActiveRecord::Base
     end
     setting.value
   end
+  
+  def self.set(name, value)
+    if setting = find_by_name(name)
+      setting.update_attribute :value, value
+    else
+      setting = create :name => name, :value => value
+    end
+    setting.value
+  end
 end

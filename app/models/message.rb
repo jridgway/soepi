@@ -1,5 +1,4 @@
 class Message < ActiveRecord::Base
-  belongs_to :notifiable, :polymorphic => true
   belongs_to :member
   has_many :message_members, :dependent => :destroy
   has_many :members, :through => :message_members, :source => :member, :uniq => true, 
@@ -22,7 +21,7 @@ class Message < ActiveRecord::Base
   
   before_validation :set_members
   after_create :mark_parent_unseen!
-  after_create :deliver_notifications!
+  after_create :deliver_messages!
   
   def validate 
     if parent_message.nil? and recipient_nicknames.empty?
@@ -70,14 +69,14 @@ class Message < ActiveRecord::Base
       end
     end
 
-    def deliver_notifications!
+    def deliver_messages!
       if parent_message
         members_to_notify = parent_message.members.where('member_id != ?', member_id)
       else
         members_to_notify = members.where('member_id != ?', member_id)
       end
       members_to_notify.each do |member|
-        Mailer.deliver_notification! member, self
+        Mailer.message3(member, self).deliver
       end
     end
 end

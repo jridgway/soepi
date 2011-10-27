@@ -24,4 +24,8 @@ class Page < ActiveRecord::Base
       title
     end
   end
+  
+  def human 
+    title
+  end
 end

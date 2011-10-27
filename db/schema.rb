@@ -11,16 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111010143527) do
-
-  create_table "actions", :force => true do |t|
-    t.string   "actionable_type"
-    t.integer  "actionable_id"
-    t.integer  "member_id"
-    t.integer  "times"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
+ActiveRecord::Schema.define(:version => 20111026161219) do
 
   create_table "age_groups", :force => true do |t|
     t.string   "label"
@@ -228,8 +219,16 @@ ActiveRecord::Schema.define(:version => 20111010143527) do
     t.integer  "message_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "notifications", :force => true do |t|
     t.integer  "notifiable_id"
     t.string   "notifiable_type"
+    t.string   "message"
+    t.integer  "member_id"
+    t.boolean  "seen",            :default => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "occupations", :force => true do |t|

@@ -1,6 +1,7 @@
 class Member < ActiveRecord::Base
   has_many :surveys_posted, :class_name => 'Survey', :dependent => :destroy
   has_and_belongs_to_many :surveys_taken, :class_name => 'Survey'
+  has_many :notifications, :dependent => :destroy
   has_many :messages, :dependent => :nullify
   has_many :message_members, :class_name => 'MessageMember', :dependent => :nullify
   has_many :messages_received, :through => :message_members, :source => :message
@@ -46,12 +47,12 @@ class Member < ActiveRecord::Base
       confirmed? and not privacy_dont_list_me?
     end
   end
-  after_save Proc.new { |m|
-    if m.nickname_changed? or m.region_changed? or m.country_changed? or m.confirmed_at_changed?
-      update_tank_indexes
-    end
-  }
-  after_destroy :delete_tank_indexes
+  #after_save Proc.new { |m|
+  #  if m.nickname_changed? or m.region_changed? or m.country_changed? or m.confirmed_at_changed?
+  #    update_tank_indexes
+  #  end
+  #}
+  #after_destroy :delete_tank_indexes
 
   attr_accessor :remove_pic, :pin
   attr_protected :admin
@@ -71,6 +72,7 @@ class Member < ActiveRecord::Base
   validates_presence_of :nickname, :city, :region, :postal_code, :country,
     :timezone, :language, :birthmonth, :gender_id, :ethnicity_ids, :race_ids, :occupation_id, :education_id
   validates_uniqueness_of :nickname
+  validate :unallowed_nicknames
   validates_length_of :nickname, :minimum => 3, :maximum => 15, :allow_blank => true
   validates_format_of :nickname, :with => /^[a-z]+[a-z0-9\.]*$/i, :allow_blank => true,
     :message => 'must begin with a letter and may not contain spaces or punctuation marks'
@@ -83,9 +85,9 @@ class Member < ActiveRecord::Base
   before_save :geocode_address
   after_create :generate_and_deliver_pin!
 
-  def validate
-    if nickname.to_s.downcase.strip.include? 'soepi'
-      errors.add :nickname, 'cannot contain SoEpi'
+  def unallowed_nicknames
+    if %w{soepi admin administrator epi}.include? nickname.to_s.downcase.strip
+      errors.add :nickname, 'this nickname is not allowed'
     end
   end
 
@@ -96,6 +98,34 @@ class Member < ActiveRecord::Base
   def geocode_address
     geo = Geokit::Geocoders::MultiGeocoder.geocode "#{address_1}, #{city}, #{region} #{postal_code}, #{country}"
     self.lat, self.lng = geo.lat, geo.lng if geo.success
+  end
+  
+  def notify!(notifiable, message, seen=false)
+    notification = Notification.new 
+    notification.member = self
+    notification.notifiable = notifiable
+    notification.message = message
+    notification.seen = seen
+    notification.save!
+    notification
+  end
+  
+  def may_follow?(followable)
+    false if (followable.is_a?(Member) and followable.id == self.id) or 
+      (not followable.is_a?(Member) and followable.member_id == self.id)
+  end
+  
+  def follow_toggle!(followable)
+    if following?(followable)
+      stop_following(followable)
+      following = false
+      member_followers.each {|m| m.notify!(followable, "#{member.nickname} stopped following #{followable.class.to_s.downcase}, #{followable.human}.")}
+    else
+      follow(followable)
+      following = true
+      member_followers.each {|m| m.notify!(followable, "#{member.nickname} began following #{followable.class.to_s.downcase}, #{followable.human}.")}
+    end
+    following
   end
 
   def generate_and_deliver_pin!
@@ -217,5 +247,9 @@ class Member < ActiveRecord::Base
     else
       email
     end
+  end
+  
+  def human 
+    nickname
   end
 end

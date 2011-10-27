@@ -2,10 +2,19 @@
 
 .bp 
   { 
-  #members.block h3 span.ui-icon.ui-icon-comment
+  #members.block 
     {
-    margin: 2px 2px 0 0;
-    float: left;
+    h3 span.ui-icon.ui-icon-comment
+      {
+      margin: 2px 2px 0 0;
+      float: left;
+      background-image: url(/assets/ui-icons_ffffff_256x240.png); 
+      }
+    
+    h5 
+      {
+      clear: none;
+      }
     }
     
   ul#conversation
@@ -20,9 +29,8 @@
     
     li#response
       {
-      padding: 2px 5px 5px 20px;
+      padding: 20px 5px 5px 20px;
       margin: 10px 0 10px 0;
-      border-top: 1px solid $dark_gray;
       
       img
         {

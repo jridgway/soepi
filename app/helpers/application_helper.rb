@@ -71,14 +71,14 @@ module ApplicationHelper
     end
   end
   
-  def followable_link(followable, remote=false)
+  def followable_link(followable, remote=false, redirect_to_url=request.url)
     if followable.is_a?(Member)
       owner_id = followable.id 
     else
       owner_id = followable.member_id
     end
     link_to 'Follow', 
-      follow_toggle_path(:followable_type => followable.class.to_s, :followable_id => followable.id), 
+      follow_toggle_path(:followable_type => followable.class.to_s, :followable_id => followable.id, :redirect_to_url => redirect_to_url), 
       :method => :put, 
       :remote => remote, 
       :id => 'follow-toggle', 

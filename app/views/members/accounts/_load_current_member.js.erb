@@ -55,18 +55,10 @@
   
   <% if current_member %>  
     function set_followable_toggle() {
-      <% unless (@followable and @followable.is_a?(Member) and current_member.id == @followable.id) or 
-      (@followable and not @followable.is_a?(Member) and @followable.member_id == current_member.id) %>
-        <% if @followable and current_member.following?(@followable) %>
-          $('#follow-toggle').find('span').text('Unfollow');
-        <% else %>
-          $('#follow-toggle').find('span').text('Follow');
-        <% end %>
-        if($('#follow-toggle').attr('data-remote')) {
-          $('#follow-toggle').click(function() {
-            setTimeout("disable_button($('#follow-toggle'));", 100);
-          });
-        }
+      <% if @followable and current_member.following?(@followable) %>
+        $('#follow-toggle').find('span').text('Unfollow');
+      <% else %>
+        $('#follow-toggle').find('span').text('Follow');
       <% end %>
     }
   <% else %>

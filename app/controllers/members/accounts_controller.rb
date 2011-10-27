@@ -89,21 +89,6 @@ class Members::AccountsController < Devise::RegistrationsController
     flash[:alert] = nil
     redirect_to member_your_pin_path
   end
-
-  def load_current_member
-    if member_signed_in?
-      unless params[:followable_id].blank? or params[:followable_type].blank?
-        case params[:followable_type]
-          when 'Survey' then @followable = Survey.find(params[:followable_id])
-          when 'Chart' then @followable = Chart.find(params[:followable_id])
-          when 'Member' then @followable = Member.find(params[:followable_id])
-          when 'Forum' then @followable = Forum.find(params[:followable_id])
-          when 'Petition' then @followable = Petition.find(params[:followable_id])
-          else @followable = nil 
-        end
-      end
-    end
-  end
   
   def follow_toggle
     case params[:followable_type]
@@ -114,30 +99,12 @@ class Members::AccountsController < Devise::RegistrationsController
       else @followable = nil 
     end
     if @followable
-      if (@followable.is_a?(Member) and @followable.id == current_member.id) or 
-      (not @followable.is_a?(Member) and @followable.member_id == current_member.id)
-        if request.xhr?
-          render :text => "alert('You cannot follow yourself.'); enable_button($('#follow-toggle'));"
-        else
-          flash[:alert] = 'You cannot follow yourself.'
-        end
+      if current_member.may_follow?(@followable)
+        flash[:alert] = 'You cannot follow yourself.'
       else 
-        if current_member.following?(@followable)
-          current_member.stop_following(@followable)
-          @following = false
-        else
-          current_member.follow(@followable)
-          @following = true
-        end
+        @following = current_member.follow_toggle!(@followable)
       end
-      unless request.xhr?
-        case params[:followable_type]
-          when 'Survey' then redirect_to survey_path(@followable)
-          when 'Chart' then redirect_to chart_path(@followable)
-          when 'Member' then redirect_to member_path(@followable)
-          when 'Petition' then redirect_to petition_path(@followable)
-        end
-      end
+      redirect_to params[:redirect_to_url]
     end
   end
 
