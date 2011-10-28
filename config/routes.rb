@@ -83,10 +83,11 @@ Soepi::Application.routes.draw do
   resources :pages, :only => [:show]
   
   # Temp patch until fix is posted for rails_admin
-  match '/logout', :controller => 'devise/sessions', :action => 'destroy'
+  match '/members/sign_out', :controller => 'devise/sessions', :action => 'destroy'
   
   mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
    
   root :to => 'pages#home'
   
+  match '*path' => 'pages#show'
 end

@@ -18,6 +18,8 @@ RailsAdmin.config do |config|
   end
   
   config.current_user_method { current_member } #auto-generated
+  
+  config.main_app_name { ['SoEpi', 'Admin'] } 
 
   #  ==> Authentication (before_filter)
   # This is run inside the controller instance so you can setup any authentication you need to.
