@@ -21,7 +21,7 @@
   
   - content_for :body_content_right do
     .highlight
-      = Part.set(:home_member_top_right, '<h2>Big news here read it!</h2><p>An important news item here, probably our latest blog post... <a href="#">Read More</a></p>'.html_safe, 'ckeditor')
+      = Part.find_or_set(:home_member_top_right, '<h2>Big news here read it!</h2><p>An important news item here, probably our latest blog post... <a href="#">Read More</a></p>'.html_safe, 'ckeditor')
     .block
       = link_to 'Create a Survey', new_survey_path, :class => 'restrict-to-members button', :icon => 'ui-icon-document'    
       = link_to 'Create a Chart', new_chart_path, :class => 'restrict-to-members button', :icon => 'ui-icon-document'    
