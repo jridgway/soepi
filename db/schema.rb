@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111026161219) do
+ActiveRecord::Schema.define(:version => 20111028141416) do
 
   create_table "age_groups", :force => true do |t|
     t.string   "label"
@@ -263,6 +263,7 @@ ActiveRecord::Schema.define(:version => 20111026161219) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "slug"
+    t.string   "markup_type"
   end
 
   add_index "pages", ["slug"], :name => "index_pages_on_slug"
@@ -329,9 +330,10 @@ ActiveRecord::Schema.define(:version => 20111026161219) do
     t.text     "javascript"
     t.datetime "show_at"
     t.datetime "hide_at"
-    t.string   "state",      :default => "draft"
+    t.string   "state",       :default => "draft"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "markup_type"
   end
 
   create_table "petitioners", :force => true do |t|

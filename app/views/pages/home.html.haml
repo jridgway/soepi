@@ -4,9 +4,9 @@
     Your Notifications
     
   - content_for :body_content_toolbar do 
+    = link_to 'Create a Petition', new_petition_path, :class => 'restrict-to-members button', :icon => 'ui-icon-document' 
+    = link_to 'Create a Chart', new_chart_path, :class => 'restrict-to-members button', :icon => 'ui-icon-document'    
     = link_to 'Create a Survey', new_survey_path, :class => 'restrict-to-members button', :icon => 'ui-icon-document'
-    = link_to 'Create a Chart', new_chart_path, :class => 'restrict-to-members button', :icon => 'ui-icon-document'  
-    = link_to 'Create a Petition', new_petition_path, :class => 'restrict-to-members button', :icon => 'ui-icon-document'   
     
   - content_for :body_content_left do
     %ul#notifications.listing
@@ -25,6 +25,7 @@
             = render :partial => '/pages/page', :locals => {:page => notification.notifiable} 
   
   - content_for :body_content_right do
+    = Part.find_or_set(:home_member_top_right, '<h2>Big news here read it!</h2><p>An important news item here, probably our latest blog post... <a href="#">Read More</a></p>'.html_safe, 'ckeditor')
     .accordian
       %h3
         %a{:href => '#your-surveys'} Your Surveys (#{@surveys.length})
@@ -43,7 +44,7 @@
       #your-followers
         %ol
           - @followers.each do |follower|
-            %li= link_to follower.nickname, follower
+            %li= link_to follower.nickname, follower          
     
   = render :partial => '/shared/content_page', :locals => {:with_inner_content_div => false}
   

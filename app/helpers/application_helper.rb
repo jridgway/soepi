@@ -1,4 +1,14 @@
 module ApplicationHelper
+  def controller_for_tag(tag)
+    case tag.taggings.first.taggable_type 
+      when 'Survey' then 'surveys'
+      when 'Chart' then 'charts'
+      when 'Petition' then 'petitions'
+      when 'Member' then 'members/profiles'
+      when 'Page' then 'pages'
+    end
+  end
+  
   def browser_title(title)
     if title.blank? and @page.present? 
       if @page.browser_title.blank?

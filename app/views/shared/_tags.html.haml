@@ -3,6 +3,6 @@
   %ul#tags
     - @tags.each do |tag| 
       %li 
-        = link_to tag, url_for(:action => 'by_tag', :tag => tag), :class => 'tag'
+        = link_to tag, url_for(:controller => controller_for_tag(tag), :action => 'by_tag', :tag => tag), :class => 'tag'
         x #{tag.count}
     
