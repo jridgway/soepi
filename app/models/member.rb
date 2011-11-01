@@ -77,9 +77,6 @@ class Member < ActiveRecord::Base
   validates_format_of :nickname, :with => /^[a-z]+[a-z0-9\.]*$/i, :allow_blank => true,
     :message => 'must begin with a letter and may not contain spaces or punctuation marks'
   validates_acceptance_of :informed_consent, :terms_of_use, :accept => true
-  validates_length_of :pic, :maximum => 2.megabytes
-  validates_property :mime_type, :of => :pic, :in => %w(image/jpeg image/png image/png image/tiff),
-    :message => 'must be a jpeg, png, png, or tiff image'
 
   before_create :set_year_registered
   before_save :geocode_address

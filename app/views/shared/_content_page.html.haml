@@ -13,20 +13,19 @@
     sections[sym] = html_2 unless html_2.blank?
   end
 
-- unless sections[:body_content_title].blank? and sections[:body_content_toolbar].blank?
-  #content-top
-    - unless sections[:body_content_toolbar].blank?
-      #toolbar
-        = sections[:body_content_toolbar]
-    - unless sections[:body_content_title].blank?
-      %h1#page-title
-        = sections[:body_content_title]
-    - unless sections[:body_content_details].blank?
-      #details
-        = sections[:body_content_details]
-    - unless sections[:body_content_more_details].blank?
-      #more-details.highlight
-        = sections[:body_content_more_details]
+#content-top
+  - unless sections[:body_content_toolbar].blank?
+    #toolbar
+      = sections[:body_content_toolbar]
+  - unless sections[:body_content_title].blank?
+    %h1#page-title
+      = sections[:body_content_title]
+  - unless sections[:body_content_details].blank?
+    #details
+      = sections[:body_content_details]
+  - unless sections[:body_content_more_details].blank?
+    #more-details.highlight
+      = sections[:body_content_more_details]
 
 - if sections[:body_content].blank?
   %section#body_content_left

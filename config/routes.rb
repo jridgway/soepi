@@ -88,6 +88,9 @@ Soepi::Application.routes.draw do
   mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
    
   root :to => 'pages#home'
+  get '/notifications', :to => 'pages#notifications'
   
-  match '*path' => 'pages#show'
+  match '*path' => 'pages#show', :constraints => lambda{ |req|  
+    (req.env["REQUEST_PATH"] =~ /\/members\/auth\//).nil? 
+  }
 end

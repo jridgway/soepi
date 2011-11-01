@@ -1,0 +1,31 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  description: MyString
+  position: 1
+  publish_at: 2011-10-31 14:54:14
+  expires_at: 2011-10-31 14:54:14
+  img: MyString
+  img_uid: MyString
+  img_mime_type: MyString
+  img_name: MyString
+  img_size: 1
+  img_width: 1
+  img_height: 1
+  img_image_uid: MyString
+  img_image_ext: MyString
+
+two:
+  description: MyString
+  position: 1
+  publish_at: 2011-10-31 14:54:14
+  expires_at: 2011-10-31 14:54:14
+  img: MyString
+  img_uid: MyString
+  img_mime_type: MyString
+  img_name: MyString
+  img_size: 1
+  img_width: 1
+  img_height: 1
+  img_image_uid: MyString
+  img_image_ext: MyString

@@ -1,7 +1,7 @@
 !!!
 = render :partial => "/shared/html_tag"
 = render :partial => "/shared/head"
-%body.bp.two-column
+%body.bp.two-column{:class => (home? ? 'home' : '')}
   #root
     %header#header
       = render :partial => "/shared/header"

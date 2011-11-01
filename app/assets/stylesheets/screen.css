@@ -5,6 +5,7 @@
  *= require_self
  *= require partials/jquery_ui_1_8_16_custom
  *= require partials/jquery_qtip
+ *= require partials/coin-slider-styles
  *= require partials/layouts
  *= require partials/formatting
  *= require partials/header

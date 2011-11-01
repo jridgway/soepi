@@ -1,4 +1,8 @@
 module ApplicationHelper
+  def home?
+    true if request.path == '/'
+  end
+  
   def controller_for_tag(tag)
     case tag.taggings.first.taggable_type 
       when 'Survey' then 'surveys'

@@ -1,31 +1,21 @@
-- if member_signed_in?
-  - content_for :body_content_title do 
-    = avatar(current_member, 20)
-    Your Notifications
-    
-  - content_for :body_content_left do
+- content_for :body_content_right do
+  - if Part.set?(:home_member_top_right)
+    .highlight
+      = Part.find_or_set(:home_member_top_right, ''.html_safe, 'ckeditor')
+  .block
+    = link_to 'Create a Survey', new_survey_path, :class => 'restrict-to-members button', :icon => 'ui-icon-document'    
+    = link_to 'Create a Chart', new_chart_path, :class => 'restrict-to-members button', :icon => 'ui-icon-document'    
+    = link_to 'Create a Petition', new_petition_path, :class => 'restrict-to-members button', :icon => 'ui-icon-document' 
+
+- if member_signed_in?    
+  - content_for :body_content_left do    
+    %h1#page-title
+      = avatar(current_member, 20)
+      Your Notifications
     %ul#notifications.listing
-      - @notifications.each do |notification|
-        %li
-          %h3= "#{notification.message}:"
-          - case notification.notifiable.class.to_s when 'Survey' then
-            = render :partial => '/surveys/survey', :locals => {:survey => notification.notifiable}
-          - when 'Chart' then
-            = render :partial => '/charts/chart', :locals => {:chart => notification.notifiable}
-          - when 'Petition' then
-            = render :partial => '/petitions/petition', :locals => {:petition => notification.notifiable}        
-          - when 'Member' then
-            = render :partial => '/members/member', :locals => {:member => notification.notifiable} 
-          - when 'Page' then 
-            = render :partial => '/pages/page', :locals => {:page => notification.notifiable} 
+      = render :partial => 'notifications', :locals => {:notifications => @notifications}
   
   - content_for :body_content_right do
-    .highlight
-      = Part.find_or_set(:home_member_top_right, '<h2>Big news here read it!</h2><p>An important news item here, probably our latest blog post... <a href="#">Read More</a></p>'.html_safe, 'ckeditor')
-    .block
-      = link_to 'Create a Survey', new_survey_path, :class => 'restrict-to-members button', :icon => 'ui-icon-document'    
-      = link_to 'Create a Chart', new_chart_path, :class => 'restrict-to-members button', :icon => 'ui-icon-document'    
-      = link_to 'Create a Petition', new_petition_path, :class => 'restrict-to-members button', :icon => 'ui-icon-document' 
     .block
       .accordian
         %h3
@@ -51,4 +41,14 @@
   
 - else
   - cache('home', :expires_in => cache_expirary) do
+    - content_for :body_content_left do 
+      #slider
+        - @slides.each do |slide|
+          %a{:href => '#'}
+            = image_tag slide.img.thumb('570x350#').url
+            %span= slide.description
+      sdf asf asdf saf sadfsdf asf asdf saf sadfsdf asf asdf saf sadfsdf asf asdf saf sadfsdf asf asdf saf sadfsdf asf asdf saf sadfsdf asf asdf saf sadfsdf asf asdf saf sadfsdf asf asdf saf sadfsdf asf asdf saf sadfsdf asf asdf saf sadfsdf asf asdf saf sadfsdf asf asdf saf sadfsdf asf asdf saf sadfsdf asf asdf saf sadfsdf asf asdf saf sadfsdf asf asdf saf sadfsdf asf asdf saf sadfsdf asf asdf saf sadfsdf asf asdf saf sadfsdf asf asdf saf sadfsdf asf asdf saf sadfsdf asf asdf saf sadfsdf asf asdf saf sadfsdf asf asdf saf sadfsdf asf asdf saf sadfsdf asf asdf saf sadfsdf asf asdf saf sadfsdf asf asdf saf sadfsdf asf asdf saf sadfsdf asf asdf saf sadfsdf asf asdf saf sadfsdf asf asdf saf sadf
+          
+      
+      
     = render :partial => "/shared/content_page", :locals => {:with_inner_content_div => false}

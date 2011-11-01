@@ -1,0 +1,13 @@
+- notifications.each do |notification|
+  %li
+    %h3= "#{notification.message}:"
+    - case notification.notifiable.class.to_s when 'Survey' then
+      = render :partial => '/surveys/survey', :locals => {:survey => notification.notifiable}
+    - when 'Chart' then
+      = render :partial => '/charts/chart', :locals => {:chart => notification.notifiable}
+    - when 'Petition' then
+      = render :partial => '/petitions/petition', :locals => {:petition => notification.notifiable}        
+    - when 'Member' then
+      = render :partial => '/members/member', :locals => {:member => notification.notifiable} 
+    - when 'Page' then 
+      = render :partial => '/pages/page', :locals => {:page => notification.notifiable}

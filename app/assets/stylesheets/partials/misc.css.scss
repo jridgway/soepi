@@ -92,20 +92,22 @@
     
   .ajax-loader
     {
-    margin: 30px auto;
-    display: block;
-    border: none;
+    margin: 30px auto !important;
+    display: block !important;
+    border: none !important;
+    float: none !important;
     }
     
   .highlight
     {
-    padding: 10px;
+    padding: 5px 10px;
     margin-bottom: 15px;
-    background: $dark_gray;
+    background: #fff;
     color: #000;
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
     border-radius: 4px;
+    border: 3px solid $blue;
     
     h1, h2, h3, h4,h5, h6
       {

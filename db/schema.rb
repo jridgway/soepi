@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111028141416) do
+ActiveRecord::Schema.define(:version => 20111031220437) do
 
   create_table "age_groups", :force => true do |t|
     t.string   "label"
@@ -170,9 +170,7 @@ ActiveRecord::Schema.define(:version => 20111028141416) do
     t.float    "lng"
     t.boolean  "informed_consent",                            :default => false
     t.boolean  "terms_of_use",                                :default => false
-    t.boolean  "subscription_surveys",                        :default => true
-    t.boolean  "subscription_petitions",                      :default => true
-    t.boolean  "subscription_groups",                         :default => true
+    t.boolean  "subscription_notifications",                  :default => true
     t.boolean  "subscription_messages",                       :default => true
     t.boolean  "subscription_news",                           :default => true
     t.integer  "year_registered"
@@ -392,6 +390,24 @@ ActiveRecord::Schema.define(:version => 20111028141416) do
   end
 
   add_index "settings", ["name"], :name => "index_settings_on_name", :unique => true
+
+  create_table "slides", :force => true do |t|
+    t.string   "description"
+    t.integer  "position"
+    t.datetime "publish_at",    :default => '2011-10-31 20:49:21'
+    t.datetime "expires_at"
+    t.string   "img"
+    t.string   "img_uid"
+    t.string   "img_mime_type"
+    t.string   "img_name"
+    t.integer  "img_size"
+    t.integer  "img_width"
+    t.integer  "img_height"
+    t.string   "img_image_uid"
+    t.string   "img_image_ext"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "slugs", :force => true do |t|
     t.string   "name"

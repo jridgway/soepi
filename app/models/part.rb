@@ -25,4 +25,8 @@ class Part < ActiveRecord::Base
       part.body.to_s
     end
   end
+  
+  def self.set?(name)
+    true if (part = find_by_name(name)) and not part.body.blank?
+  end
 end

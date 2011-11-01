@@ -8,6 +8,7 @@
 //= require jquery_ujs
 //= require_tree ./jquery
 //= require main
+//= require home
 //= require forms
 //= require tips
 //= require survey_form
