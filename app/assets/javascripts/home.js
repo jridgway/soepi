@@ -6,9 +6,10 @@ $(document).ready(function () {
 });
 
 function init_slider() {
-  if($('bp.home #slider img').length > 0) {
-    $('bp.home #slider').coinslider({
-      height: 350
+  if($('.bp.home #slider img').length > 0) {
+    $('.bp.home #slider').coinslider({
+      height: 350,
+      delay: 6000
     });
   } else {
     $('bp.home #slider').hide();
