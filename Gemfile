@@ -49,6 +49,7 @@ gem 'jquery-rails'
 gem 'rack-cache'
 gem 'rack', '1.3.3'
 gem 'deep_cloneable', '~> 1.3.0'
+gem 'redis'
 
 group :development do
   gem 'rails-dev-tweaks', '~> 0.5.0'

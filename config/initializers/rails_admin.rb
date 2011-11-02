@@ -11,11 +11,11 @@
 
 RailsAdmin.config do |config|
 
-  config.model Occupation do
-    object_label_method do
-      :label
-    end
-  end
+  #config.model Education do
+  #  object_label_method do
+  #    :label
+  #  end
+  #end
   
   config.current_user_method { current_member } #auto-generated
   
