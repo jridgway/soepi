@@ -78,6 +78,16 @@
           .bottom-actions
             = link_to 'Close', close_survey_path(@survey), :class => 'button', :method => 'put'
             %button{:id => 'cancel-close', :class => 'button'} Cancel
+      - when 'closed' then
+        %button{:id => 'publish', :icon => 'ui-icon-signal-diag', :class => 'button'} Publish
+        #publish-message{:style => 'display:none', :title => 'Publish this Survey'}
+          %p
+            Are you sure you're ready to <strong>publish</strong> this survey? Have the results been fully reviewed to protect
+            our members' anonymity?
+          %p Once published, anyone will be able to download the complete results, and members will be able to create charts and more.
+          .bottom-actions
+            = link_to 'Publish', publish_survey_path(@survey), :class => 'button', :method => 'put'
+            %button{:id => 'cancel-publish', :class => 'button'} Cancel
   - if @survey.live?
     = render :partial => '/shared/sharing'
     

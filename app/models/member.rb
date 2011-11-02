@@ -12,7 +12,6 @@ class Member < ActiveRecord::Base
   belongs_to :gender
   has_and_belongs_to_many :ethnicities
   has_and_belongs_to_many :races
-  belongs_to :occupation
   belongs_to :education
 
   scope :confirmed, where('confirmed_at is not null')
@@ -60,7 +59,7 @@ class Member < ActiveRecord::Base
   attr_accessible :remove_pic, :pic, :email, :password, :password_confirmation, :remember_me,
     :nickname, :first_name, :last_name, :email, :phone, :address_1, :address_2,
     :city, :region, :postal_code, :country, :timezone, :primary_language,
-    :gender_id, :birthmonth, :ethnicity_ids, :race_ids, :occupation_id, :education_id, :informed_consent, :terms_of_use,
+    :gender_id, :birthmonth, :ethnicity_ids, :race_ids, :education_id, :informed_consent, :terms_of_use,
     :subscription_surveys, :subscription_charts, :subscription_petitions, :subscription_groups, :subscription_messages,
     :subscription_news, :tag_list, :privacy_dont_use_my_gravatar, :privacy_dont_list_me, :privacy_dont_show_location
 
@@ -70,7 +69,7 @@ class Member < ActiveRecord::Base
     :message => 'must be a jpg, png, gif, or tiff image'
 
   validates_presence_of :nickname, :city, :region, :postal_code, :country,
-    :timezone, :language, :birthmonth, :gender_id, :ethnicity_ids, :race_ids, :occupation_id, :education_id
+    :timezone, :language, :birthmonth, :gender_id, :ethnicity_ids, :race_ids, :education_id
   validates_uniqueness_of :nickname
   validate :unallowed_nicknames
   validates_length_of :nickname, :minimum => 3, :maximum => 15, :allow_blank => true
@@ -195,11 +194,6 @@ class Member < ActiveRecord::Base
       end
       if target.target_by_gender? and target.gender_ids.length > 0
         if target.gender_ids.select {|g_id| g_id == gender_id}.length == 0
-          qualifies = false
-        end
-      end
-      if target.target_by_occupation? and target.occupation_ids.length > 0
-        if target.occupation_ids.select {|o_id| o_id == occupation_id}.length == 0
           qualifies = false
         end
       end

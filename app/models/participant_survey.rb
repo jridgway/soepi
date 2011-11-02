@@ -4,12 +4,11 @@ class ParticipantSurvey < ActiveRecord::Base
   belongs_to :gender
   has_and_belongs_to_many :ethnicities
   has_and_belongs_to_many :races
-  belongs_to :occupation
   belongs_to :education
   belongs_to :next_question, :class_name => 'SurveyQuestion'
 
   validates_presence_of :survey_id, :city, :region, :postal_code, :country,
-    :birthmonth, :gender_id, :ethnicity_ids, :race_ids, :occupation_id, :education_id
+    :birthmonth, :gender_id, :ethnicity_ids, :race_ids, :education_id
 
   before_create :set_next_question
 
@@ -31,6 +30,5 @@ class ParticipantSurvey < ActiveRecord::Base
     self.ethnicities = member.ethnicities
     self.races = member.races
     self.education = member.education
-    self.occupation = member.occupation
   end
 end

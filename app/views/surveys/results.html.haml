@@ -3,6 +3,8 @@
 = render :partial => '/surveys/details'
   
 - content_for :body_content do
-  Summary statistics here until the survey is published...
+  #charts
+  %script{:type => "text/javascript", :charset => "utf-8"}
+    = render :partial => 'surveys/summary_statistics.js.erb', :locals => {:survey => @survey}
     
 = render :partial => "/shared/content_page"

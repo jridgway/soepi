@@ -1,11 +1,13 @@
 class SurveysController < ApplicationController
   before_filter :load_survey, :only => [:show, :forks, :results, :forkit, :launch, :reject, :request_changes, 
-    :participate, :create_response, :update_pin, :generate_and_send_new_pin, :followed_by]
+    :participate, :create_response, :update_pin, :generate_and_send_new_pin, :followed_by, :publish, :close]
   before_filter :load_facebook_meta, :only => [:show, :forks, :results, :forkit, :launch, :reject, :participate,
     :create_response, :update_pin, :generate_and_send_new_pin, :followed_by]
   before_filter :authenticate_member!, :except => [:index, :launched, :closed, :published, :show, :forks, :sharing, 
     :by_tag, :followed_by, :results]
-  before_filter :admin_only!, :only => [:drafting, :review_requested, :rejected, :launch, :reject, :request_changes]
+  before_filter :admin_only!, :only => [:drafting, :review_requested, :rejected, :launch, :reject, :request_changes, :publish]
+  before_filter :owner_or_admins_only!, :only => [:results]
+  before_filter :owner_only!, :only => [:update, :destroy, :close, :submit_for_review]
   before_filter :load_tags, :only => [:index, :recent, :you_created, :by_tag]
   
   enable_esi
@@ -129,17 +131,6 @@ class SurveysController < ApplicationController
     end
   end
 
-  def launch
-    if @survey.member_id == current_member.id
-      flash[:alert] = 'You may not launch your own survey.'
-    elsif @survey.launch!
-      flash[:alert] = 'The survey has launched!'
-    else
-      flash[:alert] = 'The survey has NOT launched.'
-    end
-    redirect_to survey_path(@survey)
-  end
-
   def request_changes
     if @survey.request_changes!
       flash[:alert] = 'The status of the survey is now "Changes Requested." Please compose a message to the member describing your requests.'
@@ -155,6 +146,39 @@ class SurveysController < ApplicationController
       flash[:alert] = 'The survey was rejected.'
     else
       flash[:alert] = 'The survey was NOT rejected.'
+    end
+    redirect_to survey_path(@survey)
+  end
+
+  def launch
+    if @survey.member_id == current_member.id
+      flash[:alert] = 'You may not launch your own survey.'
+    elsif @survey.launch!
+      flash[:alert] = 'The survey has launched!'
+    else
+      flash[:alert] = 'The survey has NOT launched.'
+    end
+    redirect_to survey_path(@survey)
+  end
+
+  def close
+    if @survey.close!
+      flash[:alert] = %{The survey was closed. In order to protect the privacy of
+        the paricipants, the results will be published only after a full review by SoEpi. Please
+        <a href="#{member_contact_us_path}">contact us</a> if
+        you have questions or comments.}.html_safe
+        #/
+    else
+      flash[:alert] = 'The survey was NOT closed.'
+    end
+    redirect_to survey_path(@survey)
+  end
+
+  def publish
+    if @survey.publish!
+      flash[:alert] = 'The survey results were published!'
+    else
+      flash[:alert] = 'The survey results were NOT published.'
     end
     redirect_to survey_path(@survey)
   end
@@ -311,5 +335,21 @@ class SurveysController < ApplicationController
     
     def cache_expirary_key(params)
       params.merge :cache_expirary_key => Rails.cache.read(:surveys_cache_expirary_key)
+    end
+    
+    def owner_or_admins_only!
+      unless member_signed_in? and (current_member.admin? or current_member.id == @survey.member_id)
+        flash[:alert] = 'Insufficient privileges.'
+        redirect_to survey_path(@survey)
+        false
+      end
+    end
+  
+    def owner_only!
+      unless member_signed_in? and current_member.id == @survey.member_id
+        flash[:alert] = 'Insufficient privileges.'
+        redirect_to survey_path(@survey)
+        false
+      end
     end
 end

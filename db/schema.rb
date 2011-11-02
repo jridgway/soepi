@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111031220437) do
+ActiveRecord::Schema.define(:version => 20111102134628) do
 
   create_table "age_groups", :force => true do |t|
     t.string   "label"
@@ -134,14 +134,14 @@ ActiveRecord::Schema.define(:version => 20111031220437) do
   create_table "members", :force => true do |t|
     t.string   "password_salt"
     t.string   "email"
-    t.string   "encrypted_password",           :limit => 128, :default => "",    :null => false
+    t.string   "encrypted_password",            :limit => 128, :default => "",    :null => false
     t.string   "reset_password_token"
     t.datetime "remember_created_at"
     t.string   "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string   "authentication_token"
-    t.integer  "failed_attempts",                             :default => 0
+    t.integer  "failed_attempts",                              :default => 0
     t.string   "unlock_token"
     t.datetime "locked_at"
     t.string   "nickname"
@@ -168,21 +168,21 @@ ActiveRecord::Schema.define(:version => 20111031220437) do
     t.date     "birthmonth"
     t.float    "lat"
     t.float    "lng"
-    t.boolean  "informed_consent",                            :default => false
-    t.boolean  "terms_of_use",                                :default => false
-    t.boolean  "subscription_notifications",                  :default => true
-    t.boolean  "subscription_messages",                       :default => true
-    t.boolean  "subscription_news",                           :default => true
+    t.boolean  "informed_consent",                             :default => false
+    t.boolean  "terms_of_use",                                 :default => false
+    t.boolean  "subscription_notifications",                   :default => true
+    t.boolean  "subscription_messages",                        :default => true
+    t.boolean  "subscription_news",                            :default => true
     t.integer  "year_registered"
-    t.boolean  "admin",                                       :default => false
+    t.boolean  "admin",                                        :default => false
     t.integer  "gender_id"
-    t.integer  "occupation_id"
     t.integer  "education_id"
-    t.boolean  "subscription_charts",                         :default => true
-    t.boolean  "privacy_dont_use_my_gravatar",                :default => false
-    t.boolean  "privacy_dont_list_me",                        :default => false
-    t.boolean  "privacy_dont_show_location",                  :default => false
+    t.boolean  "subscription_charts",                          :default => true
+    t.boolean  "privacy_dont_use_my_gravatar",                 :default => false
+    t.boolean  "privacy_dont_list_me",                         :default => false
+    t.boolean  "privacy_dont_show_location",                   :default => false
     t.string   "slug"
+    t.boolean  "subscription_weekly_summaries",                :default => true
   end
 
   add_index "members", ["confirmation_token"], :name => "index_members_on_confirmation_token", :unique => true
@@ -227,18 +227,6 @@ ActiveRecord::Schema.define(:version => 20111031220437) do
     t.boolean  "seen",            :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "occupations", :force => true do |t|
-    t.string   "label"
-    t.integer  "position"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "occupations_targets", :id => false, :force => true do |t|
-    t.integer "target_id"
-    t.integer "occupation_id"
   end
 
   create_table "pages", :force => true do |t|
@@ -293,7 +281,6 @@ ActiveRecord::Schema.define(:version => 20111031220437) do
     t.integer "survey_version"
     t.date    "birthmonth"
     t.integer "gender_id"
-    t.integer "occupation_id"
     t.integer "education_id"
     t.string  "city"
     t.string  "region"
@@ -301,6 +288,7 @@ ActiveRecord::Schema.define(:version => 20111031220437) do
     t.string  "country"
     t.date    "created_at"
     t.integer "next_question_id"
+    t.boolean "complete",         :default => false
   end
 
   add_index "participant_surveys", ["id"], :name => "index_participant_surveys_on_id", :unique => true
@@ -453,10 +441,6 @@ ActiveRecord::Schema.define(:version => 20111031220437) do
     t.text     "description"
     t.integer  "member_id"
     t.boolean  "anonymous"
-    t.integer  "minimum_completes_needed"
-    t.integer  "maximum_completes_needed"
-    t.datetime "closes_soft_at"
-    t.datetime "closes_hard_at"
     t.datetime "published_at"
     t.datetime "closed_at"
     t.string   "state"
@@ -537,13 +521,6 @@ ActiveRecord::Schema.define(:version => 20111031220437) do
     t.datetime "updated_at"
   end
 
-  create_table "target_occupations", :force => true do |t|
-    t.integer  "target_id"
-    t.integer  "occupation_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "target_races", :force => true do |t|
     t.integer  "target_id"
     t.integer  "race_id"
@@ -571,7 +548,6 @@ ActiveRecord::Schema.define(:version => 20111031220437) do
     t.string   "approximate_address"
     t.boolean  "target_by_age_group",        :default => false
     t.boolean  "target_by_gender",           :default => false
-    t.boolean  "target_by_occupation",       :default => false
     t.boolean  "target_by_education",        :default => false
     t.boolean  "target_by_ethnicity",        :default => false
     t.boolean  "target_by_race",             :default => false

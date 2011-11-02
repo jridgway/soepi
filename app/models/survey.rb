@@ -29,12 +29,12 @@ class Survey < ActiveRecord::Base
   friendly_id :title, :use => :slugged
 
   validates_presence_of :title, :description, :purpose_of_survey, :uses_of_results,
-    :time_required_in_minutes, :minimum_completes_needed, :closes_soft_at, :member_id
+    :time_required_in_minutes, :member_id
   validates_length_of :title, :minimum => 3
-  validates_numericality_of :minimum_completes_needed, :maximum_completes_needed, :minimum => 300, :allow_blank => true
   validates_numericality_of :time_required_in_minutes, :cohort_interval_in_days,
     :cohort_range_in_days, :minimum => 1, :allow_blank => true
   validates_numericality_of :cohort_range_in_days, :minimum => 1, :allow_blank => true
+  validate :settings_for_draft
 
   include Tanker
   tankit 'soepi' do
@@ -60,17 +60,8 @@ class Survey < ActiveRecord::Base
   #after_save :update_tank_indexes
   #after_destroy :delete_tank_indexes
 
-  def validate
+  def settings_for_draft
     if drafting? and state_was == 'drafting'
-      if closes_soft_at and closes_soft_at - Time.now < 14.days
-        errors.add :closes_soft_at, 'must be at least 14 days from now'
-      end
-      if closes_hard_at and closes_hard_at - Time.now < 14.days
-        errors.add :closes_hard_at, 'must be at least 14 days from now'
-      end
-      if closes_soft_at and closes_hard_at and closes_soft_at > closes_hard_at
-        errors.add :closes_soft_at, 'must be earlier than Closes at hard'
-      end
       if irb?
         errors.add :irb_name, 'is required if IRB is checked' if irb_name.blank?
         errors.add :irb_phone, 'is required if IRB is checked' if irb_phone.blank?
@@ -88,9 +79,6 @@ class Survey < ActiveRecord::Base
         if cohort_range_in_days.blank?
           errors.add :cohort_range_in_days, 'is required if Cohort is checked'
         end
-      end
-      if minimum_completes_needed and maximum_completes_needed and minimum_completes_needed > maximum_completes_needed
-        errors.add :maximum_completes_needed, 'must be more than minimum completes needed'
       end
     end
   end
@@ -175,7 +163,6 @@ class Survey < ActiveRecord::Base
         new_survey.target.genders = self.target.genders
         new_survey.target.ethnicities = self.target.ethnicities
         new_survey.target.races = self.target.races
-        new_survey.target.occupations = self.target.occupations
         new_survey.target.educations = self.target.educations
       end
       new_survey.save!

@@ -1,0 +1,34 @@
+var ss_location;
+var ss_age;
+var ss_gender;
+var ss_ethnicity;
+var ss_race;
+var ss_education;
+
+$(document).ready(function() {
+  $('#charts').append('<div id="ss-location"></div>');
+  ss_location = new Highcharts.Chart({
+     chart: {
+        renderTo: 'ss-location',
+        type: 'bar'
+     },
+     title: {
+        text: 'Completes by Location'
+     },
+     xAxis: {
+        categories: ['West', 'Midwest', 'Northeast', 'South']
+     },
+     yAxis: {
+        title: {
+           text: 'Fruit eaten'
+        }
+     },
+     series: [{
+        name: 'Jane',
+        data: [1, 0, 4]
+     }, {
+        name: 'John',
+        data: [5, 7, 3]
+     }]
+  });
+});

@@ -10,8 +10,6 @@
       %a{:href => '#organization'} Organization
     %li
       %a{:href => '#schedule'} Schedule
-    %li
-      %a{:href => '#closing'} Closing
       
   #descriptions
     = f.input :title, :hint => 'Give a clear, descriptive yet enticing title.'
@@ -66,10 +64,6 @@
         .inner
           = f2.association :races, :label => 'Races', :collection => Race.all.collect {|i| [i.label, i.id]}, :as => :check_boxes
       .target
-        = f2.input :target_by_occupation, :input_html => {:class => 'check'}
-        .inner
-          = f2.association :occupations, :label => 'Occupations', :collection => Occupation.all.collect {|i| [i.label, i.id]}, :as => :check_boxes
-      .target
         = f2.input :target_by_education, :input_html => {:class => 'check'}
         .inner
           = f2.association :educations, :label => 'Educations', :collection => Education.all.collect {|i| [i.label, i.id]}, :as => :check_boxes
@@ -90,8 +84,3 @@
     #cohort-inner
       = f.input :cohort_interval_in_days, :label => 'Frequency', :as => :select, :collection => Survey.cohort_interval_options, :hint => 'How often will you survey participants of this survey?'
       = f.input :cohort_range_in_days, :label => 'Range', :as => :select, :collection => Survey.cohort_range_options, :hint => 'How long will you survey participants of this survey?'
-  #closing
-    = f.input :minimum_completes_needed, :hint => 'Keep the survey open until minimum completes needed are met.', :input_html => {:step => 100, :min => 300}
-    = f.input :maximum_completes_needed, :hint => 'Close the survey when maximum completes needed are met, regardless of closing dates/times.', :input_html => {:step => 100, :min => 300}
-    = f.input :closes_soft_at, :as => :datetime_picker, :hint => 'If minimum completes are met, close the survey at this date/time.'
-    = f.input :closes_hard_at, :as => :datetime_picker, :hint => 'Regardlesss of minimum and maximum completes needed, close the survey at this date/time.'

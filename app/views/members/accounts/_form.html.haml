@@ -44,7 +44,6 @@
       &mdash; Not shown on your profile. Included in anonymous survey results.
   = f.association :ethnicities, :as => :check_boxes, :collection => Ethnicity.all.collect {|i| [i.label, i.id]}, :label => 'Hispanic, Latino, or Spanish origin?', :hint => '<strong class="private">Private</strong> &amp; <strong class="annonymous">Annonymous</strong> &mdash; Not shown on your profile. Included in anonymous survey results.'.html_safe
   = f.association :races, :label => 'Races', :as => :check_boxes, :collection => Race.all.collect {|i| [i.label, i.id]}, :hint => '<strong class="private">Private</strong> &amp; <strong class="annonymous">Annonymous</strong> &mdash; Not shown on your profile. Included in anonymous survey results.'.html_safe
-  = f.input :occupation_id, :as => :select, :collection => Occupation.all.collect {|i| [i.label, i.id]}, :hint => '<strong class="private">Private</strong> &amp; <strong class="annonymous">Annonymous</strong> &mdash; Not shown on your profile. Included in anonymous survey results.'.html_safe
   = f.input :education_id, :as => :select, :collection => Education.all.collect {|i| [i.label, i.id]}, :hint => '<strong class="private">Private</strong> &amp; <strong class="annonymous">Annonymous</strong> &mdash; Not shown on your profile. Included in anonymous survey results.'.html_safe
 - if @member.new_record?
   = render :partial => '/members/accounts/subscriptions_form', :locals => {:f => f}

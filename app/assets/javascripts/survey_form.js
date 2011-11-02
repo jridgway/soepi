@@ -63,10 +63,16 @@ function init_global_sidebar() {
     $('#delete-message').dialog('destroy');
   });
   $('#close').click(function() {
-    $('#close-message').dialog({width:520, height:300, modal:true, zIndex:9, resizable:false}).show('blind');
+    $('#close-message').dialog({width:520, height:200, modal:true, zIndex:9, resizable:false}).show('blind');
   });
   $('#cancel-close').click(function() {
     $('#close-message').dialog('destroy');
+  });
+  $('#publish').click(function() {
+    $('#publish-message').dialog({width:520, height:200, modal:true, zIndex:9, resizable:false}).show('blind');
+  });
+  $('#cancel-publish').click(function() {
+    $('#publish-message').dialog('destroy');
   });
   $('#forkit').click(function() {
     $('#forkit-message').dialog({width:520, height:200, modal:true, zIndex:9, resizable:false}).show('blind');

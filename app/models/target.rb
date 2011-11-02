@@ -5,6 +5,5 @@ class Target < ActiveRecord::Base
   has_and_belongs_to_many :genders
   has_and_belongs_to_many :ethnicities
   has_and_belongs_to_many :races
-  has_and_belongs_to_many :occupations
   has_and_belongs_to_many :educations
 end
