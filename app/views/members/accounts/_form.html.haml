@@ -25,7 +25,7 @@
   = f.input :address_1, :hint => '<strong class="private">Private</strong> &mdash; Not revealed to the public. Not included in anonymous survey results.'.html_safe
   = f.input :address_2, :hint => '<strong class="private">Private</strong> &mdash; Not revealed to the public. Not included in anonymous survey results.'.html_safe
   = f.input :city, :hint => '<strong class="public">Public</strong> &amp; <strong class="annonymous">Annonymous</strong> &mdash; Shown on your profile. Included in anonymous survey results.'.html_safe
-  = f.input :region, :label => 'State/Region', :hint => '<strong class="public">Public</strong> &amp; <strong class="annonymous">Annonymous</strong> &mdash; Shown on your profile. Included in anonymous survey results.'.html_safe
+  = f.input :state, :label => 'State', :collection => states, :hint => '<strong class="public">Public</strong> &amp; <strong class="annonymous">Annonymous</strong> &mdash; Shown on your profile. Included in anonymous survey results.'.html_safe
   = f.input :postal_code, :hint => '<strong class="private">Private</strong> &amp; <strong class="annonymous">Annonymous</strong> &mdash; Not shown on your profile. Included in anonymous survey results.'.html_safe
   = f.input :country, :priority => priority_countries, :hint => '<strong class="public">Public</strong> &amp; <strong class="annonymous">Annonymous</strong> &mdash; Shown on your profile. Included in anonymous survey results.'.html_safe
 = field_set_tag 'Demographics' do

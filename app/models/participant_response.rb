@@ -9,7 +9,8 @@ class ParticipantResponse < ActiveRecord::Base
   validates_numericality_of :numeric_response, :allow_blank => true, :only_integer => true
   validate :question_required
 
-  after_create :set_next_question
+  after_create :set_next_question, :check_and_set_complete
+  after_destroy :clear_statistics
 
   def choices
     (multiple_choices + [single_choice]).compact
@@ -50,6 +51,27 @@ class ParticipantResponse < ActiveRecord::Base
           break
         end
       end
-      participant.surveys.find_by_survey_id(question.survey.id).update_attribute :next_question, next_question
+      current_participant_survey.update_attribute :next_question, next_question
+    end
+    
+    def check_and_set_complete
+      unless current_participant_survey.complete?
+        if current_participant_survey.next_question.nil? or all_required_questions_answered?
+          current_participant_survey.update_attribute :complete, true
+        end
+      end
+      Statistic.delete_all
+    end
+    
+    def all_required_questions_answered?
+      true if question.survey.questions.where('position > ? and required = true', question.position).count == 0
+    end
+    
+    def current_participant_survey
+      participant.surveys.find_by_survey_id(question.survey.id)
+    end
+    
+    def clear_statistics
+      Statistic.delete_all
     end
 end

@@ -304,6 +304,44 @@ class Survey < ActiveRecord::Base
   def human 
     title
   end
+  
+  def completes
+    Statistic.get_or_compute "survey_completes|id:#{id}"
+  end
+  
+  def completes_by_gender
+    totals = Statistic.get_or_compute "survey_completes_by_gender|id:#{id}"
+    Gender.all.collect {|g| {:label => g.label, :id => g.id, :total => (totals[g.id] || 0)}}
+  end
+  
+  def completes_by_age_group
+    totals = Statistic.get_or_compute "survey_completes_by_age_group|id:#{id}"
+    AgeGroup.all.collect {|a| {:label => a.label, :id => a.id, :total => (totals[a.id] || 0)}}
+  end
+  
+  def completes_by_education
+    totals = Statistic.get_or_compute "survey_completes_by_education|id:#{id}"
+    Education.all.collect {|e| {:label => e.label, :id => e.id, :total => (totals[e.id] || 0)}}
+  end
+  
+  def completes_by_race
+    totals = Statistic.get_or_compute "survey_completes_by_race|id:#{id}"
+    Race.all.collect {|r| {:label => r.label, :id => r.id, :total => (totals[r.id.to_s] || 0)}}
+  end
+  
+  def completes_by_ethnicity
+    totals = Statistic.get_or_compute "survey_completes_by_ethnicity|id:#{id}"
+    Ethnicity.all.collect {|e| {:label => e.label, :id => e.id, :total => (totals[e.id.to_s] || 0)}}
+  end
+  
+  def completes_by_region
+    totals = Statistic.get_or_compute "survey_completes_by_region|id:#{id}"
+    Region.all.collect {|r| {:label => r.label, :id => r.id, :total => (totals[r.id] || 0)}}
+  end
+  
+  def completes_by_state
+    Statistic.get_or_compute "survey_completes_by_state|id:#{id}"
+  end
 
   protected
 

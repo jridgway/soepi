@@ -10,7 +10,7 @@
       = link_to "Forks (#{@survey.forks.live_or_drafting.count})", forks_survey_path(@survey)
     - if @survey.published? or ((@survey.launched? or @survey.closed?) and (member_signed_in? and (@survey.member_id == current_member.id or current_member.admin?)))
       %li
-        = link_to "Results (<span class='participants-count'>#{@survey.participants.count}</span>)".html_safe, results_survey_path(@survey)
+        = link_to "Results (<span class='participants-count'>#{@survey.completes}</span>)".html_safe, results_survey_path(@survey)
     %li
       = link_to "Followed By (#{@survey.followings.count})", followed_by_survey_path(@survey)
 - if action_name == 'show'

@@ -36,10 +36,10 @@ class Member < ActiveRecord::Base
   include Tanker
   tankit 'soepi' do
     indexes :text do
-      "#{nickname} #{region} #{country}"
+      "#{nickname} #{state} #{country}"
     end
     indexes :nickname
-    indexes :region
+    indexes :state
     indexes :country
     indexes :id
     indexes :published do
@@ -47,7 +47,7 @@ class Member < ActiveRecord::Base
     end
   end
   #after_save Proc.new { |m|
-  #  if m.nickname_changed? or m.region_changed? or m.country_changed? or m.confirmed_at_changed?
+  #  if m.nickname_changed? or m.state_changed? or m.country_changed? or m.confirmed_at_changed?
   #    update_tank_indexes
   #  end
   #}
@@ -58,7 +58,7 @@ class Member < ActiveRecord::Base
 
   attr_accessible :remove_pic, :pic, :email, :password, :password_confirmation, :remember_me,
     :nickname, :first_name, :last_name, :email, :phone, :address_1, :address_2,
-    :city, :region, :postal_code, :country, :timezone, :primary_language,
+    :city, :state, :postal_code, :country, :timezone, :primary_language,
     :gender_id, :birthmonth, :ethnicity_ids, :race_ids, :education_id, :informed_consent, :terms_of_use,
     :subscription_surveys, :subscription_charts, :subscription_petitions, :subscription_groups, :subscription_messages,
     :subscription_news, :tag_list, :privacy_dont_use_my_gravatar, :privacy_dont_list_me, :privacy_dont_show_location
@@ -68,7 +68,7 @@ class Member < ActiveRecord::Base
   validates_property :mime_type, :of => :pic, :in => %w(image/jpeg image/png image/gif image/tiff), 
     :message => 'must be a jpg, png, gif, or tiff image'
 
-  validates_presence_of :nickname, :city, :region, :postal_code, :country,
+  validates_presence_of :nickname, :city, :state, :postal_code, :country,
     :timezone, :language, :birthmonth, :gender_id, :ethnicity_ids, :race_ids, :education_id
   validates_uniqueness_of :nickname
   validate :unallowed_nicknames
@@ -92,7 +92,7 @@ class Member < ActiveRecord::Base
   end
 
   def geocode_address
-    geo = Geokit::Geocoders::MultiGeocoder.geocode "#{address_1}, #{city}, #{region} #{postal_code}, #{country}"
+    geo = Geokit::Geocoders::MultiGeocoder.geocode "#{address_1}, #{city}, #{state} #{postal_code}, #{country}"
     self.lat, self.lng = geo.lat, geo.lng if geo.success
   end
   
@@ -169,26 +169,34 @@ class Member < ActiveRecord::Base
     qualifies = true
     if target
       if target.target_by_location?
-        if target.location_target_by_address?
-          unless target.city.blank? or target.city != member.city
+        case target.location_type
+          when 'address' then
+            unless target.city.blank? or target.city != member.city
+              qualifies = false
+            end
+            unless target.state.blank? or target.state != member.state
+              qualifies = false
+            end
+            unless target.postal_code.blank? or target.postal_code != member.postal_code
+              qualifies = false
+            end
+            unless target.country.blank? or target.country != member.country
+              qualifies = false
+            end
+        when 'vicinity' then
+          if Member.where(:id => self.id).within(target.radius, :origin => [target.lat, target.lng]).count == 0
             qualifies = false
           end
-          unless target.region.blank? or target.region != member.region
+        when 'region' then
+          region_id = region.id
+          if target.region_ids.select {|r_id| r_id == region_id}.length == 0
             qualifies = false
-          end
-          unless target.postal_code.blank? or target.postal_code != member.postal_code
-            qualifies = false
-          end
-          unless target.country.blank? or target.country != member.country
-            qualifies = false
-          end
-        elsif Member.where(:id => self.id).within(target.radius, :origin => [target.lat, target.lng]).count == 0
-          qualifies = false
+          end          
         end
       end
       if target.target_by_age_group? and target.age_group_ids.length > 0
-        age = (Time.now.to_date - birthmonth).to_f / 365.242199
-        if target.age_groups.select {|a| a.min <= age and a.max >= age}.length == 0
+        age_group_id = age_group.id
+        if target.age_group_ids.select {|a_id| a_id == age_group_id}.length == 0
           qualifies = false
         end
       end
@@ -225,11 +233,11 @@ class Member < ActiveRecord::Base
   end
 
   def address
-    "#{address_1} #{address_2}, #{city}, #{region} #{postal_code}, #{country}"
+    "#{address_1} #{address_2}, #{city}, #{state} #{postal_code}, #{country}"
   end
   
   def location
-    "#{region}, #{country}"
+    "#{state}, #{country}"
   end
   
   def email_for_gravatar
@@ -242,5 +250,14 @@ class Member < ActiveRecord::Base
   
   def human 
     nickname
+  end
+  
+  def age_group
+    years = ((Time.now - birthmonth.to_time) / 60 / 60 / 24 / 365).floor
+    AgeGroup.where('min <= ? and max >= ?', years, years).first
+  end
+  
+  def region
+    Region.where('label like ?', "%#{state}%").first
   end
 end

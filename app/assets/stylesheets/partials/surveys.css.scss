@@ -111,10 +111,15 @@
       }
     }
     
-  #by-vicinity, #by-address
+  #by-vicinity, #by-address, #by-region
     {
     float: right;
     width: 757px;
+    
+    .input span 
+      {
+      width: 590px;
+      }
     
     #map-canvas
       {

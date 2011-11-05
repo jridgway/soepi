@@ -25,7 +25,7 @@
         .inner
           .input
             %label Location
-            = f2.input :location_target_by_address, :as => :hidden
+            = f2.input :location_type, :as => :hidden
             .tabs
               %ul
                 %li
@@ -36,9 +36,13 @@
                   %a{:href => '#by-vicinity'} 
                     %span.ui-icon &nbsp;
                     By Vicinity
+                %li
+                  %a{:href => '#by-region'} 
+                    %span.ui-icon &nbsp;
+                    By Region
               #by-address
                 = f2.input :city
-                = f2.input :region
+                = f2.input :state
                 = f2.input :postal_code
                 = f2.input :country, :priority => priority_countries, :include_blank => true
               #by-vicinity
@@ -47,6 +51,8 @@
                 = f2.input :lat, :label => 'Latitude', :hint => 'Enter the latitude of the marker in the map, or drag the marker itself.'
                 = f2.input :lng, :label => 'Longitude', :hint => 'Enter the longitude of the marker in the map, or drag the marker itself.'
                 = f2.input :radius, :hint => 'Enter the radius of the circle in the map, or drag the icon in the border of the circle.'
+              #by-region
+                = f2.association :regions, :label => 'Regions', :collection => Region.all.collect {|i| [i.label, i.id]}, :as => :check_boxes
       .target
         = f2.input :target_by_age_group, :input_html => {:class => 'check'}
         .inner

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111102134628) do
+ActiveRecord::Schema.define(:version => 20111104153318) do
 
   create_table "age_groups", :force => true do |t|
     t.string   "label"
@@ -160,7 +160,6 @@ ActiveRecord::Schema.define(:version => 20111102134628) do
     t.string   "address_1"
     t.string   "address_2"
     t.string   "city"
-    t.string   "region"
     t.string   "postal_code"
     t.string   "country"
     t.string   "timezone"
@@ -183,6 +182,7 @@ ActiveRecord::Schema.define(:version => 20111102134628) do
     t.boolean  "privacy_dont_show_location",                   :default => false
     t.string   "slug"
     t.boolean  "subscription_weekly_summaries",                :default => true
+    t.string   "state"
   end
 
   add_index "members", ["confirmation_token"], :name => "index_members_on_confirmation_token", :unique => true
@@ -257,7 +257,6 @@ ActiveRecord::Schema.define(:version => 20111102134628) do
   create_table "participant_responses", :force => true do |t|
     t.integer  "participant_id"
     t.integer  "question_id"
-    t.integer  "question_version"
     t.integer  "numeric_response"
     t.datetime "datetime_response"
     t.text     "text_response"
@@ -278,17 +277,17 @@ ActiveRecord::Schema.define(:version => 20111102134628) do
   create_table "participant_surveys", :force => true do |t|
     t.integer "participant_id"
     t.integer "survey_id"
-    t.integer "survey_version"
-    t.date    "birthmonth"
     t.integer "gender_id"
     t.integer "education_id"
     t.string  "city"
-    t.string  "region"
+    t.string  "state"
     t.string  "postal_code"
     t.string  "country"
     t.date    "created_at"
     t.integer "next_question_id"
     t.boolean "complete",         :default => false
+    t.integer "age_group_id"
+    t.integer "region_id"
   end
 
   add_index "participant_surveys", ["id"], :name => "index_participant_surveys_on_id", :unique => true
@@ -368,6 +367,18 @@ ActiveRecord::Schema.define(:version => 20111102134628) do
   end
 
   add_index "rails_admin_histories", ["item", "table", "month", "year"], :name => "index_rails_admin_histories"
+
+  create_table "regions", :force => true do |t|
+    t.string   "label"
+    t.integer  "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "regions_targets", :id => false, :force => true do |t|
+    t.integer "target_id"
+    t.integer "region_id"
+  end
 
   create_table "settings", :force => true do |t|
     t.string   "name"
@@ -536,37 +547,26 @@ ActiveRecord::Schema.define(:version => 20111102134628) do
   end
 
   create_table "targets", :force => true do |t|
-    t.boolean  "target_by_location",         :default => false
-    t.boolean  "location_target_by_address", :default => true
+    t.boolean  "target_by_location",  :default => false
     t.string   "city"
     t.string   "postal_code"
-    t.string   "region"
     t.string   "country"
     t.float    "radius"
     t.float    "lat"
     t.float    "lng"
     t.string   "approximate_address"
-    t.boolean  "target_by_age_group",        :default => false
-    t.boolean  "target_by_gender",           :default => false
-    t.boolean  "target_by_education",        :default => false
-    t.boolean  "target_by_ethnicity",        :default => false
-    t.boolean  "target_by_race",             :default => false
-    t.boolean  "target_by_survey",           :default => false
+    t.boolean  "target_by_age_group", :default => false
+    t.boolean  "target_by_gender",    :default => false
+    t.boolean  "target_by_education", :default => false
+    t.boolean  "target_by_ethnicity", :default => false
+    t.boolean  "target_by_race",      :default => false
+    t.boolean  "target_by_survey",    :default => false
     t.integer  "targetable_id"
     t.string   "targetable_type"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "state"
+    t.string   "location_type",       :default => "address"
   end
-
-  create_table "versions", :force => true do |t|
-    t.string   "item_type",  :null => false
-    t.integer  "item_id",    :null => false
-    t.string   "event",      :null => false
-    t.string   "whodunnit"
-    t.text     "object"
-    t.datetime "created_at"
-  end
-
-  add_index "versions", ["item_type", "item_id"], :name => "index_versions_on_item_type_and_item_id"
 
 end

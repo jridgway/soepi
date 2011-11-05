@@ -5,6 +5,7 @@ class Participant < ActiveRecord::Base
   has_many :surveys, :class_name => 'ParticipantSurvey', :dependent => :destroy
 
   before_create :set_anonymous_key
+  after_destroy :clear_statistics
 
   attr_accessor :member
 
@@ -14,11 +15,15 @@ class Participant < ActiveRecord::Base
 
   private
 
-  def set_anonymous_key
-    self.anonymous_key = Participant.generate_anonymous_key(member)
-  end
-
-  def self.generate_anonymous_key(member)
-    Digest::SHA1.hexdigest "#{member.id}-#{member.year_registered}-#{member.pin}-#{ENV['SoEpi_PIN_EXTRA']}"
-  end
+    def set_anonymous_key
+      self.anonymous_key = Participant.generate_anonymous_key(member)
+    end
+  
+    def self.generate_anonymous_key(member)
+      Digest::SHA1.hexdigest "#{member.id}-#{member.year_registered}-#{member.pin}-#{ENV['SoEpi_PIN_EXTRA']}"
+    end
+    
+    def clear_statistics
+      Statistic.delete_all
+    end
 end

@@ -53,6 +53,10 @@ module ApplicationHelper
       keywords
     end
   end
+  
+  def states
+    Country.new('US').states.collect {|s| s.last['name']}.sort {|a,b| a <=> b}
+  end
 
   def priority_countries
     ['United States']

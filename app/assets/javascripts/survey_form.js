@@ -342,15 +342,19 @@ function init_targeting() {
     $('#targeting .tabs li.ui-tabs-selected a span').removeClass('ui-icon-cancel');
     $('#targeting .tabs li.ui-tabs-selected a span').addClass('ui-icon-check');
     if(ui.panel.id == 'by-address') {
-      $('#survey_target_attributes_location_target_by_address').val('t');
-    } else {
-      $('#survey_target_attributes_location_target_by_address').val('f');
+      $('#survey_target_attributes_location_type').val('address');
+    } else if(ui.panel.id == 'by-vicinity') {
+      $('#survey_target_attributes_location_type').val('vicinity');
+    } else if(ui.panel.id == 'by-region') {
+      $('#survey_target_attributes_location_type').val('region');
     }
   });
-  if($('#survey_target_attributes_location_target_by_address').val() == 't') {
+  if($('#survey_target_attributes_location_type').val() == 'address') {
     $('#targeting .tabs').tabs('select', 0);
-  } else {
+  } else if($('#survey_target_attributes_location_type').val() == 'vicinity') {
     $('#targeting .tabs').tabs('select', 1);
+  } else if($('#survey_target_attributes_location_type').val() == 'region') {
+    $('#targeting .tabs').tabs('select', 2);
   }
   $('#targeting .tabs li a span').removeClass('ui-icon-check');
   $('#targeting .tabs li a span').addClass('ui-icon-cancel');

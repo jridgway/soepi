@@ -346,6 +346,7 @@ class SurveysController < ApplicationController
     end
   
     def owner_only!
+      load_survey unless @survey
       unless member_signed_in? and current_member.id == @survey.member_id
         flash[:alert] = 'Insufficient privileges.'
         redirect_to survey_path(@survey)

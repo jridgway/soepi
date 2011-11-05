@@ -6,6 +6,11 @@
     {
     margin: 10px 0 15px 0;
     @include clearfix;
+    
+    .chart
+      {
+      margin: 0 0 15px 0;
+      }
     }
     
   .tip 
