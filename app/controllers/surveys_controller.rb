@@ -318,7 +318,7 @@ class SurveysController < ApplicationController
       unless @participant_survey
         @participant_survey = current_participant.surveys.find_or_create_by_survey_id survey_id
         @participant_survey.apply_member current_member
-        @participant_survey.save
+        @participant_survey.save!
         current_member.surveys_taken << @survey
       end
       @participant_survey

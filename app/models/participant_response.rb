@@ -55,11 +55,11 @@ class ParticipantResponse < ActiveRecord::Base
     end
     
     def check_and_set_complete
-      unless current_participant_survey.complete?
+      #unless current_participant_survey.complete?
         if current_participant_survey.next_question.nil? or all_required_questions_answered?
           current_participant_survey.update_attribute :complete, true
         end
-      end
+      #end
       Statistic.delete_all
     end
     

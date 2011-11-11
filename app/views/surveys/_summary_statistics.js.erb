@@ -25,7 +25,7 @@ $(document).ready(function() {
         }
      },
      series: [{
-        name: 'Regions',
+        name: 'Completes',
         data: [<%= @survey.completes_by_region.collect {|r| r[:total]}.join(", ") %>] 
      }]
   });
@@ -53,7 +53,7 @@ $(document).ready(function() {
         }
      },
      series: [{
-        name: 'Age Groups',
+        name: 'Completes',
         data: [<%= @survey.completes_by_age_group.collect {|a| a[:total]}.join(", ") %>]
      }]
   });
@@ -77,7 +77,7 @@ $(document).ready(function() {
         }
      },
      series: [{
-        name: 'Genders',
+        name: 'Completes',
         data: [<%= @survey.completes_by_gender.collect {|g| g[:total]}.join(", ") %>]
      }]
   });
@@ -101,7 +101,7 @@ $(document).ready(function() {
         }
      },
      series: [{
-        name: 'Ethnicities',
+        name: 'Completes',
         data: [<%= @survey.completes_by_ethnicity.collect {|e| e[:total]}.join(", ") %>]
      }]
   });
@@ -125,7 +125,7 @@ $(document).ready(function() {
         }
      },
      series: [{
-        name: 'Races',
+        name: 'Completes',
         data: [<%= @survey.completes_by_race.collect {|r| r[:total]}.join(", ") %>]
      }]
   });
@@ -149,7 +149,7 @@ $(document).ready(function() {
         }
      },
      series: [{
-        name: 'Educations',
+        name: 'Completes',
         data: [<%= @survey.completes_by_education.collect {|e| e[:total]}.join(", ") %>]
      }]
   });

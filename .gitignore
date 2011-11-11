@@ -1,3 +1,4 @@
+lib/tasks/generate_survey_data.rake
 .bundle
 db/*.sqlite3
 log/*.log

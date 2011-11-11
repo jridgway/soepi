@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111104153318) do
+ActiveRecord::Schema.define(:version => 20111110194345) do
 
   create_table "age_groups", :force => true do |t|
     t.string   "label"
@@ -24,6 +24,309 @@ ActiveRecord::Schema.define(:version => 20111104153318) do
   create_table "age_groups_targets", :id => false, :force => true do |t|
     t.integer "target_id"
     t.integer "age_group_id"
+  end
+
+  create_table "census_geo_profiles", :force => true do |t|
+    t.string  "fileid",      :limit => 6
+    t.string  "stusab",      :limit => 4
+    t.string  "chariter",    :limit => 4
+    t.string  "cifsn",       :limit => 4
+    t.string  "logrecno",    :limit => 7
+    t.decimal "dpsf0010001",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010002",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010003",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010004",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010005",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010006",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010007",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010008",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010009",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010010",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010011",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010012",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010013",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010014",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010015",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010016",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010017",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010018",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010019",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010020",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010021",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010022",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010023",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010024",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010025",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010026",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010027",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010028",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010029",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010030",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010031",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010032",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010033",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010034",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010035",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010036",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010037",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010038",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010039",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010040",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010041",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010042",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010043",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010044",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010045",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010046",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010047",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010048",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010049",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010050",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010051",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010052",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010053",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010054",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010055",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010056",              :precision => 12, :scale => 2
+    t.decimal "dpsf0010057",              :precision => 12, :scale => 2
+    t.decimal "dpsf0020001",              :precision => 12, :scale => 2
+    t.decimal "dpsf0020002",              :precision => 12, :scale => 2
+    t.decimal "dpsf0020003",              :precision => 12, :scale => 2
+    t.decimal "dpsf0030001",              :precision => 12, :scale => 2
+    t.decimal "dpsf0030002",              :precision => 12, :scale => 2
+    t.decimal "dpsf0030003",              :precision => 12, :scale => 2
+    t.decimal "dpsf0040001",              :precision => 12, :scale => 2
+    t.decimal "dpsf0040002",              :precision => 12, :scale => 2
+    t.decimal "dpsf0040003",              :precision => 12, :scale => 2
+    t.decimal "dpsf0050001",              :precision => 12, :scale => 2
+    t.decimal "dpsf0050002",              :precision => 12, :scale => 2
+    t.decimal "dpsf0050003",              :precision => 12, :scale => 2
+    t.decimal "dpsf0060001",              :precision => 12, :scale => 2
+    t.decimal "dpsf0060002",              :precision => 12, :scale => 2
+    t.decimal "dpsf0060003",              :precision => 12, :scale => 2
+    t.decimal "dpsf0070001",              :precision => 12, :scale => 2
+    t.decimal "dpsf0070002",              :precision => 12, :scale => 2
+    t.decimal "dpsf0070003",              :precision => 12, :scale => 2
+    t.decimal "dpsf0080001",              :precision => 12, :scale => 2
+    t.decimal "dpsf0080002",              :precision => 12, :scale => 2
+    t.decimal "dpsf0080003",              :precision => 12, :scale => 2
+    t.decimal "dpsf0080004",              :precision => 12, :scale => 2
+    t.decimal "dpsf0080005",              :precision => 12, :scale => 2
+    t.decimal "dpsf0080006",              :precision => 12, :scale => 2
+    t.decimal "dpsf0080007",              :precision => 12, :scale => 2
+    t.decimal "dpsf0080008",              :precision => 12, :scale => 2
+    t.decimal "dpsf0080009",              :precision => 12, :scale => 2
+    t.decimal "dpsf0080010",              :precision => 12, :scale => 2
+    t.decimal "dpsf0080011",              :precision => 12, :scale => 2
+    t.decimal "dpsf0080012",              :precision => 12, :scale => 2
+    t.decimal "dpsf0080013",              :precision => 12, :scale => 2
+    t.decimal "dpsf0080014",              :precision => 12, :scale => 2
+    t.decimal "dpsf0080015",              :precision => 12, :scale => 2
+    t.decimal "dpsf0080016",              :precision => 12, :scale => 2
+    t.decimal "dpsf0080017",              :precision => 12, :scale => 2
+    t.decimal "dpsf0080018",              :precision => 12, :scale => 2
+    t.decimal "dpsf0080019",              :precision => 12, :scale => 2
+    t.decimal "dpsf0080020",              :precision => 12, :scale => 2
+    t.decimal "dpsf0080021",              :precision => 12, :scale => 2
+    t.decimal "dpsf0080022",              :precision => 12, :scale => 2
+    t.decimal "dpsf0080023",              :precision => 12, :scale => 2
+    t.decimal "dpsf0080024",              :precision => 12, :scale => 2
+    t.decimal "dpsf0090001",              :precision => 12, :scale => 2
+    t.decimal "dpsf0090002",              :precision => 12, :scale => 2
+    t.decimal "dpsf0090003",              :precision => 12, :scale => 2
+    t.decimal "dpsf0090004",              :precision => 12, :scale => 2
+    t.decimal "dpsf0090005",              :precision => 12, :scale => 2
+    t.decimal "dpsf0090006",              :precision => 12, :scale => 2
+    t.decimal "dpsf0100001",              :precision => 12, :scale => 2
+    t.decimal "dpsf0100002",              :precision => 12, :scale => 2
+    t.decimal "dpsf0100003",              :precision => 12, :scale => 2
+    t.decimal "dpsf0100004",              :precision => 12, :scale => 2
+    t.decimal "dpsf0100005",              :precision => 12, :scale => 2
+    t.decimal "dpsf0100006",              :precision => 12, :scale => 2
+    t.decimal "dpsf0100007",              :precision => 12, :scale => 2
+    t.decimal "dpsf0110001",              :precision => 12, :scale => 2
+    t.decimal "dpsf0110002",              :precision => 12, :scale => 2
+    t.decimal "dpsf0110003",              :precision => 12, :scale => 2
+    t.decimal "dpsf0110004",              :precision => 12, :scale => 2
+    t.decimal "dpsf0110005",              :precision => 12, :scale => 2
+    t.decimal "dpsf0110006",              :precision => 12, :scale => 2
+    t.decimal "dpsf0110007",              :precision => 12, :scale => 2
+    t.decimal "dpsf0110008",              :precision => 12, :scale => 2
+    t.decimal "dpsf0110009",              :precision => 12, :scale => 2
+    t.decimal "dpsf0110010",              :precision => 12, :scale => 2
+    t.decimal "dpsf0110011",              :precision => 12, :scale => 2
+    t.decimal "dpsf0110012",              :precision => 12, :scale => 2
+    t.decimal "dpsf0110013",              :precision => 12, :scale => 2
+    t.decimal "dpsf0110014",              :precision => 12, :scale => 2
+    t.decimal "dpsf0110015",              :precision => 12, :scale => 2
+    t.decimal "dpsf0110016",              :precision => 12, :scale => 2
+    t.decimal "dpsf0110017",              :precision => 12, :scale => 2
+    t.decimal "dpsf0120001",              :precision => 12, :scale => 2
+    t.decimal "dpsf0120002",              :precision => 12, :scale => 2
+    t.decimal "dpsf0120003",              :precision => 12, :scale => 2
+    t.decimal "dpsf0120004",              :precision => 12, :scale => 2
+    t.decimal "dpsf0120005",              :precision => 12, :scale => 2
+    t.decimal "dpsf0120006",              :precision => 12, :scale => 2
+    t.decimal "dpsf0120007",              :precision => 12, :scale => 2
+    t.decimal "dpsf0120008",              :precision => 12, :scale => 2
+    t.decimal "dpsf0120009",              :precision => 12, :scale => 2
+    t.decimal "dpsf0120010",              :precision => 12, :scale => 2
+    t.decimal "dpsf0120011",              :precision => 12, :scale => 2
+    t.decimal "dpsf0120012",              :precision => 12, :scale => 2
+    t.decimal "dpsf0120013",              :precision => 12, :scale => 2
+    t.decimal "dpsf0120014",              :precision => 12, :scale => 2
+    t.decimal "dpsf0120015",              :precision => 12, :scale => 2
+    t.decimal "dpsf0120016",              :precision => 12, :scale => 2
+    t.decimal "dpsf0120017",              :precision => 12, :scale => 2
+    t.decimal "dpsf0120018",              :precision => 12, :scale => 2
+    t.decimal "dpsf0120019",              :precision => 12, :scale => 2
+    t.decimal "dpsf0120020",              :precision => 12, :scale => 2
+    t.decimal "dpsf0130001",              :precision => 12, :scale => 2
+    t.decimal "dpsf0130002",              :precision => 12, :scale => 2
+    t.decimal "dpsf0130003",              :precision => 12, :scale => 2
+    t.decimal "dpsf0130004",              :precision => 12, :scale => 2
+    t.decimal "dpsf0130005",              :precision => 12, :scale => 2
+    t.decimal "dpsf0130006",              :precision => 12, :scale => 2
+    t.decimal "dpsf0130007",              :precision => 12, :scale => 2
+    t.decimal "dpsf0130008",              :precision => 12, :scale => 2
+    t.decimal "dpsf0130009",              :precision => 12, :scale => 2
+    t.decimal "dpsf0130010",              :precision => 12, :scale => 2
+    t.decimal "dpsf0130011",              :precision => 12, :scale => 2
+    t.decimal "dpsf0130012",              :precision => 12, :scale => 2
+    t.decimal "dpsf0130013",              :precision => 12, :scale => 2
+    t.decimal "dpsf0130014",              :precision => 12, :scale => 2
+    t.decimal "dpsf0130015",              :precision => 12, :scale => 2
+    t.decimal "dpsf0140001",              :precision => 12, :scale => 2
+    t.decimal "dpsf0150001",              :precision => 12, :scale => 2
+    t.decimal "dpsf0160001",              :precision => 12, :scale => 2
+    t.decimal "dpsf0170001",              :precision => 12, :scale => 2
+    t.decimal "dpsf0180001",              :precision => 12, :scale => 2
+    t.decimal "dpsf0180002",              :precision => 12, :scale => 2
+    t.decimal "dpsf0180003",              :precision => 12, :scale => 2
+    t.decimal "dpsf0180004",              :precision => 12, :scale => 2
+    t.decimal "dpsf0180005",              :precision => 12, :scale => 2
+    t.decimal "dpsf0180006",              :precision => 12, :scale => 2
+    t.decimal "dpsf0180007",              :precision => 12, :scale => 2
+    t.decimal "dpsf0180008",              :precision => 12, :scale => 2
+    t.decimal "dpsf0180009",              :precision => 12, :scale => 2
+    t.decimal "dpsf0190001",              :precision => 12, :scale => 2
+    t.decimal "dpsf0200001",              :precision => 12, :scale => 2
+    t.decimal "dpsf0210001",              :precision => 12, :scale => 2
+    t.decimal "dpsf0210002",              :precision => 12, :scale => 2
+    t.decimal "dpsf0210003",              :precision => 12, :scale => 2
+    t.decimal "dpsf0220001",              :precision => 12, :scale => 2
+    t.decimal "dpsf0220002",              :precision => 12, :scale => 2
+    t.decimal "dpsf0230001",              :precision => 12, :scale => 2
+    t.decimal "dpsf0230002",              :precision => 12, :scale => 2
+  end
+
+  create_table "census_geos", :force => true do |t|
+    t.integer "census_id",               :null => false
+    t.string  "fileid",    :limit => 6
+    t.string  "stusab",    :limit => 2
+    t.string  "sumlev",    :limit => 3
+    t.string  "geocomp",   :limit => 2
+    t.string  "chariter",  :limit => 3
+    t.string  "cifsn",     :limit => 2
+    t.string  "logrecno",  :limit => 3
+    t.string  "region",    :limit => 1
+    t.string  "division",  :limit => 1
+    t.string  "state",     :limit => 2
+    t.string  "county",    :limit => 3
+    t.string  "countycc",  :limit => 2
+    t.string  "countysc",  :limit => 2
+    t.string  "cousub",    :limit => 3
+    t.string  "cousubcc",  :limit => 2
+    t.string  "cousubsc",  :limit => 2
+    t.string  "place",     :limit => 3
+    t.string  "placecc",   :limit => 2
+    t.string  "placesc",   :limit => 2
+    t.string  "tract",     :limit => 6
+    t.string  "blkgrp",    :limit => 1
+    t.string  "block",     :limit => 4
+    t.string  "iuc",       :limit => 2
+    t.string  "concit",    :limit => 3
+    t.string  "concitcc",  :limit => 2
+    t.string  "concitsc",  :limit => 2
+    t.string  "aianhh",    :limit => 4
+    t.string  "aianhhfp",  :limit => 3
+    t.string  "aianhhcc",  :limit => 2
+    t.string  "aihhtli",   :limit => 1
+    t.string  "aitsce",    :limit => 3
+    t.string  "aits",      :limit => 3
+    t.string  "aitscc",    :limit => 2
+    t.string  "ttract",    :limit => 6
+    t.string  "tblkgrp",   :limit => 1
+    t.string  "anrc",      :limit => 3
+    t.string  "anrccc",    :limit => 2
+    t.string  "cbsa",      :limit => 3
+    t.string  "cbsasc",    :limit => 2
+    t.string  "metdiv",    :limit => 3
+    t.string  "csa",       :limit => 3
+    t.string  "necta",     :limit => 3
+    t.string  "nectasc",   :limit => 2
+    t.string  "nectadiv",  :limit => 3
+    t.string  "cnecta",    :limit => 3
+    t.string  "cbsapci",   :limit => 1
+    t.string  "nectapci",  :limit => 1
+    t.string  "ua",        :limit => 3
+    t.string  "uasc",      :limit => 2
+    t.string  "uatype",    :limit => 1
+    t.string  "ur",        :limit => 1
+    t.string  "cd",        :limit => 2
+    t.string  "sldu",      :limit => 3
+    t.string  "sldl",      :limit => 3
+    t.string  "vtd",       :limit => 6
+    t.string  "vtdi",      :limit => 1
+    t.string  "reserve2",  :limit => 3
+    t.string  "zcta5",     :limit => 3
+    t.string  "submcd",    :limit => 3
+    t.string  "submcdcc",  :limit => 2
+    t.string  "sdelm",     :limit => 3
+    t.string  "sdsec",     :limit => 3
+    t.string  "sduni",     :limit => 3
+    t.string  "arealand",  :limit => 14
+    t.string  "areawatr",  :limit => 14
+    t.string  "name",      :limit => 90
+    t.string  "funcstat",  :limit => 1
+    t.string  "gcuni",     :limit => 1
+    t.string  "pop100",    :limit => 9
+    t.string  "hu100",     :limit => 9
+    t.string  "intptlat",  :limit => 11
+    t.string  "intptlon",  :limit => 12
+    t.string  "lsadc",     :limit => 2
+    t.string  "partflag",  :limit => 1
+    t.string  "reserve3",  :limit => 6
+    t.string  "uga",       :limit => 3
+    t.string  "statens",   :limit => 8
+    t.string  "countyns",  :limit => 8
+    t.string  "cousubns",  :limit => 8
+    t.string  "placens",   :limit => 8
+    t.string  "concitns",  :limit => 8
+    t.string  "aianhhns",  :limit => 8
+    t.string  "aitsns",    :limit => 8
+    t.string  "anrcns",    :limit => 8
+    t.string  "submcdns",  :limit => 8
+    t.string  "cd113",     :limit => 2
+    t.string  "cd114",     :limit => 2
+    t.string  "cd115",     :limit => 2
+    t.string  "sldu2",     :limit => 3
+    t.string  "sldu3",     :limit => 3
+    t.string  "sldu4",     :limit => 3
+    t.string  "sldl2",     :limit => 3
+    t.string  "sldl3",     :limit => 3
+    t.string  "sldl4",     :limit => 3
+    t.string  "aianhhsc",  :limit => 2
+    t.string  "csasc",     :limit => 2
+    t.string  "cnectasc",  :limit => 2
+    t.string  "memi",      :limit => 1
+    t.string  "nmemi",     :limit => 1
+    t.string  "puma",      :limit => 3
+    t.string  "reserved",  :limit => 18
+  end
+
+  create_table "censuses", :force => true do |t|
+    t.integer "year", :null => false
   end
 
   create_table "charts", :force => true do |t|
@@ -285,9 +588,16 @@ ActiveRecord::Schema.define(:version => 20111104153318) do
     t.string  "country"
     t.date    "created_at"
     t.integer "next_question_id"
-    t.boolean "complete",         :default => false
+    t.boolean "complete",                   :default => false
     t.integer "age_group_id"
     t.integer "region_id"
+    t.string  "race_ids_cache"
+    t.string  "ethnicity_ids_cache"
+    t.boolean "destroy_participant_survey", :default => false
+    t.string  "old_city"
+    t.string  "old_state"
+    t.string  "old_postal_code"
+    t.integer "old_region_id"
   end
 
   add_index "participant_surveys", ["id"], :name => "index_participant_surveys_on_id", :unique => true
@@ -473,6 +783,7 @@ ActiveRecord::Schema.define(:version => 20111104153318) do
     t.string   "irb_email"
     t.integer  "forked_from_id"
     t.string   "slug"
+    t.datetime "review_completed_at"
   end
 
   add_index "surveys", ["id"], :name => "index_surveys_on_id", :unique => true

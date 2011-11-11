@@ -350,7 +350,8 @@ class Survey < ActiveRecord::Base
       index = 1
       choices.each do |choice|
         if current_question_id == choice.survey_question_id
-          options << ["#{'&nbsp;&nbsp;' * (level)}#{index}. CHOICE: #{choice.label}".html_safe, {:disabled => 'disabled', :value => choice.id}]
+          options << ["#{'&nbsp;&nbsp;' * (level)}#{index}. CHOICE: #{choice.label}".html_safe, 
+            {:disabled => 'disabled', :value => choice.id}]
         else
           options << ["#{'&nbsp;&nbsp;' * (level)}#{index}. CHOICE: #{choice.label}".html_safe, choice.id]
         end

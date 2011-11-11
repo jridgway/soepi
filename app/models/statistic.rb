@@ -85,7 +85,7 @@ class Statistic
       end
       
       def survey_completes_by_region(params)
-        ParticipantSurvey.where('survey_id = ? and complete = true', 45).group('region_id').count
+        ParticipantSurvey.where('survey_id = ? and complete = true', params[:id]).group('region_id').count
       end
       
       def survey_completes_by_state(params)
