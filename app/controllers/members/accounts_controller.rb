@@ -7,7 +7,6 @@ class Members::AccountsController < Devise::RegistrationsController
   def create
     super
     unless @member.new_record?
-      set_pin_cookie_helper(@member.pin)
       session[:omniauth] = nil
       session[:omniauth_user_hash] = nil
     end
@@ -65,30 +64,6 @@ class Members::AccountsController < Devise::RegistrationsController
       render :action => 'subscriptions'
     end
   end
-
-  def your_pin
-    @member = current_member
-    @member.pin = current_member_pin
-  end
-
-  def update_pin
-    current_member.pin = params[:member][:pin]
-    if Participant.find_by_member current_member
-      cookies.permanent.encrypted["pin_#{current_member.id}"] = current_member.pin
-      redirect_to member_your_pin_path
-    else
-      @member = current_member
-      current_member.errors.add :pin, 'Invalid PIN. Please try again.'
-      render :action => 'your_pin'
-    end
-  end
-
-  def generate_and_send_new_pin
-    current_member.generate_and_deliver_pin!
-    set_pin_cookie_helper(current_member.pin)
-    flash[:alert] = nil
-    redirect_to member_your_pin_path
-  end
   
   def follow_toggle
     case params[:followable_type]
@@ -108,27 +83,19 @@ class Members::AccountsController < Devise::RegistrationsController
     end
   end
 
-  protected
-
-    def set_pin_cookie_helper(pin)
-      cookies.permanent.encrypted["pin_#{current_member.id}"] = pin
-      flash[:alert] = "<h2>Your PIN is: #{pin}</h2><p>Don't forget it! We highly suggest you store it on your computer or write it down.</p>".html_safe
-    end
-
-    def redirect_location(resource_name, resource)
-      member_return_to
-    end
-
   private
 
     def build_resource(*args)
       super
-      @member.language ||= I18n.locale
       if session[:omniauth]
         @member.apply_omniauth(session[:omniauth], session[:omniauth_user_hash])
       end
       if session[:omniauth]
         @member.valid?
       end
+    end
+
+    def redirect_location(resource_name, resource)
+      member_return_to
     end
 end

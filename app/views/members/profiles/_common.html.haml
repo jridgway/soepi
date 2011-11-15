@@ -2,8 +2,6 @@
   = avatar(@member, 80)
   %strong= @member.nickname
   %ul.attributes
-    - unless @member.privacy_dont_show_location?
-      %li Location: #{@member.location}
     - unless @member.tags.empty?
       %li Tagged: #{tag_list_links(@member)}
 

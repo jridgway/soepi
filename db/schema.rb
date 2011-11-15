@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111110194345) do
+ActiveRecord::Schema.define(:version => 20111111144541) do
 
   create_table "age_groups", :force => true do |t|
     t.string   "label"
@@ -362,13 +362,13 @@ ActiveRecord::Schema.define(:version => 20111110194345) do
     t.datetime "updated_at"
   end
 
-  create_table "ethnicities_members", :id => false, :force => true do |t|
-    t.integer "member_id"
+  create_table "ethnicities_participant_surveys", :id => false, :force => true do |t|
+    t.integer "participant_survey_id"
     t.integer "ethnicity_id"
   end
 
-  create_table "ethnicities_participant_surveys", :id => false, :force => true do |t|
-    t.integer "participant_survey_id"
+  create_table "ethnicities_participants", :id => false, :force => true do |t|
+    t.integer "participant_id"
     t.integer "ethnicity_id"
   end
 
@@ -457,19 +457,9 @@ ActiveRecord::Schema.define(:version => 20111110194345) do
     t.integer  "pic_height"
     t.string   "pic_image_uid"
     t.string   "pic_image_ext"
-    t.string   "first_name"
-    t.string   "last_name"
     t.string   "phone"
-    t.string   "address_1"
-    t.string   "address_2"
-    t.string   "city"
-    t.string   "postal_code"
-    t.string   "country"
     t.string   "timezone"
     t.string   "language"
-    t.date     "birthmonth"
-    t.float    "lat"
-    t.float    "lng"
     t.boolean  "informed_consent",                             :default => false
     t.boolean  "terms_of_use",                                 :default => false
     t.boolean  "subscription_notifications",                   :default => true
@@ -477,15 +467,11 @@ ActiveRecord::Schema.define(:version => 20111110194345) do
     t.boolean  "subscription_news",                            :default => true
     t.integer  "year_registered"
     t.boolean  "admin",                                        :default => false
-    t.integer  "gender_id"
-    t.integer  "education_id"
     t.boolean  "subscription_charts",                          :default => true
     t.boolean  "privacy_dont_use_my_gravatar",                 :default => false
     t.boolean  "privacy_dont_list_me",                         :default => false
-    t.boolean  "privacy_dont_show_location",                   :default => false
     t.string   "slug"
     t.boolean  "subscription_weekly_summaries",                :default => true
-    t.string   "state"
   end
 
   add_index "members", ["confirmation_token"], :name => "index_members_on_confirmation_token", :unique => true
@@ -495,11 +481,6 @@ ActiveRecord::Schema.define(:version => 20111110194345) do
   add_index "members", ["reset_password_token"], :name => "index_members_on_reset_password_token", :unique => true
   add_index "members", ["slug"], :name => "index_members_on_slug"
   add_index "members", ["unlock_token"], :name => "index_members_on_unlock_token", :unique => true
-
-  create_table "members_races", :id => false, :force => true do |t|
-    t.integer "member_id"
-    t.integer "race_id"
-  end
 
   create_table "members_surveys", :id => false, :force => true do |t|
     t.integer "member_id"
@@ -588,16 +569,11 @@ ActiveRecord::Schema.define(:version => 20111110194345) do
     t.string  "country"
     t.date    "created_at"
     t.integer "next_question_id"
-    t.boolean "complete",                   :default => false
+    t.boolean "complete",         :default => false
     t.integer "age_group_id"
     t.integer "region_id"
-    t.string  "race_ids_cache"
-    t.string  "ethnicity_ids_cache"
-    t.boolean "destroy_participant_survey", :default => false
-    t.string  "old_city"
-    t.string  "old_state"
-    t.string  "old_postal_code"
-    t.integer "old_region_id"
+    t.float   "lat"
+    t.float   "lng"
   end
 
   add_index "participant_surveys", ["id"], :name => "index_participant_surveys_on_id", :unique => true
@@ -611,11 +587,25 @@ ActiveRecord::Schema.define(:version => 20111110194345) do
   end
 
   create_table "participants", :force => true do |t|
-    t.string "anonymous_key"
+    t.string  "anonymous_key"
+    t.integer "gender_id"
+    t.integer "education_id"
+    t.date    "birthmonth"
+    t.string  "city"
+    t.string  "state"
+    t.string  "postal_code"
+    t.string  "country"
+    t.float   "lat"
+    t.float   "lng"
   end
 
   add_index "participants", ["anonymous_key"], :name => "index_participants_on_anonymous_key", :unique => true
   add_index "participants", ["id"], :name => "index_participants_on_id", :unique => true
+
+  create_table "participants_races", :id => false, :force => true do |t|
+    t.integer "participant_id"
+    t.integer "race_id"
+  end
 
   create_table "parts", :force => true do |t|
     t.string   "name"

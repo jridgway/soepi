@@ -24,4 +24,4 @@
             .block.posted-by
               = avatar(recipient, 80)
               %h5 #{link_to recipient.nickname, recipient}
-              #{recipient.location}
+              %small #{recipient.tags.join(', ')}

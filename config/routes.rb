@@ -10,9 +10,6 @@ Soepi::Application.routes.draw do
     put '/members/update_subscriptions', :controller => 'members/accounts', :action => 'update_subscriptions', :as => :member_update_subscriptions
     match '/members/privacy', :controller => 'members/accounts', :action => 'privacy', :as => :member_privacy
     put '/members/update_privacy', :controller => 'members/accounts', :action => 'update_privacy', :as => :member_update_privacy
-    match '/members/your_pin', :controller => 'members/accounts', :action => 'your_pin', :as => :member_your_pin
-    put '/members/update_pin', :controller => 'members/accounts', :action => 'update_pin', :as => :member_update_pin
-    put '/members/generate_and_send_new_pin', :controller => 'members/accounts', :action => 'generate_and_send_new_pin', :as => :member_generate_and_send_new_pin
     put '/members/follow_toggle/:followable_type/:followable_id', :controller => 'members/accounts', :action => 'follow_toggle', :as => :follow_toggle
     match '/members/load_current_member', :controller => 'members/accounts', :action => 'load_current_member'
   end
@@ -27,11 +24,17 @@ Soepi::Application.routes.draw do
       get 'followed-by', :action => 'followed_by', :as => :followed_by
     end
   end
-  
+
   match '/~', :controller => 'members/profiles', :action => 'my_profile', :as => :member_my_profile
 
   resources :member_tokens, :only => [:index, :destroy], :controller => 'members/tokens', :path => '/members/accounts/sign-in-tokens'
 
+  resources :participants, :only => [:new, :create]
+  get '/participants/edit', :to => 'participants#edit', :as => :edit_participant
+  put '/participants/update', :to => 'participants#update', :as => :update_participant
+  get '/participants/enter_your_pin', :to => 'participants#enter_your_pin', :as => :participant_enter_your_pin
+  put '/participants/store_pin', :to => 'participants#store_pin', :as => :participant_store_pin
+  
   resources :messages, :only => [:index, :show, :new, :create] do 
     collection do 
       get 'unread'
@@ -63,10 +66,12 @@ Soepi::Application.routes.draw do
       put 'close'
       put 'publish'
       match 'participate'
-      match 'update_pin'
-      put 'generate_and_send_new_pin'
+      put 'store_pin'
+      match 'new_participant'
+      post 'create_participant'
       post 'create_response'
       get 'results'
+      get 'export_results'
       put 'forkit'
       get 'forks'
       get 'followed-by', :action => 'followed_by', :as => :followed_by

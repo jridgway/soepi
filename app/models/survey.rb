@@ -342,6 +342,61 @@ class Survey < ActiveRecord::Base
   def completes_by_state
     Statistic.get_or_compute "survey_completes_by_state|id:#{id}"
   end
+  
+  def export_to_file!(filename=nil)
+    filename ||= Tempfile.new("survey-results-#{id}.csv")
+    question_ids = questions.select('id').collect(&:id)
+    CSV.open(filename, "wb") do |csv|
+      headers = [
+          'Participant Anonymous Key',
+          'Gender',
+          'Age Group',
+          'City',
+          'State',
+          'Postal Code',
+          'Country',
+          'Region',
+          'Races',
+          'Ethnicities',
+          'Education'
+        ]
+      headers += question_ids.collect {|id| "Question ID: #{id}"} 
+      csv << headers     
+      (0..(ParticipantSurvey.for_survey(id).completes.count/1000).ceil).each do |page|
+        ParticipantSurvey.for_survey(id).completes.page(page).per(1000).each do |ps|
+          row = [
+              ps.participant.anonymous_key,
+              ps.participant.gender.label,
+              ps.participant.age_group.label,
+              ps.participant.city,
+              ps.participant.state,
+              ps.participant.postal_code,
+              ps.participant.country,
+              ps.participant.region.try(:label),
+              ps.participant.races.collect(&:label).join(', '),
+              ps.participant.ethnicities.collect(&:label).join(', '),
+              ps.participant.education.label
+            ]
+          responses = ParticipantResponse.where('question_id in (?) and participant_id = ?', question_ids, Participant.first.id)
+          question_ids.each do |question_id|
+            if response = ps.participant.responses.where(:question_id => question_id).first
+              case response.question.qtype
+                when 'Select One' then row << response.single_choice_id
+                when 'Select Multiple' then row << response.multiple_choice_ids
+                when 'Text' then row << response.text_response
+                when 'Date', 'Date/Time', 'Time' then row << response.datetime_response
+                when 'Numeric' then row << response.numeric_response
+              end
+            else
+              row << nil
+            end
+          end
+          csv << row
+        end
+      end
+    end
+    filename
+  end
 
   protected
 

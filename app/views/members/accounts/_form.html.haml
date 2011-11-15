@@ -4,6 +4,7 @@
     = f.input :password
     = f.input :password_confirmation
   = f.input :nickname, :hint => '<strong class="public">Public</strong> &mdash; Shown on your profile and elsewhere. Not included in anonymous survey results. Rather than revealing your name, provide an anonymous nickname.'.html_safe
+  = f.input :phone, :as => :string, :hint => '<strong class="private">Private</strong> &mdash; Not revealed to the public. Not included in anonymous survey results.'.html_safe
   = f.input :pic, :label => 'Profile Pic', :hint => '<strong class="public">Public</strong> &mdash; Shown on your profile and elsewhere. Not included in anonymous survey results.'.html_safe do 
     = f.file_field :pic
   - if @member.pic and @member.pic.url
@@ -18,33 +19,6 @@
       Alternatively, upload your pic to <a href="http://www.gravatar.com" target="_blank">Gravatar.com</a>.
   = f.input :tag_list, :label => 'Tags', :input_html => {:class => 'tags', :"data-seperator" => ','}, :hint => 'Describe yourself with a few words. Hit Enter or type a comma to delimit each tag.'
   = f.input :timezone, :as => :time_zone, :priority => /US/, :include_blank => true
-= field_set_tag 'Contact' do 
-  = f.input :first_name, :hint => '<strong class="private">Private</strong> &mdash; Not revealed to the public. Not included in anonymous survey results.'.html_safe
-  = f.input :last_name, :hint => '<strong class="private">Private</strong> &mdash; Not revealed to the public. Not included in anonymous survey results.'.html_safe
-  = f.input :phone, :as => :string, :hint => '<strong class="private">Private</strong> &mdash; Not revealed to the public. Not included in anonymous survey results.'.html_safe
-  = f.input :address_1, :hint => '<strong class="private">Private</strong> &mdash; Not revealed to the public. Not included in anonymous survey results.'.html_safe
-  = f.input :address_2, :hint => '<strong class="private">Private</strong> &mdash; Not revealed to the public. Not included in anonymous survey results.'.html_safe
-  = f.input :city, :hint => '<strong class="public">Public</strong> &amp; <strong class="annonymous">Annonymous</strong> &mdash; Shown on your profile. Included in anonymous survey results.'.html_safe
-  = f.input :state, :label => 'State', :collection => states, :hint => '<strong class="public">Public</strong> &amp; <strong class="annonymous">Annonymous</strong> &mdash; Shown on your profile. Included in anonymous survey results.'.html_safe
-  = f.input :postal_code, :hint => '<strong class="private">Private</strong> &amp; <strong class="annonymous">Annonymous</strong> &mdash; Not shown on your profile. Included in anonymous survey results.'.html_safe
-  = f.input :country, :priority => priority_countries, :hint => '<strong class="public">Public</strong> &amp; <strong class="annonymous">Annonymous</strong> &mdash; Shown on your profile. Included in anonymous survey results.'.html_safe
-= field_set_tag 'Demographics' do
-  .highlight
-    %span.ui-icon.ui-icon-info
-    We use these fields to weight survey results, so that the results are applicable to the entire USA population,
-    rather than the survey participants alone. These fields are crucial to generating significant survey results. 
-    %string These fields do not appear on your profile.
-  = f.input :gender_id, :as => :select, :collection => Gender.all.collect {|i| [i.label, i.id]}, :hint => '<strong class="public">Public</strong> &amp; <strong class="annonymous">Annonymous</strong> &mdash; Shown on your profile. Included in anonymous survey results.'.html_safe
-  = f.input :birthmonth, :as => :select do 
-    = f.date_select :birthmonth, :include_blank => true, :order => [:month, :year], :discard_day => true, :start_year => Date.today.year - 110, :end_year => Date.today.year - 14
-    .hint
-      %strong.private Private
-      &amp;
-      %stron.annonymous Annonymous
-      &mdash; Not shown on your profile. Included in anonymous survey results.
-  = f.association :ethnicities, :as => :check_boxes, :collection => Ethnicity.all.collect {|i| [i.label, i.id]}, :label => 'Hispanic, Latino, or Spanish origin?', :hint => '<strong class="private">Private</strong> &amp; <strong class="annonymous">Annonymous</strong> &mdash; Not shown on your profile. Included in anonymous survey results.'.html_safe
-  = f.association :races, :label => 'Races', :as => :check_boxes, :collection => Race.all.collect {|i| [i.label, i.id]}, :hint => '<strong class="private">Private</strong> &amp; <strong class="annonymous">Annonymous</strong> &mdash; Not shown on your profile. Included in anonymous survey results.'.html_safe
-  = f.input :education_id, :as => :select, :collection => Education.all.collect {|i| [i.label, i.id]}, :hint => '<strong class="private">Private</strong> &amp; <strong class="annonymous">Annonymous</strong> &mdash; Not shown on your profile. Included in anonymous survey results.'.html_safe
 - if @member.new_record?
   = render :partial => '/members/accounts/subscriptions_form', :locals => {:f => f}
   = render :partial => '/members/accounts/privacy_form', :locals => {:f => f}

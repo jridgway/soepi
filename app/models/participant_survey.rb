@@ -9,46 +9,41 @@ class ParticipantSurvey < ActiveRecord::Base
   belongs_to :education
   belongs_to :next_question, :class_name => 'SurveyQuestion'
 
-  validates_presence_of :survey_id, :city, :state, :postal_code, :country,
-    :age_group_id, :gender_id, :ethnicity_ids, :race_ids, :education_id
+  validates_presence_of :participant_id, :survey_id, :city, :state, :postal_code, :country,
+    :age_group_id, :gender_id, :ethnicity_ids, :race_ids, :education_id, :next_question_id
 
-  before_create :set_ids_caches
-  before_create :set_next_question
-  after_destroy :destroy_responses, :clear_statistics
-
-  def set_next_question
-    self.next_question = survey.questions.first
-  end
+  before_create :apply_participant, :set_next_question
+  after_destroy :clear_statistics
+  
+  scope :for_survey, lambda {|survey_id| where(:survey_id => survey_id, :complete => true)}
+  scope :completes, where(:complete => true)
 
   def complete?
     true unless next_question
   end
-
-  def apply_member(member)
-    self.gender = member.gender
-    self.age_group = member.age_group
-    self.city = member.city
-    self.state = member.state
-    self.postal_code = member.postal_code
-    self.country = member.country
-    self.region = member.region
-    self.ethnicities = member.ethnicities
-    self.races = member.races
-    self.education = member.education
-  end
   
-  private
+  def apply_participant
+    self.gender_id = participant.gender_id
+    self.age_group_id = participant.age_group.id
+    self.city = participant.city
+    self.state = participant.state
+    self.postal_code = participant.postal_code
+    self.country = participant.country
+    self.region_id = participant.region.try(:id)
+    self.lat = participant.lat
+    self.lng = participant.lng
+    self.ethnicity_ids = participant.ethnicity_ids
+    self.race_ids = participant.race_ids
+    self.education_id = participant.education_id
+  end
+
+  def set_next_question
+    self.next_question_id = survey.questions.first.id
+  end
     
-    def destroy_responses
-      ParticipantResponse.where('participant_id = ? and question_id in (?)', participant.id, survey.question_ids).destroy_all
-    end
+  protected
     
     def clear_statistics
       Statistic.delete_all
-    end
-    
-    def set_ids_caches
-      self.race_ids_cache = race_ids.sort.join(',')
-      self.ethnicity_ids_cache = ethnicity_ids.sort.join(',')
     end
 end

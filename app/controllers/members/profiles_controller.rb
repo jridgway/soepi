@@ -37,8 +37,7 @@ class Members::ProfilesController < ApplicationController
   end
   
   def autocomplete
-    set_cache_control
-    @members = Member.listable
+    @members = Member.listable.where('nickname like ?', "#{params[:term]}%").limit(20)
   end
 
   protected
@@ -55,7 +54,7 @@ class Members::ProfilesController < ApplicationController
       @facebook_meta = {
         :url => member_url(@member),
         :title => @member.nickname,
-        :description => @member.location,
+        :description => @member.tags.join(', '),
         :image_url => avatar_url(@member),
         :type => 'Member'
       }

@@ -11,6 +11,11 @@
       .bottom-actions
         = link_to 'Fork', forkit_survey_path(@survey), :method => 'put', :class => 'button'
         %button{:id => 'cancel-forkit', :class => 'button'} Cancel
+  - if @survey.launched? or @survey.closed?
+    .owner-only{:'data-member-id' => @survey.member_id}
+      = link_to 'Export Results', export_results_survey_path(@survey), :class => 'button', :icon => 'ui-icon-circle-arrow-s'
+  - elsif @survey.published?
+    = link_to 'Export Results', export_results_survey_path(@survey), :class => 'button', :icon => 'ui-icon-circle-arrow-s'
   .not-owner{:'data-member-id' => @survey.member_id}
     - if @survey.review_requested?
       .admins-only
@@ -45,14 +50,13 @@
       = link_to 'Participate', participate_survey_path(@survey), :icon => 'ui-icon-play', :class => 'button restrict-to-members', :id => 'participate', :method => 'put', :remote => true
   .owner-only-not-admins{:'data-member-id' => @survey.member_id}
     - if @survey.editable?
-      .owner-only-not-admins{:'data-member-id' => @survey.member_id}
-        %button{:id => 'delete', :icon => 'ui-icon-trash', :class => 'button'} Delete
-        #delete-message{:style => 'display:none', :title => 'Delete this Survey'}
-          %p 
-            Are you sure you want to <strong>delete</strong> this survey? 
-          .bottom-actions
-            = link_to 'Delete', survey_path(@survey), :method => 'delete', :class => 'button'
-            %button{:id => 'cancel-delete', :class => 'button'} Cancel
+      %button{:id => 'delete', :icon => 'ui-icon-trash', :class => 'button'} Delete
+      #delete-message{:style => 'display:none', :title => 'Delete this Survey'}
+        %p 
+          Are you sure you want to <strong>delete</strong> this survey? 
+        .bottom-actions
+          = link_to 'Delete', survey_path(@survey), :method => 'delete', :class => 'button'
+          %button{:id => 'cancel-delete', :class => 'button'} Cancel
     - unless @survey.new_record?
       - case @survey.state when 'drafting' then
         %button{:id => 'launch', :icon => 'ui-icon-notice', :class => 'button'} Launch

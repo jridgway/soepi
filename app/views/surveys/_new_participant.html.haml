@@ -1,0 +1,7 @@
+#new-participant{:style => 'display:none', :title => 'Please create a new participant record'}
+  = simple_form_for @participant, :url => create_participant_survey_path(@survey), :html => {:novalidate => true, :class => 'validate'}, :remote => true do |f|
+    %h3 To participate in this survey, you must create a new participant record:
+    = simple_form_for(@participant) do |f|
+      = render :partial => '/participants/form', :locals => {:f => f}
+      .actions
+        = f.submit 'Submit', :class => 'button'

@@ -1,0 +1,23 @@
+= field_set_tag 'Anonymous PIN' do 
+  - if current_member_pin
+    .input
+      %label Your PIN:
+      %strong= current_member_pin
+  - else
+    = f.input :pin, :label => 'PIN', :hint => "Provide a PIN or a password (case sensitive), such as 4109 or apPle. We do not save your PIN, so please don\'t forget it. When absolutely necessary, we use this to find your participant record and survey results."
+= field_set_tag 'Anonymous Demographics' do 
+  .highlight
+    %span.ui-icon.ui-icon-info
+    These fields only appear in survey results for the sake of statistical analysis and charting. 
+    These fields do not appear on your profile. These fields are only associated with your
+    anonymous participant record, which itself is NOT associated with your personal account. 
+  = f.input :city
+  = f.input :state, :label => 'State', :collection => states
+  = f.input :postal_code
+  = f.input :country, :priority => priority_countries
+  = f.input :gender_id, :as => :select, :collection => Gender.all.collect {|i| [i.label, i.id]}
+  = f.input :birthmonth, :as => :select do 
+    = f.date_select :birthmonth, :include_blank => true, :order => [:month, :year], :discard_day => true, :start_year => Date.today.year - 110, :end_year => Date.today.year - 14
+  = f.association :ethnicities, :as => :check_boxes, :collection => Ethnicity.all.collect {|i| [i.label, i.id]}, :label => 'Hispanic, Latino, or Spanish origin?'
+  = f.association :races, :label => 'Races', :as => :check_boxes, :collection => Race.all.collect {|i| [i.label, i.id]}
+  = f.input :education_id, :as => :select, :collection => Education.all.collect {|i| [i.label, i.id]}

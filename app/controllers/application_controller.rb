@@ -1,17 +1,11 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
   layout Proc.new { |controller| controller.request.xhr? ? 'ajax' : 'two_column' }
-  before_filter :authenticate, :set_member_return_to, :force_no_cache_control
+  before_filter :set_member_return_to, :force_no_cache_control
   helper_method :cache_expirary, :cache_expirary_in_seconds, :current_participant, :current_member_pin, :member_return_to,
     :avatar_url, :member_contact_us_path,  :message_members_path
 
   protected
-  
-  def authenticate
-    #authenticate_or_request_with_http_basic do |username, password|
-    #  username == "admin" && password == "ilovedata"
-    #end
-  end
 
   def admin_only!
     if not member_signed_in? or not current_member.admin?
@@ -22,19 +16,17 @@ class ApplicationController < ActionController::Base
   end
 
   def current_participant
-    unless @current_participant
-      if member_signed_in? and current_member_pin
-        unless @current_participant
-          current_member.pin = current_member_pin
-          @current_participant = Participant.find_by_member current_member
-        end
+    if member_signed_in? and cookies.encrypted["pin_#{current_member.id}"]
+      unless @current_participant
+        current_member.pin = cookies.encrypted["pin_#{current_member.id}"]
+        @current_participant = Participant.find_by_member current_member
       end
     end
     @current_participant
   end
 
   def current_member_pin
-    cookies.encrypted["pin_#{current_member.id}"] if current_member
+    cookies.encrypted["pin_#{current_member.id}"] if current_member and current_participant
   end
 
   def after_sign_in_path_for(resource)

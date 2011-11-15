@@ -2,7 +2,7 @@
   {
     :label => member.nickname,
     :logo => avatar(member, 40, false),
-    :description => member.location,
+    :description => member.tags.join(', '),
     :value => member.nickname
   }
 end.to_json.html_safe %>

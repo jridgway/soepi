@@ -1,0 +1,17 @@
+= render :partial => "/members/accounts/common"
+
+- content_for :body_content do
+  - simple_form_for @member, :url => participant_store_pin_path do |f|
+    %fieldset
+      %legend Enter Your PIN
+      .input
+        = f.text_field :pin, :value => ''
+        = f.error :pin
+        = f.submit 'Submit', :class => 'button'
+    %fieldset
+      %legend Don't have a PIN or forgot your PIN?
+      %p
+        = link_to 'Create a New Participant Record', new_participant_path, :class => 'button', :confirm => 'Are you sure?'
+    
+= render :partial => "/shared/content_page"
+  

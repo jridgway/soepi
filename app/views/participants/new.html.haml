@@ -1,0 +1,9 @@
+= render :partial => "/members/accounts/common"
+
+- content_for :body_content do
+  = simple_form_for(@participant, :html => {:novalidate => true, :class => 'validate'}) do |f|
+    = render :partial => 'form', :locals => {:f => f}
+    .actions
+      = f.submit 'Submit', :class => 'button'
+= render :partial => "/shared/content_page"
+  

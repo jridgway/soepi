@@ -1,10 +1,12 @@
+require 'csv'
+
 class SurveysController < ApplicationController
-  before_filter :load_survey, :only => [:show, :forks, :results, :forkit, :launch, :reject, :request_changes, 
-    :participate, :create_response, :update_pin, :generate_and_send_new_pin, :followed_by, :publish, :close]
+  before_filter :load_survey, :only => [:show, :forks, :results, :export_results, :forkit, :launch, :reject, :request_changes, 
+    :participate, :create_response, :store_pin, :new_participant, :create_participant, :followed_by, :publish, :close]
   before_filter :load_facebook_meta, :only => [:show, :forks, :results, :forkit, :launch, :reject, :participate,
     :create_response, :update_pin, :generate_and_send_new_pin, :followed_by]
   before_filter :authenticate_member!, :except => [:index, :launched, :closed, :published, :show, :forks, :sharing, 
-    :by_tag, :followed_by, :results]
+    :by_tag, :followed_by, :results, :export_results]
   before_filter :admin_only!, :only => [:drafting, :review_requested, :rejected, :launch, :reject, :request_changes, :publish]
   before_filter :owner_or_admins_only!, :only => [:results]
   before_filter :owner_only!, :only => [:update, :destroy, :close, :submit_for_review]
@@ -187,8 +189,8 @@ class SurveysController < ApplicationController
     if request.put?
       if @survey.launched? and current_participant
         if current_member.id != @survey.member_id
-          if current_member.qualifies_for_survey?(@survey)
-            unless current_member_not_participant_has_taken_survey(@survey)
+          if current_participant.qualifies_for_survey?(@survey)
+            unless current_participant.has_taken_survey?(@survey.id)
               if find_or_create_participant_survey(@survey.id)
                 if @question = @participant_survey.next_question
                   @participant_response = current_participant.responses.build :question_id => @question.id
@@ -225,11 +227,11 @@ class SurveysController < ApplicationController
     end
   end
 
-  def update_pin
+  def store_pin
     current_member.pin = params[:member][:pin]
     if @current_participant = Participant.find_by_member(current_member)
       cookies.permanent.encrypted["pin_#{current_member.id}"] = current_member.pin
-      unless current_member_not_participant_has_taken_survey(@survey)
+      unless current_participant.has_taken_survey?(@survey.id)
         if @question = find_or_create_participant_survey(@survey.id).next_question
           @participant_response = current_participant.responses.build :question_id => @question.id
         end
@@ -239,17 +241,31 @@ class SurveysController < ApplicationController
     end
     render :action => 'participate'
   end
+  
+  def new_participant
+    @participant = Participant.new
+  end
 
-  def generate_and_send_new_pin
-    current_member.generate_and_deliver_pin!
-    cookies.permanent.encrypted["pin_#{current_member.id}"] = current_member.pin
-    @current_participant = Participant.find_by_member(current_member)
-    unless current_member_not_participant_has_taken_survey(@survey)
-      if @question = find_or_create_participant_survey(@survey.id).next_question
-        @participant_response = current_participant.responses.build :question_id => @question.id
-      end
+  def create_participant
+    current_member.pin = params[:participant][:pin]
+    if @participant = Participant.find_by_member(current_member)
+      @participant.attributes = params[:participant].except(:pin)
+    else
+      @participant = Participant.new params[:participant]
     end
-    render :action => 'participate'
+    @participant.member = current_member
+    if @participant.save
+      cookies.permanent.encrypted["pin_#{current_member.id}"] = current_member.pin     
+      @current_participant = @participant
+      unless current_participant.has_taken_survey?(@survey)
+        if @question = find_or_create_participant_survey(@survey.id).next_question
+          @participant_response = current_participant.responses.build :question_id => @question.id
+        end
+      end
+      render :action => 'participate'
+    else
+      render :action => 'new_participant'
+    end
   end
 
   def close
@@ -285,6 +301,28 @@ class SurveysController < ApplicationController
   def results
     render :layout => 'one_column'
   end
+  
+  def export_results
+    survey = Survey.find(params[:id])
+    if ((survey.launched? or survey.closed?) and 
+    (current_member.id == survey.member_id or current_member.admin?)) or survey.published?
+      csv_string = CSV.generate do |csv|
+        csv << ["row", "of", "CSV", "data"]
+        csv << ["another", "row", 1, 3]
+        # ...
+      end
+      filename = "soepi-"
+      filename += "preliminary-" unless survey.published? or survey.closed?
+      filename += "survey-results-#{survey.slug[0..10]}-#{Time.now.to_s.gsub(/[ |\-|:]/, '')}.zip"
+      send_data csv_string, 
+        :disposition => 'attachement', 
+        :type => 'text/csv', 
+        :filename => filename
+    else
+      flash[:alert] = 'You must wait until the survey has been published to export its results.'
+      redirect_to survey_path(survey)
+    end
+  end
 
   def followed_by
     @followings = @survey.member_followers.page(params[:page])
@@ -316,17 +354,14 @@ class SurveysController < ApplicationController
 
     def find_or_create_participant_survey(survey_id)
       unless @participant_survey
-        @participant_survey = current_participant.surveys.find_or_create_by_survey_id survey_id
-        @participant_survey.apply_member current_member
-        @participant_survey.save!
-        current_member.surveys_taken << @survey
+        unless @participant_survey = current_participant.surveys.find_by_survey_id(survey_id)
+          @participant_survey = current_participant.surveys.build :survey_id => survey_id
+          @participant_survey.set_next_question
+          @participant_survey.apply_participant
+          @participant_survey.save!
+        end
       end
       @participant_survey
-    end
-
-    def current_member_not_participant_has_taken_survey(survey)
-      true if current_participant.surveys.where(:survey_id => survey.id).count == 0 and
-        current_member.surveys_taken.exists?(survey.id)
     end
 
     def load_tags

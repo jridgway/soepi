@@ -230,42 +230,34 @@ function extractLast(term) {
 
 function init_nickname_autocomplete() {
 	if($('#message_recipient_nicknames').length > 0) {
-    $.ajax({
-    	url: '/members/autocomplete.js',
-    	dataType: "json",
-    	cache: true,
-    	success: function(data) {
-    	 $("#message_recipient_nicknames").bind("keydown", function(event) {
-  				if(event.keyCode === $.ui.keyCode.TAB && $(this).data("autocomplete").menu.active) {
-  					event.preventDefault();
-  				}
-  			})
-  			.autocomplete({
-          source: function(request, response) {
-  					response($.ui.autocomplete.filter(data, extractLast(request.term)));
-  				},		
-        	dataType: "json",
-        	delay: 0,   
-          focus: function(item) {
-           return false;
-          },
-          select: function(event, ui) {
-      			var terms = split(this.value);
-      			terms.pop();
-      			terms.push(ui.item.value);
-      			terms.push("");
-      			this.value = terms.join(", ");
-      			return false;
-      		}
-        }).data("autocomplete")._renderItem = function(ul, item) {
-          return $("<li></li>")
-            .data("item.autocomplete", item)
-            .append('<a>' + item.logo + '<h4>' + item.label + '</h4><small>' + item.description + '</small></a>')
-            .appendTo(ul);
-        }
+	  $("#message_recipient_nicknames").bind("keydown", function(event) {
+    	if(event.keyCode === $.ui.keyCode.TAB && $(this).data("autocomplete").menu.active) {
+    		event.preventDefault();
     	}
-    });
-  }
+    })
+    .autocomplete({
+    	source: function(request, response) {
+    		$.getJSON('/members/autocomplete.js', {term: extractLast(request.term)}, response);
+    	},
+    	focus: function() {
+    		return false;
+    	},
+    	select: function(event, ui) {
+    		var terms = split(this.value);
+    		terms.pop();
+    		terms.push(ui.item.value);
+    		terms.push("");
+    		this.value = terms.join(", ");
+    		return false;
+    	}
+    })
+    .data("autocomplete")._renderItem = function(ul, item) {
+      return $("<li></li>")
+        .data("item.autocomplete", item)
+        .append('<a>' + item.logo + '<h4>' + item.label + '</h4><small>' + item.description + '</small></a>')
+        .appendTo(ul);
+    }
+	}
 }
 
 

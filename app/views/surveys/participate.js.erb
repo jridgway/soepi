@@ -1,4 +1,4 @@
-$('#require-pin').remove();
+$('#require-pin, #new-participant').remove();
 <% if @survey.launched? %>
   <% if current_participant %>
     <% if not @participant_survey or @participant_survey.complete? %>
