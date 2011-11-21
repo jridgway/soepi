@@ -29,7 +29,6 @@ gem 'omniauth', '= 0.3.2'
 gem 'state_machine', '= 1.0.0'
 gem 'us_states_select'
 gem 'countries'
-gem 'cities'
 gem 'simple_form'
 gem 'rdiscount'
 gem 'acts-as-taggable-on'
@@ -53,6 +52,7 @@ gem 'redis'
 
 group :development do
   gem 'rails-dev-tweaks', '~> 0.5.0'
+  gem 'cities'
 end
 
 group :production do
