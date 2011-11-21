@@ -1,0 +1,12 @@
+= render :partial => 'common'
+
+- content_for :body_content_title do
+  Participants by Map
+
+- content_for :body_content_left do
+  #participants-map
+    = image_tag 'ajax-loader.gif', :class => 'ajax-loader'
+  :javascript
+    $.getScript('/participants/gmap.js');
+      
+= render :partial => "/shared/content_page"

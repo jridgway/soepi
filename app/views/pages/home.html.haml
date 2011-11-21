@@ -4,8 +4,8 @@
       = Part.find_or_set(:home_member_top_right, ''.html_safe, 'ckeditor')
   .block
     = link_to 'Create a Survey', new_survey_path, :class => 'restrict-to-members button', :icon => 'ui-icon-document'    
-    = link_to 'Create a Chart', new_chart_path, :class => 'restrict-to-members button', :icon => 'ui-icon-document'    
-    = link_to 'Create a Petition', new_petition_path, :class => 'restrict-to-members button', :icon => 'ui-icon-document' 
+    = link_to 'Create an R Script', new_r_script_path, :class => 'restrict-to-members button', :icon => 'ui-icon-document'    
+    = link_to 'Create a Report', new_report_path, :class => 'restrict-to-members button', :icon => 'ui-icon-document' 
 
 - if member_signed_in?    
   - content_for :body_content_left do    

@@ -1,6 +1,43 @@
 class ParticipantsController < ApplicationController
-  before_filter :authenticate_member!
+  before_filter :authenticate_member!, :except => [:index, :gmap, :by_city, :by_anonymous_key, :show]
   layout Proc.new { |controller| controller.request.xhr? ? 'ajax' : 'one_column' }
+  caches_action :gmap, :expires_in => 2.hours
+   
+  def index
+    render :layout => 'two_column'
+  end
+  
+  def gmap
+    @participants = Participant.group('lat, lng, city, state, postal_code, country').
+      select('count(*) as total, lat, lng, city, state, postal_code, country')
+  end
+  
+  def by_city
+    @participant = Participant.new params[:participant]
+    where_statement = {}
+    where_statement[:city] = @participant.city unless @participant.city.blank?
+    where_statement[:state] = @participant.state unless @participant.state.blank?
+    where_statement[:postal_code] = @participant.postal_code unless @participant.postal_code.blank?
+    where_statement[:country] = @participant.country unless @participant.country.blank?
+    @participants = Participant.where(where_statement).page(params[:page]).per(20) unless where_statement.blank?
+    render :layout => 'two_column'
+  end
+  
+  def by_anonymous_key
+    if params[:participant] and params[:participant][:anonymous_key] and 
+    (@participant = Participant.find_by_anonymous_key(params[:participant][:anonymous_key]))  
+      redirect_to participant_path(@participant)
+    else
+      @participant = Participant.new params[:participant]
+      @participant.errors.add :anonymous_key, 'not found' if params[:participant]
+      render :layout => 'two_column'
+    end
+  end
+  
+  def show
+    @participant = Participant.find params[:id]
+    render :layout => 'two_column'
+  end
   
   def new 
     if current_participant
@@ -18,7 +55,7 @@ class ParticipantsController < ApplicationController
       if @participant = Participant.find_by_member(current_member)
         if @participant.update_attributes params[:participant]
           set_pin_cookie_helper(current_member.pin)
-          redirect_to edit_participant_path
+          redirect_to edit_participants_path
         else
           cookies.permanent.encrypted["pin_#{current_member.id}"] = current_member.pin
           @participant.pin = params[:participant][:pin]
@@ -29,7 +66,7 @@ class ParticipantsController < ApplicationController
         @participant.member = current_member
         if @participant.save
           set_pin_cookie_helper(@participant.pin)
-          redirect_to edit_participant_path
+          redirect_to edit_participants_path
         else
           render :action => 'new'
         end
@@ -41,7 +78,7 @@ class ParticipantsController < ApplicationController
     if current_participant
       @participant = current_participant
     else
-      redirect_to participant_enter_your_pin_path
+      redirect_to enter_your_pin_participants_path
     end
   end
   
@@ -49,13 +86,13 @@ class ParticipantsController < ApplicationController
     if current_participant
       if current_participant.update_attributes(params[:participant])
           flash[:alert] = "Your participant record was successfully updated.".html_safe
-        redirect_to edit_participant_path
+        redirect_to edit_participants_path
       else
         @participant = current_participant
         render :action => 'edit'
       end
     else
-      redirect_to participant_enter_your_pin_path
+      redirect_to enter_your_pin_participants_path
     end
   end
 
@@ -67,7 +104,7 @@ class ParticipantsController < ApplicationController
     current_member.pin = params[:member][:pin]
     if @participant = Participant.find_by_member(current_member)
       cookies.permanent.encrypted["pin_#{current_member.id}"] = current_member.pin
-      redirect_to edit_participant_path
+      redirect_to edit_participants_path
     else
       current_member.errors.add :pin, 'Invalid PIN. Please try again.'
       @member = current_member

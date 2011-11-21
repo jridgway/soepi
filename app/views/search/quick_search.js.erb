@@ -1,4 +1,4 @@
-<%= @results.collect do |result|
+<%= @results.results.collect do |result|
   case result.class.to_s
     when 'Survey' then
       {
@@ -25,7 +25,7 @@
       {
         :label => result.nickname,
         :logo => avatar(result, 40, false),
-        :description => result.location,
+        :description => result.tags.join(', '),
         :value => member_path(result)
       }
     when 'Page' then

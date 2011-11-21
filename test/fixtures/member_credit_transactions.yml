@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  credits: 1
+  member_id: 1
+  reason: MyString
+
+two:
+  credits: 1
+  member_id: 1
+  reason: MyString

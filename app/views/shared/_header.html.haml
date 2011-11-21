@@ -20,7 +20,7 @@
                 %li
                   = link_to 'Change Password', member_change_password_path
                 %li
-                  = link_to 'Participant Record', edit_participant_path
+                  = link_to 'Participant Record', edit_participants_path
                 %li
                   = link_to 'Subscriptions', member_subscriptions_path
                 %li
@@ -43,6 +43,7 @@
             = submit_tag 'Search', :name => nil
         %ul
           %li= link_to 'Surveys', surveys_path
-          %li= link_to 'Charts', charts_path
-          %li= link_to 'Petitions', petitions_path
+          %li= link_to 'Participants', participants_path
+          %li= link_to 'R Scripts', r_scripts_path
+          %li= link_to 'Reports', reports_path
           %li= link_to 'Members', members_path

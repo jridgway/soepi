@@ -29,11 +29,17 @@ Soepi::Application.routes.draw do
 
   resources :member_tokens, :only => [:index, :destroy], :controller => 'members/tokens', :path => '/members/accounts/sign-in-tokens'
 
-  resources :participants, :only => [:new, :create]
-  get '/participants/edit', :to => 'participants#edit', :as => :edit_participant
-  put '/participants/update', :to => 'participants#update', :as => :update_participant
-  get '/participants/enter_your_pin', :to => 'participants#enter_your_pin', :as => :participant_enter_your_pin
-  put '/participants/store_pin', :to => 'participants#store_pin', :as => :participant_store_pin
+  resources :participants, :only => [:index, :show, :new, :create] do 
+    collection do 
+      get 'gmap'
+      match 'by_city'
+      match 'by_anonymous_key'
+      get 'edit'
+      put 'update'
+      get 'enter_your_pin'
+      put 'store_pin'
+    end
+  end
   
   resources :messages, :only => [:index, :show, :new, :create] do 
     collection do 
@@ -41,11 +47,7 @@ Soepi::Application.routes.draw do
     end
   end
 
-  resources :charts, :petitions do
-    collection do
-      get 'you_created'
-    end
-  end
+  resources :r_scripts, :reports
 
   resources :surveys, :except => [:index] do
     collection do

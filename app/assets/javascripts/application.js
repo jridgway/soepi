@@ -13,6 +13,7 @@
 //= require tips
 //= require survey_form
 //= require distance_widget
+//= require markerclusterer
 //= require highcharts
 //= require highcharts-theme
 //= require uservoice

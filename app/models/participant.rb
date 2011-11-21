@@ -15,17 +15,49 @@ class Participant < ActiveRecord::Base
   validates_presence_of :pin, :on => :create
   validates_length_of :pin, :minimum => 6, :allow_blank => true, :on => :create
 
-  before_create :set_anonymous_key
-  before_save :geocode_address
-  after_destroy :clear_statistics
-
   attr_accessor :member, :pin
   
-  acts_as_mappable
+  geocoded_by :location, :latitude => :lat, :longitude => :lng
+  
+  extend FriendlyId
+  friendly_id :anonymous_key
 
-  def geocode_address
-    geo = Geokit::Geocoders::MultiGeocoder.geocode "#{city}, #{state} #{postal_code}, #{country}"
-    self.lat, self.lng = geo.lat, geo.lng if geo.success
+  before_create :set_anonymous_key
+  after_validation :geocode
+  after_destroy :clear_statistics
+  
+  searchable do
+    string :anonymous_key
+    string :gender do 
+      gender.label
+    end
+    string :age_group do 
+      age_group.label
+    end
+    string :education do 
+      education.label
+    end
+    string :races do 
+      races.collect(&:label).join(', ')
+    end
+    string :ethnicities do 
+      ethnicities.collect(&:label).join(', ')
+    end
+    string :surveys_taken do 
+      surveys.collect(&:title).join(', ')
+    end
+    string :city
+    string :state
+    string :postal_code
+    string :country
+    string :region do 
+      region.label if region
+    end
+    integer :id
+  end
+
+  def location
+    [city, state, postal_code, country].compact.join(', ')
   end
 
   def deliver_pin!

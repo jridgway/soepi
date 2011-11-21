@@ -1,3 +1,0 @@
-class PetitionsController < ApplicationController
-
-end

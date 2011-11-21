@@ -1,18 +1,14 @@
 class Page < ActiveRecord::Base
   validates_presence_of :title
   
-  include Tanker
-  tankit 'soepi' do
-    indexes :text do
-      "#{title} : #{body}"
-    end
-    indexes :id
-    indexes :published do
+  searchable do
+    text :title
+    text :body
+    boolean :published do 
       live?
     end
+    integer :id
   end
-  after_save :update_tank_indexes
-  after_destroy :delete_tank_indexes
   
   extend FriendlyId
   friendly_id :title, :use => :slugged

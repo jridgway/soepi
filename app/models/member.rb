@@ -1,22 +1,21 @@
 class Member < ActiveRecord::Base
   has_many :surveys_posted, :class_name => 'Survey', :dependent => :destroy
-  has_and_belongs_to_many :surveys_taken, :class_name => 'Survey'
   has_many :notifications, :dependent => :destroy
   has_many :messages, :dependent => :nullify
   has_many :message_members, :class_name => 'MessageMember', :dependent => :nullify
   has_many :messages_received, :through => :message_members, :source => :message
-  has_many :charts, :dependent => :destroy
-  has_many :petitions, :dependent => :destroy
-  has_many :petitions_taken, :class_name => 'Petitioner', :foreign_key => :member_id, :dependent => :destroy
+  has_many :r_scripts, :dependent => :destroy
+  has_many :reports, :dependent => :destroy
+  has_many :assets, :dependent => :destroy
   has_many :tokens, :class_name => 'MemberToken', :dependent => :destroy
 
   scope :confirmed, where('confirmed_at is not null')
   scope :admins, where(:admin => true)
   scope :listable, where('privacy_dont_list_me = false or privacy_dont_list_me is null')
   scope :publishers, where(%{
-      exists (select * from surveys where member_id = members.id) or
-      exists (select * from petitions where member_id = members.id) or
-      exists (select * from charts where member_id = members.id)
+      exists (select * from surveys where member_id = members.id and state != 'drafting') or
+      exists (select * from r_scripts where member_id = members.id and state != 'drafting') or
+      exists (select * from reports where member_id = members.id and state != 'drafting')
     })
 
   extend FriendlyId
@@ -28,26 +27,17 @@ class Member < ActiveRecord::Base
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable,
     :omniauthable, :confirmable, :token_authenticatable, :lockable
 
-  include Tanker
-  tankit 'soepi' do
-    indexes :text do
-      "#{nickname}"
-    end
-    indexes :nickname
-    indexes :id
-    indexes :published do
+  searchable do
+    text :nickname
+    text :email
+    boolean :published do 
       confirmed? and not privacy_dont_list_me?
     end
+    integer :id
   end
-  #after_save Proc.new { |m|
-  #  if m.nickname_changed? or m.state_changed? or m.country_changed? or m.confirmed_at_changed?
-  #    update_tank_indexes
-  #  end
-  #}
-  #after_destroy :delete_tank_indexes
 
   attr_accessor :remove_pic, :participant, :pin
-  attr_protected :admin
+  attr_protected :admin, :credits
 
   attr_accessible :remove_pic, :pic, :email, :password, :password_confirmation, :remember_me,
     :nickname, :phone, :timezone, :tag_list, :informed_consent, :terms_of_use,
@@ -156,4 +146,29 @@ class Member < ActiveRecord::Base
   def name
     nickname
   end
+  
+  def ec2_instance
+    connection = Fog::Compute.new(
+        :provider => 'AWS', 
+        :aws_secret_access_key => ENV['S3_SECRET'], 
+        :aws_access_key_id => ENV['S3_KEY']
+      )
+    if ec2_instance_id.blank? or (server = connection.servers.get(ec2_instance_id)).nil?
+      server = create_ec2_instance(connection)
+    end
+    server
+  end
+  
+  private
+  
+    def create_ec2_instance(connection)
+      server = connection.servers.bootstrap(
+          :private_key_path => '~/.ssh/id_rsa', 
+          :public_key_path => '~/.ssh/id_rsa.pub', 
+          :username => 'ubuntu', 
+          :image_id => 'ami-d38d45ba'
+        )
+      update_attribute :ec2_instance_id, server.id
+      server
+    end
 end

@@ -1,0 +1,51 @@
+= render :partial => 'common'
+
+- content_for :body_content_title do
+  Participant #{@participant.gender.label}, #{@participant.age_group.label}, #{@participant.city}, #{@participant.state}
+      
+- content_for :body_content_left do
+  .tabs
+    %ul
+      %li
+        %a{:href => '#demographics'} Demographics
+      %li
+        %a{:href => '#surveys'} Surveys Taken
+    #demographics
+      %ul.reset
+        %li
+          Gender:
+          %strong #{@participant.gender.label}
+        %li
+          Age Group:
+          %strong #{@participant.age_group.label}
+        %li
+          Location:
+          %strong #{@participant.city}, #{@participant.state}, #{@participant.country}
+        %li
+          Races:
+          %strong #{@participant.races.collect(&:label).join(', ')}
+        %li
+          Ethnicities:
+          %strong #{@participant.ethnicities.collect(&:label).join(', ')}
+        %li
+          Education:
+          %strong #{@participant.education.label}
+        %li
+          Anonymous Key:
+          %strong #{@participant.anonymous_key}
+    #surveys
+      %ul.reset
+        - @participant.surveys.each do |survey_taken|
+          %li
+            %ul.reset
+              %li
+                Survey:
+                %strong= link_to survey_taken.survey.title, survey_path(survey_taken.survey)
+              %li
+                Taken:
+                %strong= timeago survey_taken.created_at
+              %li
+                Completed?
+                %strong= (survey_taken.complete? ? 'Yes' : 'No')
+  
+= render :partial => "/shared/content_page"

@@ -1,0 +1,12 @@
+- content_for :body_content_details do
+  %ul.menu
+    %li= link_to 'Search by Map', participants_path
+    %li= link_to 'Search by City', by_city_participants_path
+    %li= link_to 'Search by Anonymous Key', by_anonymous_key_participants_path
+
+- content_for :body_content_right do
+  %h3 Concerned About Privacy?
+  %p 
+    We are, which is why we've made our participant records completely anonymous. 
+    Our participant records cannot be associated with our member records.
+    Please contact us if you have any questions or concerns.

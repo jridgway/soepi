@@ -4,7 +4,7 @@ class Members::ProfilesController < ApplicationController
   before_filter :load_facebook_meta, :only => [:show, :following, :followed_by]
 
   def index
-    @members = Member.listable.page(params[:page]).per(30)
+    @members = Member.listable.publishers.page(params[:page]).per(30)
   end
 
   def by_tag

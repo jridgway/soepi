@@ -1,0 +1,30 @@
+= render :partial => 'common'
+
+- content_for :body_content_title do
+  Participants by City
+
+- content_for :body_content_left do
+  = simple_form_for @participant, :url => by_city_participants_path do |f|
+    = f.input :city, :required => false
+    = f.input :state, :collection => states, :required => false
+    = f.input :postal_code, :required => false
+    = f.input :country, :priority => priority_countries, :required => false
+    .actions
+      = f.submit 'Search', :class => 'button'
+  - if @participants  
+    %h3= page_entries_info @participants
+    %ul.reset
+      - @participants.each do |participant|
+        %li
+          %h3= link_to "#{participant.gender.label}, #{participant.age_group.label}, #{participant.city}, #{participant.state}", participant_path(participant)
+          %small
+            Races: #{participant.races.collect(&:label).join(', ')}
+            %br/
+            Ethnicities: #{participant.ethnicities.collect(&:label).join(', ')}
+            %br/
+            Education: #{participant.education.label}
+            %br/
+            Anonymous Key: #{participant.anonymous_key}
+    = paginate @participants
+  
+= render :partial => "/shared/content_page"

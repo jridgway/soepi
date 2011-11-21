@@ -1,7 +1,7 @@
 = render :partial => "/members/accounts/common"
 
 - content_for :body_content do
-  - simple_form_for @member, :url => participant_store_pin_path do |f|
+  - simple_form_for @member, :url => store_pin_participants_path do |f|
     %fieldset
       %legend Enter Your PIN
       .input

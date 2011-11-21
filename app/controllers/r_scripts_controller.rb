@@ -1,0 +1,3 @@
+class RScriptsController < ApplicationController
+
+end

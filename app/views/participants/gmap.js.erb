@@ -1,0 +1,28 @@
+function infoWindow(content, latLng) {
+  infowindow = new google.maps.InfoWindow();
+  infowindow.setContent(content);
+  infowindow.setPosition(latLng);
+  infowindow.open(map);
+}
+var center = new google.maps.LatLng(38.6,-98);
+var map = new google.maps.Map(document.getElementById('participants-map'), {
+  'zoom': 3,
+  'center': center,
+  'mapTypeId': google.maps.MapTypeId.ROADMAP
+});
+var latlng;
+var marker;
+var markers = [];
+<% @participants.each do |participant| %>
+  <% if participant.lat and participant.lng %>
+    latlng = new google.maps.LatLng(<%= participant.lat %>, <%= participant.lng %>);
+    marker = new google.maps.Marker({position: latlng, clickable: true});
+    google.maps.event.addListener(marker, 'click', function(event) {
+      var content = '<h3><a href="<%= by_city_participants_path('participant[city]' => participant.city, 'participant[state]' => participant.state, 'participant[postal_code]' => participant.postal_code, 'participant[country]' => participant.country) %>">' +
+        'View <%= participant.total %> participant(s) in <%= escape_javascript "#{participant.city}, #{participant.state}" %></a></h3>';
+      infoWindow(content, event.latLng);
+    });
+    markers.push(marker);
+  <% end %>
+<% end %>
+var markerCluster = new MarkerClusterer(map, markers);

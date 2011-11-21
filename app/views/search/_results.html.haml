@@ -1,5 +1,5 @@
 %ul#search-results.listing
-  - @results.each do |result|
+  - @results.each_hit_with_result do |hit, result|
     %li
       - case result.class.to_s when 'Survey' then
         = render :partial => '/surveys/survey', :locals => {:survey => result}

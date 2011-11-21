@@ -1,6 +1,5 @@
 - content_for :body_content_title do
-  = page_entries_info @results, :model => 'results'
-  for "#{@q}"
+  Search Results for "#{@q}"
 
 - content_for :body_content_left do
   = render :partial => 'results'   

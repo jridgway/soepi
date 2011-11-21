@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111111144541) do
+ActiveRecord::Schema.define(:version => 20111121195732) do
 
   create_table "age_groups", :force => true do |t|
     t.string   "label"
@@ -24,6 +24,25 @@ ActiveRecord::Schema.define(:version => 20111111144541) do
   create_table "age_groups_targets", :id => false, :force => true do |t|
     t.integer "target_id"
     t.integer "age_group_id"
+  end
+
+  create_table "assets", :force => true do |t|
+    t.integer  "member_id",      :null => false
+    t.integer  "assetable_id",   :null => false
+    t.string   "assetable_type", :null => false
+    t.string   "title"
+    t.text     "body"
+    t.string   "file"
+    t.string   "file_uid"
+    t.string   "file_mime_type"
+    t.string   "file_name"
+    t.integer  "file_size"
+    t.integer  "file_width"
+    t.integer  "file_height"
+    t.string   "file_image_uid"
+    t.string   "file_image_ext"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "census_geo_profiles", :force => true do |t|
@@ -329,20 +348,6 @@ ActiveRecord::Schema.define(:version => 20111111144541) do
     t.integer "year", :null => false
   end
 
-  create_table "charts", :force => true do |t|
-    t.string   "title"
-    t.text     "description"
-    t.integer  "member_id"
-    t.boolean  "anonymous"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "slug"
-  end
-
-  add_index "charts", ["id"], :name => "index_charts_on_id", :unique => true
-  add_index "charts", ["member_id"], :name => "index_charts_on_member_id"
-  add_index "charts", ["slug"], :name => "index_charts_on_slug"
-
   create_table "educations", :force => true do |t|
     t.string   "label"
     t.integer  "position"
@@ -401,28 +406,13 @@ ActiveRecord::Schema.define(:version => 20111111144541) do
     t.integer "gender_id"
   end
 
-  create_table "member_ethnicities", :force => true do |t|
-    t.integer  "member_id"
-    t.integer  "ethnicity_id"
+  create_table "member_credit_transactions", :force => true do |t|
+    t.integer  "credits"
+    t.integer  "member_id",  :null => false
+    t.string   "reason",     :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  create_table "member_races", :force => true do |t|
-    t.integer  "member_id"
-    t.integer  "race_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "member_surveys", :force => true do |t|
-    t.integer "member_id"
-    t.integer "survey_id"
-  end
-
-  add_index "member_surveys", ["id"], :name => "index_member_surveys_on_id", :unique => true
-  add_index "member_surveys", ["member_id"], :name => "index_member_surveys_on_member_id"
-  add_index "member_surveys", ["survey_id"], :name => "index_member_surveys_on_survey_id"
 
   create_table "member_tokens", :force => true do |t|
     t.integer  "member_id"
@@ -472,6 +462,8 @@ ActiveRecord::Schema.define(:version => 20111111144541) do
     t.boolean  "privacy_dont_list_me",                         :default => false
     t.string   "slug"
     t.boolean  "subscription_weekly_summaries",                :default => true
+    t.integer  "credits",                                      :default => 10
+    t.string   "ec2_instance_id"
   end
 
   add_index "members", ["confirmation_token"], :name => "index_members_on_confirmation_token", :unique => true
@@ -621,27 +613,16 @@ ActiveRecord::Schema.define(:version => 20111111144541) do
     t.string   "markup_type"
   end
 
-  create_table "petitioners", :force => true do |t|
-    t.integer  "petition_id"
-    t.integer  "member_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "petitions", :force => true do |t|
-    t.string   "title"
+  create_table "r_scripts", :force => true do |t|
+    t.integer  "member_id",                             :null => false
+    t.integer  "forked_from_id"
+    t.string   "title",                                 :null => false
     t.text     "description"
-    t.text     "promise"
-    t.integer  "member_id"
-    t.string   "state"
+    t.text     "code",                                  :null => false
+    t.string   "state",          :default => "pending"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "slug"
   end
-
-  add_index "petitions", ["id"], :name => "index_petitions_on_id", :unique => true
-  add_index "petitions", ["member_id"], :name => "index_petitions_on_member_id"
-  add_index "petitions", ["slug"], :name => "index_petitions_on_slug"
 
   create_table "races", :force => true do |t|
     t.string   "label"
@@ -679,6 +660,18 @@ ActiveRecord::Schema.define(:version => 20111111144541) do
     t.integer "target_id"
     t.integer "region_id"
   end
+
+  create_table "reports", :force => true do |t|
+    t.integer  "member_id",                          :null => false
+    t.string   "title",                              :null => false
+    t.text     "body",                               :null => false
+    t.string   "state",      :default => "drafting"
+    t.string   "slug"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "reports", ["slug"], :name => "index_reports_on_slug", :unique => true
 
   create_table "settings", :force => true do |t|
     t.string   "name"

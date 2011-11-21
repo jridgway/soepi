@@ -204,8 +204,8 @@ Devise.setup do |config|
     config.omniauth :facebook, "182817381765264", "8aaf97328cc792c552ea3218418467dd"
     config.omniauth :twitter, "BjaXvp2XM3XBHRwIf9LZ0g", "FHKOedvp3fR8FPFe0rLr0QqA7R6naN1FYdVVkTuMEfE"
     config.omniauth :google_apps, OpenID::Store::Filesystem.new(Rails.root.join('tmp').to_s), :domain => 'gmail.com'
-    #config.omniauth :yahoo, "dj0yJmk9Y0kzRGxvMk1paDZFJmQ9WVdrOWFFRk1SRlJUTkRnbWNHbzlNVGsxTnpRNE1ESTJNZy0tJnM9Y29uc3VtZXJzZWNyZXQmeD05Zg--", "d72b3cce1052030ef6b66cd410c329e4a5843171"
-    config.omniauth :linked_in, "9n_yjSwmo0UwDr_NPs6eOknneS7MgRgbvTx0kXK5ooOz-zZ-0dYH-uwXvvuYqkh1", "iz0-SnJoyTKjzuDWUhhRekT5WYst9Qzx5nstK2MYjDT4t1nyqfS4ZhEUoP1zzN5l"
+    config.omniauth :yahoo, "dj0yJmk9Y0kzRGxvMk1paDZFJmQ9WVdrOWFFRk1SRlJUTkRnbWNHbzlNVGsxTnpRNE1ESTJNZy0tJnM9Y29uc3VtZXJzZWNyZXQmeD05Zg--", "d72b3cce1052030ef6b66cd410c329e4a5843171"
+    #config.omniauth :linked_in, "9n_yjSwmo0UwDr_NPs6eOknneS7MgRgbvTx0kXK5ooOz-zZ-0dYH-uwXvvuYqkh1", "iz0-SnJoyTKjzuDWUhhRekT5WYst9Qzx5nstK2MYjDT4t1nyqfS4ZhEUoP1zzN5l"
     config.omniauth :github, "b8ee2c197c6d68fe64fd", "1e62eb237909f135b8a2842ac45a900a76661e2b"
     config.omniauth :open_id, OpenID::Store::Filesystem.new(Rails.root.join('tmp').to_s)
     #config.omniauth :vimeo, "9b1e82c3b79bf3a7d288824e00ba0138", "b7a1c3eb264a5c50"
@@ -214,8 +214,8 @@ Devise.setup do |config|
     config.omniauth :facebook, "113742618704445", "d4df7ff48a0f6602857200894231bba9"
     config.omniauth :twitter, "Q795shC8Qj5NdzXZ2AS35w", "SAhMYcaTDSpWqNN1qkjizR8YvZW9EIUMjaOmfIw6j4"
     config.omniauth :google_apps, OpenID::Store::Filesystem.new(Rails.root.join('tmp').to_s), :domain => 'gmail.com'
-    #config.omniauth :yahoo, "dj0yJmk9MzRjNDN3QWNWNm42JmQ9WVdrOVRXVlFjV0p4Tm5NbWNHbzlNVE0yT0RnMk5UWXkmcz1jb25zdW1lcnNlY3JldCZ4PWUw", "ee42d4e29a965408394f83917f47b373c34e777c"
-    config.omniauth :linked_in, "Y1KogHrjY5Yi-ozxrc8DGCh2FQOG3VPvvWEuZqfpWmECA46MszuTRyLOlyX59VYf", "106Tn8QxoH35KmGh_Ris2C0X7WoO8ZpCeq9Oe8Xr4Q27q4ABE1lmPjs4tXAZ7C6S"
+    config.omniauth :yahoo, "dj0yJmk9MzRjNDN3QWNWNm42JmQ9WVdrOVRXVlFjV0p4Tm5NbWNHbzlNVE0yT0RnMk5UWXkmcz1jb25zdW1lcnNlY3JldCZ4PWUw", "ee42d4e29a965408394f83917f47b373c34e777c"
+    #config.omniauth :linked_in, "Y1KogHrjY5Yi-ozxrc8DGCh2FQOG3VPvvWEuZqfpWmECA46MszuTRyLOlyX59VYf", "106Tn8QxoH35KmGh_Ris2C0X7WoO8ZpCeq9Oe8Xr4Q27q4ABE1lmPjs4tXAZ7C6S"
     config.omniauth :github, "fb30d950652ddea58ee2", "759d5fec5f0f05d4bff39fe20ddad0afbbd1e379"
     config.omniauth :open_id, OpenID::Store::Filesystem.new(Rails.root.join('tmp').to_s)
     #config.omniauth :vimeo, "af3e7f56f4f9e56ed45915b057785df0", "7c829bf66cb1e51b"

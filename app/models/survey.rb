@@ -35,31 +35,32 @@ class Survey < ActiveRecord::Base
     :cohort_range_in_days, :minimum => 1, :allow_blank => true
   validates_numericality_of :cohort_range_in_days, :minimum => 1, :allow_blank => true
   validate :settings_for_draft
-
-  include Tanker
-  tankit 'soepi' do
-    indexes :text do
-      s = "#{title} #{description} #{purpose_of_survey} #{uses_of_results} #{organization_name} #{irb_name} #{tag_list} #{member.nickname}"
-      questions.each do |question|
-        s += ' ' + question.body
-        question.choices.each do |choice|
-          s += ' ' + choice.label
-        end
-      end
-      s
-    end
-    indexes :id
-    indexes :state
-    indexes :member do
+  
+  searchable do
+    text :title
+    text :description
+    text :purpose_of_survey
+    text :uses_of_results
+    text :organization_name
+    text :irb_name
+    text :tag_list
+    text :nickname do 
       member.nickname
     end
-    indexes :published do
+    text :questions do 
+      s = question.body
+      question.choices.each do |choice|
+        s += ' ' + choice.label
+      end
+      s 
+    end
+    boolean :published do 
       live?
     end
+    string :state
+    integer :id
   end
-  #after_save :update_tank_indexes
-  #after_destroy :delete_tank_indexes
-
+  
   def settings_for_draft
     if drafting? and state_was == 'drafting'
       if irb?

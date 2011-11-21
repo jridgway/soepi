@@ -1,0 +1,12 @@
+= render :partial => 'common'
+
+- content_for :body_content_title do
+  Participants by Anonymous Key
+
+- content_for :body_content_left do
+  = simple_form_for @participant, :url => by_anonymous_key_participants_path do |f|
+    = f.input :anonymous_key
+    .actions
+      = f.submit 'Search', :class => 'button'
+  
+= render :partial => "/shared/content_page"
