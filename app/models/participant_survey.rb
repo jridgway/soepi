@@ -40,6 +40,11 @@ class ParticipantSurvey < ActiveRecord::Base
   def set_next_question
     self.next_question_id = survey.questions.first.id
   end
+
+  def responses
+    participant.responses.joins('join survey_questions sq on sq.id = participant_responses.question_id').
+      where('sq.survey_id = ?', survey_id).order('sq.position asc')
+  end
     
   protected
     

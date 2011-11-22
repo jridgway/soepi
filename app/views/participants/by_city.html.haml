@@ -16,15 +16,7 @@
     %ul.reset
       - @participants.each do |participant|
         %li
-          %h3= link_to "#{participant.gender.label}, #{participant.age_group.label}, #{participant.city}, #{participant.state}", participant_path(participant)
-          %small
-            Races: #{participant.races.collect(&:label).join(', ')}
-            %br/
-            Ethnicities: #{participant.ethnicities.collect(&:label).join(', ')}
-            %br/
-            Education: #{participant.education.label}
-            %br/
-            Anonymous Key: #{participant.anonymous_key}
+          = render :partial => 'participant', :locals => {:participant => participant}
     = paginate @participants
   
 = render :partial => "/shared/content_page"

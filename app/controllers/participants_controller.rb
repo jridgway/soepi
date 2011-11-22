@@ -1,5 +1,6 @@
 class ParticipantsController < ApplicationController
-  before_filter :authenticate_member!, :except => [:index, :gmap, :by_city, :by_anonymous_key, :show]
+  before_filter :authenticate_member!, :except => [:index, :gmap, :by_city, :by_categories, :by_anonymous_key, :show]
+  before_filter :load_default_facets, :except => [:by_facets]
   layout Proc.new { |controller| controller.request.xhr? ? 'ajax' : 'one_column' }
   caches_action :gmap, :expires_in => 2.hours
    
@@ -23,6 +24,16 @@ class ParticipantsController < ApplicationController
     render :layout => 'two_column'
   end
   
+  def by_categories
+    @facets = Participant.search do 
+      [:gender, :age_group, :races, :ethnicities, :education].each do |f|
+        with f, params[f] unless params[f].blank?
+      end
+      facet :gender, :age_group, :races, :ethnicities, :education
+    end
+    render :layout => 'two_column'
+  end
+  
   def by_anonymous_key
     if params[:participant] and params[:participant][:anonymous_key] and 
     (@participant = Participant.find_by_anonymous_key(params[:participant][:anonymous_key]))  
@@ -37,6 +48,11 @@ class ParticipantsController < ApplicationController
   def show
     @participant = Participant.find params[:id]
     render :layout => 'two_column'
+  end
+  
+  def show_responses
+    @participant = Participant.find params[:id]
+    @survey_taken = @participant.surveys.find params[:survey_taken_id]
   end
   
   def new 
@@ -117,5 +133,11 @@ class ParticipantsController < ApplicationController
     def set_pin_cookie_helper(pin)
       cookies.permanent.encrypted["pin_#{current_member.id}"] = pin
       flash[:alert] = "<h2>Your PIN is: #{pin}</h2><p>Don't forget it! We highly suggest you store it on your computer or write it down.</p>".html_safe
+    end
+    
+    def load_default_facets
+      @facets = Participant.search do 
+        facet :gender, :age_group, :races, :ethnicities, :education
+      end
     end
 end

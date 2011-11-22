@@ -1,7 +1,7 @@
 class SearchController < ApplicationController
   def index
     @q = params[:q]
-    @results = Sunspot.search([Survey, Participant, RScript, Report, Member, Page]) do 
+    @results = Sunspot.search([Survey, RScript, Report, Member, Page]) do 
       keywords @q
       with :published, true
       paginate :page => params[:page], :per_page => 10
@@ -10,8 +10,8 @@ class SearchController < ApplicationController
   end
 
   def quick_search
-    @term = params[:term].to_s.split(' ').collect {|s| s.strip + '*'}.join(' ')
-    @results = Sunspot.search([Survey, Participant, RScript, Report, Member, Page]) do 
+    @term = params[:term]
+    @results = Sunspot.search([Survey, RScript, Report, Member, Page]) do 
       keywords @term
       with :published, true
       paginate :page => params[:page], :per_page => 10

@@ -2,11 +2,22 @@
   %ul.menu
     %li= link_to 'Search by Map', participants_path
     %li= link_to 'Search by City', by_city_participants_path
+    %li= link_to 'Search by Categories', by_categories_participants_path
     %li= link_to 'Search by Anonymous Key', by_anonymous_key_participants_path
 
 - content_for :body_content_right do
-  %h3 Concerned About Privacy?
-  %p 
-    We are, which is why we've made our participant records completely anonymous. 
-    Our participant records cannot be associated with our member records.
-    Please contact us if you have any questions or concerns.
+  %p
+    Concerned About Privacy? We are... 
+    %a{:href => '/privacy'} Read More
+  #facets.block
+    %h3 Search by Category
+    .accordian
+      - [:gender, :age_group, :races, :ethnicities, :education].each do |facet_name|
+        - if facet = @facets.facet(facet_name)
+          %h3
+            %a{:href => '#' + facet_name.to_s}= facet_name.to_s.titleize
+          %ul
+            - facet.rows.each do |row|
+              %li
+                = link_to_unless_current(row.value, by_categories_participants_path(params.merge(facet_name => row.value).except(:controller, :action)))
+                %span (#{row.count})

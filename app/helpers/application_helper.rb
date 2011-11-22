@@ -125,4 +125,15 @@ module ApplicationHelper
     end
     info.html_safe
   end
+  
+  def facets_chosen
+    s = [:gender, :age_group, :races, :ethnicities, :education].select {|f| params[f]}.collect do |facet_name|
+      "<strong>#{params[facet_name]}</strong> (#{link_to 'Remove', params.except(facet_name)})"
+    end.join(', ').html_safe
+    if s.blank?
+      'None, choose from the right column.'
+    else
+      s
+    end
+  end
 end

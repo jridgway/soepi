@@ -84,6 +84,7 @@
     }
   table {margin: 15px 0; border: 1px solid $dark_gray; border-right: none; border-bottom: none;}
   table caption {font-weight: 500; background: none; margin: 0; padding: 0;}
+  table tr th {border-right: 1px solid $dark_gray; border-bottom: 1px solid $dark_gray;}
   table tr td {border-right: 1px solid $dark_gray; border-bottom: 1px solid $dark_gray;}
-  table tr:nth-child(odd) {background: $light_blue; }
+  table tr:nth-child(odd) {background: #222; }
   }

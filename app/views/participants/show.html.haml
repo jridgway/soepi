@@ -47,5 +47,7 @@
               %li
                 Completed?
                 %strong= (survey_taken.complete? ? 'Yes' : 'No')
+              %li
+                = link_to 'View Responses', show_responses_participant_path(@participant, :survey_taken_id => survey_taken.id), :remote => true, :class => 'button'
   
 = render :partial => "/shared/content_page"

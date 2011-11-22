@@ -1,0 +1,19 @@
+= render :partial => 'common'
+
+- content_for :body_content_title do
+  Participants by Facets
+
+- content_for :body_content_left do
+  - if @facets  
+    %small#facets-chosen
+      Categories Chosen:
+      = facets_chosen
+    %h3 
+      Found #{pluralize(@facets.total, 'Participants')} 
+    %ul.reset
+      - @facets.results.each do |participant|
+        %li
+          = render :partial => 'participant', :locals => {:participant => participant}
+    = paginate @facets
+  
+= render :partial => "/shared/content_page"

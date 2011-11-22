@@ -48,11 +48,9 @@ class Survey < ActiveRecord::Base
       member.nickname
     end
     text :questions do 
-      s = question.body
-      question.choices.each do |choice|
-        s += ' ' + choice.label
-      end
-      s 
+      questions.collect do |question|
+        question.body + ', ' + question.choices.collect(&:label).join(', ')
+      end.join(', ')
     end
     boolean :published do 
       live?

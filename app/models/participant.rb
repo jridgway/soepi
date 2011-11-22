@@ -37,14 +37,14 @@ class Participant < ActiveRecord::Base
     string :education do 
       education.label
     end
-    string :races do 
-      races.collect(&:label).join(', ')
+    string :races, :multiple => true do 
+      races.collect(&:label)
     end
-    string :ethnicities do 
-      ethnicities.collect(&:label).join(', ')
+    string :ethnicities, :multiple => true do 
+      ethnicities.collect(&:label)
     end
     string :surveys_taken do 
-      surveys.collect(&:title).join(', ')
+      surveys.collect(&:survey).collect(&:title).join(', ')
     end
     string :city
     string :state
@@ -52,6 +52,9 @@ class Participant < ActiveRecord::Base
     string :country
     string :region do 
       region.label if region
+    end
+    string :surveys_taken, :multiple => true do 
+      surveys.collect(&:survey).collect(&:title)
     end
     integer :id
   end

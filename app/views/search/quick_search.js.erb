@@ -7,20 +7,6 @@
         :description => truncate(result.description, :size => 20),
         :value => survey_path(result)
       }
-    when 'Chart' then
-      {
-        :label => "#{result.class}: #{result.title}",
-        :logo => avatar(result.member, 40, false),
-        :description => truncate(result.description, :size => 20),
-        :value => chart_path(result)
-      }
-    when 'Petition' then
-      {
-        :label => "#{result.class}: #{result.title}",
-        :logo => avatar(result.member, 40, false),
-        :description => truncate(result.description, :size => 20),
-        :value => petition_path(result)
-      }
     when 'Member' then
       {
         :label => result.nickname,
@@ -34,13 +20,6 @@
         :logo => %{<img src="/assets/soepi-logo-light-bg.png" width="50" />},
         :description => result.path.gsub(' - ', ' &gt; ').html_safe,
         :value => "/#{result.to_param}"
-      }
-    when 'NewsItem' then
-      {
-        :label => "News: #{result.title}",
-        :logo => %{<img src="/assets/soepi-logo-light-bg.png" width="50" />},
-        :description => result.tag_list,
-        :value => "/news/#{result.to_param}"
       }
   end
 end.to_json.html_safe %>

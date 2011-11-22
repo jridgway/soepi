@@ -30,10 +30,14 @@ Soepi::Application.routes.draw do
   resources :member_tokens, :only => [:index, :destroy], :controller => 'members/tokens', :path => '/members/accounts/sign-in-tokens'
 
   resources :participants, :only => [:index, :show, :new, :create] do 
+    member do 
+      get 'show_responses/:survey_taken_id', :action => 'show_responses', :as => :show_responses
+    end
     collection do 
       get 'gmap'
       match 'by_city'
       match 'by_anonymous_key'
+      get 'by_categories'
       get 'edit'
       put 'update'
       get 'enter_your_pin'

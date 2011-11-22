@@ -1,0 +1,29 @@
+#show-responses{:title => 'Participant Responses'}
+  %p 
+    Responses to survey #{link_to @survey_taken.survey.title, survey_path(@survey_taken.survey)}:
+  %table
+    %tr
+      %th &nbsp;
+      %th Question
+      %th Response
+    - @survey_taken.responses.each do |response|
+      %tr
+        %td= response.question.position + 1
+        %td= simple_format response.question.body
+        %td
+          - case response.question.qtype
+          - when 'Select One' then 
+            = response.single_choice.label
+          - when 'Select Multiple' then 
+            = '<ol><li>' + response.multiple_choices.collect(&:label).join('<li/><li>') + '</li></ol>'
+          - when 'Text' then 
+            = simple_format(response.text_response)
+          - when 'Date' then 
+            = response.datetime_response
+          - when 'Date/Time' then 
+            = response.datetime_response
+          - when 'Time' then 
+            = response.datetime_response
+          - when 'Numeric' then 
+            = response.numeric_response
+        
