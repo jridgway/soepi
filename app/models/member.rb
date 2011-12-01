@@ -1,5 +1,5 @@
 class Member < ActiveRecord::Base
-  has_many :surveys_posted, :class_name => 'Survey', :dependent => :destroy
+  has_many :surveys, :dependent => :destroy
   has_many :notifications, :dependent => :destroy
   has_many :messages, :dependent => :nullify
   has_many :message_members, :class_name => 'MessageMember', :dependent => :nullify
@@ -58,6 +58,7 @@ class Member < ActiveRecord::Base
   validates_acceptance_of :informed_consent, :terms_of_use, :accept => true
 
   before_create :set_year_registered
+  before_destroy :destroy_ec2_instance!
 
   def unallowed_nicknames
     if %w{soepi admin administrator epi}.include? nickname.to_s.downcase.strip
@@ -147,28 +148,35 @@ class Member < ActiveRecord::Base
     nickname
   end
   
-  def ec2_instance
-    connection = Fog::Compute.new(
-        :provider => 'AWS', 
-        :aws_secret_access_key => ENV['S3_SECRET'], 
-        :aws_access_key_id => ENV['S3_KEY']
-      )
-    if ec2_instance_id.blank? or (server = connection.servers.get(ec2_instance_id)).nil?
-      server = create_ec2_instance(connection)
+  @@connection = Fog::Compute.new(
+      :provider => 'AWS', 
+      :aws_secret_access_key => ENV['S3_SECRET'], 
+      :aws_access_key_id => ENV['S3_KEY']
+    )
+  
+  def get_ec2_instance
+    unless ec2_instance_id.blank?
+      @@connection.servers.get(ec2_instance_id)
     end
-    server
   end
   
-  private
+  def create_ec2_instance!
+    ec2_instance = @@connection.servers.bootstrap(
+        :private_key_path => '~/.ssh/id_rsa', 
+        :public_key_path => '~/.ssh/id_rsa.pub', 
+        :username => 'ubuntu', 
+        :image_id => 'ami-29ff3440'
+      )
+    update_attribute :ec2_instance_id, ec2_instance.id
+    update_attribute :booting_ec2_instance, false
+    update_attribute :ec2_last_accessed_at, Time.now
+    ec2_instance
+  end
   
-    def create_ec2_instance(connection)
-      server = connection.servers.bootstrap(
-          :private_key_path => '~/.ssh/id_rsa', 
-          :public_key_path => '~/.ssh/id_rsa.pub', 
-          :username => 'ubuntu', 
-          :image_id => 'ami-d38d45ba'
-        )
-      update_attribute :ec2_instance_id, server.id
-      server
+  def destroy_ec2_instance!
+    if ec2_instance = get_ec2_instance
+      ec2_instance.destroy
     end
+    update_attribute :ec2_instance_id, nil
+  end
 end

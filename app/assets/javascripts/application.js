@@ -7,11 +7,16 @@
 //= require jquery
 //= require jquery_ujs
 //= require_tree ./jquery
+//= require codemirror2
+//= require codemirror/modes/r
+//= require simple-hint
+//= require r-hint
 //= require main
 //= require home
 //= require forms
 //= require tips
-//= require survey_form
+//= require survey-form
+//= require r-scripts
 //= require distance_widget
 //= require markerclusterer
 //= require highcharts

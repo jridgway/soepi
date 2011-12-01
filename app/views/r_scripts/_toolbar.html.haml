@@ -1,0 +1,25 @@
+- content_for :body_content_toolbar do 
+  - unless @r_script.new_record?
+    = link_to 'Run', run_r_script_path(@r_script), :method => 'put', :id => 'run-btn', :icon => 'ui-icon-play', :class => 'button restrict-to-members', :remote => true 
+  .owner-only-not-admins{:'data-member-id' => @r_script.member_id}
+    - if action_name != 'edit' and action_name != 'update' 
+      = link_to 'Edit', edit_r_script_path(@r_script), :class => 'button', :icon => 'ui-icon-document'
+    - unless @r_script.new_record?
+      %button{:id => 'delete', :icon => 'ui-icon-trash', :class => 'button restrict-to-members'} Delete
+      #delete-message{:style => 'display:none', :title => 'Delete this R Script'}
+        %p 
+          Are you sure you want to <strong>delete</strong> this R script? 
+        .bottom-actions
+          = link_to 'Delete', r_script_path(@r_script), :method => 'delete', :class => 'button'
+          %button{:id => 'cancel-delete', :class => 'button'} Cancel
+  = followable_link @r_script
+  - unless @r_script.new_record?
+    %button{:id => 'forkit', :icon => 'ui-icon-shuffle', :class => 'button restrict-to-members'} Fork
+    #forkit-message{:style => 'display:none', :title => 'Fork this R Script'}
+      %p
+        By forking this script, you will create your own script with the same settings and code as this script. 
+      %p 
+        Are you sure you want to <strong>fork</strong> this R script? 
+      .bottom-actions
+        = link_to 'Fork', forkit_r_script_path(@r_script), :method => 'put', :class => 'button'
+        %button{:id => 'cancel-forkit', :class => 'button'} Cancel

@@ -21,4 +21,7 @@
  *= require partials/listing
  *= require partials/sign_in
  *= require partials/misc
+ *= require codemirror
+ *= require codemirror/themes/night
+ *= require partials/simple-hint
 */

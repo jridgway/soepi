@@ -1,0 +1,20 @@
+= render :partial => '/r_scripts/common'
+
+- content_for :body_content_left do  
+  #cm-editor
+  
+- content_for :body_content_right do 
+  = simple_form_for @r_script, :url => save_and_run_r_script_path(@r_script), :html => {:id => 'r-script-save-and-run', :novalidate => true, :class => 'r_script'}, :remote => true do |f|
+    = f.hidden_field :code
+    %button{:class => 'button', :id => 'save-and-run', :icon => 'ui-icon-disk', :secondary_icon => 'ui-icon-play'} Save and Run
+  = simple_form_for @r_script, :url => save_and_continue_r_script_path(@r_script), :html => {:id => 'r-script-save-and-continue', :novalidate => true, :class => 'r_script'}, :remote => true do |f|
+    = f.hidden_field :code
+    %button{:class => 'button', :id => 'save-and-continue', :icon => 'ui-icon-disk', :secondary_icon => 'ui-icon-document'} Save and Continue
+  = simple_form_for @r_script, :url => save_and_exit_r_script_path(@r_script), :html => {:id => 'r-script-save-and-exit', :novalidate => true, :class => 'r_script'} do |f|
+    = f.hidden_field :code
+    %button{:class => 'button', :id => 'save-and-exit', :icon => 'ui-icon-disk', :secondary_icon => 'ui-icon-arrowreturnthick-1-e'} Save and Exit
+
+        
+= render :partial => "/shared/content_page"
+
+

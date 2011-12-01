@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  instance_id: MyString
+  member_id: 1
+
+two:
+  instance_id: MyString
+  member_id: 1

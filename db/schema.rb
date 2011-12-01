@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111121195732) do
+ActiveRecord::Schema.define(:version => 20111130175051) do
 
   create_table "age_groups", :force => true do |t|
     t.string   "label"
@@ -348,6 +348,21 @@ ActiveRecord::Schema.define(:version => 20111121195732) do
     t.integer "year", :null => false
   end
 
+  create_table "delayed_jobs", :force => true do |t|
+    t.integer  "priority",   :default => 0
+    t.integer  "attempts",   :default => 0
+    t.text     "handler"
+    t.text     "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string   "locked_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
+
   create_table "educations", :force => true do |t|
     t.string   "label"
     t.integer  "position"
@@ -464,6 +479,8 @@ ActiveRecord::Schema.define(:version => 20111121195732) do
     t.boolean  "subscription_weekly_summaries",                :default => true
     t.integer  "credits",                                      :default => 10
     t.string   "ec2_instance_id"
+    t.boolean  "booting_ec2_instance",                         :default => false
+    t.datetime "ec2_last_accessed_at"
   end
 
   add_index "members", ["confirmation_token"], :name => "index_members_on_confirmation_token", :unique => true
@@ -622,6 +639,7 @@ ActiveRecord::Schema.define(:version => 20111121195732) do
     t.string   "state",          :default => "pending"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "slug"
   end
 
   create_table "races", :force => true do |t|
@@ -664,11 +682,14 @@ ActiveRecord::Schema.define(:version => 20111121195732) do
   create_table "reports", :force => true do |t|
     t.integer  "member_id",                          :null => false
     t.string   "title",                              :null => false
-    t.text     "body",                               :null => false
-    t.string   "state",      :default => "drafting"
+    t.text     "body"
+    t.string   "state",       :default => "pending"
     t.string   "slug"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "r_script_id"
+    t.text     "code"
+    t.text     "results"
   end
 
   add_index "reports", ["slug"], :name => "index_reports_on_slug", :unique => true

@@ -1,7 +1,7 @@
 #require-pin{:style => 'display:none', :title => 'Please enter your PIN'}
   = simple_form_for current_member, :url => store_pin_survey_path(@survey), :remote => true do |f|
     %h3 To participate in this survey, you must enter your PIN:
-    = f.input :pin, :hint => 'Your PIN is four alphanumeric characters.', :label => false do 
+    = f.input :pin, :label => false do 
       = f.input_field :pin, :style => 'width:300px', :value => ''
       = f.submit 'Submit', :class => 'button'
   %h3 Don't have a PIN or forgot your PIN?

@@ -14,7 +14,7 @@ class Members::ProfilesController < ApplicationController
   end
 
   def show
-    @surveys = @member.surveys_posted.live.page(params[:page])
+    @surveys = @member.surveys.live.page(params[:page])
     render :layout => 'one_column'
   end
 

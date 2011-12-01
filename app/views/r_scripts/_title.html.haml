@@ -1,0 +1,19 @@
+- content_for :title do 
+  = @r_script.title
+  
+- content_for :body_content_title do
+  = avatar(@r_script.member, 20)
+  = link_to @r_script.member.nickname, member_path(@r_script.member)
+  \/
+  %strong= link_to @r_script.title, r_script_path(@r_script)
+  %ul.attributes
+    %li Status: #{@r_script.state_human}
+    - if @r_script.forked_from
+      %li 
+        Forked from: #{link_to @r_script.forked_from.member.nickname, member_path(@r_script.forked_from.member)} 
+        \/ 
+        #{link_to @r_script.forked_from.title, r_script_path(@r_script.forked_from)}
+    %li 
+      Posted: #{timeago @r_script.created_at}
+    - unless @r_script.tags.empty?
+      %li Tagged: #{tag_list_links(@r_script)}

@@ -1,0 +1,31 @@
+#run-results{:title => 'Results'}
+  - if @report
+    - if @report.drafting?      
+      #results-actions
+        %button{:class => 'button'} Report these Results
+        %button{:class => 'button'} Delete these Results
+      .tabs
+        %ul
+          %li
+            %a{:href => '#output'} Output
+          %li
+            %a{:href => '#plots'} Plots
+        #output
+          = simple_format @report.results
+        #plots
+          %ul.reset
+            - @report.assets.each do |asset|
+              %li
+                = image_tag asset.file.thumb('800x800>').url
+    - elsif @report.pending?
+      %h3 
+        We are running your R script. This could take a minute. Please wait. 
+      %p
+        = image_tag 'ajax-loader.gif', :class => 'ajax-loader'
+  - else
+    %h3 
+      We are starting your own R server. This could take a minute. Please wait.
+    %p
+      = image_tag 'ajax-loader.gif', :class => 'ajax-loader'
+      
+  

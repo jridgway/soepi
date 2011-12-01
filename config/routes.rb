@@ -51,7 +51,29 @@ Soepi::Application.routes.draw do
     end
   end
 
-  resources :r_scripts, :reports
+  resources :r_scripts do 
+    member do 
+      put 'forkit'
+      put 'run'
+      get 'code'
+      put 'save_and_run'
+      put 'save_and_continue'
+      put 'save_and_exit'
+      get 'settings'
+      get 'forks(/page/:page)', :action => 'forks', :as => :forks
+      get 'reports(/page/:page)', :action => 'reports', :as => :reports
+      get 'followed-by(/page/:page)', :action => 'followed_by', :as => :followed_by
+    end
+    collection do 
+      get '(page/:page)', :action => 'index'
+      get 'pending(/page/:page)', :action => 'pending', :as => :pending
+      get 'failing(/page/:page)', :action => 'failing', :as => :failing
+      get 'passing(/page/:page)', :action => 'passing', :as => :passing
+      get 'tagged/:tag(/page/:page)', :action => 'by_tag', :as => :tagged
+    end
+  end
+  
+  resources :reports
 
   resources :surveys, :except => [:index] do
     collection do
@@ -79,8 +101,8 @@ Soepi::Application.routes.draw do
       get 'results'
       get 'export_results'
       put 'forkit'
-      get 'forks'
-      get 'followed-by', :action => 'followed_by', :as => :followed_by
+      get 'forks(/page/:page)', :action => 'forks', :as => :forks
+      get 'followed-by(/page/:page)', :action => 'followed_by', :as => :followed_by
     end
     resources :survey_questions, :path => 'questions', :as => :questions do
       collection do

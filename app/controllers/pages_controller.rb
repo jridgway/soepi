@@ -4,7 +4,8 @@ class PagesController < ApplicationController
   def home
     if member_signed_in?
       @notifications = current_member.notifications.page(params[:page]).per(20)
-      @surveys = current_member.surveys_posted
+      @surveys = current_member.surveys
+      @r_scripts = current_member.r_scripts
       @follows = current_member.follows
       @followers = current_member.member_followers
       tag_limit = 50

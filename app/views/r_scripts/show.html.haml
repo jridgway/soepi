@@ -1,10 +1,19 @@
-- content_for :body_content_title do
-  R Script
+= render :partial => 'common'
       
 - content_for :body_content_left do
-  Content...
+  #cm-editor.readonly
+  = hidden_field_tag :cm_editor_code, @r_script.code
+  :javascript
+    var editor = CodeMirror(document.getElementById('cm-editor'), {
+      readOnly: true,
+      mode: 'r',
+      theme: 'night',
+      lineNumbers: true
+    });
+    editor.setValue($('#cm_editor_code').val().trim());
       
 - content_for :body_content_right do
-  Content...       
+  %h3 Description
+  = simple_format @r_script.description      
   
 = render :partial => "/shared/content_page"

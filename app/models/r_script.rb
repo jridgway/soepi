@@ -1,6 +1,8 @@
 class RScript < ActiveRecord::Base
   belongs_to :member
-  has_many :assets, :as => :assetable
+  has_many :forks, :class_name => 'RScript', :foreign_key => :forked_from_id
+  belongs_to :forked_from, :class_name => 'RScript'
+  has_many :reports
 
   acts_as_taggable
   acts_as_followable
@@ -8,7 +10,12 @@ class RScript < ActiveRecord::Base
   extend FriendlyId
   friendly_id :title, :use => :slugged
 
-  validates :title, :presence => true, :uniqueness => true
+  validates :title, :presence => true
+  validates :description, :presence => true
+  
+  scope :pending, where(:state => 'pending')
+  scope :passing, where(:state => 'passing')
+  scope :failing, where(:state => 'failing')
 
   def posted_by
     member.nickname if member
@@ -27,5 +34,41 @@ class RScript < ActiveRecord::Base
     text :code
     string :state
     integer :id
+  end
+  
+  attr_protected :state
+
+  state_machine :state, :initial => :pending do
+    state :pending
+    state :passing
+    state :failing
+
+    event :passed do
+      transition :pending => :passing
+    end
+
+    event :failed do
+      transition [:pending, :passing] => :failing
+    end
+  end
+  
+  def state_human
+    case state
+      when 'pending' then 'Pending'
+      when 'passing' then 'Passing'
+      when 'failing' then 'Failing'
+    end
+  end
+  
+  def forkit!(member_id)
+    RScript.transaction do 
+      new_r_script = self.dup
+      new_r_script.forked_from = self
+      new_r_script.member_id = member_id 
+      new_r_script.state = 'pending'
+      new_r_script.tag_list = tag_list
+      new_r_script.save!
+      return new_r_script
+    end
   end
 end

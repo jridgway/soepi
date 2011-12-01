@@ -25,6 +25,12 @@
             - @surveys.each do |survey|
               %li= link_to survey.title, survey
         %h3
+          %a{:href => '#your-r-scripts'} Your R Scripts (#{@r_scripts.length})
+        #your-r-scripts
+          %ol
+            - @r_scripts.each do |r_script|
+              %li= link_to r_script.title, r_script
+        %h3
           %a{:href => '#your-follows'} You're Following (#{@follows.length})
         #your-follows
           %ol

@@ -66,7 +66,7 @@ class SurveyQuestionsController < ApplicationController
       if current_member.admin?
         @survey = Survey.find params[:survey_id]
       else
-        @survey = current_member.surveys_posted.find params[:survey_id]
+        @survey = current_member.surveys.find params[:survey_id]
       end
     end
     

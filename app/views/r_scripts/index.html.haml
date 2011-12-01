@@ -1,10 +1,31 @@
 - content_for :body_content_title do
   R Scripts
+
+- content_for :body_content_details do
+  %ul.menu
+    %li
+      = link_to 'All', r_scripts_path
+    - if action_name == 'by_tag'
+      %li
+        = link_to %{Tagged "#{@tag}"}, request.path
+    %li
+      = link_to 'Pending', pending_r_scripts_path
+    %li
+      = link_to 'Passing', passing_r_scripts_path
+    %li
+      = link_to 'Failing', failing_r_scripts_path
       
 - content_for :body_content_left do
-  Content...
-      
-- content_for :body_content_right do
-  Content...       
+  - if @r_scripts.empty?
+    %p No R scripts found.
+  - else
+    %ul#r_scripts.listing.reset
+      - @r_scripts.each do |r_script|
+        %li
+          = render :partial => 'r_script', :locals => {:r_script => r_script}
+    = paginate @r_scripts
+
+- content_for :body_content_toolbar do 
+  = link_to 'Create an R Script', new_r_script_path, :class => 'restrict-to-members button', :icon => 'ui-icon-document'        
   
 = render :partial => "/shared/content_page"
