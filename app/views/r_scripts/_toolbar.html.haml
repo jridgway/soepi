@@ -2,8 +2,6 @@
   - unless @r_script.new_record?
     = link_to 'Run', run_r_script_path(@r_script), :method => 'put', :id => 'run-btn', :icon => 'ui-icon-play', :class => 'button restrict-to-members', :remote => true 
   .owner-only-not-admins{:'data-member-id' => @r_script.member_id}
-    - if action_name != 'edit' and action_name != 'update' 
-      = link_to 'Edit', edit_r_script_path(@r_script), :class => 'button', :icon => 'ui-icon-document'
     - unless @r_script.new_record?
       %button{:id => 'delete', :icon => 'ui-icon-trash', :class => 'button restrict-to-members'} Delete
       #delete-message{:style => 'display:none', :title => 'Delete this R Script'}
