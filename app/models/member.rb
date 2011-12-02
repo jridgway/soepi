@@ -165,8 +165,7 @@ class Member < ActiveRecord::Base
         :private_key_path => "#{Rails.root}/id_rsa.#{Rails.env}", 
         :public_key_path => "#{Rails.root}/id_rsa.#{Rails.env}.pub", 
         :username => 'ubuntu', 
-        :image_id => 'ami-29ff3440',
-        :key_name => "fog_default_#{Rails.env}"
+        :image_id => 'ami-29ff3440'
       )
     update_attribute :ec2_instance_id, ec2_instance.id
     update_attribute :booting_ec2_instance, false
