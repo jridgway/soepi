@@ -156,14 +156,16 @@ class Member < ActiveRecord::Base
   
   def get_ec2_instance
     unless ec2_instance_id.blank?
-      @@connection.servers.get(ec2_instance_id)
+      ec2_instance = @@connection.servers.get(ec2_instance_id)
+      ec2_instance.private_key = ENV['ec2_private_key']
+      ec2_instance
     end
   end
   
   def create_ec2_instance!
     ec2_instance = @@connection.servers.bootstrap(
-        :key_name => 'fog_production',
-        :private_key_path => "#{Rails.root}/fog_production.pem", 
+        :public_key => ENV['ec2_public_key'], 
+        :private_key => ENV['ec2_private_key'], 
         :username => 'ubuntu', 
         :image_id => 'ami-29ff3440'
       )
