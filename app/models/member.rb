@@ -162,8 +162,8 @@ class Member < ActiveRecord::Base
   
   def create_ec2_instance!
     ec2_instance = @@connection.servers.bootstrap(
-        :private_key_path => "#{Rails.root}/id_rsa", 
-        :public_key_path => "#{Rails.root}/id_rsa.pub", 
+        :private_key_path => "#{Rails.root}/id_rsa.#{Rails.env}", 
+        :public_key_path => "#{Rails.root}/id_rsa.#{Rails.env}.pub", 
         :username => 'ubuntu', 
         :image_id => 'ami-29ff3440'
       )
