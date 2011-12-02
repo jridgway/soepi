@@ -56,7 +56,8 @@ class Report < ActiveRecord::Base
       File.open(local_script_name, 'w') {|f| f.write(report.code + "\n")}
       ec2_instance.scp_upload(local_script_name, remote_script_name)
       local_script_name.delete
-      results = ec2_instance.ssh("R < #{remote_script_name} --vanilla")[0].stdout.strip.slice(s.index('>')..-1)
+      results = ec2_instance.ssh("R < #{remote_script_name} --vanilla")[0].stdout.strip
+      results = results.slice(results.index('>')..-1) if results.index('>').to_i > 0
       report.update_attribute :results, results
       ec2_instance.ssh("convert -density 300 -resize 1000x1000\> -quality 100 Rplots.pdf Rplots.png")
       (0..1000).each do |i|
