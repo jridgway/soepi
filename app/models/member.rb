@@ -163,7 +163,7 @@ class Member < ActiveRecord::Base
   def create_ec2_instance!
     ec2_instance = @@connection.servers.bootstrap(
         :key_name => 'fog_production',
-        :private_key => ENV['ec2_private_key'], 
+        :private_key => "#{Rails.root}/fog_production.pem", 
         :username => 'ubuntu', 
         :image_id => 'ami-29ff3440'
       )
