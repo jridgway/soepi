@@ -20,6 +20,9 @@ function init_global_sidebar() {
   $('#cancel-forkit').click(function() {
     $('#forkit-message').dialog('destroy');
   });
+  $('#run-btn').click(function() {
+    $('body').append('<div id="please-wait">Please wait...</div>');
+  });
 }
 
 var editor;
