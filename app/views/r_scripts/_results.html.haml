@@ -1,6 +1,9 @@
 #run-results{:title => 'Results'}
   - if @report
-    - if @report.drafting?  
+    - if @report.drafting? 
+      #results-actions
+        %button{:class => 'button'} Report these Results
+        %button{:class => 'button'} Delete these Results 
       #plots
         %h3 Plots
         %ul.reset
