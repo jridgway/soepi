@@ -1,0 +1,13 @@
+= render :partial => '/reports/common' 
+  
+- content_for :body_content do
+  - if @forks.empty?
+    %p No forks found.
+  - else
+    %ul#reports.listing.reset
+      - @forks.each do |report|
+        %li
+          = render :partial => 'report', :locals => {:report => report}
+    = paginate @forks
+    
+= render :partial => "/shared/content_page"

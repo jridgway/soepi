@@ -1,5 +1,5 @@
 class RScriptsController < ApplicationController
-  before_filter :authenticate_member!, :except => [:index, :show]
+  before_filter :authenticate_member!, :except => [:index, :show, :reports, :forks, :followed_by, :by_tag]
   layout Proc.new { |controller| controller.request.xhr? ? 'ajax' : 'one_column' }
   
   def index 
@@ -75,6 +75,9 @@ class RScriptsController < ApplicationController
   end
   
   def by_tag
+    @tag = ActsAsTaggableOn::Tag.find params[:tag]
+    @r_scripts = RScript.tagged_with(@tag).page(params[:page])
+    render :action => 'index'
   end
   
   def forkit
@@ -82,6 +85,24 @@ class RScriptsController < ApplicationController
     flash[:alert] = %{You forked R script, #{new_r_script.title}. You now have your own copy of the R script.
       You can make any edits you wish.}
     redirect_to r_script_path(new_r_script)
+  end
+  
+  def reports
+    @r_script = RScript.find params[:id]  
+    @reports = @r_script.reports.page(params[:page])
+    render :layout => 'one_column'
+  end
+
+  def forks
+    @r_script = RScript.find params[:id]
+    @forks = @r_script.forks.page(params[:page])
+    render :layout => 'one_column'
+  end
+
+  def followed_by
+    @r_script = RScript.find params[:id]  
+    @followings = @r_script.member_followers.page(params[:page])
+    render :layout => 'one_column'
   end
   
   protected 

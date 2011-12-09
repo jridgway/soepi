@@ -1,0 +1,10 @@
+- content_for :body_content_toolbar do 
+  .owner-only-not-admins{:'data-member-id' => @report.member_id}
+    - unless @report.new_record?
+      %button{:id => 'delete', :icon => 'ui-icon-trash', :class => 'button restrict-to-members'} Delete
+      #delete-message{:style => 'display:none', :title => 'Delete this Report'}
+        %p 
+          Are you sure you want to <strong>delete</strong> this report? 
+        .bottom-actions
+          = link_to 'Delete', report_path(@report), :method => 'delete', :class => 'button'
+          %button{:id => 'cancel-delete', :class => 'button'} Cancel

@@ -7,12 +7,12 @@
       #plots
         %h3 Plots
         %ul.reset
-          - @report.assets.each do |asset|
+          - @report.plots.each do |plot|
             %li
-              = link_to image_tag(asset.file.thumb('250x250#').url), asset.file.url, :target => '_blank' 
+              = link_to image_tag(plot.plot.thumb('250x250#').url), plot.plot.url, :target => '_blank' 
       #output
         %h3 Output
-        = simple_format @report.results
+        = simple_format @report.output
     - elsif @report.pending?
       %h3 
         We are running your R script. This could take a minute. Please wait. 

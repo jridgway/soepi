@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111130175051) do
+ActiveRecord::Schema.define(:version => 20111209182344) do
 
   create_table "age_groups", :force => true do |t|
     t.string   "label"
@@ -24,25 +24,6 @@ ActiveRecord::Schema.define(:version => 20111130175051) do
   create_table "age_groups_targets", :id => false, :force => true do |t|
     t.integer "target_id"
     t.integer "age_group_id"
-  end
-
-  create_table "assets", :force => true do |t|
-    t.integer  "member_id",      :null => false
-    t.integer  "assetable_id",   :null => false
-    t.string   "assetable_type", :null => false
-    t.string   "title"
-    t.text     "body"
-    t.string   "file"
-    t.string   "file_uid"
-    t.string   "file_mime_type"
-    t.string   "file_name"
-    t.integer  "file_size"
-    t.integer  "file_width"
-    t.integer  "file_height"
-    t.string   "file_image_uid"
-    t.string   "file_image_ext"
-    t.datetime "created_at"
-    t.datetime "updated_at"
   end
 
   create_table "census_geo_profiles", :force => true do |t|
@@ -679,17 +660,35 @@ ActiveRecord::Schema.define(:version => 20111130175051) do
     t.integer "region_id"
   end
 
+  create_table "report_plots", :force => true do |t|
+    t.integer  "report_id",      :null => false
+    t.text     "description"
+    t.integer  "position"
+    t.string   "plot"
+    t.string   "plot_uid"
+    t.string   "plot_mime_type"
+    t.string   "plot_name"
+    t.integer  "plot_size"
+    t.integer  "plot_width"
+    t.integer  "plot_height"
+    t.string   "plot_image_uid"
+    t.string   "plot_image_ext"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "reports", :force => true do |t|
-    t.integer  "member_id",                          :null => false
-    t.string   "title",                              :null => false
-    t.text     "body"
-    t.string   "state",       :default => "pending"
+    t.integer  "member_id",                           :null => false
+    t.string   "title",                               :null => false
+    t.text     "introduction"
+    t.string   "state",        :default => "pending"
     t.string   "slug"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "r_script_id"
     t.text     "code"
-    t.text     "results"
+    t.text     "output"
+    t.text     "conclusion"
   end
 
   add_index "reports", ["slug"], :name => "index_reports_on_slug", :unique => true

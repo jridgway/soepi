@@ -13,6 +13,7 @@ class RScript < ActiveRecord::Base
   validates :title, :presence => true
   validates :description, :presence => true
   
+  default_scope order('created_at desc')
   scope :pending, where(:state => 'pending')
   scope :passing, where(:state => 'passing')
   scope :failing, where(:state => 'failing')
@@ -44,11 +45,11 @@ class RScript < ActiveRecord::Base
     state :failing
 
     event :passed do
-      transition :pending => :passing
+      transition [:pending, :passing, :failing] => :passing
     end
 
     event :failed do
-      transition [:pending, :passing] => :failing
+      transition [:pending, :failing, :passing] => :failing
     end
   end
   

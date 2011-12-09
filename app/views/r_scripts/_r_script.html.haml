@@ -7,7 +7,7 @@
       %strong= link_to r_script.title, r_script_path(r_script)
     %ul.attributes
       %li Status: #{r_script.state_human}
-      %li Survey posted: #{timeago r_script.created_at}
+      %li R Script posted: #{timeago r_script.created_at}
       - unless r_script.tags.empty?
         %li Tagged: #{tag_list_links(r_script)}
     %p #{truncate(r_script.description, :length => 200)}

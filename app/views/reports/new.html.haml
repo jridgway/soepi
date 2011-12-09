@@ -1,7 +1,12 @@
-- content_for :body_content_title do
-  New Report
-      
-- content_for :body_content do
-  Content...
-  
+- content_for :body_content_title do 
+  New R Script
+
+- content_for :body_content do 
+  = simple_form_for @report, :html => {:id => 'r-script', :novalidate => true, :class => 'report'} do |f|
+    = render :partial => 'form', :locals => {:f => f}
+    .actions
+      = f.submit 'Submit', :class => 'button'
+        
 = render :partial => "/shared/content_page"
+
+

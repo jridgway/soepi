@@ -1,10 +1,16 @@
-- content_for :body_content_title do
-  Report
+= render :partial => 'common'
       
-- content_for :body_content_left do
-  Content...
-      
-- content_for :body_content_right do
-  Content...       
+- content_for :body_content do
+  - unless @report.introduction.blank?
+    %h2 Introduction
+    = simple_format @report.introduction
+  - @report.plots.each do |plot|
+    .plot
+      %h2 Plot #{plot.position}
+      .description= simple_format plot.description
+      = link_to image_tag(plot.plot.thumb('950x600>').url), plot.plot.url(:format => :png), :target => '_blank', :rel => 'shadowbox'
+  - unless @report.conclusion.blank?
+    %h2 Conclusion
+    = simple_format @report.conclusion
   
 = render :partial => "/shared/content_page"

@@ -1,0 +1,6 @@
+= render :partial => '/r_scripts/common'
+
+- content_for :body_content do
+  %pre= @report.output
+        
+= render :partial => "/shared/content_page"

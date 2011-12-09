@@ -1,5 +1,14 @@
 @import "common";
 
+.simple_form.report
+  {
+  textarea.plot-description
+    {
+    float: left;
+    margin: 0 10px 5px 0px;
+    }
+  }
+
 .CodeMirror
   {
   margin: 5px 0;

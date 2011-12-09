@@ -73,7 +73,13 @@ Soepi::Application.routes.draw do
     end
   end
   
-  resources :reports
+  resources :reports do 
+    member do
+      get 'tagged/:tag(/page/:page)', :action => 'by_tag', :as => :tagged
+      get 'output' 
+      get 'code' 
+    end
+  end
 
   resources :surveys, :except => [:index] do
     collection do

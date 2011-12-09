@@ -1,7 +1,9 @@
 class Report < ActiveRecord::Base
   belongs_to :member
   belongs_to :r_script
-  has_many :assets, :as => :assetable
+  has_many :plots, :class_name => 'ReportPlot'
+  
+  accepts_nested_attributes_for :plots
 
   acts_as_taggable
   acts_as_followable
@@ -11,6 +13,10 @@ class Report < ActiveRecord::Base
 
   validates :title, :presence => true, :uniqueness => true
   validates :r_script_id, :member_id, :presence => true
+  
+  default_scope order('created_at desc')
+  scope :drafting, where(:state => 'drafting')
+  scope :published, where(:state => 'published')
 
   def posted_by
     member.nickname if member
@@ -22,14 +28,15 @@ class Report < ActiveRecord::Base
   
   searchable do
     text :title
-    text :body
+    text :introduction
+    text :conclusion
     text :code
-    text :results
+    text :output
     text :nickname do 
       member.nickname
     end
-    text :assets do 
-      assets.collect {|a| a.title + ' ' + a.description}.join(', ') 
+    text :plots do 
+      plots.collect {|a| a.description}.join(', ') 
     end
     string :state
     integer :id
@@ -56,16 +63,23 @@ class Report < ActiveRecord::Base
       File.open(local_script_name, 'w') {|f| f.write(report.code + "\n")}
       ec2_instance.scp_upload(local_script_name, remote_script_name)
       local_script_name.delete
-      results = ec2_instance.ssh("R < #{remote_script_name} --vanilla")[0].stdout.strip
-      results = results.slice(results.index('>')..-1) if results.index('>').to_i > 0
-      report.update_attribute :results, results
+      output = ec2_instance.ssh("R < #{remote_script_name} --vanilla")[0].stdout.strip
+      output = output.slice(output.index('>')..-1) if output.index('>').to_i > 0
+      report.update_attribute :output, output
+      if report.member_id == report.r_script.member_id
+        if output.include?('Execution halted')
+          report.r_script.failed! 
+        else
+          report.r_script.passed!
+        end
+      end
       ec2_instance.ssh("convert -density 300 -resize 1000x1000\> -quality 100 Rplots.pdf Rplots.png")
       (0..1000).each do |i|
         begin
           remote_page_name = "Rplots-#{i}.png"
           local_page_name = Tempfile.new report.member.nickname + remote_page_name
           ec2_instance.scp_download remote_page_name, local_page_name.path
-          report.assets.create :file => local_page_name, :member_id => report.member_id
+          report.plots.create :plot => local_page_name, :report_id => report.id, :position => (i + 1)
           local_page_name.delete 
           ec2_instance.ssh "rm #{remote_page_name}"
         rescue Net::SCP::Error
@@ -73,6 +87,13 @@ class Report < ActiveRecord::Base
         end
       end
       ec2_instance.ssh "rm Rplots.pdf"
+    end
+  end
+  
+  def state_human
+    case state
+      when 'drafting' then 'Drafting'
+      when 'published' then 'Published'
     end
   end
 end

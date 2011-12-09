@@ -2,22 +2,31 @@
 
 .bp
   { 
-  #plots
+  .plot img
     {
-    ul
+    margin: 15px auto;
+    display: block;
+    }
+  
+  #run-results
+    {
+    #plots
       {
-      li 
+      ul
         {
-        float: left;
-        margin: 0 10px 10px 0 !important;
+        li 
+          {
+          float: left;
+          margin: 0 10px 10px 0 !important;
+          }
         }
       }
-    }
-    
-  #results-actions
-    {
-    text-align: right;
-    }
+      
+    #results-actions
+      {
+      text-align: right;
+      }
+  }
     
   #participants-map
     {

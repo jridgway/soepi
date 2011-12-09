@@ -6,7 +6,6 @@ class Member < ActiveRecord::Base
   has_many :messages_received, :through => :message_members, :source => :message
   has_many :r_scripts, :dependent => :destroy
   has_many :reports, :dependent => :destroy
-  has_many :assets, :dependent => :destroy
   has_many :tokens, :class_name => 'MemberToken', :dependent => :destroy
 
   scope :confirmed, where('confirmed_at is not null')
@@ -156,9 +155,10 @@ class Member < ActiveRecord::Base
   
   def get_ec2_instance
     unless ec2_instance_id.blank?
-      ec2_instance = @@connection.servers.get(ec2_instance_id)
-      ec2_instance.private_key = ENV['ec2_private_key']
-      ec2_instance
+      if ec2_instance = @@connection.servers.get(ec2_instance_id)
+        ec2_instance.private_key = ENV['ec2_private_key']
+        ec2_instance
+      end
     end
   end
   

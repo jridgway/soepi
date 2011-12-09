@@ -1,0 +1,13 @@
+= render :partial => '/r_scripts/common' 
+  
+- content_for :body_content do
+  - if @forks.empty?
+    %p No forks found.
+  - else
+    %ul#r_scripts.listing.reset
+      - @forks.each do |r_script|
+        %li
+          = render :partial => 'r_script', :locals => {:r_script => r_script}
+    = paginate @forks
+    
+= render :partial => "/shared/content_page"

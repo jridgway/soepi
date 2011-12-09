@@ -1,0 +1,15 @@
+= render :partial => '/reports/common'
+
+- content_for :body_content do
+  #cm-editor.readonly
+  = hidden_field_tag :cm_editor_code, @report.code
+  :javascript
+    var editor = CodeMirror(document.getElementById('cm-editor'), {
+      readOnly: true,
+      mode: 'r',
+      theme: 'night',
+      lineNumbers: true
+    });
+    editor.setValue($('#cm_editor_code').val().trim());
+        
+= render :partial => "/shared/content_page"

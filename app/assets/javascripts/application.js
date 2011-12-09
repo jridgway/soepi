@@ -17,6 +17,7 @@
 //= require tips
 //= require survey-form
 //= require r-scripts
+//= require reports
 //= require distance_widget
 //= require markerclusterer
 //= require highcharts
