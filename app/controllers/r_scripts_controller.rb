@@ -1,9 +1,34 @@
 class RScriptsController < ApplicationController
   before_filter :authenticate_member!, :except => [:index, :show, :reports, :forks, :followed_by, :by_tag]
+  before_filter :admin_only!, :only => [:pending]
+  before_filter :load_tags, :only => [:index, :passing, :failing, :by_tag]
+  before_filter :load_facebook_meta, :only => [:show, :code, :edit, :update]
   layout Proc.new { |controller| controller.request.xhr? ? 'ajax' : 'one_column' }
   
   def index 
-    @r_scripts = RScript.page(params[:page]).per(10)
+    @r_scripts = RScript.page(params[:page])
+    render :layout => 'two_column'
+  end
+  
+  def pending
+    @r_scripts = RScript.pending.page(params[:page])
+    render :action => 'index'
+  end
+  
+  def passing
+    @r_scripts = RScript.passing.page(params[:page])
+    render :action => 'index', :layout => 'two_column'
+  end
+  
+  def failing
+    @r_scripts = RScript.failing.page(params[:page])
+    render :action => 'index', :layout => 'two_column'
+  end
+  
+  def by_tag
+    @tag = ActsAsTaggableOn::Tag.find params[:tag]
+    @r_scripts = RScript.tagged_with(@tag).page(params[:page])
+    render :action => 'index', :layout => 'two_column'
   end
   
   def new 
@@ -74,12 +99,6 @@ class RScriptsController < ApplicationController
     run_helper
   end
   
-  def by_tag
-    @tag = ActsAsTaggableOn::Tag.find params[:tag]
-    @r_scripts = RScript.tagged_with(@tag).page(params[:page])
-    render :action => 'index'
-  end
-  
   def forkit
     new_r_script = RScript.find(params[:id]).forkit!(current_member.id)
     flash[:alert] = %{You forked R script, #{new_r_script.title}. You now have your own copy of the R script.
@@ -124,5 +143,22 @@ class RScriptsController < ApplicationController
           end
         end
       end
+    end
+  
+  protected    
+
+    def load_tags
+      @tags = RScript.not_pending.tag_counts :start_at => 2.months.ago, :limit => 100
+    end
+
+    def load_facebook_meta
+      @r_script = RScript.find params[:id] 
+      @facebook_meta = {
+        :url => report_url(@r_script),
+        :title => @r_script.title,
+        :description => @r_script.description,
+        :image_url => "#{request.protocol}#{request.host_with_port}/assets/soepi-logo-light-bg.png",
+        :type => 'R Script'
+      }
     end
 end

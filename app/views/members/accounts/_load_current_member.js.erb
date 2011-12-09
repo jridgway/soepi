@@ -68,7 +68,11 @@
       $('.restrict-to-members').unbind('click');
       $('.restrict-to-members').click(function(e) {
         e.preventDefault();
-        sign_in_dialog($(this).attr('href'));
+        if($(this).attr('data-method') == null || $(this).attr('data-method') == 'get') {
+          sign_in_dialog($(this).attr('href'));
+        } else {
+          sign_in_dialog();
+        }
         return false;
       });
     }

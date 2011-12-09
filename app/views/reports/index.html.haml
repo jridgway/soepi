@@ -1,5 +1,5 @@
 - content_for :body_content_title do
-  R Scripts
+  Reports
 
 - content_for :body_content_details do
   %ul.menu
@@ -8,24 +8,17 @@
     - if action_name == 'by_tag'
       %li
         = link_to %{Tagged "#{@tag}"}, request.path
-    %li
-      = link_to 'Pending', pending_reports_path
-    %li
-      = link_to 'Passing', passing_reports_path
-    %li
-      = link_to 'Failing', failing_reports_path
+    %li.admins-only
+      = link_to 'Drafting', drafting_reports_path
       
 - content_for :body_content_left do
   - if @reports.empty?
-    %p No R scripts found.
+    %p No reports found.
   - else
     %ul#reports.listing.reset
       - @reports.each do |report|
         %li
           = render :partial => 'report', :locals => {:report => report}
-    = paginate @reports
-
-- content_for :body_content_toolbar do 
-  = link_to 'Create an R Script', new_report_path, :class => 'restrict-to-members button', :icon => 'ui-icon-document'        
+    = paginate @reports       
   
 = render :partial => "/shared/content_page"

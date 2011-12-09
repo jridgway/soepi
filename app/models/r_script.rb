@@ -17,6 +17,7 @@ class RScript < ActiveRecord::Base
   scope :pending, where(:state => 'pending')
   scope :passing, where(:state => 'passing')
   scope :failing, where(:state => 'failing')
+  scope :not_pending, where("state != 'pending'")
 
   def posted_by
     member.nickname if member

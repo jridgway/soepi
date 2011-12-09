@@ -1,0 +1,1 @@
+Fog.credential = "default_#{Rails.env}".to_sym

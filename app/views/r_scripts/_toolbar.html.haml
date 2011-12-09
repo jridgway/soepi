@@ -21,3 +21,5 @@
       .bottom-actions
         = link_to 'Fork', forkit_r_script_path(@r_script), :method => 'put', :class => 'button'
         %button{:id => 'cancel-forkit', :class => 'button'} Cancel
+  - unless @r_script.pending?
+    = render :partial => '/shared/sharing'

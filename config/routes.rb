@@ -77,7 +77,13 @@ Soepi::Application.routes.draw do
     member do
       get 'tagged/:tag(/page/:page)', :action => 'by_tag', :as => :tagged
       get 'output' 
-      get 'code' 
+      get 'code'
+      put 'publish' 
+    end
+    collection do 
+      get '(page/:page)', :action => 'index'
+      get 'drafting(/page/:page)', :action => 'drafting', :as => :drafting
+      get 'tagged/:tag(/page/:page)', :action => 'by_tag', :as => :tagged
     end
   end
 
