@@ -38,8 +38,8 @@ class RScriptsController < ApplicationController
   def create 
     @r_script = current_member.r_scripts.build params[:r_script]
     if @r_script.save 
-      flash[:notice] = 'Your R script was saved.'
-      redirect_to r_script_path(@r_script)
+      flash[:notice] = 'Your R script was saved. You may begin coding here.'
+      redirect_to code_r_script_path(@r_script)
     else
       render :action => 'new'
     end
@@ -143,9 +143,7 @@ class RScriptsController < ApplicationController
           end
         end
       end
-    end
-  
-  protected    
+    end  
 
     def load_tags
       @tags = RScript.not_pending.tag_counts :start_at => 2.months.ago, :limit => 100

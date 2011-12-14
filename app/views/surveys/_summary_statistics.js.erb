@@ -21,12 +21,15 @@ $(document).ready(function() {
      yAxis: {
         min: 0,
         title: {
-           text: 'Completes'
+           text: 'Participants'
         }
      },
      series: [{
         name: 'Completes',
         data: [<%= @survey.completes_by_region.collect {|r| r[:total]}.join(", ") %>] 
+     },{
+        name: 'Incompletes',
+        data: [<%= @survey.incompletes_by_region.collect {|r| r[:total]}.join(", ") %>] 
      }]
   });
   
@@ -49,12 +52,15 @@ $(document).ready(function() {
      yAxis: {
         min: 0,
         title: {
-           text: 'Completes'
+           text: 'Participants'
         }
      },
      series: [{
         name: 'Completes',
         data: [<%= @survey.completes_by_age_group.collect {|a| a[:total]}.join(", ") %>]
+     },{
+        name: 'Inompletes',
+        data: [<%= @survey.incompletes_by_age_group.collect {|a| a[:total]}.join(", ") %>]
      }]
   });
   
@@ -73,12 +79,15 @@ $(document).ready(function() {
      yAxis: {
         min: 0,
         title: {
-           text: 'Completes'
+           text: 'Participants'
         }
      },
      series: [{
         name: 'Completes',
         data: [<%= @survey.completes_by_gender.collect {|g| g[:total]}.join(", ") %>]
+     },{
+        name: 'Incompletes',
+        data: [<%= @survey.incompletes_by_gender.collect {|g| g[:total]}.join(", ") %>]
      }]
   });
   
@@ -97,12 +106,15 @@ $(document).ready(function() {
      yAxis: {
         min: 0,
         title: {
-           text: 'Completes'
+           text: 'Participants'
         }
      },
      series: [{
         name: 'Completes',
         data: [<%= @survey.completes_by_ethnicity.collect {|e| e[:total]}.join(", ") %>]
+     },{
+        name: 'Incompletes',
+        data: [<%= @survey.incompletes_by_ethnicity.collect {|e| e[:total]}.join(", ") %>]
      }]
   });
   
@@ -121,12 +133,15 @@ $(document).ready(function() {
      yAxis: {
         min: 0,
         title: {
-           text: 'Completes'
+           text: 'Participants'
         }
      },
      series: [{
         name: 'Completes',
         data: [<%= @survey.completes_by_race.collect {|r| r[:total]}.join(", ") %>]
+     },{
+        name: 'Incompletes',
+        data: [<%= @survey.incompletes_by_race.collect {|r| r[:total]}.join(", ") %>]
      }]
   });
   
@@ -145,12 +160,15 @@ $(document).ready(function() {
      yAxis: {
         min: 0,
         title: {
-           text: 'Completes'
+           text: 'Participants'
         }
      },
      series: [{
         name: 'Completes',
         data: [<%= @survey.completes_by_education.collect {|e| e[:total]}.join(", ") %>]
+     },{
+        name: 'Incompletes',
+        data: [<%= @survey.incompletes_by_education.collect {|e| e[:total]}.join(", ") %>]
      }]
   });
 });

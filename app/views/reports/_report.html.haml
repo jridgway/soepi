@@ -1,9 +1,20 @@
-.report
-  = avatar(report.member, 60) 
-  .inner
+- if not defined?(show_owner) or show_owner
+  .report
+    = avatar(report.member, 60) 
+    .inner
+      %h3
+        = link_to report.member.nickname, member_path(report.member)
+        \/
+        %strong= link_to report.title, report_path(report)
+      %ul.attributes
+        %li Status: #{report.state_human}
+        %li Report posted: #{timeago report.created_at}
+        - unless report.tags.empty?
+          %li Tagged: #{tag_list_links(report)}
+      %p #{truncate(report.introduction, :length => 200)}
+- else
+  .report
     %h3
-      = link_to report.member.nickname, member_path(report.member)
-      \/
       %strong= link_to report.title, report_path(report)
     %ul.attributes
       %li Status: #{report.state_human}

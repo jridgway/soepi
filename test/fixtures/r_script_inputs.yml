@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  r_script_id: 1
+  name: MyString
+  description: MyText
+  default: MyText
+  position: 1
+  itype: MyString
+
+two:
+  r_script_id: 1
+  name: MyString
+  description: MyText
+  default: MyText
+  position: 1
+  itype: MyString

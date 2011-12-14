@@ -17,6 +17,7 @@ class ParticipantSurvey < ActiveRecord::Base
   
   scope :for_survey, lambda {|survey_id| where(:survey_id => survey_id, :complete => true)}
   scope :completes, where(:complete => true)
+  scope :incompletes, where(:complete => false)
 
   def complete?
     true unless next_question
@@ -44,6 +45,10 @@ class ParticipantSurvey < ActiveRecord::Base
   def responses
     participant.responses.joins('join survey_questions sq on sq.id = participant_responses.question_id').
       where('sq.survey_id = ?', survey_id).order('sq.position asc')
+  end
+  
+  def self.compute_weights_for_survey!(survey)
+    ParticipantSurvey.for_survey(survey.id).update_all 'weight = 1.0'
   end
     
   protected

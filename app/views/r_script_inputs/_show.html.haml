@@ -1,0 +1,11 @@
+%li[input]
+  %h4= input.name
+  .description.expandable
+    %p
+      %em 
+        Default:
+        = input.default.blank? ? 'None' : input.default
+    = simple_format input.description
+  .actions
+    = link_to 'Edit', edit_r_script_input_path(input, :r_script_id => r_script.id), :class => 'button', :remote => true
+    = link_to 'Remove', r_script_input_path(input, :r_script_id => r_script.id), :class => 'button', :remote => true, :method => 'delete', :confirm => 'Are you sure?'

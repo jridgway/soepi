@@ -20,6 +20,7 @@
  *= require partials/messages
  *= require partials/listing
  *= require partials/sign_in
+ *= require partials/r_scripts
  *= require partials/misc
  *= require codemirror
  *= require codemirror/themes/night

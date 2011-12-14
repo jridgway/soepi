@@ -1,31 +1,28 @@
+var editor;
+
 $(document).ready(function() {
   if(controller_name == 'r_scripts') {
-    init_global_sidebar();
+    $('#delete').click(function() {
+      $('#delete-message').dialog({width:520, height:175, modal:true, zIndex:9, resizable:false}).show('blind');
+    });
+    $('#cancel-delete').click(function() {
+      $('#delete-message').dialog('destroy');
+    });
+    $('#forkit').click(function() {
+      $('#forkit-message').dialog({width:520, height:200, modal:true, zIndex:9, resizable:false}).show('blind');
+    });
+    $('#cancel-forkit').click(function() {
+      $('#forkit-message').dialog('destroy');
+    });
+    $('#run-btn').click(function() {
+      $('body').append('<div id="please-wait">Please wait...</div>');
+    });
   }
   if(controller_name == 'r_scripts' && action_name == 'code' ) {
     init_code_editor();
   }
 });
 
-function init_global_sidebar() {
-  $('#delete').click(function() {
-    $('#delete-message').dialog({width:520, height:175, modal:true, zIndex:9, resizable:false}).show('blind');
-  });
-  $('#cancel-delete').click(function() {
-    $('#delete-message').dialog('destroy');
-  });
-  $('#forkit').click(function() {
-    $('#forkit-message').dialog({width:520, height:200, modal:true, zIndex:9, resizable:false}).show('blind');
-  });
-  $('#cancel-forkit').click(function() {
-    $('#forkit-message').dialog('destroy');
-  });
-  $('#run-btn').click(function() {
-    $('body').append('<div id="please-wait">Please wait...</div>');
-  });
-}
-
-var editor;
 function init_code_editor() {
   editor = CodeMirror(document.getElementById('cm-editor'), {
     mode: 'r',

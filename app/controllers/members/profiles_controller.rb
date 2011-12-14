@@ -1,11 +1,7 @@
 class Members::ProfilesController < ApplicationController
-  before_filter :load_member, :except => [:index, :my_profile, :by_tag, :autocomplete]
+  before_filter :load_member, :except => [:my_profile, :by_tag, :autocomplete]
   before_filter :load_tags, :only => [:index, :by_tag]
-  before_filter :load_facebook_meta, :only => [:show, :following, :followed_by]
-
-  def index
-    @members = Member.listable.publishers.page(params[:page]).per(30)
-  end
+  before_filter :load_facebook_meta, :only => [:show, :r_scripts, :reports, :following, :followed_by]
 
   def by_tag
     @tag = ActsAsTaggableOn::Tag.find params[:tag]
@@ -15,6 +11,16 @@ class Members::ProfilesController < ApplicationController
 
   def show
     @surveys = @member.surveys.live.page(params[:page])
+    render :layout => 'one_column'
+  end
+
+  def r_scripts
+    @r_scripts = @member.r_scripts.not_pending.page(params[:page])
+    render :layout => 'one_column'
+  end
+
+  def reports
+    @reports = @member.reports.published.page(params[:page])
     render :layout => 'one_column'
   end
 

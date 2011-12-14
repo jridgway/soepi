@@ -1,0 +1,29 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  survey_id: 1
+  description: MyString
+  position: 1
+  file: MyString
+  file_uid: MyString
+  file_mime_type: MyString
+  file_name: MyString
+  file_size: 1
+  file_width: 1
+  file_height: 1
+  file_image_uid: MyString
+  file_image_ext: MyString
+
+two:
+  survey_id: 1
+  description: MyString
+  position: 1
+  file: MyString
+  file_uid: MyString
+  file_mime_type: MyString
+  file_name: MyString
+  file_size: 1
+  file_width: 1
+  file_height: 1
+  file_image_uid: MyString
+  file_image_ext: MyString

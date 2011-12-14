@@ -13,7 +13,25 @@
   = simple_form_for @r_script, :url => save_and_exit_r_script_path(@r_script), :html => {:id => 'r-script-save-and-exit', :novalidate => true, :class => 'r_script'} do |f|
     = f.hidden_field :code
     %button{:class => 'button', :id => 'save-and-exit', :icon => 'ui-icon-disk', :secondary_icon => 'ui-icon-arrowreturnthick-1-e'} Save and Exit
-
+  .divider
+  #inputs-container
+    %h3 Inputs
+    #inputs
+      %p#none-defined{:style => (@r_script.inputs.empty? ? '' : 'display:none')} None defined.
+      %ul.reset
+        - @r_script.inputs.each do |input|
+          %li[input]
+            %h4= input.name
+            .description.expandable
+              %p
+                %em 
+                  Default:
+                  = input.default.blank? ? 'None' : input.default
+              = simple_format input.description
+            .actions
+              = link_to 'Edit', edit_r_script_input_path(input, :r_script_id => @r_script.id), :class => 'button', :remote => true
+              = link_to 'Remove', r_script_input_path(input, :r_script_id => @r_script.id), :class => 'button', :remote => true, :method => 'delete', :confirm => 'Are you sure?'
+    = link_to 'Add an Input', new_r_script_input_path(@r_script), :class => 'button', :remote => true, :icon => 'ui-icon-plus'
         
 = render :partial => "/shared/content_page"
 

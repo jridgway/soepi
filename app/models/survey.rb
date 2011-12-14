@@ -9,6 +9,7 @@ class Survey < ActiveRecord::Base
   has_many :forks, :class_name => 'Survey', :foreign_key => :forked_from_id
   belongs_to :forked_from, :class_name => 'Survey'
   has_many :notifications, :as => :notifiable
+  has_many :downloads, :class_name => 'SurveyDownload'
 
   accepts_nested_attributes_for :target
 
@@ -132,11 +133,14 @@ class Survey < ActiveRecord::Base
     end
 
     after_transition any => :closed do |survey, transition|
-      Member.admins.each {|m| m.notify!(survey, "#{survey.member.nickname}'s survey was closed")}
-      survey.member_followers.each {|m| m.notify!(self, "#{survey.member.nickname}'s survey was closed")}
+      Member.admins.each {|m| m.notify!(survey, "#{survey.member.nickname}'s survey was closed, results are coming soon")}
+      survey.member_followers.each {|m| m.notify!(self, "#{survey.member.nickname}'s survey was closed, results are coming soon")}
+      survey.delay.publish!
     end
 
     after_transition any => :published do |survey, transition|
+      ParticipantSurvey.compute_weights_for_survey! survey
+      SurveyDownload.generate_for_survey! survey
       survey.member.notify!(survey, 'Yay, your survey results have been published')
       survey.member_followers.each {|m| m.notify!(self, "#{survey.member.nickname}'s survey results have been published")}
     end
@@ -305,96 +309,87 @@ class Survey < ActiveRecord::Base
   end
   
   def completes
-    Statistic.get_or_compute "survey_completes|id:#{id}"
+    ParticipantSurvey.where('survey_id = ? and complete = true', id).count
+  end
+  
+  def incompletes
+    ParticipantSurvey.where('survey_id = ? and complete = false', id).count
   end
   
   def completes_by_gender
-    totals = Statistic.get_or_compute "survey_completes_by_gender|id:#{id}"
+    totals = ParticipantSurvey.where('survey_id = ? and complete = true', id).group('gender_id').count
     Gender.all.collect {|g| {:label => g.label, :id => g.id, :total => (totals[g.id] || 0)}}
   end
   
   def completes_by_age_group
-    totals = Statistic.get_or_compute "survey_completes_by_age_group|id:#{id}"
+    totals = ParticipantSurvey.where('survey_id = ? and complete = true', id).group('age_group_id').count
     AgeGroup.all.collect {|a| {:label => a.label, :id => a.id, :total => (totals[a.id] || 0)}}
   end
   
   def completes_by_education
-    totals = Statistic.get_or_compute "survey_completes_by_education|id:#{id}"
+    totals = ParticipantSurvey.where('survey_id = ? and complete = true', id).group('education_id').count
     Education.all.collect {|e| {:label => e.label, :id => e.id, :total => (totals[e.id] || 0)}}
   end
   
-  def completes_by_race
-    totals = Statistic.get_or_compute "survey_completes_by_race|id:#{id}"
-    Race.all.collect {|r| {:label => r.label, :id => r.id, :total => (totals[r.id.to_s] || 0)}}
-  end
-  
   def completes_by_ethnicity
-    totals = Statistic.get_or_compute "survey_completes_by_ethnicity|id:#{id}"
+    totals = ParticipantSurvey.where('survey_id = ? and complete = true', id).
+      joins('join ethnicities_participant_surveys eps on eps.participant_survey_id = participant_surveys.id').
+      group('ethnicity_id').count
     Ethnicity.all.collect {|e| {:label => e.label, :id => e.id, :total => (totals[e.id.to_s] || 0)}}
   end
   
+  def completes_by_race
+    totals = ParticipantSurvey.where('survey_id = ? and complete = true', id).
+      joins('join participant_surveys_races psr on psr.participant_survey_id = participant_surveys.id').
+      group('race_id').count
+    Race.all.collect {|r| {:label => r.label, :id => r.id, :total => (totals[r.id.to_s] || 0)}}
+  end
+  
   def completes_by_region
-    totals = Statistic.get_or_compute "survey_completes_by_region|id:#{id}"
+    totals = ParticipantSurvey.where('survey_id = ? and complete = true', id).group('region_id').count
     Region.all.collect {|r| {:label => r.label, :id => r.id, :total => (totals[r.id] || 0)}}
   end
   
   def completes_by_state
-    Statistic.get_or_compute "survey_completes_by_state|id:#{id}"
+    ParticipantSurvey.where('survey_id = ? and complete = true', id).group('state').count
   end
   
-  def export_to_file!(filename=nil)
-    filename ||= Tempfile.new("survey-results-#{id}.csv")
-    question_ids = questions.select('id').collect(&:id)
-    CSV.open(filename, "wb") do |csv|
-      headers = [
-          'Participant Anonymous Key',
-          'Gender',
-          'Age Group',
-          'City',
-          'State',
-          'Postal Code',
-          'Country',
-          'Region',
-          'Races',
-          'Ethnicities',
-          'Education'
-        ]
-      headers += question_ids.collect {|id| "Question ID: #{id}"} 
-      csv << headers     
-      (0..(ParticipantSurvey.for_survey(id).completes.count/1000).ceil).each do |page|
-        ParticipantSurvey.for_survey(id).completes.page(page).per(1000).each do |ps|
-          row = [
-              ps.participant.anonymous_key,
-              ps.participant.gender.label,
-              ps.participant.age_group.label,
-              ps.participant.city,
-              ps.participant.state,
-              ps.participant.postal_code,
-              ps.participant.country,
-              ps.participant.region.try(:label),
-              ps.participant.races.collect(&:label).join(', '),
-              ps.participant.ethnicities.collect(&:label).join(', '),
-              ps.participant.education.label
-            ]
-          responses = ParticipantResponse.where('question_id in (?) and participant_id = ?', question_ids, Participant.first.id)
-          question_ids.each do |question_id|
-            if response = ps.participant.responses.where(:question_id => question_id).first
-              case response.question.qtype
-                when 'Select One' then row << response.single_choice_id
-                when 'Select Multiple' then row << response.multiple_choice_ids
-                when 'Text' then row << response.text_response
-                when 'Date', 'Date/Time', 'Time' then row << response.datetime_response
-                when 'Numeric' then row << response.numeric_response
-              end
-            else
-              row << nil
-            end
-          end
-          csv << row
-        end
-      end
-    end
-    filename
+  def incompletes_by_gender
+    totals = ParticipantSurvey.where('survey_id = ? and complete = false', id).group('gender_id').count
+    Gender.all.collect {|g| {:label => g.label, :id => g.id, :total => (totals[g.id] || 0)}}
+  end
+  
+  def incompletes_by_age_group
+    totals = ParticipantSurvey.where('survey_id = ? and complete = false', id).group('age_group_id').count
+    AgeGroup.all.collect {|a| {:label => a.label, :id => a.id, :total => (totals[a.id] || 0)}}
+  end
+  
+  def incompletes_by_education
+    totals = ParticipantSurvey.where('survey_id = ? and complete = false', id).group('education_id').count
+    Education.all.collect {|e| {:label => e.label, :id => e.id, :total => (totals[e.id] || 0)}}
+  end
+  
+  def incompletes_by_ethnicity
+    totals = ParticipantSurvey.where('survey_id = ? and complete = false', id).
+      joins('join ethnicities_participant_surveys eps on eps.participant_survey_id = participant_surveys.id').
+      group('ethnicity_id').count
+    Ethnicity.all.collect {|e| {:label => e.label, :id => e.id, :total => (totals[e.id.to_s] || 0)}}
+  end
+  
+  def incompletes_by_race
+    totals = ParticipantSurvey.where('survey_id = ? and complete = false', id).
+      joins('join participant_surveys_races psr on psr.participant_survey_id = participant_surveys.id').
+      group('race_id').count
+    Race.all.collect {|r| {:label => r.label, :id => r.id, :total => (totals[r.id.to_s] || 0)}}
+  end
+  
+  def incompletes_by_region
+    totals = ParticipantSurvey.where('survey_id = ? and complete = false', id).group('region_id').count
+    Region.all.collect {|r| {:label => r.label, :id => r.id, :total => (totals[r.id] || 0)}}
+  end
+  
+  def incompletes_by_state
+    ParticipantSurvey.where('survey_id = ? and complete = false', id).group('state').count
   end
 
   protected

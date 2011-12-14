@@ -1,14 +1,13 @@
 require 'csv'
 
 class SurveysController < ApplicationController
-  before_filter :load_survey, :only => [:show, :forks, :results, :export_results, :forkit, :launch, :reject, :request_changes, 
-    :participate, :create_response, :store_pin, :new_participant, :create_participant, :followed_by, :publish, :close]
-  before_filter :load_facebook_meta, :only => [:show, :forks, :results, :forkit, :launch, :reject, :participate,
+  before_filter :load_survey, :only => [:show, :forks, :completes, :downloads, :export_results, :forkit, :launch, :reject, :request_changes, 
+    :participate, :create_response, :store_pin, :new_participant, :create_participant, :followed_by, :close]
+  before_filter :load_facebook_meta, :only => [:show, :forks, :completes, :downloads, :forkit, :launch, :reject, :participate,
     :create_response, :update_pin, :generate_and_send_new_pin, :followed_by]
-  before_filter :authenticate_member!, :except => [:index, :launched, :closed, :published, :show, :forks, :sharing, 
-    :by_tag, :followed_by, :results, :export_results]
-  before_filter :admin_only!, :only => [:drafting, :review_requested, :rejected, :launch, :reject, :request_changes, :publish]
-  before_filter :owner_or_admins_only!, :only => [:results]
+  before_filter :authenticate_member!, :except => [:index, :launched, :published, :show, :forks, :sharing, 
+    :by_tag, :followed_by, :completes, :downloads, :export_results]
+  before_filter :admin_only!, :only => [:drafting, :review_requested, :rejected, :launch, :reject, :request_changes]
   before_filter :owner_only!, :only => [:update, :destroy, :close, :submit_for_review]
   before_filter :load_tags, :only => [:index, :recent, :you_created, :by_tag]
   
@@ -26,11 +25,6 @@ class SurveysController < ApplicationController
 
   def launched
     @surveys = Survey.launched.page(params[:page]).per(10)
-    render :action => 'index', :layout => 'one_column'
-  end
-
-  def closed
-    @surveys = Survey.closed.page(params[:page]).per(10)
     render :action => 'index', :layout => 'one_column'
   end
 
@@ -61,6 +55,36 @@ class SurveysController < ApplicationController
   end
 
   def show
+    render :layout => 'one_column'
+  end
+
+  def forks
+    @forks = @survey.forks.live_or_drafting.page(params[:page])
+    render :layout => 'one_column'
+  end
+
+  def completes
+    if @survey.published? or 
+    ((@survey.launched? or @survey.closed?) and (current_member.id == @survey.member_id or current_member.admin?))
+      render :layout => 'one_column'
+    else
+      flash[:alert] = 'You must wait until the survey has been published to view the completes.'
+      redirect_to survey_path(@survey)
+    end
+  end
+
+  def downloads
+    if @survey.published? or 
+    ((@survey.launched? or @survey.closed?) and (current_member.id == @survey.member_id or current_member.admin?))
+      render :layout => 'one_column'
+    else
+      flash[:alert] = 'You must wait until the survey has been published to view the downloads.'
+      redirect_to survey_path(@survey)
+    end
+  end
+
+  def followed_by
+    @followings = @survey.member_followers.page(params[:page])
     render :layout => 'one_column'
   end
 
@@ -164,25 +188,19 @@ class SurveysController < ApplicationController
   end
 
   def close
-    if @survey.close!
-      flash[:alert] = %{The survey was closed. In order to protect the privacy of
-        the paricipants, the results will be published only after a full review by SoEpi. Please
-        <a href="#{member_contact_us_path}">contact us</a> if
-        you have questions or comments.}.html_safe
-        #/
+    if @survey.close! 
+      flash[:alert] = "Your survey was closed. Please see the Downloads section in a few minutes for the results."
     else
       flash[:alert] = 'The survey was NOT closed.'
     end
     redirect_to survey_path(@survey)
   end
 
-  def publish
-    if @survey.publish!
-      flash[:alert] = 'The survey results were published!'
-    else
-      flash[:alert] = 'The survey results were NOT published.'
-    end
-    redirect_to survey_path(@survey)
+  def forkit
+    new_survey = @survey.forkit!(current_member.id)
+    flash[:alert] = %{You forked survey, #{@survey.title}. You now have your own copy of the survey.
+      You can make any edits you wish before launching it.}
+    redirect_to survey_path(new_survey)
   end
 
   def participate
@@ -266,67 +284,6 @@ class SurveysController < ApplicationController
     else
       render :action => 'new_participant'
     end
-  end
-
-  def close
-    if current_member.admin?
-      @survey = Survey.find params[:id]
-    else
-      @survey = current_member.r_script.find params[:id]
-    end
-    if @survey.close!
-      flash[:alert] = %{The survey was closed. In order to protect the privacy of
-        the paricipants, the results will be published only after a full review by SoEpi. Please
-        <a href="#{member_contact_us_path}">contact us</a> if
-        you have questions or comments.}.html_safe
-        #/
-    else
-      flash[:alert] = 'The survey was NOT closed.'
-    end
-    redirect_to survey_path(@survey)
-  end
-
-  def forkit
-    new_survey = @survey.forkit!(current_member.id)
-    flash[:alert] = %{You forked survey, #{@survey.title}. You now have your own copy of the survey.
-      You can make any edits you wish before launching it.}
-    redirect_to survey_path(new_survey)
-  end
-
-  def forks
-    @forks = @survey.forks.live_or_drafting.page(params[:page])
-    render :layout => 'one_column'
-  end
-
-  def results
-    render :layout => 'one_column'
-  end
-  
-  def export_results
-    survey = Survey.find(params[:id])
-    if ((survey.launched? or survey.closed?) and 
-    (current_member.id == survey.member_id or current_member.admin?)) or survey.published?
-      csv_string = CSV.generate do |csv|
-        csv << ["row", "of", "CSV", "data"]
-        csv << ["another", "row", 1, 3]
-        # ...
-      end
-      filename = "soepi-"
-      filename += "preliminary-" unless survey.published? or survey.closed?
-      filename += "survey-results-#{survey.slug[0..10]}-#{Time.now.to_s.gsub(/[ |\-|:]/, '')}.zip"
-      send_data csv_string, 
-        :disposition => 'attachement', 
-        :type => 'text/csv', 
-        :filename => filename
-    else
-      flash[:alert] = 'You must wait until the survey has been published to export its results.'
-      redirect_to survey_path(survey)
-    end
-  end
-
-  def followed_by
-    @followings = @survey.member_followers.page(params[:page])
-    render :layout => 'one_column'
   end
 
   protected

@@ -1,0 +1,86 @@
+@import "common";
+
+.bp
+  { 
+  .plot-container
+    {
+    .plot
+      {
+      margin: 15px auto;
+      text-align: center;
+      }
+    }
+  
+  #run-results
+    {
+    #plots
+      {
+      ul
+        {
+        li 
+          {
+          float: left;
+          margin: 0 10px 10px 0 !important;
+          }
+        }
+      }
+      
+    #results-actions
+      {
+      text-align: right;
+      }
+    }
+  
+  #inputs
+    {
+    li 
+      {
+      margin: 0 0 20px 0;
+      padding: 0;
+      position: relative;
+      
+      h4 
+        {
+        margin: 0;
+        padding: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        -o-text-overflow: ellipsis;
+        -moz-binding: url(/xml/ellipsis.xml#ellipsis);
+        }
+      
+      .description
+        {
+        font-size: 12px;
+      
+        p 
+          {
+          margin: 0 0 7px 0;
+          padding: 0;
+          }
+        }
+          
+      .actions
+        {
+        display: none;
+        
+        .button
+          {
+          width: auto !important;
+          }
+        }
+        
+      &:hover
+        {       
+        .actions
+          {
+          display: block;
+          position: absolute;
+          top: 0;
+          right: 3px;
+          }
+        }
+      }
+    }
+  }

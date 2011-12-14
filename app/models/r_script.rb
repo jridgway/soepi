@@ -1,8 +1,11 @@
 class RScript < ActiveRecord::Base
   belongs_to :member
+  has_many :inputs, :class_name => 'RScriptInput'
   has_many :forks, :class_name => 'RScript', :foreign_key => :forked_from_id
   belongs_to :forked_from, :class_name => 'RScript'
   has_many :reports
+  
+  before_create :init_code
 
   acts_as_taggable
   acts_as_followable
@@ -73,4 +76,10 @@ class RScript < ActiveRecord::Base
       return new_r_script
     end
   end
+  
+  protected
+    
+    def init_code
+      self.code = "# Your code goes here\n\nhello_world <- function(arg1) {\n  print(arg1)\n}\n\nhello_world('hello world');"
+    end
 end

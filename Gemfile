@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '= 3.1.1'
+gem 'rails', '= 3.1.3'
 
 gem 'pg'
 
@@ -22,7 +22,7 @@ group :test do
 end
 
 gem 'kaminari'
-gem 'dragonfly', '~>0.9.8'
+gem 'dragonfly'
 gem 'rails_admin', :git => 'git://github.com/sferik/rails_admin.git'
 gem 'devise', '= 1.4.5'
 gem 'omniauth', '= 0.3.2'
@@ -45,16 +45,18 @@ gem 'rails_autolink'
 gem 'thin'
 gem 'fog', '= 1.0.0'
 gem 'jquery-rails'
-gem 'rack-cache'
-gem 'rack', '1.3.3'
+gem 'rack-cache', :require => 'rack/cache'
+gem 'rack', '1.3.5'
 gem 'deep_cloneable', '~> 1.3.0'
 gem 'redis'
 gem 'codemirror-rails'
 gem 'delayed_job'
+gem 'easy_esi'
+gem 'rubyzip'
 
 group :development do
   gem 'rails-dev-tweaks', '~> 0.5.0'
-  gem 'cities'
+  # gem 'cities'
 end
 
 group :production do

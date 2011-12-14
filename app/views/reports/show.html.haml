@@ -5,10 +5,11 @@
     %h2 Introduction
     = simple_format @report.introduction
   - @report.plots.each do |plot|
-    .plot
+    .plot-container
       %h2 Plot #{plot.position}
       .description= simple_format plot.description
-      = link_to image_tag(plot.plot.thumb('950x600>').url(:format => :png)), plot.plot.url(:format => :png), :target => '_blank', :rel => 'shadowbox'
+      .plot
+        = link_to image_tag(plot.plot.thumb('950x600>').url(:format => :png)), plot.plot.url(:format => :png), :target => '_blank'
   - unless @report.conclusion.blank?
     %h2 Conclusion
     = simple_format @report.conclusion

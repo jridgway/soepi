@@ -1,0 +1,13 @@
+= render :partial => 'common'
+      
+- content_for :body_content do
+  - if @reports.empty?
+    %p No reports found.
+  - else
+    %ul#reports.listing.reset
+      - @reports.each do |report|
+        %li
+          = render :partial => '/reports/report', :locals => {:report => report, :show_owner => false}
+    = paginate @reports    
+  
+= render :partial => "/shared/content_page"

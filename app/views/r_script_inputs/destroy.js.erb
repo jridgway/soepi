@@ -1,0 +1,7 @@
+<% if @r_script.inputs.empty? %>
+  $('#none-defined').show();
+<% else %>
+  $('#none-defined').hide();
+<% end %>
+$('#r_script_input_<%= @r_script_input.id %>').hide('explode');
+$('#r_script_input_<%= @r_script_input.id %>').remove();

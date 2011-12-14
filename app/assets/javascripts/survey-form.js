@@ -3,8 +3,62 @@ $(document).ready(function() {
   if(controller_name == 'survey_questions') {
     init_survey_question_form();
   }
-  if(controller_name == 'survey_questions' || controller_name == 'surveys') {
-    init_global_sidebar();
+  if(controller_name == 'survey_questions' || controller_name == 'surveys') {    
+    $('#launch').click(function() {
+      $('#launch-message').dialog({width:520, height:250, modal:true, zIndex:9, resizable:false}).show('blind');
+    });
+    $('#cancel-launch').click(function() {
+      $('#launch-message').dialog('destroy');
+    });
+    $('#launch2').click(function() {
+      $('#launch2-message').dialog({width:520, height:175, modal:true, zIndex:9, resizable:false}).show('blind');
+    });
+    $('#cancel-launch2').click(function() {
+      $('#launch2-message').dialog('destroy');
+    });
+    $('#request-changes').click(function() {
+      $('#request-changes-message').dialog({width:620, height:175, modal:true, zIndex:9, resizable:false}).show('blind');
+    });
+    $('#cancel-request-changes').click(function() {
+      $('#request-changes-message').dialog('destroy');
+    });
+    $('#reject').click(function() {
+      $('#reject-message').dialog({width:520, height:175, modal:true, zIndex:9, resizable:false}).show('blind');
+    });
+    $('#cancel-reject').click(function() {
+      $('#reject-message').dialog('destroy');
+    });
+    $('#delete').click(function() {
+      $('#delete-message').dialog({width:520, height:175, modal:true, zIndex:9, resizable:false}).show('blind');
+    });
+    $('#cancel-delete').click(function() {
+      $('#delete-message').dialog('destroy');
+    });
+    $('#close').click(function() {
+      $('#close-message').dialog({width:600, height:200, modal:true, zIndex:9, resizable:false}).show('blind');
+    });
+    $('#cancel-close').click(function() {
+      $('#close-message').dialog('destroy');
+    });
+    $('#forkit').click(function() {
+      $('#forkit-message').dialog({width:520, height:200, modal:true, zIndex:9, resizable:false}).show('blind');
+    });
+    $('#cancel-forkit').click(function() {
+      $('#forkit-message').dialog('destroy');
+    });
+  }
+  if(controller_name == 'surveys' && action_name == 'downloads') {
+    $('a.copy').each(function() {
+      $(this).zclip({
+          path:'/ZeroClipboard.swf',
+          copy: $(this).siblings('input').val(),
+          afterCopy: function() {
+            id = 'copied' + Math.random().toString().replace('.', '');
+            $(this).after(' <strong id="' + id + '">Copied!</strong>');
+            setTimeout("$('#" + id + "').hide('fade');", 5000);
+          }
+      });
+    });
   }
 });
 
@@ -33,65 +87,15 @@ function init_survey_form() {
   init_targeting();
 }
 
-function init_global_sidebar() {
-  $('#launch').click(function() {
-    $('#launch-message').dialog({width:520, height:250, modal:true, zIndex:9, resizable:false}).show('blind');
-  });
-  $('#cancel-launch').click(function() {
-    $('#launch-message').dialog('destroy');
-  });
-  $('#launch2').click(function() {
-    $('#launch2-message').dialog({width:520, height:175, modal:true, zIndex:9, resizable:false}).show('blind');
-  });
-  $('#cancel-launch2').click(function() {
-    $('#launch2-message').dialog('destroy');
-  });
-  $('#request-changes').click(function() {
-    $('#request-changes-message').dialog({width:620, height:175, modal:true, zIndex:9, resizable:false}).show('blind');
-  });
-  $('#cancel-request-changes').click(function() {
-    $('#request-changes-message').dialog('destroy');
-  });
-  $('#reject').click(function() {
-    $('#reject-message').dialog({width:520, height:175, modal:true, zIndex:9, resizable:false}).show('blind');
-  });
-  $('#cancel-reject').click(function() {
-    $('#reject-message').dialog('destroy');
-  });
-  $('#delete').click(function() {
-    $('#delete-message').dialog({width:520, height:175, modal:true, zIndex:9, resizable:false}).show('blind');
-  });
-  $('#cancel-delete').click(function() {
-    $('#delete-message').dialog('destroy');
-  });
-  $('#close').click(function() {
-    $('#close-message').dialog({width:520, height:200, modal:true, zIndex:9, resizable:false}).show('blind');
-  });
-  $('#cancel-close').click(function() {
-    $('#close-message').dialog('destroy');
-  });
-  $('#publish').click(function() {
-    $('#publish-message').dialog({width:520, height:200, modal:true, zIndex:9, resizable:false}).show('blind');
-  });
-  $('#cancel-publish').click(function() {
-    $('#publish-message').dialog('destroy');
-  });
-  $('#forkit').click(function() {
-    $('#forkit-message').dialog({width:520, height:200, modal:true, zIndex:9, resizable:false}).show('blind');
-  });
-  $('#cancel-forkit').click(function() {
-    $('#forkit-message').dialog('destroy');
-  });
-}
-
 function init_survey_question_form() {
   $('#root-questions li.survey_question').each(function(q) {
+    $(this).find('p:first').prepend('API Key: ' + $(this).attr('data-question-id') + ' &mdash; <br />');
     if($(this).attr('data-question-required') == 'true') {
       $(this).find('p:first').prepend('<strong class="q-tag">QUESTION</strong> <strong class="q-type-tag">' + 
-        $(this).attr('data-question-qtype') + '</strong> <abbr class="r-tag" title="Required">*</abbr> &mdash; ');
+        $(this).attr('data-question-qtype') + '</strong> <strong>Required</strong>, ');
     } else {
       $(this).find('p:first').prepend('<strong class="q-tag">QUESTION</strong> <strong class="q-type-tag">' + 
-        $(this).attr('data-question-qtype') + '</strong> &mdash; ');
+        $(this).attr('data-question-qtype') + '</strong>');
     }
   });
   no_questions_message();

@@ -1,0 +1,5 @@
+= simple_form_for @r_script_input, :html => {:id => 'r-script-input', :novalidate => true, :class => 'r_script_input', :remote => true} do |f|
+  = render :partial => 'form', :locals => {:f => f}
+  .actions
+    = f.submit 'Submit', :class => 'button'
+

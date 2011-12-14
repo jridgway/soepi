@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111209182344) do
+ActiveRecord::Schema.define(:version => 20111213211348) do
 
   create_table "age_groups", :force => true do |t|
     t.string   "label"
@@ -564,6 +564,7 @@ ActiveRecord::Schema.define(:version => 20111209182344) do
     t.integer "region_id"
     t.float   "lat"
     t.float   "lng"
+    t.float   "weight",           :default => 1.0
   end
 
   add_index "participant_surveys", ["id"], :name => "index_participant_surveys_on_id", :unique => true
@@ -611,12 +612,23 @@ ActiveRecord::Schema.define(:version => 20111209182344) do
     t.string   "markup_type"
   end
 
+  create_table "r_script_inputs", :force => true do |t|
+    t.integer  "r_script_id"
+    t.string   "name"
+    t.text     "description"
+    t.text     "default"
+    t.integer  "position"
+    t.string   "itype"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "r_scripts", :force => true do |t|
     t.integer  "member_id",                             :null => false
     t.integer  "forked_from_id"
     t.string   "title",                                 :null => false
     t.text     "description"
-    t.text     "code",                                  :null => false
+    t.text     "code"
     t.string   "state",          :default => "pending"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -734,6 +746,20 @@ ActiveRecord::Schema.define(:version => 20111209182344) do
   add_index "slugs", ["locale"], :name => "index_slugs_on_locale"
   add_index "slugs", ["name", "sluggable_type", "scope", "sequence"], :name => "index_slugs_on_n_s_s_and_s", :unique => true
   add_index "slugs", ["sluggable_id"], :name => "index_slugs_on_sluggable_id"
+
+  create_table "survey_downloads", :force => true do |t|
+    t.integer  "survey_id",       :null => false
+    t.string   "title"
+    t.string   "dtype"
+    t.integer  "position"
+    t.string   "asset"
+    t.string   "asset_uid"
+    t.string   "asset_mime_type"
+    t.string   "asset_name"
+    t.integer  "asset_size"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "survey_question_choices", :force => true do |t|
     t.integer  "survey_question_id"

@@ -14,12 +14,15 @@ Soepi::Application.routes.draw do
     match '/members/load_current_member', :controller => 'members/accounts', :action => 'load_current_member'
   end
   
-  resources :members, :controller => 'members/profiles', :path => '/members', :only => [:index, :show] do 
+  resources :members, :controller => 'members/profiles', :path => '/members', :only => [:show] do 
     collection do
       get 'tagged/:tag(/:page)', :action => 'by_tag'
       get 'autocomplete', :action => 'autocomplete'
     end
     member do
+      get '(page/:page)', :action => 'show'
+      get 'r_scripts(/page/:page)', :action => 'r_scripts', :as => :r_scripts
+      get 'reports(/page/:page)', :action => 'reports', :as => :reports
       get 'following', :action => 'following', :as => :following
       get 'followed-by', :action => 'followed_by', :as => :followed_by
     end
@@ -71,6 +74,8 @@ Soepi::Application.routes.draw do
       get 'passing(/page/:page)', :action => 'passing', :as => :passing
       get 'tagged/:tag(/page/:page)', :action => 'by_tag', :as => :tagged
     end
+  
+    resources :r_script_inputs, :path => 'inputs', :as => :inputs, :only => [:new, :create, :edit, :update, :destroy]
   end
   
   resources :reports do 
@@ -94,7 +99,6 @@ Soepi::Application.routes.draw do
       get 'review_requested(/page/:page)', :action => 'review_requested', :as => :review_requested
       get 'rejected(/page/:page)', :action => 'rejected', :as => :rejected
       get 'open(/page/:page)', :action => 'launched', :as => :launched
-      get 'closed(/page/:page)', :action => 'closed', :as => :closed
       get 'published(/page/:page)', :action => 'published', :as => :published
       get 'tagged/:tag(/page/:page)', :action => 'by_tag', :as => :tagged
     end
@@ -104,14 +108,13 @@ Soepi::Application.routes.draw do
       put 'reject'
       put 'request_changes'
       put 'close'
-      put 'publish'
       match 'participate'
       put 'store_pin'
       match 'new_participant'
       post 'create_participant'
       post 'create_response'
-      get 'results'
-      get 'export_results'
+      get 'completes'
+      get 'downloads'
       put 'forkit'
       get 'forks(/page/:page)', :action => 'forks', :as => :forks
       get 'followed-by(/page/:page)', :action => 'followed_by', :as => :followed_by

@@ -17,3 +17,4 @@
       Posted: #{timeago @survey.created_at}
     - unless @survey.tags.empty?
       %li Tagged: #{tag_list_links(@survey)}
+    %li API Key: #{@survey.id}

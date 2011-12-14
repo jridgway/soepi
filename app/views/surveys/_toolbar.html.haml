@@ -11,11 +11,6 @@
       .bottom-actions
         = link_to 'Fork', forkit_survey_path(@survey), :method => 'put', :class => 'button'
         %button{:id => 'cancel-forkit', :class => 'button'} Cancel
-  - if @survey.launched? or @survey.closed?
-    .owner-only{:'data-member-id' => @survey.member_id}
-      = link_to 'Export Results', export_results_survey_path(@survey), :class => 'button', :icon => 'ui-icon-circle-arrow-s'
-  - elsif @survey.published?
-    = link_to 'Export Results', export_results_survey_path(@survey), :class => 'button', :icon => 'ui-icon-circle-arrow-s'
   .not-owner{:'data-member-id' => @survey.member_id}
     - if @survey.review_requested?
       .admins-only
@@ -73,25 +68,13 @@
             = link_to 'Submit for Review', submit_for_review_survey_path(@survey), :class => 'button', :method => 'put'
             %button{:id => 'cancel-launch', :class => 'button'} Cancel
       - when 'launched' then
-        %button{:id => 'close', :icon => 'ui-icon-locked', :class => 'button'} Close
-        #close-message{:style => 'display:none', :title => 'Close this Survey'}
-          %p
-            In order to protect the privacy of the participants, the results will be published only after a full review by SoEpi.
-            You will be notified when the results are published.
-          %p Once closed, members will not be allowed to participate in the survey.
+        %button{:id => 'close', :icon => 'ui-icon-locked', :secondary_icon => 'ui-icon-signal-diag', :class => 'button'} Close and Publish
+        #close-message{:style => 'display:none', :title => 'Close and Publish this Survey'}
+          %p Once closed and published, members will not be allowed to participate in the survey, and the results will be made available for everyone.
+          %p You cannot undo this action. Are you sure you want to <strong>close</strong> this survey?
           .bottom-actions
-            = link_to 'Close', close_survey_path(@survey), :class => 'button', :method => 'put'
+            = link_to 'Close and Publish', close_survey_path(@survey), :class => 'button', :method => 'put'
             %button{:id => 'cancel-close', :class => 'button'} Cancel
-      - when 'closed' then
-        %button{:id => 'publish', :icon => 'ui-icon-signal-diag', :class => 'button'} Publish
-        #publish-message{:style => 'display:none', :title => 'Publish this Survey'}
-          %p
-            Are you sure you're ready to <strong>publish</strong> this survey? Have the results been fully reviewed to protect
-            our members' anonymity?
-          %p Once published, anyone will be able to download the complete results, and members will be able to create charts and more.
-          .bottom-actions
-            = link_to 'Publish', publish_survey_path(@survey), :class => 'button', :method => 'put'
-            %button{:id => 'cancel-publish', :class => 'button'} Cancel
   - if @survey.live?
     = render :partial => '/shared/sharing'
     

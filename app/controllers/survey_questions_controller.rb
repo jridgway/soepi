@@ -1,5 +1,6 @@
 class SurveyQuestionsController < ApplicationController
-  before_filter :authenticate_member!, :find_survey
+  before_filter :authenticate_member!, :except => [:index]
+  before_filter :load_survey
   before_filter :validate_editable, :only => [:new, :create, :edit, :update, :destroy]
   layout Proc.new {|controller| controller.request.xhr? ? 'ajax' : 'two_column'}
 
@@ -62,11 +63,12 @@ class SurveyQuestionsController < ApplicationController
 
   protected
 
-    def find_survey
-      if current_member.admin?
-        @survey = Survey.find params[:survey_id]
-      else
-        @survey = current_member.surveys.find params[:survey_id]
+    def load_survey
+      @survey = Survey.find params[:survey_id]
+      unless @survey.published? or (member_signed_in? and (current_member.admin? or current_member.id == @survey.member_id))
+        flash[:notice] = 'You cannot view the questions of this survey until it has been published.'
+        redirect_to survey_path(@survey)
+        false
       end
     end
     

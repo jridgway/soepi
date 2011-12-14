@@ -1,12 +1,12 @@
 class Member < ActiveRecord::Base
+  has_many :tokens, :class_name => 'MemberToken', :dependent => :destroy
   has_many :surveys, :dependent => :destroy
+  has_many :r_scripts, :dependent => :destroy
+  has_many :reports, :dependent => :destroy
   has_many :notifications, :dependent => :destroy
   has_many :messages, :dependent => :nullify
   has_many :message_members, :class_name => 'MessageMember', :dependent => :nullify
   has_many :messages_received, :through => :message_members, :source => :message
-  has_many :r_scripts, :dependent => :destroy
-  has_many :reports, :dependent => :destroy
-  has_many :tokens, :class_name => 'MemberToken', :dependent => :destroy
 
   scope :confirmed, where('confirmed_at is not null')
   scope :admins, where(:admin => true)

@@ -1,33 +1,7 @@
 @import "common";
 
 .bp
-  { 
-  .plot img
-    {
-    margin: 15px auto;
-    display: block;
-    }
-  
-  #run-results
-    {
-    #plots
-      {
-      ul
-        {
-        li 
-          {
-          float: left;
-          margin: 0 10px 10px 0 !important;
-          }
-        }
-      }
-      
-    #results-actions
-      {
-      text-align: right;
-      }
-  }
-    
+  {     
   #participants-map
     {
     width: 700px;
