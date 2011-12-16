@@ -1,0 +1,11 @@
+= simple_form_for @r_script, :url => run_r_script_path(@r_script), :html => {:id => 'r-script', :novalidate => true, :class => 'r_script', :remote => true, :method => 'put'} do |f|
+  = f.association :inputs do |f2|
+    - case f2.object.itype when 'Survey results' then 
+      = f2.input :survey_id, :as => :hidden
+      = f2.input :survey_label, :as => :string, :value => f2.object.survey_label, :label => "Input #{f2.object.name}", :hint => "<p>Specify a survey.</p> #{simple_format(f2.object.description)}".html_safe
+    - when 'Character' then 
+      = f2.input :default_character, :value => f2.object.default_character, :label => "Input #{f2.object.name}", :hint => "<p>Specify a charcter value.</p> #{simple_format(f2.object.description)}".html_safe
+    - when 'Numeric' then 
+      = f2.input :default_numeric, :value => f2.object.default_numeric, :label => "Input #{f2.object.name}", :hint => "<p>Specify a numeric value.</p> #{simple_format(f2.object.description)}".html_safe
+  .actions
+    = f.submit 'Run', :class => 'button'

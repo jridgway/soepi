@@ -10,6 +10,8 @@ class Survey < ActiveRecord::Base
   belongs_to :forked_from, :class_name => 'Survey'
   has_many :notifications, :as => :notifiable
   has_many :downloads, :class_name => 'SurveyDownload'
+  has_many :r_scripts
+  has_and_belongs_to_many :reports
 
   accepts_nested_attributes_for :target
 
@@ -390,6 +392,18 @@ class Survey < ActiveRecord::Base
   
   def incompletes_by_state
     ParticipantSurvey.where('survey_id = ? and complete = false', id).group('state').count
+  end
+  
+  def completes_download
+    downloads.where(:dtype => 'completes_compressed').first
+  end
+  
+  def incompletes_download
+    downloads.where(:dtype => 'incompletes_compressed').first
+  end
+  
+  def data_dictionary_download
+    downloads.where(:dtype => 'data_dictionary_compressed').first
   end
 
   protected

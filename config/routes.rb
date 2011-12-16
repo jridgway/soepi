@@ -75,7 +75,11 @@ Soepi::Application.routes.draw do
       get 'tagged/:tag(/page/:page)', :action => 'by_tag', :as => :tagged
     end
   
-    resources :r_script_inputs, :path => 'inputs', :as => :inputs, :only => [:new, :create, :edit, :update, :destroy]
+    resources :r_script_inputs, :path => 'inputs', :as => :inputs, :only => [:new, :create, :edit, :update, :destroy] do 
+      collection do 
+        get 'surveys_auto_complete'
+      end
+    end
   end
   
   resources :reports do 

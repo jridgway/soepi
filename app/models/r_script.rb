@@ -1,9 +1,13 @@
 class RScript < ActiveRecord::Base
+  include ActionView::Helpers::JavaScriptHelper
+  
   belongs_to :member
   has_many :inputs, :class_name => 'RScriptInput'
   has_many :forks, :class_name => 'RScript', :foreign_key => :forked_from_id
   belongs_to :forked_from, :class_name => 'RScript'
   has_many :reports
+  
+  accepts_nested_attributes_for :inputs
   
   before_create :init_code
 
@@ -75,6 +79,25 @@ class RScript < ActiveRecord::Base
       new_r_script.save!
       return new_r_script
     end
+  end  
+  
+  def inputs_code(actual=true)
+    "# Based on the inputs provided, the following code #{actual ? 'will' : 'was'} be appended to your \n# code prior to execution. #{actual ? "Default values will be replaced when necessary.\n" : ''}" +
+    inputs.collect do |input|
+      case input.itype
+        when 'Survey results' then 
+          if input.survey
+            "#{input.name}_completes_temp <- tempfile() \ndownload.file('#{ENV['domain']}#{input.survey.completes_download.asset.url}', #{input.name}_completes_temp) \n" +
+            "#{input.name}_incompletes_temp <- tempfile() \ndownload.file('#{ENV['domain']}#{input.survey.incompletes_download.asset.url}', #{input.name}_incompletes_temp) \n" +
+            "#{input.name}_data_dictionary_temp <- tempfile() \ndownload.file('#{ENV['domain']}#{input.survey.data_dictionary_download.asset.url}', #{input.name}_data_dictionary_temp) \n" +
+            "#{input.name} <- list(completes=read.csv(unzip(#{input.name}_completes_temp)), incompletes=read.csv(unzip(#{input.name}_incompletes_temp)), data_dictionary=read.csv(unzip(#{input.name}_data_dictionary_temp))) "
+          end
+        when 'Character' then 
+          "#{input.name} <- '#{escape_javascript(input.default_character)}' "
+        when 'Numeric' then
+          "#{input.name} <- #{input.default_numeric} "
+      end
+    end.compact.join("\n\n") + "\n"
   end
   
   protected

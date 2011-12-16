@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111213211348) do
+ActiveRecord::Schema.define(:version => 20111215131209) do
 
   create_table "age_groups", :force => true do |t|
     t.string   "label"
@@ -616,11 +616,13 @@ ActiveRecord::Schema.define(:version => 20111213211348) do
     t.integer  "r_script_id"
     t.string   "name"
     t.text     "description"
-    t.text     "default"
     t.integer  "position"
     t.string   "itype"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "survey_id"
+    t.string   "default_character"
+    t.decimal  "default_numeric"
   end
 
   create_table "r_scripts", :force => true do |t|
@@ -704,6 +706,11 @@ ActiveRecord::Schema.define(:version => 20111213211348) do
   end
 
   add_index "reports", ["slug"], :name => "index_reports_on_slug", :unique => true
+
+  create_table "reports_surveys", :id => false, :force => true do |t|
+    t.integer "report_id"
+    t.integer "survey_id"
+  end
 
   create_table "settings", :force => true do |t|
     t.string   "name"

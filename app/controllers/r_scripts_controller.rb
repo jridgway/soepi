@@ -79,7 +79,6 @@ class RScriptsController < ApplicationController
     @r_script = current_member.r_scripts.find params[:id]
     @r_script.update_attribute :code, params[:r_script][:code]
     run_helper
-    render :action => 'run'
   end 
   
   def save_and_continue
@@ -108,7 +107,7 @@ class RScriptsController < ApplicationController
   
   def reports
     @r_script = RScript.find params[:id]  
-    @reports = @r_script.reports.page(params[:page])
+    @reports = @r_script.reports.published.page(params[:page])
     render :layout => 'one_column'
   end
 
@@ -130,10 +129,17 @@ class RScriptsController < ApplicationController
       if current_member.get_ec2_instance.try(:state).to_s == 'running'
         if params[:report_id].to_i > 0
           @report = Report.find params[:report_id]
-        else
-          @report = current_member.reports.create :r_script_id => @r_script.id, :code => @r_script.code, 
-            :title => "#{@r_script.title} run at #{Time.now}"
+          render :action => 'run'
+        elsif not params[:r_script].nil? and not params[:r_script][:inputs_attributes].nil?
+          @r_script.attributes = params[:r_script]
+          @report = current_member.reports.create(:r_script_id => @r_script.id, 
+            :code => @r_script.inputs_code + "\n" + @r_script.code, 
+            :survey_ids => @r_script.inputs.where('survey_id is not null').collect(&:survey_id),
+            :title => "#{@r_script.title} run at #{Time.now}")
           @report.delay.run!
+          render :action => 'run'
+        else
+          render :action => 'request_inputs'
         end
       else
         current_member.transaction do 
@@ -142,6 +148,7 @@ class RScriptsController < ApplicationController
             current_member.delay.create_ec2_instance!
           end
         end
+        render :action => 'run'
       end
     end  
 

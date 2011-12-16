@@ -7,7 +7,7 @@
     %li.owner-only{:'data-member-id' => @r_script.member_id}
       = link_to 'Code', code_r_script_path(@r_script)
     %li
-      = link_to "Reports (#{@r_script.reports.count})", reports_r_script_path(@r_script)
+      = link_to "Reports (#{@r_script.reports.published.count})", reports_r_script_path(@r_script)
     %li
       = link_to "Forks (#{@r_script.forks.count})", forks_r_script_path(@r_script)
     %li

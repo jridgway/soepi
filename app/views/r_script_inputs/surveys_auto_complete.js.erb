@@ -1,0 +1,8 @@
+<%= @results.results.collect do |result|
+  {
+    :label => "#{result.title}",
+    :logo => avatar(result.member, 40, false),
+    :description => "#{result.completes} completes, #{result.incompletes} incompletes, #{truncate(result.description, :size => 40)}",
+    :value => result.id
+  }
+end.to_json.html_safe %>

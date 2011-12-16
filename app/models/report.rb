@@ -2,6 +2,7 @@ class Report < ActiveRecord::Base
   belongs_to :member
   belongs_to :r_script
   has_many :plots, :class_name => 'ReportPlot'
+  has_and_belongs_to_many :surveys
   
   accepts_nested_attributes_for :plots
 

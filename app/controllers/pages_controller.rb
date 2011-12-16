@@ -6,6 +6,7 @@ class PagesController < ApplicationController
       @notifications = current_member.notifications.page(params[:page]).per(20)
       @surveys = current_member.surveys
       @r_scripts = current_member.r_scripts
+      @reports = current_member.reports
       @follows = current_member.follows
       @followers = current_member.member_followers
       tag_limit = 50

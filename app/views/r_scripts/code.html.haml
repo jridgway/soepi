@@ -1,6 +1,21 @@
 = render :partial => '/r_scripts/common'
 
 - content_for :body_content_left do  
+  #cm-editor-inputs-code-editor.cm-editor.readonly
+  = hidden_field_tag :cm_editor_inputs_code, @r_script.inputs_code
+  :javascript
+    var editor2 = CodeMirror(document.getElementById('cm-editor-inputs-code-editor'), {
+      readOnly: true,
+      mode: 'r',
+      theme: 'night',
+      lineNumbers: true
+    });
+    editor2.setValue($('#cm_editor_inputs_code').val());
+    $('#cm-editor-inputs-code-editor').hide();
+  %a{:href => '#', :id => 'show-inputs-code-a'} 
+    View Inputs Code
+  %a{:href => '#', :id => 'hide-inputs-code-a', :style => 'display:none'} 
+    Hide Inputs Code
   #cm-editor
   
 - content_for :body_content_right do 
@@ -20,17 +35,7 @@
       %p#none-defined{:style => (@r_script.inputs.empty? ? '' : 'display:none')} None defined.
       %ul.reset
         - @r_script.inputs.each do |input|
-          %li[input]
-            %h4= input.name
-            .description.expandable
-              %p
-                %em 
-                  Default:
-                  = input.default.blank? ? 'None' : input.default
-              = simple_format input.description
-            .actions
-              = link_to 'Edit', edit_r_script_input_path(input, :r_script_id => @r_script.id), :class => 'button', :remote => true
-              = link_to 'Remove', r_script_input_path(input, :r_script_id => @r_script.id), :class => 'button', :remote => true, :method => 'delete', :confirm => 'Are you sure?'
+          = render :partial => 'r_script_inputs/show', :locals => {:input => input, :r_script => @r_script}
     = link_to 'Add an Input', new_r_script_input_path(@r_script), :class => 'button', :remote => true, :icon => 'ui-icon-plus'
         
 = render :partial => "/shared/content_page"

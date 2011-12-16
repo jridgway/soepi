@@ -95,7 +95,7 @@ class SurveysController < ApplicationController
   end
 
   def create
-    @survey = current_member.r_script.new params[:survey]
+    @survey = current_member.surveys.new params[:survey]
     if @survey.save
       redirect_to survey_questions_path(@survey)
     else
@@ -107,14 +107,14 @@ class SurveysController < ApplicationController
     if current_member.admin?
       @survey = Survey.find params[:id]
     else
-      @survey = current_member.r_script.find params[:id]
+      @survey = current_member.surveys.find params[:id]
     end
     @survey.target ||= Target.new
     render :layout => 'one_column'
   end
 
   def update
-    @survey = current_member.r_script.find params[:id]
+    @survey = current_member.surveys.find params[:id]
     if @survey.editable?
       if @survey.update_attributes params[:survey]
         flash[:alert] = 'Your survey was successfully updated.'
@@ -129,7 +129,7 @@ class SurveysController < ApplicationController
   end
 
   def destroy
-    @survey = current_member.r_script.find params[:id]
+    @survey = current_member.surveys.find params[:id]
     if @survey.editable?
       @survey.destroy
       flash[:alert] = 'Your survey was deleted.'
@@ -141,7 +141,7 @@ class SurveysController < ApplicationController
   end
 
   def submit_for_review
-    @survey = current_member.r_script.find params[:id]
+    @survey = current_member.surveys.find params[:id]
     if @survey.questions.empty?
       flash[:alert] = 'You must add at least one question before launching your survey. ' +
         'Your survey has not been submitted for review. '

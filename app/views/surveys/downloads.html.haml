@@ -16,7 +16,7 @@
           %ul.attributes
             %li
               %label{:for => "url_#{download.id}"} URL:
-              = text_field_tag "url_#{download.id}", download.asset.url(:host => "#{request.protocol}#{request.host_with_port}"), :readonly => true, :class => 'url'
+              = text_field_tag "url_#{download.id}", "#{ENV['domain']}#{download.asset.url}", :readonly => true, :class => 'url'
               %a.copy{:href => '#'} Copy to Clipboard
             %li
               %label Type:

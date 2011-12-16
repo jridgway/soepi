@@ -5,6 +5,9 @@
   $('#input-dialog').html('<%= escape_javascript render(:template => 'r_script_inputs/edit.html.haml') %>');
   init_form_tips();
   init_form_errors($('#input-dialog .input'));
+  init_r_script_input_form();
 <% end %>
 $('.error2').qtip('destroy');
 init_common_elements();
+editor2.setValue('<%= escape_javascript(@r_script.inputs_code).html_safe %>');
+editor.setOption('firstLineNumber', editor2.lineCount() + 1);

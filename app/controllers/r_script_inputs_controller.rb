@@ -25,6 +25,14 @@ class RScriptInputsController < ApplicationController
     @r_script_input.destroy
   end
   
+  def surveys_auto_complete
+    @results = Survey.search do
+      keywords params[:term]
+      with :published, true
+      paginate :page => params[:page], :per_page => 50
+    end
+  end
+  
   protected
   
     def load_r_script
