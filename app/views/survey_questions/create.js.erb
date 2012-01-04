@@ -8,7 +8,6 @@
     }
     $('#nested-questions-<%= @question_just_added.survey_question_choice_id %>').append('<%= escape_javascript render(:partial => 'question', :locals => {:question => @question_just_added}) %>');
   <% end %>
-  $('#survey_question_<%= @question_just_added.id %>').find('p:first').prepend('<strong class="q-tag">QUESTION</strong> <strong class="q-type-tag"><%= @question_just_added.qtype %></strong> <%= @question_just_added.required? ? ' <abbr class="r-tag" title="Required">*</abbr>'.html_safe : '' %> ');
   $('#new-question-dialog').html('<%= escape_javascript render(:template => 'survey_questions/new') %>');  
   init_common_elements();
   init_choices();
@@ -29,3 +28,4 @@ $('.question-type').change();
 no_questions_message();
 $('.questions-count').html('<%= @survey.questions.count %>');
 $('#please-wait').remove();
+init_form_tips();

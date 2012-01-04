@@ -1,5 +1,6 @@
 class ParticipantResponse < ActiveRecord::Base
   belongs_to :participant
+  belongs_to :participant_survey
   has_and_belongs_to_many :multiple_choices, :class_name => 'SurveyQuestionChoice'
   belongs_to :single_choice, :class_name => 'SurveyQuestionChoice'
   belongs_to :question, :class_name => 'SurveyQuestion'
@@ -19,7 +20,7 @@ class ParticipantResponse < ActiveRecord::Base
   def question_required
     if question.required?
       case question.qtype
-        when 'Select One' then
+        when 'Select One', 'Yes/No', 'True/False' then
           errors.add :single_choice_id, 'You must respond to this question' if single_choice_id.blank?
         when 'Select Multiple' then
           errors.add :multiple_choice_ids, 'You must respond to this question' if multiple_choice_ids.blank?
@@ -51,13 +52,13 @@ class ParticipantResponse < ActiveRecord::Base
           break
         end
       end
-      current_participant_survey.update_attribute :next_question, next_question
+      participant_survey.update_attribute :next_question, next_question
     end
     
     def check_and_set_complete
-      unless current_participant_survey.complete?
-        if current_participant_survey.next_question.nil? or all_required_questions_answered?
-          current_participant_survey.update_attribute :complete, true
+      unless participant_survey.complete?
+        if participant_survey.next_question.nil? or all_required_questions_answered?
+          participant_survey.update_attribute :complete, true
         end
       end
       Statistic.delete_all
@@ -65,10 +66,6 @@ class ParticipantResponse < ActiveRecord::Base
     
     def all_required_questions_answered?
       true if question.survey.questions.where('position > ? and required = true', question.position).count == 0
-    end
-    
-    def current_participant_survey
-      participant.surveys.find_by_survey_id(question.survey.id)
     end
     
     def clear_statistics

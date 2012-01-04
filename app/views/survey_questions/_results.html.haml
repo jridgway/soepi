@@ -1,0 +1,27 @@
+%div[question]
+  %a{:name => 'responses'}
+  .nav
+    - if question.next_question
+      = link_to 'Next Question', results_survey_question_path(:survey_id => @survey, :id => question.next_question.id), :remote => true, :class => 'button next'
+    - if question.previous_question
+      = link_to 'Previous Question', results_survey_question_path(:survey_id => @survey, :id => question.previous_question.id), :remote => true, :class => 'button previous'
+  %h2 Question #{question.path}
+  = simple_format question.body
+  %p
+    %small #{question.qtype} | #{question.required? ? 'Required' : 'Optional'} | ID=#{question.id}
+  - case question.qtype when 'Select One', 'Select Multiple', 'Yes/No', 'True/False' then
+    %div{:id => "question-#{question.id}-chart"}
+    %script{:type => "text/javascript", :charset => "utf-8"}
+      = render :template => 'survey_questions/_results_choices.js.erb', :locals => {:question => question, :totals => question.response_totals}
+  - when 'Numeric' then
+    = render :template => 'survey_questions/_results_numeric_stats.html.haml', :locals => {:question => question, :totals => question.response_totals}        
+  - when 'Date' then
+    = render :template => 'survey_questions/_results_date_stats.html.haml', :locals => {:question => question, :totals => question.response_totals}        
+  - when 'Date/Time' then
+    = render :template => 'survey_questions/_results_datetime_stats.html.haml', :locals => {:question => question, :totals => question.response_totals}        
+  - when 'Time' then
+    = render :template => 'survey_questions/_results_time_stats.html.haml', :locals => {:question => question, :totals => question.response_totals}        
+  - when 'Text' then
+    = render :template => 'survey_questions/_results_list.html.haml', :locals => {:question => question, :totals => question.response_totals(params[:page])}        
+
+    

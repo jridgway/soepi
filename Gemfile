@@ -56,7 +56,7 @@ gem 'rubyzip'
 
 group :development do
   gem 'rails-dev-tweaks', '~> 0.5.0'
-  # gem 'cities'
+  gem 'cities'
 end
 
 group :production do

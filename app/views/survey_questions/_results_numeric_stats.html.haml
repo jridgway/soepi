@@ -1,0 +1,32 @@
+%table.stats
+  %tr
+    %th Statistic
+    %th Value
+  %tr
+    %td Responses
+    %td.numeric= number_with_delimiter totals[:count]
+  %tr
+    %td Minimum
+    %td.numeric= number_with_delimiter totals[:min]
+  %tr
+    %td 1st Quartile
+    %td.numeric= number_with_delimiter totals[:low]
+  %tr
+    %td Median
+    %td.numeric= number_with_delimiter totals[:median]
+  %tr
+    %td 3rd Quartile
+    %td.numeric= number_with_delimiter totals[:high]
+  %tr
+    %td Maximum
+    %td.numeric= number_with_delimiter totals[:max]
+  %tr
+    %td Mode
+    %td.numeric= number_with_delimiter totals[:mode]
+  %tr
+    %td Average
+    %td.numeric= number_with_delimiter totals[:avg]
+  %tr
+    %td Standard Deviation
+    %td.numeric= number_with_delimiter totals[:stddev]
+

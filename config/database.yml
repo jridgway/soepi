@@ -3,8 +3,8 @@ development:
   encoding: unicode
   database: soepi_development
   pool: 5
-  username: jridgway
-  password:
+  username: postgres
+  password: dev
   
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -14,13 +14,13 @@ test:
   encoding: unicode
   database: soepi_test
   pool: 5
-  username: jridgway
-  password:
+  username: postgres
+  password: dev
 
 production:
   adapter: postgresql
   encoding: unicode
   database: soepi_production
   pool: 5
-  username: jridgway
-  password:
+  username: postgres
+  password: dev

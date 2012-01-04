@@ -14,6 +14,7 @@
       $('.members-only').show();
       $('.visitors-only').hide();
       $('.owner-only[data-member-id=<%= current_member.id %>]').show();
+      $('.owner-only-until-published[data-member-id=<%= current_member.id %>]').show();
       $('.owner-only-not-admins[data-member-id=<%= current_member.id %>]').show();
       $('.not-owner[data-member-id=<%= current_member.id %>]').hide();
       $('.not-owner[data-member-id!=<%= current_member.id %>]').show();
@@ -33,6 +34,7 @@
       $('.not-owner').show();
       restrict_to_members();
     <% end %>
+    $('.owner-only-until-published[data-state=published], .owner-only-until-published[data-state=closed]').show();
     <% if current_member and current_member.admin? %>
       $('.owner-only').show();
       $('.owner-only-not-admins[data-member-id!=<%= current_member.id %>]').hide();

@@ -71,7 +71,7 @@ class RScript < ActiveRecord::Base
   
   def forkit!(member_id)
     RScript.transaction do 
-      new_r_script = self.dup
+      new_r_script = self.dup :include => [:inputs]
       new_r_script.forked_from = self
       new_r_script.member_id = member_id 
       new_r_script.state = 'pending'

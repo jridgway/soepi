@@ -2,19 +2,14 @@
   %ul.menu
     %li{:'data-member-id' => @survey.member_id}
       = link_to 'Summary', survey_path(@survey)
-    %li.owner-only{:'data-member-id' => @survey.member_id}
+    %li.owner-only-until-published{:'data-member-id' => @survey.member_id, :'data-state' => @survey.state}
       = link_to 'Settings', edit_survey_path(@survey)
-    - if @survey.published?
-      %li
-        = link_to "Questions (<span class='questions-count'>#{@survey.questions.count}</span>)".html_safe, survey_questions_path(:survey_id => @survey)
-    - else
-      %li.owner-only{:'data-member-id' => @survey.member_id}
-        = link_to "Questions (<span class='questions-count'>#{@survey.questions.count}</span>)".html_safe, survey_questions_path(:survey_id => @survey)
-    - if @survey.published? or ((@survey.launched? or @survey.closed?) and (member_signed_in? and (@survey.member_id == current_member.id or current_member.admin?)))
-      %li
-        = link_to "Completes (<span class='participants-count'>#{number_with_delimiter @survey.completes}</span>)".html_safe, completes_survey_path(@survey)
-      %li
-        = link_to "Downloads (<span class='participants-count'>#{number_with_delimiter @survey.downloads.count}</span>)".html_safe, downloads_survey_path(@survey)
+    %li.owner-only-until-published{:'data-member-id' => @survey.member_id, :'data-state' => @survey.state}
+      = link_to "Questions (<span class='questions-count'>#{@survey.questions.count}</span>)".html_safe, survey_questions_path(:survey_id => @survey)
+    %li.owner-only-until-published{:'data-member-id' => @survey.member_id, :'data-state' => @survey.state}
+      = link_to "Demographics".html_safe, demographics_survey_path(@survey)
+    %li.owner-only-until-published{:'data-member-id' => @survey.member_id, :'data-state' => @survey.state}
+      = link_to "Downloads (<span>#{@survey.downloads.count}</span>)".html_safe, downloads_survey_path(@survey)
     %li
       = link_to "Forks (#{@survey.forks.live_or_drafting.count})", forks_survey_path(@survey)
     %li
@@ -28,10 +23,10 @@
           %p This survey hasn't launched. Please come back later to participate.
       - elsif @survey.closed?
         %p 
-          This survey has closed. In order to protect the privacy of the participants, 
-          the results will be published only after a full review by SoEpi.
+          This survey has closed. See the Results page to view demographics and responses 
+          to questions. The raw results will be available soon in downloadable CSV files.
       - elsif @survey.published?
-        %p This survey has closed and the results were published.
+        %p This survey has closed and the results were published. See the Results page.
       - elsif @survey.rejected?
         %p This survey was rejected during review.
       - elsif @survey.drafting?
@@ -59,13 +54,14 @@
           %p 
             This survey has closed. Members are no longer able to participate. 
           %p 
-            In order to protect the privacy of the participants, 
-            the results will be published only after a full review by SoEpi.
+            See the Results page to view demographics and responses 
+            to questions. The raw results will be available soon in downloadable CSV files.
           %p 
             Please #{link_to 'contact us', member_contact_us_path} 
             if you have any questions or comments.
         - when 'published' then
           %p
             This survey has closed and the results published. Members are no longer able to participate.
+            See the Results page for demogrpahics, charts, and raw results in downloadable CSV files.
   
       

@@ -1,0 +1,22 @@
+<%= "var question_#{question.id}" %> = new Highcharts.Chart({
+   chart: {
+      renderTo: '<%= "question-#{question.id}-chart" %>',
+      type: 'column'
+   },
+   title: {
+      text: '<%= escape_javascript question.label %>'
+   },
+   xAxis: {
+      categories: ['<%= totals.collect {|e| escape_javascript(e[:label])}.join("', '") %>']
+   },
+   yAxis: {
+      min: 0,
+      title: {
+         text: 'Participants'
+      }
+   },
+   series: [{
+      name: 'Choices',
+      data: [<%= totals.collect {|e| e[:total]}.join(", ") %>]
+   }]
+});

@@ -8,4 +8,19 @@ class SurveyQuestionChoice < ActiveRecord::Base
 
   validates_presence_of :label
   validates_uniqueness_of :label, :scope => 'survey_question_id'
+  
+  def r_name
+    if question.qtype == 'Select Multiple'
+      question.r_name[id]
+    else
+      question.r_name
+    end
+  end
+  
+  def boolean_code
+    case label 
+      when 'True', 'Yes' then 1
+      when 'False', 'No' then 0
+    end
+  end
 end

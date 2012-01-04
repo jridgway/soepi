@@ -1,0 +1,39 @@
+= render :partial => '/surveys/title'
+= render :partial => '/surveys/toolbar'
+= render :partial => '/surveys/details'
+  
+- content_for :body_content_left do  
+  #demographics.charts
+    %a{:name => 'gender'}
+    #gender.chart
+    %a{:name => 'age-group'}
+    #age-group.chart
+    %a{:name => 'region'}
+    #region.chart
+    %a{:name => 'ethnicity'}
+    #ethnicity.chart
+    %a{:name => 'race'}
+    #race.chart
+    %a{:name => 'education'}
+    #education.chart 
+    
+  %script{:type => "text/javascript", :charset => "utf-8"}
+    = render :partial => 'surveys/demographics.js.erb', :locals => {:survey => @survey}
+    
+- content_for :body_content_right do 
+  %h3 Demographics
+  %ul#demographic-links
+    %li
+      %a{:href => '#gender'} Gender
+    %li
+      %a{:href => '#age-group'} Age Group
+    %li
+      %a{:href => '#region'} Region
+    %li
+      %a{:href => '#ethnicity'} Ethinicity
+    %li
+      %a{:href => '#race'} Race
+    %li
+      %a{:href => '#education'} Education
+    
+= render :partial => "/shared/content_page"

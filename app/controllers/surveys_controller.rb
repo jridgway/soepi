@@ -1,14 +1,16 @@
 require 'csv'
 
 class SurveysController < ApplicationController
-  before_filter :load_survey, :only => [:show, :forks, :completes, :downloads, :export_results, :forkit, :launch, :reject, :request_changes, 
-    :participate, :create_response, :store_pin, :new_participant, :create_participant, :followed_by, :close]
-  before_filter :load_facebook_meta, :only => [:show, :forks, :completes, :downloads, :forkit, :launch, :reject, :participate,
+  before_filter :load_survey, :only => [:show, :forks, :demographics, :downloads, :forkit, :launch, 
+    :reject, :request_changes, :participate, :create_response, :store_pin, :new_participant, :create_participant, 
+    :followed_by, :close]
+  before_filter :load_facebook_meta, :only => [:show, :forks, :forkit, :launch, :reject, :participate,
     :create_response, :update_pin, :generate_and_send_new_pin, :followed_by]
   before_filter :authenticate_member!, :except => [:index, :launched, :published, :show, :forks, :sharing, 
-    :by_tag, :followed_by, :completes, :downloads, :export_results]
+    :by_tag, :followed_by, :edit, :questions, :demographics, :downloads]
   before_filter :admin_only!, :only => [:drafting, :review_requested, :rejected, :launch, :reject, :request_changes]
   before_filter :owner_only!, :only => [:update, :destroy, :close, :submit_for_review]
+  before_filter :owner_only_until_published!, :only => [:edit, :demographics, :downloads]
   before_filter :load_tags, :only => [:index, :recent, :you_created, :by_tag]
   
   enable_esi
@@ -62,25 +64,11 @@ class SurveysController < ApplicationController
     @forks = @survey.forks.live_or_drafting.page(params[:page])
     render :layout => 'one_column'
   end
-
-  def completes
-    if @survey.published? or 
-    ((@survey.launched? or @survey.closed?) and (current_member.id == @survey.member_id or current_member.admin?))
-      render :layout => 'one_column'
-    else
-      flash[:alert] = 'You must wait until the survey has been published to view the completes.'
-      redirect_to survey_path(@survey)
-    end
+  
+  def demographics
   end
-
+  
   def downloads
-    if @survey.published? or 
-    ((@survey.launched? or @survey.closed?) and (current_member.id == @survey.member_id or current_member.admin?))
-      render :layout => 'one_column'
-    else
-      flash[:alert] = 'You must wait until the survey has been published to view the downloads.'
-      redirect_to survey_path(@survey)
-    end
   end
 
   def followed_by
@@ -104,11 +92,6 @@ class SurveysController < ApplicationController
   end
 
   def edit
-    if current_member.admin?
-      @survey = Survey.find params[:id]
-    else
-      @survey = current_member.surveys.find params[:id]
-    end
     @survey.target ||= Target.new
     render :layout => 'one_column'
   end
@@ -189,11 +172,11 @@ class SurveysController < ApplicationController
 
   def close
     if @survey.close! 
-      flash[:alert] = "Your survey was closed. Please see the Downloads section in a few minutes for the results."
+      flash[:alert] = "Your survey was closed. Please see the Analysis and Downloads tabs for the results."
     else
       flash[:alert] = 'The survey was NOT closed.'
     end
-    redirect_to survey_path(@survey)
+    redirect_to results_survey_path(@survey)
   end
 
   def forkit
@@ -229,16 +212,17 @@ class SurveysController < ApplicationController
 
   def create_response
     if request.post? and current_participant
-      @participant_response = current_participant.responses.build(params[:participant_response])
-      if @participant_response.save
-        if find_or_create_participant_survey(@survey)
+      if find_or_create_participant_survey(@survey)
+        @participant_response = current_participant.responses.build(params[:participant_response])  
+        @participant_response.participant_survey = @participant_survey
+        if @participant_response.save
           if @question = @participant_survey.next_question
             @participant_response = current_participant.responses.build :question_id => @question.id
           end
+        else
+          @question = @participant_response.question
         end
         render :action => 'participate'
-      else
-        @question = @participant_response.question
       end
     else
       render :text => "window.onbeforeunload = null; alert('An error occurred. Please refresh this page and try again.');"
@@ -330,6 +314,7 @@ class SurveysController < ApplicationController
     end
     
     def owner_or_admins_only!
+      load_survey unless @survey
       unless member_signed_in? and (current_member.admin? or current_member.id == @survey.member_id)
         flash[:alert] = 'Insufficient privileges.'
         redirect_to survey_path(@survey)
@@ -343,6 +328,15 @@ class SurveysController < ApplicationController
         flash[:alert] = 'Insufficient privileges.'
         redirect_to survey_path(@survey)
         false
+      end
+    end
+    
+    def owner_only_until_published!
+      load_survey unless @survey
+      unless @survey.published? or @survey.closed? or 
+      (@survey.launched? and (member_signed_in? and (current_member.id == @survey.member_id or current_member.admin?)))
+        flash[:alert] = 'Insufficient privileges. You must wait until this survey has been closed.'
+        redirect_to survey_path(@survey)
       end
     end
 end

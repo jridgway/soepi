@@ -3,20 +3,28 @@ class SurveyQuestion < ActiveRecord::Base
   has_many :choices, :class_name => 'SurveyQuestionChoice', :dependent => :destroy
   has_many :responses, :class_name => 'ParticipantResponse', :dependent => :destroy, :foreign_key => 'question_id'
   belongs_to :parent_choice, :class_name => 'SurveyQuestionChoice', :foreign_key => 'survey_question_choice_id'
+  has_many :r_script_inputs
+  has_many :survey_downloads
 
   accepts_nested_attributes_for :choices, :allow_destroy => true
 
   default_scope order('position asc, created_at asc')
 
-  validates_presence_of :body, :qtype
+  validates_presence_of :body, :qtype, :label
+  validates_length_of :label, :maximum => 50
   validates_length_of :choices, :minimum => 2, :if => proc {|a| ['Select One', 'Select Multiple'].include? a['qtype']},
     :message => 'you must provide at least 2 choices'
   validate :uniq_choices
   validates_uniqueness_of :body, :message => 'you already added this question', :scope => :survey_id
+  validates_uniqueness_of :label, :scope => :survey_id
 
-  before_create :set_position
-  after_create :set_positions_other_others
-  after_save :clear_choices!, :unless => Proc.new {|q| ['Select One', 'Select Multiple'].include? q.qtype}
+  before_create :init_position
+  before_save :set_boolean_choices
+  before_update :update_position
+  after_create :init_other_positions
+  after_update :update_other_positions, :tidy_positions
+  after_destroy :tidy_positions
+  after_save :clear_choices!, :unless => Proc.new {|q| ['Yes/No', 'True/False', 'Select One', 'Select Multiple'].include? q.qtype}
 
   scope :roots, where('survey_question_choice_id is null or survey_question_choice_id = 0')
   scope :choice_qtype, where("qtype = 'Select One' or qtype = 'Select Multiple'")
@@ -38,16 +46,18 @@ class SurveyQuestion < ActiveRecord::Base
 
   def path
     if parent_choice
-      "#{parent_choice.question.path}.#{position + 1}"
+      "#{parent_choice.question.path}.#{position}"
     else
-      "#{position + 1}"
+      "#{position}"
     end
   end
 
   def self.qtype_options
     [
       ['Multiple Choice',
-        [['Select One', 'Select One'],
+        [['Yes/No', 'Yes/No'],
+        ['True/False', 'True/False'],
+        ['Select One', 'Select One'],
         ['Select Mutiple', 'Select Multiple']]
       ],
       ['Open Ended',
@@ -59,19 +69,156 @@ class SurveyQuestion < ActiveRecord::Base
       ]
     ]
   end
+  
+  def r_name
+    if qtype == 'Select Multiple'
+      h = {}
+      choices.each {|c| h[c.id] = ["#{label} - #{c.label}", r_format("#{label} #{c.label}")]}
+      h
+    else
+      [label, r_format(label)]
+    end
+  end
+  
+  def response_totals(page=1, per=10)
+    case qtype
+      when 'Select One', 'Yes/No', 'True/False' then
+        totals = ParticipantSurvey.joins('join participant_responses pr on pr.participant_id = participant_surveys.participant_id').
+          where('survey_id = ? and complete = ? and pr.question_id = ?', survey_id, true, id).
+          group('pr.single_choice_id').count
+        choices.collect {|c| {:label => c.label, :id => c.id, :total => (totals[c.id.to_s] || 0)}}
+      when 'Select Multiple' then
+        totals = ParticipantSurvey.joins('join participant_responses pr on pr.participant_id = participant_surveys.participant_id ' +
+            'join participant_responses_survey_question_choices prsqc on prsqc.participant_response_id = pr.id').
+          where('survey_id = ? and complete = ? and pr.question_id = ?', survey_id, true, id).
+          group('prsqc.survey_question_choice_id').count
+        choices.collect {|c| {:label => c.label, :id => c.id, :total => (totals[c.id.to_s] || 0)}}
+      when 'Numeric' then
+        totals = {}     
+        totals[:count] = connection.exec_query(%{select count(numeric_response) as numeric_response
+          from participant_responses where question_id = #{id}}).first['numeric_response'] 
+        totals[:min] = connection.exec_query(%{select min(numeric_response) as numeric_response
+          from participant_responses where question_id = #{id}}).first['numeric_response'].to_f.round(2) 
+        totals[:low] = connection.exec_query(%{select numeric_response
+          from (select numeric_response, row_number() over (order by numeric_response), 
+            count(*) over () from participant_responses where question_id = #{id}) der
+          where row_number = floor(der.count-((der.count/4)*3)-1)}).first['numeric_response'].to_f.round(2)
+        totals[:median] = connection.exec_query(%{select numeric_response
+          from (select numeric_response, row_number() over (order by numeric_response), 
+            count(*) over () from participant_responses where question_id = #{id}) der
+          where row_number = floor(der.count-((der.count/4)*2)-1)}).first['numeric_response'].to_f.round(2)
+        totals[:high] = connection.exec_query(%{select numeric_response
+          from (select numeric_response, row_number() over (order by numeric_response), 
+            count(*) over () from participant_responses where question_id = #{id}) der
+          where row_number = floor(der.count-((der.count/4)*1)-1)}).first['numeric_response'].to_f.round(2) 
+        totals[:max] = connection.exec_query(%{select max(numeric_response) as numeric_response
+          from participant_responses where question_id = #{id}}).first['numeric_response'].to_f.round(2)
+        totals[:avg] = connection.exec_query(%{select avg(numeric_response) as numeric_response
+          from participant_responses where question_id = #{id}}).first['numeric_response'].to_f.round(2) 
+        totals[:mode] = connection.exec_query(%{select numeric_response, count(*)
+          from participant_responses where question_id = #{id}
+          group by numeric_response
+          order by count(*) desc
+          limit 1}).first['numeric_response'].to_f.round(2) 
+        totals[:stddev] = connection.exec_query(%{select stddev(numeric_response) as numeric_response
+          from participant_responses where question_id = #{id}}).first['numeric_response'].to_f.round(2) 
+        totals
+      when 'Date', 'Date/Time', 'Time' then
+        totals = {}     
+        totals[:count] = connection.exec_query(%{select count(datetime_response) as datetime_response
+          from participant_responses where question_id = #{id}}).first['datetime_response']
+        totals[:min] = connection.exec_query(%{select min(datetime_response) as datetime_response
+          from participant_responses where question_id = #{id}}).first['datetime_response'].to_datetime
+        totals[:low] = connection.exec_query(%{select datetime_response
+          from (select datetime_response, row_number() over (order by datetime_response), 
+            count(*) over () from participant_responses where question_id = #{id}) der
+          where row_number = floor(der.count-((der.count/4)*3)-1)}).first['datetime_response'].to_datetime
+        totals[:median] = connection.exec_query(%{select datetime_response
+          from (select datetime_response, row_number() over (order by datetime_response), 
+            count(*) over () from participant_responses where question_id = #{id}) der
+          where row_number = floor(der.count-((der.count/4)*2)-1)}).first['datetime_response'].to_datetime
+        totals[:high] = connection.exec_query(%{select datetime_response
+          from (select datetime_response, row_number() over (order by datetime_response), 
+            count(*) over () from participant_responses where question_id = #{id}) der
+          where row_number = floor(der.count-((der.count/4)*1)-1)}).first['datetime_response'].to_datetime
+        totals[:max] = connection.exec_query(%{select max(datetime_response) as datetime_response
+          from participant_responses where question_id = #{id}}).first['datetime_response'].to_datetime
+        totals[:avg] = connection.exec_query(%{select TIMESTAMP with time zone 'epoch' + avg(extract(epoch from datetime_response)) * interval '1 second' as datetime_response
+          from participant_responses where question_id = #{id}}).first['datetime_response'].to_datetime
+        totals[:mode] = connection.exec_query(%{select datetime_response, count(*)
+          from participant_responses where question_id = #{id}
+          group by datetime_response
+          order by count(*) desc
+          limit 1}).first['datetime_response'].to_datetime
+        totals
+      when 'Text' then
+        responses.page(page).per(per)
+    end
+  end
+  
+  def next_question
+    survey.questions.where('position = ?', position + 1).first
+  end
+  
+  def previous_question
+    survey.questions.where('position = ?', position - 1).first
+  end
 
   private
+    
+    def r_format(s)
+      s2 = s.strip.gsub(/\s+/, ' ').gsub(/\W/, '.')
+    end
 
-    def set_position
+    def init_position
       if parent_choice
-        self.position = parent_choice.question.position + parent_choice.child_questions.count + 1
+        if parent_choice.child_questions.count == 0
+          self.position = parent_choice.question.position + 1
+        else
+          self.position = parent_choice.child_questions.last.position + 1
+        end
       else
-        self.position = survey.questions.count
+        self.position = survey.questions.count + 1
       end
     end
 
-    def set_positions_other_others
+    def init_other_positions
       survey.questions.update_all('position = position + 1', ['position >= ? and id != ?', position, id])
+    end
+    
+    def update_position
+      if survey_question_choice_id_changed?
+        init_position
+      end
+    end
+    
+    def update_other_positions
+      if survey_question_choice_id_changed?
+        init_other_positions
+      end
+    end
+    
+    def tidy_positions
+      survey.questions.each_with_index do |question, index|
+        index_2 = index + 1 
+        if question.position != index_2
+          question.update_attribute :position, index_2
+        end
+      end
+    end
+    
+    def set_boolean_choices
+      choices.destroy_all if not new_record? and qtype_changed?
+      if choices.empty?
+        case qtype
+          when 'Yes/No' then
+            choices.build :label => 'Yes', :value => 1, :position => 1
+            choices.build :label => 'No', :value => 0, :position => 2
+          when 'True/False' then
+            choices.build :label => 'True', :value => 1, :position => 1
+            choices.build :label => 'False', :value => 0, :position => 2
+        end
+      end
     end
 
     def clear_choices!

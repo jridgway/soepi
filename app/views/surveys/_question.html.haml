@@ -5,7 +5,7 @@
       = simple_format @question.body
       %h5 Your Response
       - case @question.qtype
-      - when 'Select One' then 
+      - when 'Select One', 'Yes/No', 'True/False' then 
         %ul.choices.reset
           - @question.choices.each do |choice|
             %li

@@ -4,14 +4,18 @@
       .top-actions
         = link_to 'Edit', edit_survey_question_path(:survey_id => question.survey, :id => question.id), :class => 'button edit', :remote => true
         = link_to 'Delete', survey_question_path(:survey_id => question.survey, :id => question.id), :class => 'button destroy'
-    .expandable
-      = simple_format question.body
+    %p
+      - if @survey.published? or @survey.closed?
+        %strong= link_to question.label, results_survey_question_path(:survey_id => question.survey, :id => question.id), :remote => true
+      - else
+        %strong= question.label
+    %p
+      %small #{question.qtype} | #{question.required? ? 'Required' : 'Optional'} | ID=#{question.id}
   - unless question.choices.empty? 
     %ol.choices
       - question.choices.each do |choice|
         %li[choice]{:'data-choice-id' => choice.id}          
           %div
-            %strong.c-tag CHOICE
             = choice.label
           - unless choice.child_questions.empty?
             %ol.nested-questions{:id => "nested-questions-#{choice.id}"}

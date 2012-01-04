@@ -17,7 +17,7 @@
       }
     }
   
-  #charts
+  .charts
     {
     margin: 10px 0 15px 0;
     @include clearfix;
@@ -189,7 +189,8 @@
     color: $brown;
     }
     
-  .owner-only, .members-only, .visitors-only, .not-owner, .admins-only, .not-admin, .owner-only-not-admins
+  .owner-only, .members-only, .visitors-only, .not-owner, .admins-only, .not-admin, 
+  .owner-only-not-admins, .owner-only-until-published
     {
     display: none;
     }

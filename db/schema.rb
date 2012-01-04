@@ -11,7 +11,16 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111215131209) do
+ActiveRecord::Schema.define(:version => 20111222140831) do
+
+  create_table "actions", :force => true do |t|
+    t.string   "actionable_type"
+    t.integer  "actionable_id"
+    t.integer  "member_id"
+    t.integer  "times"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "age_groups", :force => true do |t|
     t.string   "label"
@@ -329,6 +338,20 @@ ActiveRecord::Schema.define(:version => 20111215131209) do
     t.integer "year", :null => false
   end
 
+  create_table "charts", :force => true do |t|
+    t.string   "title"
+    t.text     "description"
+    t.integer  "member_id"
+    t.boolean  "anonymous"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "slug"
+  end
+
+  add_index "charts", ["id"], :name => "index_charts_on_id", :unique => true
+  add_index "charts", ["member_id"], :name => "index_charts_on_member_id"
+  add_index "charts", ["slug"], :name => "index_charts_on_slug"
+
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
     t.integer  "attempts",   :default => 0
@@ -361,6 +384,11 @@ ActiveRecord::Schema.define(:version => 20111215131209) do
     t.integer  "position"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "ethnicities_members", :id => false, :force => true do |t|
+    t.integer "member_id"
+    t.integer "ethnicity_id"
   end
 
   create_table "ethnicities_participant_surveys", :id => false, :force => true do |t|
@@ -409,6 +437,29 @@ ActiveRecord::Schema.define(:version => 20111215131209) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "member_ethnicities", :force => true do |t|
+    t.integer  "member_id"
+    t.integer  "ethnicity_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "member_races", :force => true do |t|
+    t.integer  "member_id"
+    t.integer  "race_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "member_surveys", :force => true do |t|
+    t.integer "member_id"
+    t.integer "survey_id"
+  end
+
+  add_index "member_surveys", ["id"], :name => "index_member_surveys_on_id", :unique => true
+  add_index "member_surveys", ["member_id"], :name => "index_member_surveys_on_member_id"
+  add_index "member_surveys", ["survey_id"], :name => "index_member_surveys_on_survey_id"
 
   create_table "member_tokens", :force => true do |t|
     t.integer  "member_id"
@@ -472,6 +523,11 @@ ActiveRecord::Schema.define(:version => 20111215131209) do
   add_index "members", ["slug"], :name => "index_members_on_slug"
   add_index "members", ["unlock_token"], :name => "index_members_on_unlock_token", :unique => true
 
+  create_table "members_races", :id => false, :force => true do |t|
+    t.integer "member_id"
+    t.integer "race_id"
+  end
+
   create_table "members_surveys", :id => false, :force => true do |t|
     t.integer "member_id"
     t.integer "survey_id"
@@ -501,6 +557,18 @@ ActiveRecord::Schema.define(:version => 20111215131209) do
     t.boolean  "seen",            :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "occupations", :force => true do |t|
+    t.string   "label"
+    t.integer  "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "occupations_targets", :id => false, :force => true do |t|
+    t.integer "target_id"
+    t.integer "occupation_id"
   end
 
   create_table "pages", :force => true do |t|
@@ -536,6 +604,7 @@ ActiveRecord::Schema.define(:version => 20111215131209) do
     t.text     "text_response"
     t.date     "created_at"
     t.integer  "single_choice_id"
+    t.integer  "participant_survey_id"
   end
 
   add_index "participant_responses", ["id"], :name => "index_participant_responses_on_id", :unique => true
@@ -612,6 +681,28 @@ ActiveRecord::Schema.define(:version => 20111215131209) do
     t.string   "markup_type"
   end
 
+  create_table "petitioners", :force => true do |t|
+    t.integer  "petition_id"
+    t.integer  "member_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "petitions", :force => true do |t|
+    t.string   "title"
+    t.text     "description"
+    t.text     "promise"
+    t.integer  "member_id"
+    t.string   "state"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "slug"
+  end
+
+  add_index "petitions", ["id"], :name => "index_petitions_on_id", :unique => true
+  add_index "petitions", ["member_id"], :name => "index_petitions_on_member_id"
+  add_index "petitions", ["slug"], :name => "index_petitions_on_slug"
+
   create_table "r_script_inputs", :force => true do |t|
     t.integer  "r_script_id"
     t.string   "name"
@@ -623,6 +714,7 @@ ActiveRecord::Schema.define(:version => 20111215131209) do
     t.integer  "survey_id"
     t.string   "default_character"
     t.decimal  "default_numeric"
+    t.integer  "question_id"
   end
 
   create_table "r_scripts", :force => true do |t|
@@ -654,7 +746,7 @@ ActiveRecord::Schema.define(:version => 20111215131209) do
     t.string   "username"
     t.integer  "item"
     t.string   "table"
-    t.integer  "month",      :limit => 2
+    t.integer  "month"
     t.integer  "year",       :limit => 8
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -766,6 +858,7 @@ ActiveRecord::Schema.define(:version => 20111215131209) do
     t.integer  "asset_size"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "question_id"
   end
 
   create_table "survey_question_choices", :force => true do |t|
@@ -774,6 +867,7 @@ ActiveRecord::Schema.define(:version => 20111215131209) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "position"
+    t.string   "value"
   end
 
   add_index "survey_question_choices", ["id"], :name => "index_survey_question_choices_on_id", :unique => true
@@ -788,6 +882,7 @@ ActiveRecord::Schema.define(:version => 20111215131209) do
     t.integer  "position"
     t.boolean  "required",                  :default => true
     t.integer  "survey_question_choice_id"
+    t.string   "label"
   end
 
   add_index "survey_questions", ["id"], :name => "index_survey_questions_on_id", :unique => true
@@ -879,6 +974,13 @@ ActiveRecord::Schema.define(:version => 20111215131209) do
     t.datetime "updated_at"
   end
 
+  create_table "target_occupations", :force => true do |t|
+    t.integer  "target_id"
+    t.integer  "occupation_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "target_races", :force => true do |t|
     t.integer  "target_id"
     t.integer  "race_id"
@@ -915,5 +1017,16 @@ ActiveRecord::Schema.define(:version => 20111215131209) do
     t.string   "state"
     t.string   "location_type",       :default => "address"
   end
+
+  create_table "versions", :force => true do |t|
+    t.string   "item_type",  :null => false
+    t.integer  "item_id",    :null => false
+    t.string   "event",      :null => false
+    t.string   "whodunnit"
+    t.text     "object"
+    t.datetime "created_at"
+  end
+
+  add_index "versions", ["item_type", "item_id"], :name => "index_versions_on_item_type_and_item_id"
 
 end

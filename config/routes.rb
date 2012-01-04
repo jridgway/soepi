@@ -117,13 +117,16 @@ Soepi::Application.routes.draw do
       match 'new_participant'
       post 'create_participant'
       post 'create_response'
-      get 'completes'
+      get 'demographics'
       get 'downloads'
       put 'forkit'
       get 'forks(/page/:page)', :action => 'forks', :as => :forks
       get 'followed-by(/page/:page)', :action => 'followed_by', :as => :followed_by
     end
     resources :survey_questions, :path => 'questions', :as => :questions do
+      member do        
+        get 'results' 
+      end
       collection do
         put 'update_positions'
         get 'survey_question_choice_id_options'

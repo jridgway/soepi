@@ -8,6 +8,7 @@ class ParticipantSurvey < ActiveRecord::Base
   has_and_belongs_to_many :races
   belongs_to :education
   belongs_to :next_question, :class_name => 'SurveyQuestion'
+  has_many :responses, :class_name => 'ParticipantResponse'
 
   validates_presence_of :participant_id, :survey_id, :city, :state, :postal_code, :country,
     :age_group_id, :gender_id, :ethnicity_ids, :race_ids, :education_id, :next_question_id

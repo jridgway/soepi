@@ -1,0 +1,171 @@
+var region;
+var age_group;
+var gender;
+var ethnicity;
+var race;
+var education;
+
+$(document).ready(function() {
+  region = new Highcharts.Chart({
+     chart: {
+        renderTo: 'region',
+        type: 'column'
+     },
+     title: {
+        text: 'Participants by Region'
+     },
+     xAxis: {
+        categories: ['<%= @survey.completes_by_region.collect {|r| r[:label]}.join("', '") %>']
+     },
+     yAxis: {
+        min: 0,
+        title: {
+           text: 'Participants'
+        }
+     },
+     series: [{
+        name: 'Completes',
+        data: [<%= @survey.completes_by_region.collect {|r| r[:total]}.join(", ") %>] 
+     },{
+        name: 'Incompletes',
+        data: [<%= @survey.incompletes_by_region.collect {|r| r[:total]}.join(", ") %>] 
+     }]
+  });
+  
+  age_group = new Highcharts.Chart({
+     chart: {
+        renderTo: 'age-group',
+        type: 'column'
+     },
+     title: {
+        text: 'Participants by Age Group'
+     },
+     xAxis: {
+        categories: ['<%= @survey.completes_by_age_group.collect {|a| a[:label].gsub('years', '').strip}.join("', '") %>'],
+        labels: {
+            rotation: -45,
+            align: 'right'
+         }
+     },
+     yAxis: {
+        min: 0,
+        title: {
+           text: 'Participants'
+        }
+     },
+     series: [{
+        name: 'Completes',
+        data: [<%= @survey.completes_by_age_group.collect {|a| a[:total]}.join(", ") %>]
+     },{
+        name: 'Inompletes',
+        data: [<%= @survey.incompletes_by_age_group.collect {|a| a[:total]}.join(", ") %>]
+     }]
+  });
+  
+  gender = new Highcharts.Chart({
+     chart: {
+        renderTo: 'gender',
+        type: 'column'
+     },
+     title: {
+        text: 'Participants by Gender'
+     },
+     xAxis: {
+        categories: ['<%= @survey.completes_by_gender.collect {|g| g[:label]}.join("', '") %>']
+     },
+     yAxis: {
+        min: 0,
+        title: {
+           text: 'Participants'
+        }
+     },
+     series: [{
+        name: 'Completes',
+        data: [<%= @survey.completes_by_gender.collect {|g| g[:total]}.join(", ") %>]
+     },{
+        name: 'Incompletes',
+        data: [<%= @survey.incompletes_by_gender.collect {|g| g[:total]}.join(", ") %>]
+     }]
+  });
+  
+  ethnicity = new Highcharts.Chart({
+     chart: {
+        renderTo: 'ethnicity',
+        type: 'column'
+     },
+     title: {
+        text: 'Participants by Ethnicity'
+     },
+     xAxis: {
+        categories: ['<%= @survey.completes_by_ethnicity.collect {|e| e[:label]}.join("', '") %>']
+     },
+     yAxis: {
+        min: 0,
+        title: {
+           text: 'Participants'
+        }
+     },
+     series: [{
+        name: 'Completes',
+        data: [<%= @survey.completes_by_ethnicity.collect {|e| e[:total]}.join(", ") %>]
+     },{
+        name: 'Incompletes',
+        data: [<%= @survey.incompletes_by_ethnicity.collect {|e| e[:total]}.join(", ") %>]
+     }]
+  });
+  
+  race = new Highcharts.Chart({
+     chart: {
+        renderTo: 'race',
+        type: 'column'
+     },
+     title: {
+        text: 'Participants by Race'
+     },
+     xAxis: {
+        categories: ['<%= @survey.completes_by_race.collect {|r| r[:label]}.join("', '") %>']
+     },
+     yAxis: {
+        min: 0,
+        title: {
+           text: 'Participants'
+        }
+     },
+     series: [{
+        name: 'Completes',
+        data: [<%= @survey.completes_by_race.collect {|r| r[:total]}.join(", ") %>]
+     },{
+        name: 'Incompletes',
+        data: [<%= @survey.incompletes_by_race.collect {|r| r[:total]}.join(", ") %>]
+     }]
+  });
+  
+  education = new Highcharts.Chart({
+     chart: {
+        renderTo: 'education',
+        type: 'column'
+     },
+     title: {
+        text: 'Participants by Education'
+     },
+     xAxis: {
+        categories: ['<%= @survey.completes_by_education.collect {|e| escape_javascript(e[:label])}.join("', '") %>']
+     },
+     yAxis: {
+        min: 0,
+        title: {
+           text: 'Participants'
+        }
+     },
+     series: [{
+        name: 'Completes',
+        data: [<%= @survey.completes_by_education.collect {|e| e[:total]}.join(", ") %>]
+     },{
+        name: 'Incompletes',
+        data: [<%= @survey.incompletes_by_education.collect {|e| e[:total]}.join(", ") %>]
+     }]
+  });
+    
+  
+  $(window).resize();
+});

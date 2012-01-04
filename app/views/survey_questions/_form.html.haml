@@ -1,6 +1,7 @@
-= f.input :body, :label => 'Question'
+= f.input :body, :label => 'Question', :input_html => {:class => 'survey_question_body'}
+= f.input :label, :input_html => {:class => 'survey_question_label'}, :hint => 'Please provide a short label for this question that, for example, can be used as a chart title. If your question is already short, simply duplicate it here.'
 = f.input :required
-= f.input :survey_question_choice_id, :as => :select, :collection => @survey.survey_question_choice_id_options(question.id), :label => 'Dependent On', :input_options => {:include_blank => true}
+= f.input :survey_question_choice_id, :as => :select, :collection => @survey.survey_question_choice_id_options(question.id), :label => 'Dependent On', :input_options => {:include_blank => true}, :hint => 'This question will only be asked if the question/choice it\'s dependen on is selected previously. This is an approach similar to skip patterns.'
 = f.input :qtype, :label => 'Type' do 
   = f.select :qtype, grouped_options_for_select(SurveyQuestion.qtype_options, question.qtype), {:include_blank => true}, {:class => 'question-type'}
 .choice_labels

@@ -11,7 +11,6 @@ $('.error2').qtip('destroy');
     }
   <% end %>
   $('#survey_question_<%= @question.id %>').replaceWith('<%= escape_javascript render(:partial => 'question', :locals => {:question => @question}) %>');
-  $('#survey_question_<%= @question.id %>').find('p:first').prepend('<strong class="q-tag">QUESTION</strong> <strong class="q-type-tag"><%= @question.qtype %></strong> <%= @question.required? ? ' <abbr class="r-tag" title="Required">*</abbr>'.html_safe : '' %>  &mdash; ');
   <% if params[:update_edit] %>
     $('.ui-widget-overlay').height($(document).height());
   <% else %>
@@ -25,4 +24,5 @@ $('.error2').qtip('destroy');
 <% end %>
 init_common_elements();
 no_questions_message();
-load_new_choice_options();
+load_new_choice_options(<%= @question.survey_question_choice_id %>);
+init_form_tips();

@@ -1,0 +1,9 @@
+$('#results').html('<%= escape_javascript render(:template => 'survey_questions/_results.html.haml', :locals => {:question => @question}) %>');
+init_common_elements();
+if($('#results:visible').length == 0) {
+  $('#root-questions').hide('slide');
+  $('#results').show('slide');
+  $(window).resize();
+}
+$.scrollTo('#results');
+$('#all-questions').show();

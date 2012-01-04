@@ -2,27 +2,28 @@
 = render :partial => '/surveys/toolbar'
 = render :partial => '/surveys/details'
   
-- content_for :body_content do
-  - if @survey.downloads.empty?
-    - if @survey.closed?
-      %p The results are being published now. Please come back in a few minutes.
+- content_for :body_content do  
+  #downloads
+    - if @survey.downloads.empty?
+      - if @survey.closed?
+        %p The results are being published now. Please come back in a few minutes.
+      - else
+        %p No downloads have been generated yet. Please come back after the survey has been closed and the results published.
     - else
-      %p No downloads have been generated yet. Please come back after the survey has been closed and the results published.
-  - else
-    %ul.listing.downloads
-      - @survey.downloads.each do |download|
-        %li
-          = link_to download.title, download.asset.url, :class => 'button', :icon => 'ui-icon-circle-arrow-s'
-          %ul.attributes
-            %li
-              %label{:for => "url_#{download.id}"} URL:
-              = text_field_tag "url_#{download.id}", "#{ENV['domain']}#{download.asset.url}", :readonly => true, :class => 'url'
-              %a.copy{:href => '#'} Copy to Clipboard
-            %li
-              %label Type:
-              = download.asset_mime_type.split('/').last.upcase
-            %li
-              %label Size:
-              = number_to_human_size download.asset_size
+      %ul.listing.downloads
+        - @survey.downloads.each do |download|
+          %li
+            = link_to download.title, download.asset.url, :class => 'button', :icon => 'ui-icon-circle-arrow-s'
+            %ul.attributes
+              %li
+                %label{:for => "url_#{download.id}"} URL:
+                = text_field_tag "url_#{download.id}", "#{ENV['domain']}#{download.asset.url}", :readonly => true, :class => 'url'
+                %a.copy{:href => '#'} Copy to Clipboard
+              %li
+                %label Type:
+                = download.asset_mime_type.split('/').last.upcase
+              %li
+                %label Size:
+                = number_to_human_size download.asset_size
     
 = render :partial => "/shared/content_page"

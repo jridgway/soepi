@@ -1,5 +1,5 @@
 class SurveyQuestionsController < ApplicationController
-  before_filter :authenticate_member!, :except => [:index]
+  before_filter :authenticate_member!, :except => [:index, :results]
   before_filter :load_survey
   before_filter :validate_editable, :only => [:new, :create, :edit, :update, :destroy]
   layout Proc.new {|controller| controller.request.xhr? ? 'ajax' : 'two_column'}
@@ -26,11 +26,16 @@ class SurveyQuestionsController < ApplicationController
   end
 
   def create
-    @question = @survey.questions.new params[:survey_question]
+    if ['Yes/No', 'True/False'].include? params[:survey_question][:qtype]
+      @question = @survey.questions.new params[:survey_question].except(:choices_attributes)
+    else
+      @question = @survey.questions.new params[:survey_question]
+    end
     if @question.save
       @question_just_added = @question
       @question = @survey.questions.build params[:survey_question]
       @question.body = '' 
+      @question.label = '' 
     end
   end
 
@@ -60,13 +65,18 @@ class SurveyQuestionsController < ApplicationController
   def survey_question_choice_id_options
     render :layout => false
   end
+  
+  def results
+    @question = @survey.questions.find(params[:id])
+  end
 
   protected
 
     def load_survey
       @survey = Survey.find params[:survey_id]
-      unless @survey.published? or (member_signed_in? and (current_member.admin? or current_member.id == @survey.member_id))
-        flash[:notice] = 'You cannot view the questions of this survey until it has been published.'
+      unless @survey.published? or @survey.closed? or 
+      (member_signed_in? and (current_member.id == @survey.member_id or current_member.admin?))
+        flash[:alert] = 'Insufficient privileges. You must wait until this survey has been closed.'
         redirect_to survey_path(@survey)
         false
       end

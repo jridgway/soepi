@@ -204,7 +204,7 @@ class Survey < ActiveRecord::Base
   end
 
   def update_question_positions!(positions)
-    index = 0
+    index = 1
     questions_2 = {}
     questions.all.each {|q| questions_2[q.id] = q}
     positions.each_pair do |id, choice_id|
@@ -395,15 +395,26 @@ class Survey < ActiveRecord::Base
   end
   
   def completes_download
-    downloads.where(:dtype => 'completes_compressed').first
+    downloads.where(:dtype => 'completes').first
   end
   
   def incompletes_download
-    downloads.where(:dtype => 'incompletes_compressed').first
+    downloads.where(:dtype => 'incompletes').first
   end
   
   def data_dictionary_download
-    downloads.where(:dtype => 'data_dictionary_compressed').first
+    downloads.where(:dtype => 'data_dictionary').first
+  end
+  
+  def calculate_question_totals
+    questions.each do |question|
+      case question.qtype
+        when 'Single Choice', 'Yes/No', 'True/False' then
+        when 'Multiple Choice' then
+        when 'Numeric' then
+        when 'Date', 'Date/Time', 'Time' then
+      end
+    end
   end
 
   protected

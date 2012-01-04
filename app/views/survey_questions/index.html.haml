@@ -6,6 +6,7 @@
 
 - content_for :body_content_left do
   %p#no-questions.text-align-center{:style => 'display:none'} You have not added any questions yet. Click "Add a Question" to the right to begin.
+  #results{:style => 'display:none'}
   #root-questions-container.not-ordering
     %ol#root-questions
       - @questions.each do |question|
@@ -13,6 +14,7 @@
         
 - content_for :body_content_right do 
   %input{:type => 'text', :placeholder => 'Find a question', :id => 'question-search'} 
+  %button{:icon => 'ui-icon-circle-arrow-w', :class => 'button', :id => 'all-questions', :style => 'display:none'} All Questions
   - if @survey.editable?
     .owner-only-not-admins{:'data-member-id' => @survey.member_id}
       %button{:id => 'order-questions', :class => 'button', :icon => 'ui-icon-arrow-4'} Order Questions

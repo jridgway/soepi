@@ -1,5 +1,27 @@
 @import "common";
 
+#results
+  {      
+  .survey_question
+    {      
+    .nav
+      {
+      @include clearfix;
+      margin-bottom: 15px;
+      
+      a.button.previous
+        {
+        float: left;
+        }
+        
+      a.button.next
+        {
+        float: right;
+        }
+      }
+    }
+  }
+
 .top
   {
   margin: 0 0 10px 0;
@@ -192,45 +214,9 @@
     margin: 5px 0;
     }
   
-  .q-tag
+  small
     {
-    background: $purple;
-    color: #fff;
-    padding: 2px 3px;
-    margin: 0 1px 0 0;
-    font-size: 0.88em;
-    -moz-border-radius: 4px;
-    -webkit-border-radius: 4px;
-    border-radius: 4px;
-    }
-    
-  .q-type-tag
-    {
-    background: $gray;
-    color: #222;
-    padding: 2px 3px;
-    margin: 0 1px 0 0;
-    font-size: 0.88em;
-    -moz-border-radius: 4px;
-    -webkit-border-radius: 4px;
-    border-radius: 4px;
-    }
-    
-  .r-tag
-    {
-    font-weight: bold;
-    }
-    
-  .c-tag
-    {
-    background: #ffccff;
-    color: #222;
-    padding: 2px 3px;
-    margin: 0 1px 0 0;
-    font-size: 0.88em;
-    -moz-border-radius: 4px;
-    -webkit-border-radius: 4px;
-    border-radius: 4px;
+    font-size: 11px;
     }
     
   ol.choices
