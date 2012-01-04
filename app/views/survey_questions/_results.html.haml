@@ -2,9 +2,9 @@
   %a{:name => 'responses'}
   .nav
     - if question.next_question
-      = link_to 'Next Question', results_survey_question_path(:survey_id => @survey, :id => question.next_question.id), :remote => true, :class => 'button next'
+      %button{:onclick => "$.history.load('#{@question.next_question.id}');", :class => 'button next', :secondary_icon => 'ui-icon-triangle-1-e'} Next Question
     - if question.previous_question
-      = link_to 'Previous Question', results_survey_question_path(:survey_id => @survey, :id => question.previous_question.id), :remote => true, :class => 'button previous'
+      %button{:onclick => "$.history.load('#{@question.previous_question.id}');", :class => 'button previous', :icon => 'ui-icon-triangle-1-w'} Previous Question
   %h2 Question #{question.path}
   = simple_format question.body
   %p

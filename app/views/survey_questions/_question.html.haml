@@ -6,7 +6,8 @@
         = link_to 'Delete', survey_question_path(:survey_id => question.survey, :id => question.id), :class => 'button destroy'
     %p
       - if @survey.published? or @survey.closed?
-        %strong= link_to question.label, results_survey_question_path(:survey_id => question.survey, :id => question.id), :remote => true
+        %strong
+          %a{:href => "##{question.id}"}= question.label
       - else
         %strong= question.label
     %p

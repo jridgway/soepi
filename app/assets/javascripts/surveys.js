@@ -1,4 +1,4 @@
-var copy_set = false;
+var stop_arrows = false;
 
 $(document).ready(function() {
   init_survey_form();
@@ -192,19 +192,87 @@ function init_survey_question_form() {
     $('#root-questions li.survey_question:contains("' + $(this).val() + '")').css({height:'auto', borderTop:'none', overflow:'visible'});
   });
   $('#question-search').focus(function() {
+    remove_question_results_tip();
     if($('#root-questions:visible').length == 0) {
-      $('#all-questions').hide();
-      $('#results').hide('slide', function() {
-        $('#root-questions').show('slide'); 
-      });
+      $.history.load('all');
     }
   });
-  $('#all-questions').click(function() {
-    $(this).hide();
+  $('#root-questions a').first().qtip({
+    content:'<p>Click a question to view its results.</p>',
+    position: {
+      at: 'top middle',
+      my: 'bottom middle',
+      viewport: $(window),
+      adjust: {
+        method: 'flip flip'
+      }
+    },
+    show: {
+      event: true,
+      ready: true
+    },
+    hide: false,
+    style: {
+      classes: 'tip',
+      tip: {
+       border: 5,
+       offset: 10,
+       height: 7
+      }
+    }
+  });
+  if($('.not-editable').length > 0) {
+    $(document).keydown(function(e) {
+      if(!stop_arrows) {
+        if(e.keyCode == 37 && ! e.metaKey && ! e.ctrlKey) {
+          stop_arrows = true;
+          if($('.nav button.previous').length == 0 && $('#results:visible').length > 0) {            
+            $.history.load('all');
+          } else if($('#results:visible').length == 0) {
+             window.location = $('#root-questions a').last().attr('href');
+          } else {
+            $('.nav button.previous').click();
+          }
+          return false;
+        }
+        if(e.keyCode == 39 && ! e.metaKey && ! e.ctrlKey) {
+          stop_arrows = true;
+          if($('.nav button.next:visible').length == 0 && $('#results:visible').length > 0) {          
+            $.history.load('all');
+          } else if($('#results:visible').length == 0) {
+            window.location = $('#root-questions a').first().attr('href');
+          } else {
+            $('.nav button.next').click();
+          }
+          return false;
+        }
+      }
+    });
+    $.history.init(load_content);
+  }
+}
+
+function load_content(hash) {
+  console.log(hash);
+  if(hash == '' || hash == 'all') {
+    show_all_questions();
+  } else {
+    $.getScript('questions/' + hash + '/results.js?h=1');
+  }
+}
+
+function show_all_questions() {
+  if($('#root-questions:visible').length == 0) {
     $('#results').hide('slide', function() {
       $('#root-questions').show('slide'); 
+      $('#all-questions').hide()
+      stop_arrows = false;
     });
-  });
+  }
+}
+
+function remove_question_results_tip() {
+  $('#root-questions a').first().qtip('destroy');
 }
 
 function init_choices() {

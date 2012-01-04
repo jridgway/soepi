@@ -23,10 +23,9 @@
           %p This survey hasn't launched. Please come back later to participate.
       - elsif @survey.closed?
         %p 
-          This survey has closed. See the Results page to view demographics and responses 
-          to questions. The raw results will be available soon in downloadable CSV files.
+          This survey has closed. See the Questions, Demographics, and Downloads pages for the results.
       - elsif @survey.published?
-        %p This survey has closed and the results were published. See the Results page.
+        %p This survey has closed and the results were published. See the Questions, Demographics, and Downloads pages for the results.
       - elsif @survey.rejected?
         %p This survey was rejected during review.
       - elsif @survey.drafting?
@@ -54,8 +53,7 @@
           %p 
             This survey has closed. Members are no longer able to participate. 
           %p 
-            See the Results page to view demographics and responses 
-            to questions. The raw results will be available soon in downloadable CSV files.
+            See the Questions, Demographics, and Downloads pages for the results.
           %p 
             Please #{link_to 'contact us', member_contact_us_path} 
             if you have any questions or comments.
