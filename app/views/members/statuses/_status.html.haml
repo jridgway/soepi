@@ -1,0 +1,18 @@
+- if not defined?(show_owner) or show_owner
+  = avatar(status.member, 60)
+  %h3
+    #{link_to status.member.nickname, status.member} wrote:
+  .inner
+    .expandable
+      = simple_format status.body
+    %ul.attributes
+      %li Posted: #{timeago status.created_at}
+      - unless status.tags.empty?
+        %li Tagged: #{tag_list_links(status)}
+- else
+  .expandable
+    = simple_format status.body
+  %ul.attributes
+    %li Posted: #{timeago status.created_at}
+    - unless status.tags.empty?
+      %li Tagged: #{tag_list_links(status)}

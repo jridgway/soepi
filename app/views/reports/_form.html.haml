@@ -1,8 +1,9 @@
 = f.input :title, :hint => 'Describe in a few words what this report shows.'
 = f.input :tag_list, :label => 'Tags', :input_html => {:class => 'tags', :"data-seperator" => ','}, :hint => 'Categorize this report with any words you want. Hit Enter or type a comma to delimit each tag.'
-= f.input :introduction, :hint => 'Describe this report in full. Why did you create it? How did you create it? What does it show?'
-= f.association :plots do |f2|
-  = f2.input :description, :label => "Plot #{f2.object.position.to_i} Description", :hint => "Describe the plot #{f2.object.position.to_i} to the right. What does the plot show?" do 
-    = f2.text_area :description, {:class => 'plot-description'}
-    = link_to image_tag(f2.object.plot.thumb('250x250#').url), f2.object.plot.url, :target => '_blank'
-= f.input :conclusion, :hint => 'Add any concluding remarks. What should these findings lead to next?'
+- unless @report.new_record?
+  = f.input :introduction, :hint => 'Describe this report in full. Why did you create it? How did you create it? What does it show?'
+  = f.association :plots do |f2|
+    = f2.input :description, :label => "Plot #{f2.object.position.to_i} Description", :hint => "Describe the plot #{f2.object.position.to_i} to the right. What does the plot show?" do 
+      = f2.text_area :description, {:class => 'plot-description'}
+      = link_to image_tag(f2.object.plot.thumb('250x250#').url), f2.object.plot.url, :target => '_blank'
+  = f.input :conclusion, :hint => 'Add any concluding remarks. What should these findings lead to next?'

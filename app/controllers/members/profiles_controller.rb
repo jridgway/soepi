@@ -1,7 +1,17 @@
 class Members::ProfilesController < ApplicationController
-  before_filter :load_member, :except => [:my_profile, :by_tag, :autocomplete]
-  before_filter :load_tags, :only => [:index, :by_tag]
-  before_filter :load_facebook_meta, :only => [:show, :r_scripts, :reports, :following, :followed_by]
+  before_filter :load_member, :except => [:index, :publishers, :by_tag, :my_profile, :autocomplete]
+  before_filter :load_tags, :only => [:index, :publishers, :by_tag]
+  before_filter :load_facebook_meta, :only => [:show, :reports, :following, :followed_by]
+
+  def index
+    @members = Member.listable.page(params[:page]).per(30)
+    render :action => 'index'
+  end
+  
+  def publishers
+    @members = Member.listable.publishers.page(params[:page]).per(30)
+    render :action => 'index'
+  end
 
   def by_tag
     @tag = ActsAsTaggableOn::Tag.find params[:tag]
@@ -10,12 +20,12 @@ class Members::ProfilesController < ApplicationController
   end
 
   def show
-    @surveys = @member.surveys.live.page(params[:page])
+    @statuses = @member.statuses.page(params[:page])
     render :layout => 'one_column'
   end
 
-  def r_scripts
-    @r_scripts = @member.r_scripts.not_pending.page(params[:page])
+  def surveys
+    @surveys = @member.surveys.live.page(params[:page])
     render :layout => 'one_column'
   end
 
@@ -54,6 +64,9 @@ class Members::ProfilesController < ApplicationController
 
     def load_tags
       @tags = Member.listable.tag_counts :start_at => 2.months.ago, :limit => 100
+      if @tags.empty?
+        @tags = Member.listable.tag_counts :limit => 100
+      end
     end
 
     def load_facebook_meta

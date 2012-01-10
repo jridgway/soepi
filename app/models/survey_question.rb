@@ -96,60 +96,64 @@ class SurveyQuestion < ActiveRecord::Base
       when 'Numeric' then
         totals = {}     
         totals[:count] = connection.exec_query(%{select count(numeric_response) as numeric_response
-          from participant_responses where question_id = #{id}}).first['numeric_response'] 
-        totals[:min] = connection.exec_query(%{select min(numeric_response) as numeric_response
-          from participant_responses where question_id = #{id}}).first['numeric_response'].to_f.round(2) 
-        totals[:low] = connection.exec_query(%{select numeric_response
-          from (select numeric_response, row_number() over (order by numeric_response), 
-            count(*) over () from participant_responses where question_id = #{id}) der
-          where row_number = floor(der.count-((der.count/4)*3)-1)}).first['numeric_response'].to_f.round(2)
-        totals[:median] = connection.exec_query(%{select numeric_response
-          from (select numeric_response, row_number() over (order by numeric_response), 
-            count(*) over () from participant_responses where question_id = #{id}) der
-          where row_number = floor(der.count-((der.count/4)*2)-1)}).first['numeric_response'].to_f.round(2)
-        totals[:high] = connection.exec_query(%{select numeric_response
-          from (select numeric_response, row_number() over (order by numeric_response), 
-            count(*) over () from participant_responses where question_id = #{id}) der
-          where row_number = floor(der.count-((der.count/4)*1)-1)}).first['numeric_response'].to_f.round(2) 
-        totals[:max] = connection.exec_query(%{select max(numeric_response) as numeric_response
-          from participant_responses where question_id = #{id}}).first['numeric_response'].to_f.round(2)
-        totals[:avg] = connection.exec_query(%{select avg(numeric_response) as numeric_response
-          from participant_responses where question_id = #{id}}).first['numeric_response'].to_f.round(2) 
-        totals[:mode] = connection.exec_query(%{select numeric_response, count(*)
-          from participant_responses where question_id = #{id}
-          group by numeric_response
-          order by count(*) desc
-          limit 1}).first['numeric_response'].to_f.round(2) 
-        totals[:stddev] = connection.exec_query(%{select stddev(numeric_response) as numeric_response
-          from participant_responses where question_id = #{id}}).first['numeric_response'].to_f.round(2) 
+          from participant_responses where question_id = #{id}}).first['numeric_response'].to_i
+        if totals[:count] > 0
+          totals[:min] = connection.exec_query(%{select min(numeric_response) as numeric_response
+            from participant_responses where question_id = #{id}}).first['numeric_response'].to_f.round(2) 
+          totals[:low] = SurveyQuestion.connection.exec_query(%{select numeric_response
+            from (select numeric_response, row_number() over (order by numeric_response), 
+              count(*) over () from participant_responses where question_id = 314) der
+            where row_number = floor(der.count-((der.count/4)*3)-1)}).first['numeric_response'].to_f.round(2)
+          totals[:median] = connection.exec_query(%{select numeric_response
+            from (select numeric_response, row_number() over (order by numeric_response), 
+              count(*) over () from participant_responses where question_id = #{id}) der
+            where row_number = floor(der.count-((der.count/4)*2)-1)}).first['numeric_response'].to_f.round(2)
+          totals[:high] = connection.exec_query(%{select numeric_response
+            from (select numeric_response, row_number() over (order by numeric_response), 
+              count(*) over () from participant_responses where question_id = #{id}) der
+            where row_number = floor(der.count-((der.count/4)*1)-1)}).first['numeric_response'].to_f.round(2) 
+          totals[:max] = connection.exec_query(%{select max(numeric_response) as numeric_response
+            from participant_responses where question_id = #{id}}).first['numeric_response'].to_f.round(2)
+          totals[:avg] = connection.exec_query(%{select avg(numeric_response) as numeric_response
+            from participant_responses where question_id = #{id}}).first['numeric_response'].to_f.round(2) 
+          totals[:mode] = connection.exec_query(%{select numeric_response, count(*)
+            from participant_responses where question_id = #{id}
+            group by numeric_response
+            order by count(*) desc
+            limit 1}).first['numeric_response'].to_f.round(2) 
+          totals[:stddev] = connection.exec_query(%{select stddev(numeric_response) as numeric_response
+            from participant_responses where question_id = #{id}}).first['numeric_response'].to_f.round(2) 
+        end
         totals
       when 'Date', 'Date/Time', 'Time' then
         totals = {}     
         totals[:count] = connection.exec_query(%{select count(datetime_response) as datetime_response
-          from participant_responses where question_id = #{id}}).first['datetime_response']
-        totals[:min] = connection.exec_query(%{select min(datetime_response) as datetime_response
-          from participant_responses where question_id = #{id}}).first['datetime_response'].to_datetime
-        totals[:low] = connection.exec_query(%{select datetime_response
-          from (select datetime_response, row_number() over (order by datetime_response), 
-            count(*) over () from participant_responses where question_id = #{id}) der
-          where row_number = floor(der.count-((der.count/4)*3)-1)}).first['datetime_response'].to_datetime
-        totals[:median] = connection.exec_query(%{select datetime_response
-          from (select datetime_response, row_number() over (order by datetime_response), 
-            count(*) over () from participant_responses where question_id = #{id}) der
-          where row_number = floor(der.count-((der.count/4)*2)-1)}).first['datetime_response'].to_datetime
-        totals[:high] = connection.exec_query(%{select datetime_response
-          from (select datetime_response, row_number() over (order by datetime_response), 
-            count(*) over () from participant_responses where question_id = #{id}) der
-          where row_number = floor(der.count-((der.count/4)*1)-1)}).first['datetime_response'].to_datetime
-        totals[:max] = connection.exec_query(%{select max(datetime_response) as datetime_response
-          from participant_responses where question_id = #{id}}).first['datetime_response'].to_datetime
-        totals[:avg] = connection.exec_query(%{select TIMESTAMP with time zone 'epoch' + avg(extract(epoch from datetime_response)) * interval '1 second' as datetime_response
-          from participant_responses where question_id = #{id}}).first['datetime_response'].to_datetime
-        totals[:mode] = connection.exec_query(%{select datetime_response, count(*)
-          from participant_responses where question_id = #{id}
-          group by datetime_response
-          order by count(*) desc
-          limit 1}).first['datetime_response'].to_datetime
+          from participant_responses where question_id = #{id}}).first['datetime_response'].to_i
+        if totals[:count] > 0
+          totals[:min] = connection.exec_query(%{select min(datetime_response) as datetime_response
+            from participant_responses where question_id = #{id}}).first['datetime_response'].to_datetime
+          totals[:low] = connection.exec_query(%{select datetime_response
+            from (select datetime_response, row_number() over (order by datetime_response), 
+              count(*) over () from participant_responses where question_id = #{id}) der
+            where row_number = floor(der.count-((der.count/4)*3)-1)}).first['datetime_response'].to_datetime
+          totals[:median] = connection.exec_query(%{select datetime_response
+            from (select datetime_response, row_number() over (order by datetime_response), 
+              count(*) over () from participant_responses where question_id = #{id}) der
+            where row_number = floor(der.count-((der.count/4)*2)-1)}).first['datetime_response'].to_datetime
+          totals[:high] = connection.exec_query(%{select datetime_response
+            from (select datetime_response, row_number() over (order by datetime_response), 
+              count(*) over () from participant_responses where question_id = #{id}) der
+            where row_number = floor(der.count-((der.count/4)*1)-1)}).first['datetime_response'].to_datetime
+          totals[:max] = connection.exec_query(%{select max(datetime_response) as datetime_response
+            from participant_responses where question_id = #{id}}).first['datetime_response'].to_datetime
+          totals[:avg] = connection.exec_query(%{select TIMESTAMP with time zone 'epoch' + avg(extract(epoch from datetime_response)) * interval '1 second' as datetime_response
+            from participant_responses where question_id = #{id}}).first['datetime_response'].to_datetime
+          totals[:mode] = connection.exec_query(%{select datetime_response, count(*)
+            from participant_responses where question_id = #{id}
+            group by datetime_response
+            order by count(*) desc
+            limit 1}).first['datetime_response'].to_datetime
+        end
         totals
       when 'Text' then
         responses.page(page).per(per)

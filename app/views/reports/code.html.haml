@@ -1,15 +1,19 @@
 = render :partial => '/reports/common'
 
-- content_for :body_content do
-  #cm-editor.readonly
-  = hidden_field_tag :cm_editor_code, @report.code
-  :javascript
-    var editor = CodeMirror(document.getElementById('cm-editor'), {
-      readOnly: true,
-      mode: 'r',
-      theme: 'night',
-      lineNumbers: true
-    });
-    editor.setValue($('#cm_editor_code').val().trim());
-        
+- content_for :body_content_left do  
+  #cm-editor
+  
+- content_for :body_content_right do 
+  = simple_form_for @report, :url => save_and_run_report_path(@report), :html => {:id => 'report-save-and-run', :novalidate => true, :class => 'report'}, :remote => true do |f|
+    = f.hidden_field :code
+    %button{:class => 'button', :id => 'save-and-run', :icon => 'ui-icon-disk', :secondary_icon => 'ui-icon-play'} Save and Run
+  = simple_form_for @report, :url => save_and_continue_report_path(@report), :html => {:id => 'report-save-and-continue', :novalidate => true, :class => 'report'}, :remote => true do |f|
+    = f.hidden_field :code
+    %button{:class => 'button', :id => 'save-and-continue', :icon => 'ui-icon-disk', :secondary_icon => 'ui-icon-document'} Save and Continue
+  = simple_form_for @report, :url => save_and_exit_report_path(@report), :html => {:id => 'report-save-and-exit', :novalidate => true, :class => 'report'} do |f|
+    = f.hidden_field :code
+    %button{:class => 'button', :id => 'save-and-exit', :icon => 'ui-icon-disk', :secondary_icon => 'ui-icon-arrowreturnthick-1-e'} Save and Exit
+ 
 = render :partial => "/shared/content_page"
+
+

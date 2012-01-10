@@ -126,6 +126,7 @@
       list-style-type: none;
       margin: 7px 0 7px 0;
       padding: 0;
+      line-height: 18px;
       }
     }
     
@@ -209,10 +210,6 @@
     text-align: center;
     }
     
-  .tag
-    {
-    }
-    
   .posted-by 
     {
     margin: 0 !important;
@@ -273,6 +270,11 @@
           {
           border: none;
           background: none;
+          
+          a, a:visited
+            {
+            color: #fff
+            }
           }
         
         li.ui-state-active
@@ -280,7 +282,7 @@
           border: none;
           background: #eee;
           
-          a:hover
+          a, a:hover
             {
             color: #222;
             }

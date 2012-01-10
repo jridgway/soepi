@@ -7,7 +7,7 @@
     %ul#reports.listing.reset
       - @reports.each do |report|
         %li
-          = render :partial => '/reports/report', :locals => {:report => report, :show_owner => false}
+          = render :partial => '/reports/report', :locals => {:report => report}
     = paginate @reports    
   
 = render :partial => "/shared/content_page"

@@ -1,3 +1,5 @@
 = avatar(member, 60)
 %h3
   = link_to member.nickname, member
+- unless member.tags.empty?
+  %small Tagged: #{tag_list_links(member)}

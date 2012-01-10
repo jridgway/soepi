@@ -1,6 +1,9 @@
 - content_for :body_content_title do
   Reports
 
+- content_for :body_content_toolbar do 
+  = link_to 'Create a Report', new_report_path, :class => 'restrict-to-members button', :icon => 'ui-icon-document'
+
 - content_for :body_content_details do
   %ul.menu
     %li
@@ -8,8 +11,14 @@
     - if action_name == 'by_tag'
       %li
         = link_to %{Tagged "#{@tag}"}, request.path
-    %li.admins-only
-      = link_to 'Drafting', drafting_reports_path
+    %li
+      = link_to 'Pending', pending_reports_path
+    %li
+      = link_to 'Passing', passing_reports_path
+    %li
+      = link_to 'Failing', failing_reports_path
+    %li
+      = link_to 'Published', published_reports_path
       
 - content_for :body_content_left do
   - if @reports.empty?

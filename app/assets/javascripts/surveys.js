@@ -197,7 +197,7 @@ function init_survey_question_form() {
       $.history.load('all');
     }
   });
-  $('#root-questions a').first().qtip({
+  $('.not-editable #root-questions a').first().qtip({
     content:'<p>Click a question to view its results.</p>',
     position: {
       at: 'top middle',
@@ -221,6 +221,7 @@ function init_survey_question_form() {
       }
     }
   });
+  setTimeout("$('#ui-tooltip-0').remove();", 5000);
   if($('.not-editable').length > 0) {
     $(document).keydown(function(e) {
       if(!stop_arrows) {

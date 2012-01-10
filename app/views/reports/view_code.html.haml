@@ -1,0 +1,9 @@
+= render :partial => '/reports/common'
+
+- content_for :body_content do  
+  #cm-editor.cm-editor.readonly
+  = hidden_field_tag :report_code, @report.code
+
+= render :partial => "/shared/content_page"
+
+

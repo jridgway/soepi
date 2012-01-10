@@ -7,8 +7,8 @@ module ApplicationHelper
     case tag.taggings.first.taggable_type 
       when 'Survey' then 'surveys'
       when 'Report' then 'reports'
-      when 'RScript' then 'r_scripts'
       when 'Member' then 'members/profiles'
+      when 'MemberStatus' then 'members/statuses'
       when 'Page' then 'pages'
     end
   end
@@ -69,6 +69,7 @@ module ApplicationHelper
   def tag_list_links(record)
     case record.class.to_s
       when 'Member' then controller = '/members/profiles'
+      when 'MemberStatus' then controller = '/members/statuses'
       when 'RScript' then controller = '/r_scripts'
       else controller = '/' + record.class.to_s.downcase.pluralize
     end

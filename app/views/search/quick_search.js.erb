@@ -2,10 +2,17 @@
   case result.class.to_s
     when 'Survey' then
       {
-        :label => "#{result.class}: #{result.title}",
+        :label => result.title,
         :logo => avatar(result.member, 40, false),
         :description => truncate(result.description, :size => 20),
         :value => survey_path(result)
+      }
+    when 'Report' then
+      {
+        :label => result.title,
+        :logo => avatar(result.member, 40, false),
+        :description => result.tags.join(', '),
+        :value => report_path(result)
       }
     when 'Member' then
       {
@@ -16,7 +23,7 @@
       }
     when 'Page' then
       {
-        :label => "Page: #{result.title}",
+        :label => result.title,
         :logo => %{<img src="/assets/soepi-logo-light-bg.png" width="50" />},
         :description => result.path.gsub(' - ', ' &gt; ').html_safe,
         :value => "/#{result.to_param}"

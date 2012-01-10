@@ -11,16 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111222140831) do
-
-  create_table "actions", :force => true do |t|
-    t.string   "actionable_type"
-    t.integer  "actionable_id"
-    t.integer  "member_id"
-    t.integer  "times"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
+ActiveRecord::Schema.define(:version => 20120106210742) do
 
   create_table "age_groups", :force => true do |t|
     t.string   "label"
@@ -338,20 +329,6 @@ ActiveRecord::Schema.define(:version => 20111222140831) do
     t.integer "year", :null => false
   end
 
-  create_table "charts", :force => true do |t|
-    t.string   "title"
-    t.text     "description"
-    t.integer  "member_id"
-    t.boolean  "anonymous"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "slug"
-  end
-
-  add_index "charts", ["id"], :name => "index_charts_on_id", :unique => true
-  add_index "charts", ["member_id"], :name => "index_charts_on_member_id"
-  add_index "charts", ["slug"], :name => "index_charts_on_slug"
-
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
     t.integer  "attempts",   :default => 0
@@ -452,6 +429,14 @@ ActiveRecord::Schema.define(:version => 20111222140831) do
     t.datetime "updated_at"
   end
 
+  create_table "member_statuses", :force => true do |t|
+    t.text     "body"
+    t.integer  "repost_id"
+    t.integer  "member_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "member_surveys", :force => true do |t|
     t.integer "member_id"
     t.integer "survey_id"
@@ -522,6 +507,11 @@ ActiveRecord::Schema.define(:version => 20111222140831) do
   add_index "members", ["reset_password_token"], :name => "index_members_on_reset_password_token", :unique => true
   add_index "members", ["slug"], :name => "index_members_on_slug"
   add_index "members", ["unlock_token"], :name => "index_members_on_unlock_token", :unique => true
+
+  create_table "members_member_statuses", :id => false, :force => true do |t|
+    t.integer "member_id"
+    t.integer "member_status_id"
+  end
 
   create_table "members_races", :id => false, :force => true do |t|
     t.integer "member_id"
@@ -681,54 +671,6 @@ ActiveRecord::Schema.define(:version => 20111222140831) do
     t.string   "markup_type"
   end
 
-  create_table "petitioners", :force => true do |t|
-    t.integer  "petition_id"
-    t.integer  "member_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "petitions", :force => true do |t|
-    t.string   "title"
-    t.text     "description"
-    t.text     "promise"
-    t.integer  "member_id"
-    t.string   "state"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "slug"
-  end
-
-  add_index "petitions", ["id"], :name => "index_petitions_on_id", :unique => true
-  add_index "petitions", ["member_id"], :name => "index_petitions_on_member_id"
-  add_index "petitions", ["slug"], :name => "index_petitions_on_slug"
-
-  create_table "r_script_inputs", :force => true do |t|
-    t.integer  "r_script_id"
-    t.string   "name"
-    t.text     "description"
-    t.integer  "position"
-    t.string   "itype"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "survey_id"
-    t.string   "default_character"
-    t.decimal  "default_numeric"
-    t.integer  "question_id"
-  end
-
-  create_table "r_scripts", :force => true do |t|
-    t.integer  "member_id",                             :null => false
-    t.integer  "forked_from_id"
-    t.string   "title",                                 :null => false
-    t.text     "description"
-    t.text     "code"
-    t.string   "state",          :default => "pending"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "slug"
-  end
-
   create_table "races", :force => true do |t|
     t.string   "label"
     t.integer  "position"
@@ -791,7 +733,6 @@ ActiveRecord::Schema.define(:version => 20111222140831) do
     t.string   "slug"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "r_script_id"
     t.text     "code"
     t.text     "output"
     t.text     "conclusion"
@@ -813,24 +754,6 @@ ActiveRecord::Schema.define(:version => 20111222140831) do
   end
 
   add_index "settings", ["name"], :name => "index_settings_on_name", :unique => true
-
-  create_table "slides", :force => true do |t|
-    t.string   "description"
-    t.integer  "position"
-    t.datetime "publish_at",    :default => '2011-10-31 20:49:21'
-    t.datetime "expires_at"
-    t.string   "img"
-    t.string   "img_uid"
-    t.string   "img_mime_type"
-    t.string   "img_name"
-    t.integer  "img_size"
-    t.integer  "img_width"
-    t.integer  "img_height"
-    t.string   "img_image_uid"
-    t.string   "img_image_ext"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "slugs", :force => true do |t|
     t.string   "name"
@@ -1017,16 +940,5 @@ ActiveRecord::Schema.define(:version => 20111222140831) do
     t.string   "state"
     t.string   "location_type",       :default => "address"
   end
-
-  create_table "versions", :force => true do |t|
-    t.string   "item_type",  :null => false
-    t.integer  "item_id",    :null => false
-    t.string   "event",      :null => false
-    t.string   "whodunnit"
-    t.text     "object"
-    t.datetime "created_at"
-  end
-
-  add_index "versions", ["item_type", "item_id"], :name => "index_versions_on_item_type_and_item_id"
 
 end

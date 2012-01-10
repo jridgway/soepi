@@ -1,0 +1,7 @@
+!!!
+= render :partial => "/shared/html_tag"
+= render :partial => "/shared/head"
+%body.bp.blank{:class => (home? ? 'home' : '')}
+  #root
+    #container
+      = yield

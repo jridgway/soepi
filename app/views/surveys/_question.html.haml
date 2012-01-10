@@ -1,7 +1,7 @@
 .question{:style => 'display:none;'}
   = simple_form_for @participant_response, :url => create_response_survey_path(@survey), :remote => true do |f|
     = f.hidden_field :question_id
-    = field_set_tag "Question #{@question.position + 1} - #{@question.required? ? '<strong>Required</strong>' : '<strong>Optional</strong>'}".html_safe do
+    = field_set_tag "Question #{@question.path} - #{@question.qtype} - #{@question.required? ? '<strong>Required</strong>' : '<strong>Optional</strong>'}".html_safe do
       = simple_format @question.body
       %h5 Your Response
       - case @question.qtype
@@ -23,5 +23,5 @@
         = f.input :datetime_response, :as => :time_picker, :label => false
       - when 'Numeric' then 
         = f.input :numeric_response, :label => false, :hint => 'Must be a number. Periods and commas are not allowed.'
-      = f.submit 'Submit', :class => 'button' unless @question.qtype == 'Select One'
+      = f.submit 'Submit', :class => 'button' unless ['Select One', 'True/False', 'Yes/No'].include?(@question.qtype)
   

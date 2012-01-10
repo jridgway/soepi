@@ -1,42 +1,164 @@
+@import "common";
+@import "compass/css3/opacity";
+
 .bp.home
   {
-  h1#page-title
-    {   
-    margin: 0 0 10px 0;
-    padding: 0;
-    font-weight: 200;
-    clear: none;
+  form.status
+    {
+    @include clearfix;
+    margin-bottom: 15px;
     
-    a
+    #member_status_body
       {
-      color: #fff;
+      height: 20px;
+      width: 561px;
+      max-width: 561px;
+      padding: 10px;
       }
     
-    strong
+    #status-extra 
       {
-      font-weight: 600;
+      float: left;
       }
     
-    img
+    .tagit
       {
-      display: inline;
-      margin: 4px 10px 0 0;
+      width: 575px;
       }
+    
+    button
+      {
+      float: right;
+      }
+    }
+  
+  #your
+    {
+    margin-bottom: 15px;
+    
+    .ui-tabs-nav
+      {
+      font-size: 0.96em;
       
-    img[width='80']
-      {
-      margin-bottom: 10px;
-      }
-        
-    ul.attributes
-      {
-      margin: 10px 0 0 0;
-      color: #C6C6C6;
-      
-      a 
+      li:first-child
         {
-        color: $light_blue;
+        padding: 3px 10px 0 0;
+        font-size: 1em;
         }
+      
+      li.your
+        {
+        color: #aaa !important;
+        }
+      
+      a
+        {
+        padding: 4px 7px;
+        }
+      }
+    }
+  
+  
+  #welcome
+    {    
+    -moz-box-shadow: 0 0 15px #111;
+    -webkit-box-shadow: 0 0 15px #111;
+    -o-box-shadow: 0 0 15px #111;
+    box-shadow: 0px 0px 15px #111;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    background: #2a2a2a;
+    width: 800px;
+    height: 400px;
+    margin: -215px 0 0 -415px;
+    padding: 15px;
+    position:absolute;
+    left: 50%;
+    top: 50%;
+  
+    #top
+      {
+      @include clearfix;
+      
+      h1#logo
+        {
+        @include column(4);
+        margin: 0;
+        padding: 0;
+        
+        a 
+          { 
+          background: url(/assets/soepi-logo-dark-bg.png) no-repeat;
+          text-indent: -99999px;
+          display: block;
+          height: 62px;
+          width: 133px;
+          }
+        }
+      
+      #sign-in-links
+        {
+        float: right;
+        }
+      }
+      
+    #inner
+      {
+      margin-top: 15px;
+      
+      #about
+        {
+        width: 250px;
+        margin: 0 15px 0 0;
+        float: left;
+        }
+      
+      #features 
+        {
+        width: 505px;
+        float: right;
+        
+        .ui-accordion-header
+          {
+          background: transparent; 
+          border: none;
+          
+          a 
+            {
+            color: $blue;
+            padding: 5px 0 5px 5px;
+            font-size: 1.2em;
+            }
+          
+          &.ui-state-active a
+            {
+            color: white;
+            }
+          
+          .ui-icon
+            {
+            background-image: url(/assets/ui-icons_ffffff_256x240.png);
+            }
+          }
+        
+        .ui-accordion-content
+          {
+          border: none;
+          }
+        } 
+      }
+      
+    #footer
+      {
+      width: auto;
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      margin: 0 0 0 -185px;
+      padding: 10px 0;
+      height: auto;
+      font-size: 0.7em;
       }
     }
   }

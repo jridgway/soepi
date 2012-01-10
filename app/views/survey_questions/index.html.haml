@@ -15,12 +15,13 @@
 - content_for :body_content_right do 
   %input{:type => 'text', :placeholder => 'Find a question', :id => 'question-search'} 
   %a{:icon => 'ui-icon-arrowthick-1-w', :class => 'button', :id => 'all-questions', :style => 'display:none', :href => '#all'} All Questions
-  #key-mappings
-    %h5 Shortcuts
-    %p
-      %small
-        Left Arrow = Previous Question
-        Right Arrow = Next Question
+  - unless @survey.drafting?
+    #key-mappings
+      %h5 Shortcuts
+      %p
+        %small
+          Left Arrow = Previous Question
+          Right Arrow = Next Question
   - if @survey.editable?
     .owner-only-not-admins{:'data-member-id' => @survey.member_id}
       %button{:id => 'order-questions', :class => 'button', :icon => 'ui-icon-arrow-4'} Order Questions

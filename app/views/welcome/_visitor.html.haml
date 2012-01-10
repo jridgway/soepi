@@ -1,0 +1,42 @@
+- cache('home', :expires_in => cache_expirary) do
+  #welcome
+    #top
+      %h1#logo
+        = link_to 'SoEpi', root_path, :title => 'SoEpi'
+      #sign-in-links
+        = link_to 'Sign In', new_member_session_path, :class => 'button', :icon => 'ui-icon-key'
+        = link_to 'Sign Up', new_member_registration_path, :class => 'button', :icon => 'ui-icon-arrowthick-1-n'
+    #inner
+      #about
+        %h2 Connecting Communities and Health Investigators...
+        %p SoEpi is a 501(c)(3) non-profit organization committed to better health via online, social epidemiology.
+      #features
+        #home-accordian
+          %h3
+            %a{:href => '#anonymous-surveys'} Anonymous Surveys
+          #anonymous-surveys
+            %p 
+              Rigorous, well-designed, -streamlined and -tested&mdash;our survey tool is completely
+              <strong>free</strong> and <strong>anonmyous</strong>, is available for anyone to use,
+              and it includes advanced targeting&mdash;based on age, gender, 
+              location, surveys taken, education, race and ethnicity&mdash;and question branching.
+          %h3
+            %a{:href => '#open-database'} Open Database
+          #open-database
+            %p
+              As our partcipants are completely anonymous, all survey <strong>results</strong> are available for 
+              <strong>browsing</strong> and <strong>download</strong>. 
+          %h3
+            %a{:href => '#r-based-reports'} R-based Reports
+          #r-based-reports
+            %p
+              Write unadulterated <strong>R</strong> scripts to generate plots, then annotate and publish them 
+              as reports. We've integrated R into our site, so that analyzing surveys results couldn't be easier. 
+          %h3
+            %a{:href => '#community'} Community
+          #community
+            %p
+              Communicate, plan and organize by <strong>following</strong> your fellow SoEpi members and posting
+              your own <strong>status updates</strong>.
+    %footer#footer
+      = render :partial => "/shared/footer"

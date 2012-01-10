@@ -1,6 +1,15 @@
 Soepi::Application.routes.draw do
   get '/search(/:page)', :controller => 'search', :action => 'index', :as => :search
   get '/quick_search', :controller => 'search', :action => 'quick_search'
+  
+  get '/your/notifications', :controller => 'welcome', :action => 'notifications', :as => :your_notifications
+  get '/your/surveys', :controller => 'welcome', :action => 'surveys', :as => :your_surveys
+  get '/your/reports', :controller => 'welcome', :action => 'reports', :as => :your_reports
+  get '/your/statuses', :controller => 'welcome', :action => 'statuses', :as => :your_statuses
+  post '/your/statuses', :controller => 'welcome', :action => 'create_status', :as => :create_status
+  delete '/your/statuses', :controller => 'welcome', :action => 'create_status', :as => :destroy_status
+  get '/your/follows', :controller => 'welcome', :action => 'follows', :as => :your_follows
+  get '/your/member_followers', :controller => 'welcome', :action => 'member_followers', :as => :your_member_followers
 
   devise_for :members, :controllers => {:registrations => 'members/accounts', :sessions => 'members/sessions', :omniauth_callbacks => 'members/omniauth_callbacks'} do
     match '/members/change_password', :controller => 'members/accounts', :action => 'change_password', :as => :member_change_password
@@ -14,21 +23,30 @@ Soepi::Application.routes.draw do
     match '/members/load_current_member', :controller => 'members/accounts', :action => 'load_current_member'
   end
   
-  resources :members, :controller => 'members/profiles', :path => '/members', :only => [:show] do 
+  resources :members, :controller => 'members/profiles', :path => '/members', :only => [:index, :show] do 
     collection do
-      get 'tagged/:tag(/:page)', :action => 'by_tag'
+      get '(page/:page)', :action => 'index'
+      get 'publishers(/page/:page)', :action => 'publishers', :as => :publishers
+      get 'tagged/:tag(/page/:page)', :action => 'by_tag'
       get 'autocomplete', :action => 'autocomplete'
     end
     member do
       get '(page/:page)', :action => 'show'
-      get 'r_scripts(/page/:page)', :action => 'r_scripts', :as => :r_scripts
+      get 'surveys(/page/:page)', :action => 'surveys', :as => :surveys
       get 'reports(/page/:page)', :action => 'reports', :as => :reports
       get 'following', :action => 'following', :as => :following
       get 'followed-by', :action => 'followed_by', :as => :followed_by
     end
   end
+  
+  resources :member_statuses, :controller => 'members/statuses', :path => '/statuses', :only => [:index, :show] do 
+    collection do
+      get '(page/:page)', :action => 'index'
+      get 'tagged/:tag(/page/:page)', :action => 'by_tag'
+    end
+  end
 
-  match '/~', :controller => 'members/profiles', :action => 'my_profile', :as => :member_my_profile
+  match '/~', :controller => 'members/profiles', :action => 'your_profile', :as => :member_your_profile
 
   resources :member_tokens, :only => [:index, :destroy], :controller => 'members/tokens', :path => '/members/accounts/sign-in-tokens'
 
@@ -53,45 +71,23 @@ Soepi::Application.routes.draw do
       get 'unread'
     end
   end
-
-  resources :r_scripts do 
-    member do 
-      put 'forkit'
-      put 'run'
-      get 'code'
+  
+  resources :reports do 
+    member do
       put 'save_and_run'
       put 'save_and_continue'
       put 'save_and_exit'
-      get 'settings'
-      get 'forks(/page/:page)', :action => 'forks', :as => :forks
-      get 'reports(/page/:page)', :action => 'reports', :as => :reports
-      get 'followed-by(/page/:page)', :action => 'followed_by', :as => :followed_by
+      put 'publish' 
+      get 'output'
+      get 'code'
+      get 'view_code'
     end
     collection do 
       get '(page/:page)', :action => 'index'
       get 'pending(/page/:page)', :action => 'pending', :as => :pending
-      get 'failing(/page/:page)', :action => 'failing', :as => :failing
+      get 'published(/page/:page)', :action => 'published', :as => :published
       get 'passing(/page/:page)', :action => 'passing', :as => :passing
-      get 'tagged/:tag(/page/:page)', :action => 'by_tag', :as => :tagged
-    end
-  
-    resources :r_script_inputs, :path => 'inputs', :as => :inputs, :only => [:new, :create, :edit, :update, :destroy] do 
-      collection do 
-        get 'surveys_auto_complete'
-      end
-    end
-  end
-  
-  resources :reports do 
-    member do
-      get 'tagged/:tag(/page/:page)', :action => 'by_tag', :as => :tagged
-      get 'output' 
-      get 'code'
-      put 'publish' 
-    end
-    collection do 
-      get '(page/:page)', :action => 'index'
-      get 'drafting(/page/:page)', :action => 'drafting', :as => :drafting
+      get 'failing(/page/:page)', :action => 'failing', :as => :failing
       get 'tagged/:tag(/page/:page)', :action => 'by_tag', :as => :tagged
     end
   end
@@ -142,8 +138,7 @@ Soepi::Application.routes.draw do
   
   mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
    
-  root :to => 'pages#home'
-  get '/notifications', :to => 'pages#notifications'
+  root :to => 'welcome#index'
   
   match '*path' => 'pages#show', :constraints => lambda{ |req|  
     (req.env["REQUEST_PATH"] =~ /\/members\/auth\//).nil? 

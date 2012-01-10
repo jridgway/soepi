@@ -1,5 +1,12 @@
 @import "common";
 
+::-webkit-input-placeholder {
+    color:  #efefef;
+}
+:-moz-placeholder {
+    color:  #efefef;
+}
+
 .bp input.url
   {
   width: 300px;
@@ -44,7 +51,7 @@
     -o-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
     box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
     background-color: transparent;
-    color: #C6C6C6;
+    color: #eee;
   
     .CodeMirror-gutter
       {
@@ -71,7 +78,7 @@ fieldset
   {
   margin: 0 0 20px 0;
   padding: 15px;
-  border: 1px solid #666;
+  border: 1px solid #444 !important;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
   border-radius: 4px;
@@ -146,7 +153,7 @@ fieldset
     -o-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
     box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
     background-color: transparent;
-    color: #C6C6C6;
+    color: #eee;
     font-size: 1em;
     }
     
@@ -457,12 +464,14 @@ fieldset ul.tagit
   
   li.tagit-new
     {
-  
+    margin: 0;
+    padding: 0;
+      
     input
       {
       display: block;
     	float: left;
-    	margin: 2px 5px 2px 0;
+    	margin: 0;
       border: medium none;
       cursor: default;
       outline: 0 none;  
@@ -470,7 +479,7 @@ fieldset ul.tagit
       -webkit-box-shadow: none !important;
       -o-box-shadow: none !important;
       box-shadow: none !important;
-      color: #C6C6C6;
+      color: #eee !important;
       background: transparent !important;
       }
     }

@@ -16,7 +16,6 @@
 //= require forms
 //= require tips
 //= require surveys
-//= require r-scripts
 //= require reports
 //= require markerclusterer
 //= require highcharts

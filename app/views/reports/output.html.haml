@@ -1,6 +1,9 @@
-= render :partial => '/r_scripts/common'
+= render :partial => '/reports/common'
 
 - content_for :body_content do
-  %pre= @report.output
+  - if @report.pending?
+    %p No output exists yet, because you have't run your report.
+  - else
+    %pre#output= @report.output
         
 = render :partial => "/shared/content_page"

@@ -1,4 +1,7 @@
 $(document).ready(function () {
+  $('.ui-widget-overlay').live('click', function () {
+    $('.ui-dialog-content').dialog('close');
+  });
   $('.accordian').accordion({
     autoHeight: false, 
     navigation: true, 
@@ -7,9 +10,6 @@ $(document).ready(function () {
     change: function() {
       $(window).scroll();
     }
-  });
-  $('.ui-widget-overlay').live('click', function () {
-    $('.ui-dialog-content').dialog('close');
   });
   init_pop_navs();
   load_quick_search();
@@ -188,36 +188,38 @@ function isWhollyVisible(elem) {
 var quick_search_cache = {}, lastXhr;
 
 function load_quick_search() {
-  $('#q').autocomplete({
-    minLength: 2,
-    delay: 100,
-    source: function(request, response) {
-      var term = request.term;
-      if(term in quick_search_cache) {
-        response(quick_search_cache[term]);
-        return;
-      }
-      lastXhr = $.getJSON('/quick_search', request, function(data, status, xhr) {
-        quick_search_cache[term] = data;
-        if(xhr === lastXhr) {
-          response(data);
+  if($('#q').length > 0) {
+    $('#q').autocomplete({
+      minLength: 2,
+      delay: 100,
+      source: function(request, response) {
+        var term = request.term;
+        if(term in quick_search_cache) {
+          response(quick_search_cache[term]);
+          return;
         }
-      });
-    },
-    focus: function(item) {
-     return false;
-    },
-    select: function(event, ui) {
-      location.href = ui.item.value;
-      return false;
-    }
-  })
-  .data("autocomplete")._renderItem = function(ul, item) {
-    return $("<li></li>")
-      .data("item.autocomplete", item)
-      .append('<a>' + item.logo + '<h4>' + item.label + '</h4><small>' + item.description + '</small></a>')
-      .appendTo(ul);
-  };
+        lastXhr = $.getJSON('/quick_search', request, function(data, status, xhr) {
+          quick_search_cache[term] = data;
+          if(xhr === lastXhr) {
+            response(data);
+          }
+        });
+      },
+      focus: function(item) {
+       return false;
+      },
+      select: function(event, ui) {
+        location.href = ui.item.value;
+        return false;
+      }
+    })
+    .data("autocomplete")._renderItem = function(ul, item) {
+      return $("<li></li>")
+        .data("item.autocomplete", item)
+        .append('<a>' + item.logo + '<h4>' + item.label + '</h4><small>' + item.description + '</small></a>')
+        .appendTo(ul);
+    };
+  }
 }
 
 function split(val) {

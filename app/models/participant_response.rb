@@ -11,7 +11,6 @@ class ParticipantResponse < ActiveRecord::Base
   validate :question_required
 
   after_create :set_next_question, :check_and_set_complete
-  after_destroy :clear_statistics
 
   def choices
     (multiple_choices + [single_choice]).compact
@@ -56,19 +55,12 @@ class ParticipantResponse < ActiveRecord::Base
     end
     
     def check_and_set_complete
-      unless participant_survey.complete?
-        if participant_survey.next_question.nil? or all_required_questions_answered?
-          participant_survey.update_attribute :complete, true
-        end
+      if participant_survey.next_question.nil? or all_required_questions_answered?
+        participant_survey.update_attribute :complete, true
       end
-      Statistic.delete_all
     end
     
     def all_required_questions_answered?
       true if question.survey.questions.where('position > ? and required = true', question.position).count == 0
-    end
-    
-    def clear_statistics
-      Statistic.delete_all
     end
 end

@@ -4,7 +4,9 @@
       = link_to 'Summary', report_path(@report)
     %li.owner-only{:'data-member-id' => @report.member_id}
       = link_to 'Settings', edit_report_path(@report)
-    %li
+    %li.owner-only{:'data-member-id' => @report.member_id}
       = link_to 'Code', code_report_path(@report)
+    %li.not-owner{:'data-member-id' => @report.member_id}
+      = link_to 'Code', view_code_report_path(@report)
     %li
       = link_to 'Output', output_report_path(@report)

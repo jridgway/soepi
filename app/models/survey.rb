@@ -10,7 +10,6 @@ class Survey < ActiveRecord::Base
   belongs_to :forked_from, :class_name => 'Survey'
   has_many :notifications, :as => :notifiable
   has_many :downloads, :class_name => 'SurveyDownload'
-  has_many :r_scripts
   has_and_belongs_to_many :reports
 
   accepts_nested_attributes_for :target

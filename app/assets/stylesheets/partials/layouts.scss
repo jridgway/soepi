@@ -1,12 +1,9 @@
 @import "common";
 @import "blueprint/reset";
-@import "compass/layout/sticky-footer";
-
-@include sticky-footer($footer-height, "#root", "#root-footer", "footer");
 
 body.bp 
   {  
-  background: #2F2F2F;
+  background: #2F2F2F url(/assets/bg-dark-2.png);
   
   #root
     {
@@ -15,13 +12,24 @@ body.bp
     
   #container 
     {
-    width: 950px;
-    margin: 0 auto;
     @include pie-clearfix;
-    padding: 25px 30px 0 30px;
-    background: url(/assets/top-border.png) 0px -10px no-repeat;
-    overflow: visible;
+    width: 950px;
+    margin: 15px auto;
+    padding: 15px;
+    -moz-box-shadow: 0 0 15px #111;
+    -webkit-box-shadow: 0 0 15px #111;
+    -o-box-shadow: 0 0 15px #111;
+    box-shadow: 0px 0px 15px #111;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
     }
+  }
+  
+body.bp.blank #container
+  {
+  padding: 0;
+  background: none;
   }
 
 body.bp.two-column #container 

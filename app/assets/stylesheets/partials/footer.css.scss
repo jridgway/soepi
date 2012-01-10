@@ -2,11 +2,10 @@
 
 #footer
   {
-  padding-top: 15px;
-  height: $footer-height;
   @include container; 
   text-align: center;
   font-size: 0.9em;
+  margin-bottom: 15px;
   
   ul 
     {

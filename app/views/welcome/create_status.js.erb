@@ -1,0 +1,14 @@
+<% unless @status.new_record? %>
+  $('body').append('<div id="alert" title="Alert"><p>Your status was sent!</p></div>');
+  $('#alert').dialog({
+    modal:true, 
+    zIndex:9, 
+    minWidth:400, 
+    close:function() {
+      $(this).remove();
+    }
+  }).show('blind');
+  $('#member_status_body').css('height','20px').val('');
+  $('input.tags, textarea.tags').tagit('removeAll');
+  init_common_elements();
+<% end %>

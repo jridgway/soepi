@@ -1,6 +1,5 @@
 class Report < ActiveRecord::Base
   belongs_to :member
-  belongs_to :r_script
   has_many :plots, :class_name => 'ReportPlot'
   has_and_belongs_to_many :surveys
   
@@ -13,10 +12,15 @@ class Report < ActiveRecord::Base
   friendly_id :title, :use => :slugged
 
   validates :title, :presence => true, :uniqueness => true
-  validates :r_script_id, :member_id, :presence => true
+  
+  before_create :init_code
   
   default_scope order('created_at desc')
-  scope :drafting, where(:state => 'drafting')
+  scope :pending, where(:state => 'pending')
+  scope :preparing_to_run, where(:state => 'preparing_to_run')
+  scope :running, where(:state => 'running')
+  scope :passing, where(:state => 'passing')
+  scope :failing, where(:state => 'failing')
   scope :published, where(:state => 'published')
 
   def posted_by
@@ -39,24 +43,45 @@ class Report < ActiveRecord::Base
     text :plots do 
       plots.collect {|a| a.description}.join(', ') 
     end
+    boolean :published do 
+      true
+    end
     string :state
     integer :id
   end
   
   state_machine :state, :initial => :pending do
-    state :pending
-    state :drafting
-    state :published    
+    state :preparing_to_run
+    state :running
+    state :passing
+    state :failing
+    state :published 
+    
+    event :prepare_to_run do 
+      transition [:pending, :passing, :failing, :published] => :preparing_to_run
+    end
 
     event :run do
-      transition :pending => :drafting
+      transition :preparing_to_run => :running
+    end
+
+    event :passed do
+      transition :running => :passing
+    end
+
+    event :failed do
+      transition :running => :failing
     end
 
     event :publish do
-      transition :drafting => :published
+      transition :passing => :published
+    end
+    
+    after_transition any => :preparing_to_run do |report, transition|
+      report.update_attribute :output, nil
     end
 
-    after_transition any => :drafting do |report, transition|
+    after_transition any => :running do |report, transition|
       report.member.update_attribute :ec2_last_accessed_at, Time.now
       ec2_instance = report.member.get_ec2_instance
       local_script_name = Tempfile.new report.member.nickname + 'script'
@@ -66,35 +91,48 @@ class Report < ActiveRecord::Base
       local_script_name.delete
       output = ec2_instance.ssh("R < #{remote_script_name} --vanilla")[0].stdout.strip
       output = output.slice(output.index('>')..-1) if output.index('>').to_i > 0
-      report.update_attribute :output, output
-      if report.member_id == report.r_script.member_id
-        if output.include?('Execution halted')
-          report.r_script.failed! 
-        else
-          report.r_script.passed!
+      report.update_attribute :output, output      
+      if output.include?('Execution halted')
+        report.failed! 
+      else
+        report.passed!
+        ec2_instance.ssh("convert -density 300 -resize 1000x1000\> -quality 100 Rplots.pdf Rplots.png")
+        (0..1000).each do |i|
+          begin
+            remote_page_name = "Rplots-#{i}.png"
+            local_page_name = Tempfile.new report.member.nickname + remote_page_name
+            ec2_instance.scp_download remote_page_name, local_page_name.path
+            if plot=report.plots.find_by_position(i + 1)
+              plot.update_attributes :plot => local_page_name
+            else
+              report.plots.create :plot => local_page_name, :report_id => report.id, :position => (i + 1)
+            end
+            local_page_name.delete 
+            ec2_instance.ssh "rm #{remote_page_name}"
+          rescue Net::SCP::Error
+            report.plots.where('position >= ?', i + 1).destroy_all
+            break 
+          end
         end
+        ec2_instance.ssh "rm Rplots.pdf"
       end
-      ec2_instance.ssh("convert -density 300 -resize 1000x1000\> -quality 100 Rplots.pdf Rplots.png")
-      (0..1000).each do |i|
-        begin
-          remote_page_name = "Rplots-#{i}.png"
-          local_page_name = Tempfile.new report.member.nickname + remote_page_name
-          ec2_instance.scp_download remote_page_name, local_page_name.path
-          report.plots.create :plot => local_page_name, :report_id => report.id, :position => (i + 1)
-          local_page_name.delete 
-          ec2_instance.ssh "rm #{remote_page_name}"
-        rescue Net::SCP::Error
-          break 
-        end
-      end
-      ec2_instance.ssh "rm Rplots.pdf"
     end
   end
   
   def state_human
     case state
-      when 'drafting' then 'Drafting'
+      when 'pending' then 'Pending'
+      when 'preparing_to_run' then 'Preparing to run'
+      when 'running' then 'Running'
+      when 'passing' then 'Passing'
+      when 'failing' then 'Failing'
       when 'published' then 'Published'
     end
   end
+  
+  protected
+    
+    def init_code
+      self.code = "# Your code goes here\n\nhello_world <- function(arg1) {\n  print(arg1)\n}\n\nhello_world('hello world');"
+    end
 end

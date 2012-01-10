@@ -1,0 +1,22 @@
+$('#please-wait').remove();
+<% if current_member.booting_ec2_instance? %>
+  if($('#run-results').length == 0) {
+    $('body').append("<%= escape_javascript(render(:partial => 'results')) %>");
+    $('#run-results').dialog({width:670, height:200, modal:true, zIndex:9, resizable:false}).show('blind');
+  }
+  setTimeout("check_ec2()", 5000);
+<% else %>
+  $('#run-results').remove();
+  $('body').append("<%= escape_javascript(render(:partial => 'results')) %>");
+  <% if @report.passing? or @report.failing? %>
+    $('#run-results').dialog({width:900, height:600, modal:true, zIndex:9, resizable:false});
+    init_common_elements();
+  <% else %>
+    $('#run-results').dialog({width:625, height:200, modal:true, zIndex:9, resizable:false});
+    setTimeout("check_ec2(<%= @job_id %>)", 5000);
+  <% end %>
+<% end %>
+$('.report-state').html('<%= escape_javascript @report.state_human %>');
+<% if @report.passing? %>
+  $('#publish').show();
+<% end %>

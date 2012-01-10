@@ -1,0 +1,13 @@
+= render :partial => 'common'
+      
+- content_for :body_content do
+  - if @surveys.empty?
+    %p No surveys found.
+  - else
+    %ul#surveys.listing.reset
+      - @surveys.each do |survey|
+        %li
+          = render :partial => '/surveys/survey', :locals => {:survey => survey}
+    = paginate @surveys   
+  
+= render :partial => "/shared/content_page"

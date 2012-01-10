@@ -11,20 +11,33 @@
       }
     }
   
-  #members.listing li 
+  #members.listing 
     {
     float: left;
-    width: 225px;
-    height: 90px;
-    margin: 0 10px 5px 0;
-    white-space: nowrap;
-    overflow: hidden;
+    clear: both;
+    width: 100%;
     
-    h3
+    li 
       {
-      margin-top: 0;
-      padding-top: 0;
-      clear: none;
+      float: left;
+      width: 225px;
+      height: 90px;
+      margin: 0 10px 5px 0;
+      white-space: nowrap;
+      overflow: hidden;
+      
+      h3
+        {
+        margin-top: 0;
+        padding-top: 0;
+        clear: none;
+        }
+      
+      small 
+        {
+        font-size: 0.7em;
+        white-space: normal;
+        }
       }
     }
   }

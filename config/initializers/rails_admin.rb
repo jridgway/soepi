@@ -134,18 +134,6 @@ RailsAdmin.config do |config|
 
 #  ==> Your models configuration, to help you get started!
 
-  config.model Slide do 
-    edit do 
-      field :description
-      field :img do 
-        partial "dragonfly_file" 
-      end
-      field :position
-      field :publish_at
-      field :expires_at
-    end
-  end
-
 end
 
 # You made it this far? You're looking for something that doesn't exist! Add it to RailsAdmin and send us a Pull Request!

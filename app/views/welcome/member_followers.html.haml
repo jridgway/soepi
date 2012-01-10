@@ -1,0 +1,6 @@
+%ul.listing.reset
+  - @member_followers.each do |follower|
+    %li[follower]      
+      = render :partial => '/members/member', :locals => {:member => follower}
+= paginate @member_followers, :remote => true
+= javascript_tag 'init_common_elements();'

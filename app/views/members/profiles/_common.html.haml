@@ -13,9 +13,9 @@
 - content_for :body_content_details do
   %ul.menu
     %li
-      = link_to "Surveys (#{@member.surveys.live.count})", member_path(@member)
+      = link_to "Statuses (#{@member.statuses.count})", member_path(@member)
     %li
-      = link_to "R Scripts (#{@member.r_scripts.not_pending.count})", r_scripts_member_path(@member)
+      = link_to "Surveys (#{@member.surveys.live.count})", surveys_member_path(@member)
     %li
       = link_to "Reports (#{@member.reports.published.count})", reports_member_path(@member)
     %li

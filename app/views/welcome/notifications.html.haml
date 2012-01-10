@@ -1,0 +1,14 @@
+%ul.listing.reset
+  - @notifications.each do |notification|
+    %li[notification]
+      %h4= "#{notification.message}:"
+      - case notification.notifiable.class.to_s when 'Survey' then
+        = render :partial => '/surveys/survey', :locals => {:survey => notification.notifiable}
+      - when 'Report' then
+        = render :partial => '/reports/report', :locals => {:chart => notification.notifiable}      
+      - when 'Member' then
+        = render :partial => '/members/member', :locals => {:member => notification.notifiable}   
+      - when 'MemberStatus' then
+        = render :partial => '/members/statuses/status', :locals => {:status => notification.notifiable} 
+= paginate @notifications, :remote => true
+= javascript_tag 'init_common_elements();'

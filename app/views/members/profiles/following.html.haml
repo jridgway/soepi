@@ -6,17 +6,9 @@
     - @follows.each do |follow|
       %li
         - case follow.followable_type when 'Survey' then
-          = render :partial => '/surveys/survey', :locals => {:survey => follow.followable}
-        - when 'Chart' then
-          = render :partial => '/charts/chart', :locals => {:chart => follow.followable}
-        - when 'Petition' then
-          = render :partial => '/petitions/petition', :locals => {:petition => follow.followable}        
+          = render :partial => '/surveys/survey', :locals => {:survey => follow.followable}        
         - when 'Member' then
           = render :partial => '/members/member', :locals => {:member => follow.followable} 
-        - when 'Page' then 
-          = render :partial => '/pages/page', :locals => {:page => follow.followable} 
-        - when 'NewsItem' then
-          = render :partial => '/news_items/news_item', :locals => {:news_item => follow.followable} 
   = paginate @follows
   
 = render :partial => "/shared/content_page"

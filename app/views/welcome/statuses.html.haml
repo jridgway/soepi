@@ -1,0 +1,6 @@
+%ul.listing.reset
+  - @statuses.each do |status|
+    %li[status]
+      = render :partial => '/members/statuses/status', :locals => {:status => status}
+= paginate  @statuses, :remote => true
+= javascript_tag 'init_common_elements();'

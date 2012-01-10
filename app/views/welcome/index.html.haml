@@ -1,0 +1,38 @@
+- if member_signed_in?    
+  - content_for :body_content_left do  
+    = simple_form_for @status, :url => your_statuses_path, :html => {:novalidate => true, :class => 'status'}, :remote => true do |f|
+      = f.input :body, :placeholder => "What's new, #{current_member.nickname}?", :label => false
+      #status-extra{:style => 'display:none'}
+        = f.input :tag_list, :label => false, :input_html => {:class => 'tags', :"data-seperator" => ',', :placeholder => 'Tag it!'}, :hint => 'Categorize this status with any words you want. Hit Enter or type a comma to delimit each tag.'
+        %button.button{:icon => 'ui-icon-signal-diag'} Share
+    #your.tabs
+      %ul
+        %li.your Your:
+        %li
+          %a{:href => '#notifications'} Notifications
+        %li
+          %a{:href => '/your/statuses'} Statuses
+        %li
+          %a{:href => '/your/surveys'} Surveys
+        %li
+          %a{:href => '/your/reports'} Reports
+        %li
+          %a{:href => '/your/follows'} Following
+        %li
+          %a{:href => '/your/member_followers'} Followers
+      
+      #notifications
+        = render :template => 'welcome/notifications'
+      
+  - content_for :body_content_right do
+    - if Part.set?(:home_member_top_right)
+      .highlight
+        = Part.find_or_set(:home_member_top_right, ''.html_safe, 'ckeditor')
+    .block
+      = link_to 'Create a Survey', new_survey_path, :class => 'restrict-to-members button', :icon => 'ui-icon-document'        
+      = link_to 'Create a Report', new_report_path, :class => 'restrict-to-members button', :icon => 'ui-icon-document'     
+    
+  = render :partial => '/shared/content_page', :locals => {:with_inner_content_div => false}
+  
+- else
+  = render :partial => 'visitor'

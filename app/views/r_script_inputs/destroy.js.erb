@@ -1,9 +1,0 @@
-<% if @r_script.inputs.empty? %>
-  $('#none-defined').show();
-<% else %>
-  $('#none-defined').hide();
-<% end %>
-$('#r_script_input_<%= @r_script_input.id %>').hide('explode');
-$('#r_script_input_<%= @r_script_input.id %>').remove();
-editor2.setValue('<%= escape_javascript(@r_script.inputs_code).html_safe %>');
-editor.setOption('firstLineNumber', editor2.lineCount() + 1);

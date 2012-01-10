@@ -1,19 +1,19 @@
 class Member < ActiveRecord::Base
   has_many :tokens, :class_name => 'MemberToken', :dependent => :destroy
   has_many :surveys, :dependent => :destroy
-  has_many :r_scripts, :dependent => :destroy
   has_many :reports, :dependent => :destroy
   has_many :notifications, :dependent => :destroy
   has_many :messages, :dependent => :nullify
   has_many :message_members, :class_name => 'MessageMember', :dependent => :nullify
   has_many :messages_received, :through => :message_members, :source => :message
+  has_many :statuses, :class_name => 'MemberStatus'
+  has_and_belongs_to_many :status_references, :class_name => 'MemberStatus'
 
   scope :confirmed, where('confirmed_at is not null')
   scope :admins, where(:admin => true)
   scope :listable, where('privacy_dont_list_me = false or privacy_dont_list_me is null')
   scope :publishers, where(%{
       exists (select * from surveys where member_id = members.id and state != 'drafting') or
-      exists (select * from r_scripts where member_id = members.id and state != 'drafting') or
       exists (select * from reports where member_id = members.id and state != 'drafting')
     })
 
@@ -28,7 +28,6 @@ class Member < ActiveRecord::Base
 
   searchable do
     text :nickname
-    text :email
     boolean :published do 
       confirmed? and not privacy_dont_list_me?
     end
@@ -88,11 +87,11 @@ class Member < ActiveRecord::Base
     if following?(followable)
       stop_following(followable)
       following = false
-      member_followers.each {|m| m.notify!(followable, "#{member.nickname} stopped following #{followable.class.to_s.downcase}, #{followable.human}.")}
+      member_followers.each {|m| m.notify!(followable, "#{nickname} stopped following #{followable.class.to_s.downcase}, #{followable.human}")}
     else
       follow(followable)
       following = true
-      member_followers.each {|m| m.notify!(followable, "#{member.nickname} began following #{followable.class.to_s.downcase}, #{followable.human}.")}
+      member_followers.each {|m| m.notify!(followable, "#{nickname} began following #{followable.class.to_s.downcase}, #{followable.human}")}
     end
     following
   end
