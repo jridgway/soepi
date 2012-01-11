@@ -1,11 +1,19 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
   layout Proc.new { |controller| controller.request.xhr? ? 'ajax' : 'two_column' }
-  before_filter :set_member_return_to, :force_no_cache_control
+  before_filter :authenticate_admins, :set_member_return_to, :force_no_cache_control
   helper_method :cache_expirary, :cache_expirary_in_seconds, :current_participant, :current_member_pin, :member_return_to,
     :avatar_url, :member_contact_us_path,  :message_members_path
 
   protected
+  
+  def authenticate_admins
+    unless Rails.env.development?
+      authenticate_or_request_with_http_basic do |username, password|
+        username == "admin" && password == "results"
+      end
+    end
+  end
 
   def admin_only!
     if not member_signed_in? or not current_member.admin?
