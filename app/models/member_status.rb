@@ -22,7 +22,7 @@ class MemberStatus < ActiveRecord::Base
     end
   
     def notify!
-      member.member_followers.each {|m| m.notify!(self, "#{member.nickname}'s status was updated")}
-      member_references.each {|m| m.notify!(self, "#{member.nickname} wrote about you")}
+      member.member_followers.each {|m| m.delay.notify!(self, "#{member.nickname}'s status was updated")}
+      member_references.each {|m| m.delay.notify!(self, "#{member.nickname} wrote about you")}
     end
 end

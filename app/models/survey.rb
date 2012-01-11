@@ -120,12 +120,12 @@ class Survey < ActiveRecord::Base
     end
 
     after_transition any => :review_requested do |survey, transition|
-      Member.admins.each {|m| m.notify!(survey, "#{survey.member.nickname} submitted a survey for review")}
+      Member.admins.each {|m| m.delay.notify!(survey, "#{survey.member.nickname} submitted a survey for review")}
     end
 
     after_transition any => :rejected do |survey, transition|
-      survey.member.notify!(survey, 'Sorry, your survey was rejected.')
-      survey.member_followers.each {|m| m.notify!(self, "#{survey.member.nickname}'s survey was rejected")}
+      survey.member.delay.notify!(survey, 'Sorry, your survey was rejected.')
+      survey.member_followers.each {|m| m.delay.notify!(self, "#{survey.member.nickname}'s survey was rejected")}
     end
 
     after_transition any => :launched do |survey, transition|
@@ -134,16 +134,16 @@ class Survey < ActiveRecord::Base
     end
 
     after_transition any => :closed do |survey, transition|
-      Member.admins.each {|m| m.notify!(survey, "#{survey.member.nickname}'s survey was closed, results are coming soon")}
-      survey.member_followers.each {|m| m.notify!(survey, "#{survey.member.nickname}'s survey was closed, results are coming soon")}
+      Member.admins.each {|m| m.delay.notify!(survey, "#{survey.member.nickname}'s survey was closed, results are coming soon")}
+      survey.member_followers.each {|m| m.delay.notify!(survey, "#{survey.member.nickname}'s survey was closed, results are coming soon")}
       survey.delay.publish!
     end
 
     after_transition any => :published do |survey, transition|
       ParticipantSurvey.compute_weights_for_survey! survey
       SurveyDownload.generate_for_survey! survey
-      survey.member.notify!(survey, 'Yay, your survey results have been published')
-      survey.member_followers.each {|m| m.notify!(self, "#{survey.member.nickname}'s survey results have been published")}
+      survey.member.delay.notify!(survey, 'Yay, your survey results have been published')
+      survey.member_followers.each {|m| m.delay.notify!(survey, "#{survey.member.nickname}'s survey results have been published")}
     end
   end
 

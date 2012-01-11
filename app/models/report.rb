@@ -104,7 +104,16 @@ class Report < ActiveRecord::Base
           begin
             remote_page_name = "Rplots-#{i}.png"
             local_page_name = Tempfile.new report.member.nickname + remote_page_name
-            ec2_instance.scp_download remote_page_name, local_page_name.path
+            if i == 0
+              begin
+                ec2_instance.scp_download remote_page_name, local_page_name.path
+              rescue Net::SCP::Error
+                remote_page_name = "Rplots.png"
+                ec2_instance.scp_download remote_page_name, local_page_name.path
+              end
+            else
+              ec2_instance.scp_download remote_page_name, local_page_name.path
+            end
             if plot=report.plots.find_by_position(i + 1)
               plot.update_attributes :plot => local_page_name
             else
@@ -119,6 +128,11 @@ class Report < ActiveRecord::Base
         end
         ec2_instance.ssh "rm Rplots.pdf"
       end
+    end
+    
+    after_transition any => :published do |report, transition|
+      report.member.member_followers.each {|m| m.delay.notify!(report, "#{report.member.nickname}'s published a report")}
+      report.member.delay.notify!(report, "Your report was published")
     end
   end
   
