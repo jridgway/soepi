@@ -153,7 +153,7 @@ class Report < ActiveRecord::Base
     end
   
     def set_survey_references
-      code.scan(/#{ENV['domain']}\/surveys\/([[a-z][A-Z][0-9]\-]+)/) do |slug|
+      code.to_s.scan(/#{ENV['domain']}\/surveys\/([[a-z][A-Z][0-9]\-]+)/) do |slug|
         if (survey_referenced = Survey.find_by_slug(slug))
           surveys << survey_referenced
         end
