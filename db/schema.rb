@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120106210742) do
+ActiveRecord::Schema.define(:version => 20120111184748) do
 
   create_table "age_groups", :force => true do |t|
     t.string   "label"
@@ -437,6 +437,11 @@ ActiveRecord::Schema.define(:version => 20120106210742) do
     t.datetime "updated_at"
   end
 
+  create_table "member_statuses_members", :id => false, :force => true do |t|
+    t.integer "member_id"
+    t.integer "member_status_id"
+  end
+
   create_table "member_surveys", :force => true do |t|
     t.integer "member_id"
     t.integer "survey_id"
@@ -507,11 +512,6 @@ ActiveRecord::Schema.define(:version => 20120106210742) do
   add_index "members", ["reset_password_token"], :name => "index_members_on_reset_password_token", :unique => true
   add_index "members", ["slug"], :name => "index_members_on_slug"
   add_index "members", ["unlock_token"], :name => "index_members_on_unlock_token", :unique => true
-
-  create_table "members_member_statuses", :id => false, :force => true do |t|
-    t.integer "member_id"
-    t.integer "member_status_id"
-  end
 
   create_table "members_races", :id => false, :force => true do |t|
     t.integer "member_id"
@@ -726,16 +726,17 @@ ActiveRecord::Schema.define(:version => 20120106210742) do
   end
 
   create_table "reports", :force => true do |t|
-    t.integer  "member_id",                           :null => false
-    t.string   "title",                               :null => false
+    t.integer  "member_id",                             :null => false
+    t.string   "title",                                 :null => false
     t.text     "introduction"
-    t.string   "state",        :default => "pending"
+    t.string   "state",          :default => "pending"
     t.string   "slug"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "code"
     t.text     "output"
     t.text     "conclusion"
+    t.integer  "forked_from_id"
   end
 
   add_index "reports", ["slug"], :name => "index_reports_on_slug", :unique => true
@@ -754,20 +755,6 @@ ActiveRecord::Schema.define(:version => 20120106210742) do
   end
 
   add_index "settings", ["name"], :name => "index_settings_on_name", :unique => true
-
-  create_table "slugs", :force => true do |t|
-    t.string   "name"
-    t.integer  "sluggable_id"
-    t.integer  "sequence",                     :default => 1, :null => false
-    t.string   "sluggable_type", :limit => 40
-    t.string   "scope",          :limit => 40
-    t.datetime "created_at"
-    t.string   "locale"
-  end
-
-  add_index "slugs", ["locale"], :name => "index_slugs_on_locale"
-  add_index "slugs", ["name", "sluggable_type", "scope", "sequence"], :name => "index_slugs_on_n_s_s_and_s", :unique => true
-  add_index "slugs", ["sluggable_id"], :name => "index_slugs_on_sluggable_id"
 
   create_table "survey_downloads", :force => true do |t|
     t.integer  "survey_id",       :null => false

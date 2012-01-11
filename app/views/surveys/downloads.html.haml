@@ -11,7 +11,7 @@
         %p No downloads have been generated yet. Please come back after the survey has been closed and the results published.
     - else
       %ul.listing.downloads
-        - @survey.downloads.each do |download|
+        - @downloads.each do |download|
           %li
             = link_to download.title, download.asset.url, :class => 'button', :icon => 'ui-icon-circle-arrow-s'
             %ul.attributes
@@ -25,5 +25,6 @@
               %li
                 %label Size:
                 = number_to_human_size download.asset_size
+      = paginate @downloads
     
 = render :partial => "/shared/content_page"

@@ -43,7 +43,13 @@
     <% else %>
       $('.admins-only').hide();
       $('.not-admin').show();
-    <% end %>
+    <% end %>    
+    $('.state-not-pending[data-state="pending"]').hide();
+    $('.state-not-drafting[data-state="drafting"]').hide();
+    $('.state-not-review-requested[data-state="review_requested"]').hide();
+    $('.state-not-launched[data-state="launched"]').hide();
+    $('.state-not-closed[data-state="closed"]').hide();
+    $('.state-not-published[data-state="published"]').hide();
     init_sign_in_links();
     select_details_menu_item();
     $('.current-member-name').html(current_member['name']);

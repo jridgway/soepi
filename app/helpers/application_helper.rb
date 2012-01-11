@@ -111,7 +111,6 @@ module ApplicationHelper
   
   def page_entries_info(collection, options = {})
     collection_name = options[:collection_name] || (collection.empty?? 'entry' : collection.first.class.name.underscore.sub('_', ' '))
-
     if collection.num_pages < 2
       case collection.size
       when 0; info = "No #{collection_name.pluralize} found"
@@ -137,5 +136,15 @@ module ApplicationHelper
     else
       s
     end
+  end
+  
+  def format_and_link_member_references(body)
+    body_2 = auto_link(simple_format(strip_tags(body)))
+    body.scan(/@\w+/) do |nickname|
+      if member_referenced = Member.find_by_nickname(nickname[1..-1])
+        body_2.gsub!(/#{nickname}\b/, link_to("@#{member_referenced.nickname}", member_path(member_referenced)))
+      end
+    end
+    body_2.html_safe
   end
 end

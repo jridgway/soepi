@@ -119,4 +119,12 @@ class ApplicationController < ActionController::Base
     nicknames = members.collect(&:nickname).join('-')
     new_message_path(:members => nicknames)
   end
+  
+  def redirect_to_back_or(other)
+    if !request.env["HTTP_REFERER"].blank? and request.env["HTTP_REFERER"] != request.env["REQUEST_URI"]
+      redirect_to :back
+    else
+      redirect_to other
+    end
+  end
 end

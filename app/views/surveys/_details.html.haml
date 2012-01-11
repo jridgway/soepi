@@ -6,10 +6,12 @@
       = link_to 'Settings', edit_survey_path(@survey)
     %li.owner-only-until-published{:'data-member-id' => @survey.member_id, :'data-state' => @survey.state}
       = link_to "Questions (<span class='questions-count'>#{@survey.questions.count}</span>)".html_safe, survey_questions_path(:survey_id => @survey)
-    %li.owner-only-until-published{:'data-member-id' => @survey.member_id, :'data-state' => @survey.state}
-      = link_to "Demographics".html_safe, demographics_survey_path(@survey)
-    %li.owner-only-until-published{:'data-member-id' => @survey.member_id, :'data-state' => @survey.state}
+    %li.owner-only-until-published.state-not-drafting.state-not-review-requested{:'data-member-id' => @survey.member_id, :'data-state' => @survey.state}
+      = link_to "Demographics (#{number_with_delimiter @survey.participants.completes.count})".html_safe, demographics_survey_path(@survey)
+    %li.owner-only-until-published.state-not-drafting.state-not-review-requested{:'data-member-id' => @survey.member_id, :'data-state' => @survey.state}
       = link_to "Downloads (<span>#{@survey.downloads.count}</span>)".html_safe, downloads_survey_path(@survey)
+    %li.owner-only-until-published.state-not-drafting.state-not-review-requested{:'data-member-id' => @survey.member_id, :'data-state' => @survey.state}
+      = link_to "Reports (<span>#{@survey.reports.count}</span>)".html_safe, reports_survey_path(@survey)
     %li
       = link_to "Forks (#{@survey.forks.live_or_drafting.count})", forks_survey_path(@survey)
     %li

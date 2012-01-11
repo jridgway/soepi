@@ -1,6 +1,8 @@
 class Report < ActiveRecord::Base
   belongs_to :member
   has_many :plots, :class_name => 'ReportPlot'
+  belongs_to :forked_from, :class_name => 'Report'
+  has_many :forks, :class_name => 'Report', :foreign_key => :forked_from_id
   has_and_belongs_to_many :surveys
   
   accepts_nested_attributes_for :plots
@@ -11,9 +13,10 @@ class Report < ActiveRecord::Base
   extend FriendlyId
   friendly_id :title, :use => :slugged
 
-  validates :title, :presence => true, :uniqueness => true
+  validates :title, :presence => true
   
   before_create :init_code
+  before_save :set_survey_references
   
   default_scope order('created_at desc')
   scope :pending, where(:state => 'pending')
@@ -129,10 +132,31 @@ class Report < ActiveRecord::Base
       when 'published' then 'Published'
     end
   end
+
+  def forkit!(member_id)
+    Report.transaction do 
+      new_report = self.dup
+      new_report.forked_from = self
+      new_report.member_id = member_id 
+      new_report.state = 'pending'
+      new_report.output = nil
+      new_report.tag_list = tag_list
+      new_report.save!
+      return new_report
+    end
+  end
   
   protected
     
     def init_code
       self.code = "# Your code goes here\n\nhello_world <- function(arg1) {\n  print(arg1)\n}\n\nhello_world('hello world');"
+    end
+  
+    def set_survey_references
+      code.scan(/#{ENV['domain']}\/surveys\/([[a-z][A-Z][0-9]\-]+)/) do |slug|
+        if (survey_referenced = Survey.find_by_slug(slug))
+          surveys << survey_referenced
+        end
+      end
     end
 end

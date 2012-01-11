@@ -78,7 +78,9 @@ Soepi::Application.routes.draw do
       put 'save_and_continue'
       put 'save_and_exit'
       put 'publish' 
+      put 'forkit' 
       get 'output'
+      get 'surveys(/page/:page)', :action => 'surveys', :as => :surveys
       get 'code'
       get 'view_code'
     end
@@ -114,7 +116,8 @@ Soepi::Application.routes.draw do
       post 'create_participant'
       post 'create_response'
       get 'demographics'
-      get 'downloads'
+      get 'downloads(/page/:page)', :action => 'downloads', :as => 'downloads'
+      get 'reports(/page/:page)', :action => 'reports', :as => 'reports'
       put 'forkit'
       get 'forks(/page/:page)', :action => 'forks', :as => :forks
       get 'followed-by(/page/:page)', :action => 'followed_by', :as => :followed_by

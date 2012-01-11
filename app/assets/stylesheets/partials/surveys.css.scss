@@ -158,6 +158,19 @@
     clear: both;
     }
   }
+  
+.editable #root-questions li.survey_question .handle:hover 
+  {
+  strong
+    {
+    text-decoration: underline;
+    }
+  
+  .top-actions
+    {
+    display: block;
+    }
+        }
     
 #root-questions
   {    
@@ -189,19 +202,6 @@
           box-shadow: 3px 3px 5px #000; 
           }
         } 
-        
-      &:hover 
-        {
-        strong
-          {
-          text-decoration: underline;
-          }
-        
-        .top-actions
-          {
-          display: block;
-          }
-        }
       }
     }
   

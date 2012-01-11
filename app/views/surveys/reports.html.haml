@@ -1,0 +1,11 @@
+= render :partial => '/surveys/title'
+= render :partial => '/surveys/toolbar'
+= render :partial => '/surveys/details'
+  
+- content_for :body_content do  
+  %ul#reports.listing.reset
+    - @reports.each do |report|
+      %li= render :partial => '/reports/report', :locals => {:report => report}
+  = paginate @reports
+    
+= render :partial => "/shared/content_page"

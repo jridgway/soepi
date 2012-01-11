@@ -1,16 +1,16 @@
 require 'csv'
 
 class SurveysController < ApplicationController
-  before_filter :load_survey, :only => [:show, :forks, :demographics, :downloads, :forkit, :launch, 
+  before_filter :load_survey, :only => [:show, :forks, :demographics, :downloads, :reports, :forkit, :launch, 
     :reject, :request_changes, :participate, :create_response, :store_pin, :new_participant, :create_participant, 
     :followed_by, :close]
   before_filter :load_facebook_meta, :only => [:show, :forks, :forkit, :launch, :reject, :participate,
     :create_response, :update_pin, :generate_and_send_new_pin, :followed_by]
   before_filter :authenticate_member!, :except => [:index, :launched, :published, :show, :forks, :sharing, 
-    :by_tag, :followed_by, :edit, :questions, :demographics, :downloads]
+    :by_tag, :followed_by, :edit, :questions, :demographics, :downloads, :reports]
   before_filter :admin_only!, :only => [:drafting, :review_requested, :rejected, :launch, :reject, :request_changes]
   before_filter :owner_only!, :only => [:update, :destroy, :close, :submit_for_review]
-  before_filter :owner_only_until_published!, :only => [:edit, :demographics, :downloads]
+  before_filter :owner_or_admins_only_until_published!, :only => [:edit, :demographics, :downloads, :reports]
   before_filter :load_tags, :only => [:index, :recent, :you_created, :by_tag]
   
   enable_esi
@@ -65,10 +65,14 @@ class SurveysController < ApplicationController
     render :layout => 'one_column'
   end
   
-  def demographics
-  end
-  
   def downloads
+    @downloads = @survey.downloads.page(params[:page]).per(10)
+    render :layout => 'one_column'
+  end
+
+  def reports
+    @reports = @survey.reports.page(params[:page]).per(10)
+    render :layout => 'one_column'
   end
 
   def followed_by
@@ -119,7 +123,7 @@ class SurveysController < ApplicationController
       redirect_to root_path
     else
       flash[:alert] = 'You cannot delete this survey.'
-      redirect_to survey_path(@survey)
+      redirect_to_back_or(survey_path(@survey))
     end
   end
 
@@ -132,11 +136,11 @@ class SurveysController < ApplicationController
     elsif @survey.request_review!
       flash[:alert] = 'Your survey has been submitted for review. We will get back to you shortly. ' +
         'Please contact us if you have questions or concerns.'
-      redirect_to survey_path(@survey)
+      redirect_to_back_or(survey_path(@survey))
     else
       flash[:alert] = 'Your survey has not been submitted for review. ' +
         'Please contact us if you have questions or concerns.'
-      redirect_to survey_path(@survey)
+      redirect_to_back_or(survey_path(@survey))
     end
   end
 
@@ -146,7 +150,7 @@ class SurveysController < ApplicationController
       redirect_to new_message_path(:members => @survey.member.nickname)
     else
       flash[:alert] = 'Changes to the survey have NOT been requested.'
-      redirect_to survey_path(@survey)
+      redirect_to_back_or(survey_path(@survey))
     end
   end
 
@@ -156,7 +160,7 @@ class SurveysController < ApplicationController
     else
       flash[:alert] = 'The survey was NOT rejected.'
     end
-    redirect_to survey_path(@survey)
+    redirect_to_back_or(survey_path(@survey))
   end
 
   def launch
@@ -167,16 +171,16 @@ class SurveysController < ApplicationController
     else
       flash[:alert] = 'The survey has NOT launched.'
     end
-    redirect_to survey_path(@survey)
+    redirect_to_back_or(survey_path(@survey))
   end
 
   def close
     if @survey.close! 
-      flash[:alert] = "Your survey was closed. Please see the Analysis and Downloads tabs for the results."
+      flash[:alert] = "Your survey was closed. Please see the Questions, Demographics and Downloads pages for the results."
     else
       flash[:alert] = 'The survey was NOT closed.'
     end
-    redirect_to results_survey_path(@survey)
+    redirect_to_back_or(survey_path(@survey))
   end
 
   def forkit
@@ -206,7 +210,7 @@ class SurveysController < ApplicationController
         end
       end
     else
-      redirect_to survey_path(@survey)
+      redirect_to_back_or(survey_path(@survey))
     end
   end
 
@@ -312,31 +316,22 @@ class SurveysController < ApplicationController
     def cache_expirary_key(params)
       params.merge :cache_expirary_key => Rails.cache.read(:surveys_cache_expirary_key)
     end
-    
-    def owner_or_admins_only!
-      load_survey unless @survey
-      unless member_signed_in? and (current_member.admin? or current_member.id == @survey.member_id)
-        flash[:alert] = 'Insufficient privileges.'
-        redirect_to survey_path(@survey)
-        false
-      end
-    end
   
     def owner_only!
       load_survey unless @survey
       unless member_signed_in? and current_member.id == @survey.member_id
         flash[:alert] = 'Insufficient privileges.'
-        redirect_to survey_path(@survey)
+        redirect_to_back_or(survey_path(@survey))
         false
       end
     end
     
-    def owner_only_until_published!
+    def owner_or_admins_only_until_published!
       load_survey unless @survey
       unless @survey.published? or @survey.closed? or 
-      (@survey.launched? and (member_signed_in? and (current_member.id == @survey.member_id or current_member.admin?)))
+      (member_signed_in? and (current_member.id == @survey.member_id or current_member.admin?))
         flash[:alert] = 'Insufficient privileges. You must wait until this survey has been closed.'
-        redirect_to survey_path(@survey)
+        redirect_to_back_or(survey_path(@survey))
       end
     end
 end

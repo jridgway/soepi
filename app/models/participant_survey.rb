@@ -14,7 +14,6 @@ class ParticipantSurvey < ActiveRecord::Base
     :age_group_id, :gender_id, :ethnicity_ids, :race_ids, :education_id, :next_question_id
 
   before_create :apply_participant, :set_next_question
-  after_destroy :clear_statistics
   
   scope :for_survey, lambda {|survey_id| where(:survey_id => survey_id, :complete => true)}
   scope :completes, where(:complete => true)
@@ -51,10 +50,4 @@ class ParticipantSurvey < ActiveRecord::Base
   def self.compute_weights_for_survey!(survey)
     ParticipantSurvey.for_survey(survey.id).update_all 'weight = 1.0'
   end
-    
-  protected
-    
-    def clear_statistics
-      Statistic.delete_all
-    end
 end

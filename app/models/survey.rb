@@ -135,7 +135,7 @@ class Survey < ActiveRecord::Base
 
     after_transition any => :closed do |survey, transition|
       Member.admins.each {|m| m.notify!(survey, "#{survey.member.nickname}'s survey was closed, results are coming soon")}
-      survey.member_followers.each {|m| m.notify!(self, "#{survey.member.nickname}'s survey was closed, results are coming soon")}
+      survey.member_followers.each {|m| m.notify!(survey, "#{survey.member.nickname}'s survey was closed, results are coming soon")}
       survey.delay.publish!
     end
 

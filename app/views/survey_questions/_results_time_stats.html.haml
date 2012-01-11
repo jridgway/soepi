@@ -5,25 +5,26 @@
   %tr
     %td Responses
     %td.numeric= number_with_delimiter totals[:count]
-  %tr
-    %td Minimum
-    %td.numeric= totals[:min].strftime('%I:%M %p')
-  %tr
-    %td 1st Quartile
-    %td.numeric= totals[:low].strftime('%I:%M %p')
-  %tr
-    %td Median
-    %td.numeric= totals[:median].strftime('%I:%M %p')
-  %tr
-    %td 3rd Quartile
-    %td.numeric= totals[:high].strftime('%I:%M %p')
-  %tr
-    %td Maximum
-    %td.numeric= totals[:max].strftime('%I:%M %p')
-  %tr
-    %td Mode
-    %td.numeric= totals[:mode].strftime('%I:%M %p')
-  %tr
-    %td Average
-    %td.numeric= totals[:avg].strftime('%I:%M %p')
-
+  - if totals[:count] > 0
+    %tr
+      %td Minimum
+      %td.numeric= totals[:min].strftime('%I:%M %p')
+    %tr
+      %td 1st Quartile
+      %td.numeric= totals[:low].strftime('%I:%M %p')
+    %tr
+      %td Median
+      %td.numeric= totals[:median].strftime('%I:%M %p')
+    %tr
+      %td 3rd Quartile
+      %td.numeric= totals[:high].strftime('%I:%M %p')
+    %tr
+      %td Maximum
+      %td.numeric= totals[:max].strftime('%I:%M %p')
+    %tr
+      %td Mode
+      %td.numeric= totals[:mode].strftime('%I:%M %p')
+    %tr
+      %td Average
+      %td.numeric= totals[:avg].strftime('%I:%M %p')
+  

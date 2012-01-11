@@ -10,6 +10,9 @@ class Participant < ActiveRecord::Base
   has_and_belongs_to_many :races
   belongs_to :education
   
+  scope :completes, where('complete = true')
+  scope :incompletes, where('complete = false or comeplete is null')
+  
   validates_presence_of :city, :state, :postal_code, :country, 
     :birthmonth, :gender_id, :ethnicity_ids, :race_ids, :education_id
   validates_presence_of :pin, :on => :create
@@ -24,7 +27,6 @@ class Participant < ActiveRecord::Base
 
   before_create :set_anonymous_key
   after_validation :geocode
-  after_destroy :clear_statistics
   
   searchable do
     string :anonymous_key
@@ -154,9 +156,5 @@ class Participant < ActiveRecord::Base
   
     def self.generate_anonymous_key(member)
       Digest::SHA1.hexdigest "#{member.id}-#{member.year_registered}-#{member.pin}-#{ENV['SoEpi_PIN_EXTRA']}"
-    end
-    
-    def clear_statistics
-      Statistic.delete_all
     end
 end

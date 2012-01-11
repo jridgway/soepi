@@ -12,6 +12,12 @@ $(document).ready(function() {
     $('#cancel-publish').click(function() {
       $('#publish-message').dialog('destroy');
     });
+    $('#forkit').click(function() {
+      $('#forkit-message').dialog({width:520, height:200, modal:true, zIndex:9, resizable:false}).show('blind');
+    });
+    $('#cancel-forkit').click(function() {
+      $('#forkit-message').dialog('destroy');
+    }); 
   }
   if(controller_name == 'reports' && action_name == 'code' ) {
     init_code_editor(false);

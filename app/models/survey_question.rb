@@ -100,18 +100,21 @@ class SurveyQuestion < ActiveRecord::Base
         if totals[:count] > 0
           totals[:min] = connection.exec_query(%{select min(numeric_response) as numeric_response
             from participant_responses where question_id = #{id}}).first['numeric_response'].to_f.round(2) 
-          totals[:low] = SurveyQuestion.connection.exec_query(%{select numeric_response
-            from (select numeric_response, row_number() over (order by numeric_response), 
-              count(*) over () from participant_responses where question_id = 314) der
-            where row_number = floor(der.count-((der.count/4)*3)-1)}).first['numeric_response'].to_f.round(2)
-          totals[:median] = connection.exec_query(%{select numeric_response
+          low_results = connection.exec_query(%{select numeric_response
             from (select numeric_response, row_number() over (order by numeric_response), 
               count(*) over () from participant_responses where question_id = #{id}) der
-            where row_number = floor(der.count-((der.count/4)*2)-1)}).first['numeric_response'].to_f.round(2)
-          totals[:high] = connection.exec_query(%{select numeric_response
+            where row_number = floor(der.count-((der.count/4)*3)-1)})
+          totals[:low] = low_results.first['numeric_response'].to_f.round(2) if low_results.count > 0
+          median_results = connection.exec_query(%{select numeric_response
             from (select numeric_response, row_number() over (order by numeric_response), 
               count(*) over () from participant_responses where question_id = #{id}) der
-            where row_number = floor(der.count-((der.count/4)*1)-1)}).first['numeric_response'].to_f.round(2) 
+            where row_number = floor(der.count-((der.count/4)*2)-1)})
+          totals[:median] = median_results.first['numeric_response'].to_f.round(2) if median_results.count > 0
+          high_results = connection.exec_query(%{select numeric_response
+            from (select numeric_response, row_number() over (order by numeric_response), 
+              count(*) over () from participant_responses where question_id = #{id}) der
+            where row_number = floor(der.count-((der.count/4)*1)-1)})
+          totals[:high] = high_results.first['numeric_response'].to_f.round(2) if high_results.count > 0
           totals[:max] = connection.exec_query(%{select max(numeric_response) as numeric_response
             from participant_responses where question_id = #{id}}).first['numeric_response'].to_f.round(2)
           totals[:avg] = connection.exec_query(%{select avg(numeric_response) as numeric_response
@@ -132,18 +135,21 @@ class SurveyQuestion < ActiveRecord::Base
         if totals[:count] > 0
           totals[:min] = connection.exec_query(%{select min(datetime_response) as datetime_response
             from participant_responses where question_id = #{id}}).first['datetime_response'].to_datetime
-          totals[:low] = connection.exec_query(%{select datetime_response
+          low_results = connection.exec_query(%{select datetime_response
             from (select datetime_response, row_number() over (order by datetime_response), 
               count(*) over () from participant_responses where question_id = #{id}) der
-            where row_number = floor(der.count-((der.count/4)*3)-1)}).first['datetime_response'].to_datetime
-          totals[:median] = connection.exec_query(%{select datetime_response
+            where row_number = floor(der.count-((der.count/4)*3)-1)})
+          totals[:low] = low_results.first['datetime_response'].to_datetime if low_results.count > 0
+          median_results = connection.exec_query(%{select datetime_response
             from (select datetime_response, row_number() over (order by datetime_response), 
               count(*) over () from participant_responses where question_id = #{id}) der
-            where row_number = floor(der.count-((der.count/4)*2)-1)}).first['datetime_response'].to_datetime
-          totals[:high] = connection.exec_query(%{select datetime_response
+            where row_number = floor(der.count-((der.count/4)*2)-1)})
+          totals[:median] = median_results.first['datetime_response'].to_datetime if median_results.count > 0
+          high_results = connection.exec_query(%{select datetime_response
             from (select datetime_response, row_number() over (order by datetime_response), 
               count(*) over () from participant_responses where question_id = #{id}) der
-            where row_number = floor(der.count-((der.count/4)*1)-1)}).first['datetime_response'].to_datetime
+            where row_number = floor(der.count-((der.count/4)*1)-1)})
+          totals[:high] = high_results.first['datetime_response'].to_datetime if high_results.count > 0
           totals[:max] = connection.exec_query(%{select max(datetime_response) as datetime_response
             from participant_responses where question_id = #{id}}).first['datetime_response'].to_datetime
           totals[:avg] = connection.exec_query(%{select TIMESTAMP with time zone 'epoch' + avg(extract(epoch from datetime_response)) * interval '1 second' as datetime_response

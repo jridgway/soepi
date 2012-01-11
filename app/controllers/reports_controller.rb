@@ -1,9 +1,11 @@
 class ReportsController < ApplicationController
   before_filter :load_report, :except => [:new, :create, :index, :pending, :published, :passing, :failing, :by_tag]
-  before_filter :authenticate_member!, :except => [:index, :pending, :published, :passing, :failing, :by_tag, :show, :view_code, :output]
-  before_filter :owner_only, :only => [:edit, :update, :destroy, :publish, :code, :save_and_run, :save_and_continue, :save_and_exit]
+  before_filter :authenticate_member!, :except => [:index, :pending, :published, :passing, :failing, 
+    :by_tag, :show, :view_code, :output, :surveys]
+  before_filter :owner_only, :only => [:edit, :update, :destroy, :publish, :code, 
+    :save_and_run, :save_and_continue, :save_and_exit]
   before_filter :load_tags, :only => [:index, :by_tag]
-  before_filter :load_facebook_meta, :only => [:show, :code, :output, :edit, :update]
+  before_filter :load_facebook_meta, :except => [:new, :create, :index, :pending, :published, :passing, :failing, :by_tag]
   layout Proc.new { |controller| controller.request.xhr? ? 'ajax' : 'one_column' }
   
   def index 
@@ -64,6 +66,10 @@ class ReportsController < ApplicationController
   def output
   end
   
+  def surveys
+    @surveys = @report.surveys.page(params[:page]).per(10)
+  end
+  
   def edit
   end 
   
@@ -117,8 +123,14 @@ class ReportsController < ApplicationController
   def publish 
     @report.publish!
     flash[:notice] = 'Your report was published.'
-    redirect_to report_path(@report)
+    redirect_to_back_or(report_path(@report))
   end  
+
+  def forkit
+    new_report = @report.forkit!(current_member.id)
+    flash[:alert] = %{You forked report, #{@report.title}. You now have your own copy of the report.}
+    redirect_to code_report_path(new_report)
+  end 
   
   protected 
   

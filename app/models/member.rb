@@ -51,7 +51,7 @@ class Member < ActiveRecord::Base
   validates_uniqueness_of :nickname
   validate :unallowed_nicknames
   validates_length_of :nickname, :minimum => 3, :maximum => 15, :allow_blank => true
-  validates_format_of :nickname, :with => /^[a-z]+[a-z0-9\.]*$/i, :allow_blank => true,
+  validates_format_of :nickname, :with => /^[a-z]+[a-z0-9]*$/i, :allow_blank => true,
     :message => 'must begin with a letter and may not contain spaces or punctuation marks'
   validates_acceptance_of :informed_consent, :terms_of_use, :accept => true
 

@@ -15,5 +15,15 @@
         .bottom-actions
           = link_to 'Publish', publish_report_path(@report), :method => 'put', :class => 'button'
           %button{:id => 'cancel-publish', :class => 'button'} Cancel
+  - unless @report.new_record?
+    %button{:id => 'forkit', :icon => 'ui-icon-shuffle', :class => 'button restrict-to-members'} Fork
+    #forkit-message{:style => 'display:none', :title => 'Fork this Report'}
+      %p
+        By forking this report, you will create a new report with the same code as this report.
+      %p 
+        Are you sure you want to <strong>fork</strong> this report? 
+      .bottom-actions
+        = link_to 'Fork', forkit_report_path(@report), :method => 'put', :class => 'button'
+        %button{:id => 'cancel-forkit', :class => 'button'} Cancel
   - if @report.published?
     = render :partial => '/shared/sharing'
