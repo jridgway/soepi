@@ -1,4 +1,7 @@
+var previousDocTop;
+
 $(document).ready(function () {
+  previousDocTop = $(window).scrollTop();
   $('.ui-widget-overlay').live('click', function () {
     $('.ui-dialog-content').dialog('close');
   });
@@ -124,8 +127,6 @@ function enable_button(button) {
   $(button).button('enable');
   $('#please-wait').remove();
 }
-
-var previousDocTop = $(window).scrollTop();
 
 function init_sidebar() {
   var initial_sidebar_width = $('#sidebar').width() + 'px';

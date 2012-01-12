@@ -52,6 +52,8 @@ gem 'codemirror-rails'
 gem 'delayed_job'
 gem 'easy_esi'
 gem 'rubyzip'
+gem 'rack-canonical-host'
+gem 'rack-ssl', :require => 'rack/ssl'
 
 group :development do
   gem 'rails-dev-tweaks', '~> 0.5.0'

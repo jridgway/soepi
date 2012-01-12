@@ -17,6 +17,8 @@ Soepi::Application.configure do
   config.action_mailer.raise_delivery_errors = false
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
 
+  config.force_ssl = true
+  
   # Print deprecation notices to the Rails logger
   config.active_support.deprecation = :log
 
@@ -27,7 +29,7 @@ Soepi::Application.configure do
   config.assets.compress = false
 
   # Expands the lines which load the assets
-  config.assets.debug = false
+  config.assets.debug = true
   
   ENV["REDISTOGO_URL"] = 'redis://localhost:6379' 
 end
