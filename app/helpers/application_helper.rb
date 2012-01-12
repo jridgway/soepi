@@ -5,11 +5,11 @@ module ApplicationHelper
   
   def controller_for_tag(tag)
     case tag.taggings.first.taggable_type 
-      when 'Survey' then 'surveys'
-      when 'Report' then 'reports'
-      when 'Member' then 'members/profiles'
-      when 'MemberStatus' then 'members/statuses'
-      when 'Page' then 'pages'
+      when 'Survey' then '/surveys'
+      when 'Report' then '/reports'
+      when 'Member' then '/members/profiles'
+      when 'MemberStatus' then '/members/statuses'
+      when 'Page' then '/pages'
     end
   end
   
@@ -70,7 +70,9 @@ module ApplicationHelper
     case record.class.to_s
       when 'Member' then controller = '/members/profiles'
       when 'MemberStatus' then controller = '/members/statuses'
-      when 'RScript' then controller = '/r_scripts'
+      when 'Survey' then controller = '/surveys'
+      when 'Report' then controller = '/reports'
+      when 'Page' then controller = '/pages'
       else controller = '/' + record.class.to_s.downcase.pluralize
     end
     unless record.tags.empty?

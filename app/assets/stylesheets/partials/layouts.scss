@@ -3,11 +3,10 @@
 
 body.bp 
   {  
-  background: #2F2F2F url(/assets/bg-dark-2.png);
+  background: #2F2F2F url(/assets/bg-dark.png);
   
   #root
     {
-    overflow: hidden;
     }
     
   #container 
@@ -23,9 +22,10 @@ body.bp
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
     border-radius: 4px;
+    background: #2F2F2F url(/assets/bg-dark.png);
     }
-  }
-  
+  }  
+
 body.bp.blank #container
   {
   padding: 0;

@@ -1,4 +1,5 @@
 - cache('home', :expires_in => cache_expirary) do
+  #tree-bg
   #welcome
     #top
       %h1#logo
@@ -6,6 +7,7 @@
       #sign-in-links
         = link_to 'Sign In', new_member_session_path, :class => 'button', :icon => 'ui-icon-key'
         = link_to 'Sign Up', new_member_registration_path, :class => 'button', :icon => 'ui-icon-arrowthick-1-n'
+        = link_to 'Browse', participants_path, :class => 'button', :icon => 'ui-icon-zoomin'
     #inner
       #about
         %h2 Connecting Communities and Health Investigators...
@@ -17,9 +19,9 @@
           #anonymous-surveys
             %p 
               Rigorous, well-designed, -streamlined and -tested&mdash;our survey tool is completely
-              <strong>free</strong> and <strong>anonmyous</strong>. It's available for anyone to use,
-              and it includes advanced features, such as targeting&mdash;based on age, gender, 
-              location, surveys taken, education, race and ethnicity&mdash;and question branching.
+              <strong>free</strong> and <strong>anonmyous</strong>. It's available for <strong>anyone</strong> to use,
+              and it includes advanced features, such as <strong>targeting</strong>&mdash;based on age, gender, 
+              location, surveys taken, education, race and ethnicity&mdash;and <strong>question branching</strong>.
           %h3
             %a{:href => '#open-database'} Open Database
           #open-database
@@ -36,7 +38,7 @@
             %a{:href => '#community'} Community
           #community
             %p
-              Communicate, plan and organize by <strong>following</strong> your fellow SoEpi members and posting
-              your own <strong>status updates</strong>.
+              Communicate, plan, organize and take action by <strong>following</strong> your fellow SoEpi members and posting
+              your own <strong>status updates</strong>, <strong>surveys</strong>, and <strong>reports</strong>.
     %footer#footer
       = render :partial => "/shared/footer"

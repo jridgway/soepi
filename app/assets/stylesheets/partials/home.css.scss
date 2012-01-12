@@ -3,6 +3,7 @@
 
 .bp.home
   {
+    
   form.status
     {
     @include clearfix;
@@ -58,6 +59,18 @@
       }
     }
   
+  #tree-bg
+    {
+    background: transparent url(/assets/tree-spring-bg.png) no-repeat;
+    position: fixed;
+    bottom: 50px;
+    left: -600px;
+    display: block;
+    height: 876px;
+    width: 991px;
+    z-index: -100;
+    }
+  
   
   #welcome
     {    
@@ -68,13 +81,14 @@
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
     border-radius: 4px;
-    width: 800px;
-    height: 400px;
-    margin: -215px 0 0 -415px;
+    width: 640px;
+    height: 420px;
+    margin: -225px 0 0 -250px;
     padding: 15px;
     position:absolute;
     left: 50%;
     top: 50%;
+    background: #222;
   
     #top
       {
@@ -108,14 +122,14 @@
       
       #about
         {
-        width: 250px;
+        width: 240px;
         margin: 0 15px 0 0;
         float: left;
         }
       
       #features 
         {
-        width: 505px;
+        width: 385px;
         float: right;
         
         .ui-accordion-header
@@ -154,7 +168,7 @@
       position: absolute;
       bottom: 0;
       left: 50%;
-      margin: 0 0 0 -185px;
+      margin: 0 0 0 -155px;
       padding: 10px 0;
       height: auto;
       font-size: 0.7em;

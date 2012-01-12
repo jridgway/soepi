@@ -1,9 +1,12 @@
 = render :partial => '/reports/common' 
   
 - content_for :body_content do  
-  %ul#surveys.listing.reset
-    - @surveys.each do |survey|
-      %li= render :partial => '/surveys/survey', :locals => {:survey => survey}
-  = paginate @surveys
+  - if @surveys.empty?
+    %p This report does not reference any surveys.
+  - else
+    %ul#surveys.listing.reset
+      - @surveys.each do |survey|
+        %li= render :partial => '/surveys/survey', :locals => {:survey => survey}
+    = paginate @surveys
     
 = render :partial => "/shared/content_page"
