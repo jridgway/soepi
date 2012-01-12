@@ -201,7 +201,7 @@ Devise.setup do |config|
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', :scope => 'user,public_repo'
   if Rails.env.production?
-    config.omniauth :facebook, "182817381765264", "8aaf97328cc792c552ea3218418467dd"
+    config.omniauth :facebook, "309296215778440", "e4a30059977a584363acd6d2499f2917"
     config.omniauth :twitter, "BjaXvp2XM3XBHRwIf9LZ0g", "FHKOedvp3fR8FPFe0rLr0QqA7R6naN1FYdVVkTuMEfE"
     config.omniauth :google_apps, OpenID::Store::Filesystem.new(Rails.root.join('tmp').to_s), :domain => 'gmail.com'
     config.omniauth :yahoo, "dj0yJmk9Y0kzRGxvMk1paDZFJmQ9WVdrOWFFRk1SRlJUTkRnbWNHbzlNVGsxTnpRNE1ESTJNZy0tJnM9Y29uc3VtZXJzZWNyZXQmeD05Zg--", "d72b3cce1052030ef6b66cd410c329e4a5843171"
