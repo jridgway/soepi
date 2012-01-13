@@ -21,6 +21,12 @@ $(document).ready(function () {
   init_common_elements();
   init_nickname_autocomplete();
   init_external_links();
+  if($('.page h1, .page h2, .page h3 .page h4, .page h5, .page h6').length > 1) {
+    $('#toc .inner').tableOfContents('.page');
+    $('#toc').show();
+  } else {
+    $('#toc').hide();
+  }
 });
 
 function member_return_to() {

@@ -5,7 +5,7 @@ class Page < ActiveRecord::Base
     text :title
     text :body
     boolean :published do 
-      live?
+      true unless state == 'drafting'
     end
     integer :id
   end

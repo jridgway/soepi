@@ -45,20 +45,21 @@
     padding: 0;
     }
   p {margin-bottom: 1.2em;}
-  h1, h2, h3, h4, h5 
+  h1, h2, h3, h4, h5,  h6
     {
     margin: 5px 0 5px 0; 
     padding: 5px 0 5px 0;
     color: #fff;
-    font-weight: 600;
+    font-weight: 200;
     line-height: 1.4em;
     clear: both;
     }
-  h1 {font-size: 1.3em;}
-  h2 {font-size: 1.25em;}
-  h3 {font-size: 1.15em;}
-  h4 {font-size: 1.05em;}
-  h5 {font-size: 1em;}   
+  h1 {font-size: 1.8em;}
+  h2 {font-size: 1.5em;}
+  h3 {font-size: 1.25em;}
+  h4 {font-size: 1.15em;}
+  h5 {font-size: 1.1em;}  
+  h6 {font-size: 1em; font-style: italic;}   
   ol,  ul {margin-left: 1.4em;padding: 0;background-image:none;}
   ol ol,  ul ul {margin-left: .5em;}
   ol li,  ul li {margin-left: 1.4em;padding: 0;background-image: none;}

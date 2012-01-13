@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120111184748) do
+ActiveRecord::Schema.define(:version => 20120113145747) do
 
   create_table "age_groups", :force => true do |t|
     t.string   "label"
@@ -571,17 +571,13 @@ ActiveRecord::Schema.define(:version => 20120111184748) do
     t.boolean  "use_custom_title", :default => false
     t.string   "meta_keywords"
     t.string   "meta_description"
-    t.integer  "lft"
-    t.integer  "rgt"
-    t.integer  "parent_id"
     t.string   "redirect_url"
     t.string   "state",            :default => "draft"
-    t.datetime "show_at"
-    t.datetime "hide_at"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "slug"
-    t.string   "markup_type"
+    t.boolean  "raw",              :default => false
+    t.string   "author_nickname"
   end
 
   add_index "pages", ["slug"], :name => "index_pages_on_slug"
@@ -665,10 +661,10 @@ ActiveRecord::Schema.define(:version => 20120111184748) do
     t.text     "javascript"
     t.datetime "show_at"
     t.datetime "hide_at"
-    t.string   "state",       :default => "draft"
+    t.string   "state",      :default => "draft"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "markup_type"
+    t.boolean  "raw",        :default => false
   end
 
   create_table "races", :force => true do |t|

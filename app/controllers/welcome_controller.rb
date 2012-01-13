@@ -6,12 +6,7 @@ class WelcomeController < ApplicationController
         render :action => 'notifications'
       else
         @status = current_member.statuses.build
-        @tags = (
-            Survey.live.tag_counts(:start_at => 6.months.ago, :limit => 50) +
-            Report.tag_counts(:start_at => 6.months.ago, :limit => 50) +
-            Member.confirmed.tag_counts(:start_at => 6.months.ago, :limit => 50) +
-            MemberStatus.tag_counts(:start_at => 6.months.ago, :limit => 50)
-          )[0..49].sort {|a,b| a.count <=> b.count}.sort {|a,b| a.name <=> b.name}
+        load_default_tags
         render :layout => 'two_column_wide'   
       end
     else

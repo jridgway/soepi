@@ -1,29 +1,21 @@
 class Part < ActiveRecord::Base
   validates_presence_of :name
   
-  def self.find_or_set(name, body, markup_type='ckeditor')
+  def self.find_or_set(name, body='', raw=false)
     unless part = find_by_name(name)
-      part = create(:name => name, :body => body, :markup_type => markup_type)
+      part = create(:name => name, :body => body, :raw => raw)
     end
-    part.update_attribute :markup_type, markup_type if part.markup_type != markup_type
-    if part.markup_type == 'ckeditor'
-      part.body.to_s.html_safe
-    else
-      part.body.to_s
-    end
+    part.update_attribute :raw, raw if part.raw != raw
+    part.body
   end
   
-  def self.set(name, body, markup_type='ckeditor')
+  def self.set(name, body, raw=false)
     if part = find_by_name(name)
-      part.update_attributes :body => body, :markup_type => markup_type
+      part.update_attributes :body => body, :raw => raw
     else
-      part = create(:name => name, :body => body, :markup_type => markup_type)
+      part = create(:name => name, :body => body, :raw => raw)
     end
-    if part.markup_type == 'ckeditor'
-      part.body.to_s.html_safe
-    else
-      part.body.to_s
-    end
+    part.body
   end
   
   def self.set?(name)

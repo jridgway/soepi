@@ -1,4 +1,4 @@
-module ApplicationHelper
+module ApplicationHelper  
   def home?
     true if request.path == '/'
   end
@@ -141,12 +141,16 @@ module ApplicationHelper
   end
   
   def format_and_link_member_references(body)
-    body_2 = auto_link(simple_format(strip_tags(body)))
+    link_member_references(auto_link(simple_format(strip_tags(body))))
+  end
+  
+  def link_member_references(body)
+    body_2 = body
     body.scan(/@\w+/) do |nickname|
       if member_referenced = Member.find_by_nickname(nickname[1..-1])
-        body_2.gsub!(/#{nickname}\b/, link_to("@#{member_referenced.nickname}", member_path(member_referenced)))
+        body_2 = body_2.gsub(/#{nickname}\b/, link_to("@#{member_referenced.nickname}", member_path(member_referenced)))
       end
     end
-    body_2.html_safe
+    body_2
   end
 end

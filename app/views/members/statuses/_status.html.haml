@@ -3,7 +3,7 @@
   #{link_to status.member.nickname, status.member} wrote:
 .inner
   .expandable
-    = format_and_link_member_references status.body
+    = format_and_link_member_references(status.body).html_safe
   %ul.attributes
     %li Posted: #{timeago status.created_at}
     - unless status.tags.empty?

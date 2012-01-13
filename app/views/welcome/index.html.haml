@@ -27,7 +27,7 @@
   - content_for :body_content_right do
     - if Part.set?(:home_member_top_right)
       .highlight
-        = Part.find_or_set(:home_member_top_right, ''.html_safe, 'ckeditor')
+        = link_member_references(RDiscount.new(Part.find_or_set(:home_member_top_right)).to_html).html_safe
     .block
       = link_to 'Create a Survey', new_survey_path, :class => 'restrict-to-members button', :icon => 'ui-icon-document'        
       = link_to 'Create a Report', new_report_path, :class => 'restrict-to-members button', :icon => 'ui-icon-document'     
