@@ -489,4 +489,18 @@ fieldset ul.tagit
   {
   width: 100%;
   }
+  
+
+
+html.ie6 , html.ie7 , html.ie8 
+  {
+  .simple_form 
+    {   
+    div.input input[type=text], div.input input[type=file], div.input input[type=tel], div.input input[type=email], 
+    div.input input[type=number], div.input input[type=password], div.input textarea, div.input select
+      {
+      background: #232323 !important;
+      }
+    }
+  }
 

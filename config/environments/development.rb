@@ -27,7 +27,5 @@ Soepi::Application.configure do
   config.assets.compress = false
 
   # Expands the lines which load the assets
-  config.assets.debug = true
-  
-  ENV["REDISTOGO_URL"] = 'redis://localhost:6379' 
+  config.assets.debug = true 
 end

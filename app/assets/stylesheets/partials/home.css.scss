@@ -3,7 +3,6 @@
 
 .bp.home
   {
-    
   form.status
     {
     @include clearfix;
@@ -63,11 +62,12 @@
     {
     background: transparent url(/assets/tree-spring-bg.png) no-repeat;
     position: fixed;
-    bottom: 50px;
+    top: 50%;
     left: -600px;
     display: block;
     height: 876px;
     width: 991px;
+    margin: -500px 0 0 0;
     z-index: -100;
     }
   

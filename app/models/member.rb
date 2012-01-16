@@ -14,7 +14,7 @@ class Member < ActiveRecord::Base
   scope :listable, where('privacy_dont_list_me = false or privacy_dont_list_me is null')
   scope :publishers, where(%{
       exists (select * from surveys where member_id = members.id and state != 'drafting') or
-      exists (select * from reports where member_id = members.id and state != 'drafting')
+      exists (select * from reports where member_id = members.id)
     })
 
   extend FriendlyId
@@ -38,7 +38,7 @@ class Member < ActiveRecord::Base
   attr_protected :admin, :credits
 
   attr_accessible :remove_pic, :pic, :email, :password, :password_confirmation, :remember_me,
-    :nickname, :phone, :timezone, :tag_list, :informed_consent, :terms_of_use,
+    :nickname, :timezone, :tag_list, :informed_consent, :terms_of_use,
     :subscription_notifications, :subscription_weekly_summaries, :subscription_messages, :subscription_news, 
     :privacy_dont_use_my_gravatar, :privacy_dont_list_me
 

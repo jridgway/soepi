@@ -4,7 +4,6 @@
     = f.input :password
     = f.input :password_confirmation
   = f.input :nickname, :hint => '<strong class="public">Public</strong> &mdash; Shown on your profile and elsewhere. Not included in anonymous survey results. Rather than revealing your name, provide an anonymous nickname.'.html_safe
-  = f.input :phone, :as => :string, :hint => '<strong class="private">Private</strong> &mdash; Not revealed to the public. Not included in anonymous survey results.'.html_safe
   = f.input :pic, :label => 'Profile Pic', :hint => '<strong class="public">Public</strong> &mdash; Shown on your profile and elsewhere. Not included in anonymous survey results.'.html_safe do 
     = f.file_field :pic
   - if @member.pic and @member.pic.url

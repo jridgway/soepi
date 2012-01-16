@@ -38,7 +38,7 @@ $(document).ready(function () {
 
 function focus_first_form_field() {
   $('form.simple_form:not(.uneditable) input:visible,  form.simple_form:not(.uneditable) textarea:visible').first().each(function() {
-    if($(this).attr('placeholder') == undefined) {
+    if($(this).attr('placeholder') == undefined && $(this).siblings('.error').length == 0) {
       $(this).focus();
     }
   });

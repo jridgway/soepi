@@ -20,5 +20,5 @@
 //= require markerclusterer
 //= require highcharts
 //= require highcharts-theme
-//= require uservoice
 //= require distance_widget
+//= require uservoice
