@@ -54,6 +54,7 @@ gem 'easy_esi'
 gem 'rubyzip'
 gem 'rack-canonical-host'
 gem 'rack-ssl', :require => 'rack/ssl'
+gem 'hominid'
 
 group :development do
   gem 'rails-dev-tweaks', '~> 0.5.0'

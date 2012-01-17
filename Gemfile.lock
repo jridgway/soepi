@@ -132,6 +132,7 @@ GEM
     gravatar_image_tag (1.0.0)
     haml (3.1.3)
     hike (1.2.1)
+    hominid (3.0.2)
     hpricot (0.8.4)
     i18n (0.6.0)
     jquery-rails (1.0.17)
@@ -322,6 +323,7 @@ DEPENDENCIES
   friendly_id (~> 4.0.0.beta8)
   geocoder
   gravatar_image_tag
+  hominid
   jquery-rails
   kaminari
   omniauth (= 0.3.2)
