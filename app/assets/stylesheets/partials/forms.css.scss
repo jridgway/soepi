@@ -156,11 +156,6 @@ fieldset
     color: #eee;
     font-size: 1em;
     }
-    
-  div.input input[type=email] 
-    {
-    width: 524px;
-    }
   
   div.input input[type=file]
     {
@@ -321,6 +316,26 @@ fieldset
     width: 200px;
     padding: 5px;
     margin: 0;
+    }
+  }
+
+.bp.two-column-wide form.simple_form 
+  {
+  div.input input[type=text], div.input input[type=tel], div.input input[type=email], 
+  div.input input[type=number], div.input input[type=password], div.input textarea, div.input select
+    {
+    width: 425px !important;
+    }
+    
+  textarea
+    {
+    width: 424px !important;
+    max-width: 424px !important;
+    }
+  
+  ul.tagit 
+    {
+    width: 430px !important;
     }
   }
 

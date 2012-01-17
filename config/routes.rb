@@ -2,6 +2,8 @@ Soepi::Application.routes.draw do
   get '/search(/:page)', :controller => 'search', :action => 'index', :as => :search
   get '/quick_search', :controller => 'search', :action => 'quick_search'
   
+  get '/subscribe', :controller => 'welcome', :action => 'subscribe', :as => :subscribe
+  post '/subscribe', :controller => 'welcome', :action => 'subscribe', :as => :new_subscriber
   get '/your/notifications', :controller => 'welcome', :action => 'notifications', :as => :your_notifications
   get '/your/surveys', :controller => 'welcome', :action => 'surveys', :as => :your_surveys
   get '/your/reports', :controller => 'welcome', :action => 'reports', :as => :your_reports

@@ -190,6 +190,6 @@ class Member < ActiveRecord::Base
   
   def set_mailchimp_helper!
     h = Hominid::API.new(ENV['SOEPI_MAILCHIMP_KEY'], {:secure => true, :timeout => 60})
-    h.list_subscribe(Setting.find_or_set('mailchimp_newsletter_list_id', '8d5bc6cad8'), email, {'FNAME' => nickname})
+    h.list_subscribe(Setting.find_or_set('mailchimp_newsletter_list_id', '8d5bc6cad8'), email, {'FNAME' => nickname}, 'html', false, true, true)
   end
 end
