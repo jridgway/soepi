@@ -22,11 +22,7 @@
   = esi_render :partial => '/members/accounts/load_current_member.js'
   %link{:rel => "shortcut icon", :href => "/favicon.ico", :type => "image/x-icon"}
   - if (page_code = Setting.find_or_set(:analytics_page_code, 'UA-xxxxxx-x').to_s.strip) =~ /^(UA-xxxxxx-x)?$/
-    :javascript
-      var _gaq=[['_setAccount',' page_code '],['_trackPageview']];(function(d,t){
-      var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-      g.async=1;g.src='https://www.google-analytics.com/ga.js';s.parentNode.insertBefore(g,s)
-      }(document,'script'))
+    = render :template => 'shared/analytics.js.erb', :locals => {:page_code => page_code}
   = javascript_tag yield(:javascript)
   %style{:type => 'text/css'} 
     = yield(:css)
