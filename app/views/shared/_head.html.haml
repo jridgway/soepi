@@ -21,7 +21,7 @@
   = javascript_include_tag 'application'
   = esi_render :partial => '/members/accounts/load_current_member.js'
   %link{:rel => "shortcut icon", :href => "/favicon.ico", :type => "image/x-icon"}
-  - if (page_code = Setting.find_or_set(:analytics_page_code, 'UA-xxxxxx-x').to_s.strip) =~ /^(UA-xxxxxx-x)?$/
+  - unless (page_code = Setting.find_or_set(:analytics_page_code, 'UA-xxxxxx-x').to_s.strip).blank?
     = render :template => '/shared/_analytics.js.erb', :locals => {:page_code => page_code}
   = javascript_tag yield(:javascript)
   %style{:type => 'text/css'} 
