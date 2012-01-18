@@ -56,7 +56,8 @@ class Member < ActiveRecord::Base
   validates_acceptance_of :informed_consent, :terms_of_use, :accept => true
 
   before_create :set_year_registered
-  after_save :set_mailchimp!
+  after_create :set_mailchimp_1!
+  after_update :set_mailchimp_2!
   before_destroy :destroy_ec2_instance!
 
   def unallowed_nicknames
@@ -182,14 +183,25 @@ class Member < ActiveRecord::Base
     update_attribute :ec2_instance_id, nil
   end
   
-  def set_mailchimp!
-    if subscription_news_changed? and subscription_news?
+  def set_mailchimp_1!
+    if subscription_news?
+      delay.set_mailchimp_helper!
+    end 
+  end
+  
+  def set_mailchimp_2!
+    if subscription_news_changed?
       delay.set_mailchimp_helper!
     end 
   end
   
   def set_mailchimp_helper!
     h = Hominid::API.new(ENV['SOEPI_MAILCHIMP_KEY'], {:secure => true, :timeout => 60})
-    h.list_subscribe(Setting.find_or_set('mailchimp_newsletter_list_id', '8d5bc6cad8'), email, {'FNAME' => nickname}, 'html', false, true, true)
+    if subscription_news?
+      h.list_subscribe(Setting.find_or_set('mailchimp_newsletter_list_id', '8d5bc6cad8'), email, {'FNAME' => nickname}, 'html', 
+        false, true, true)
+    else
+      h.list_unsubscribe(Setting.find_or_set('mailchimp_newsletter_list_id', '8d5bc6cad8'), email, true, true, true)
+    end
   end
 end
