@@ -119,6 +119,13 @@ fieldset
 
 .simple_form 
   {    
+  .inline-hint
+    {
+    margin: 2px 0 2px 150px;
+    font-size: 0.9em;
+    font-style: italic;
+    }
+  
   label 
     {
     float: left;

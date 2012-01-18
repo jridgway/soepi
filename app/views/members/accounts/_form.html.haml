@@ -1,7 +1,11 @@
 = field_set_tag 'Account' do
   = f.input :email, :as => :email, :hint => '<strong class="private">Private</strong>  &mdash; Not revealed to the public.'.html_safe
   - if @member.password_required?
-    = f.input :password
+    = f.input :password do 
+      = f.input_field :password, :class => 'password-stregth'
+      .inline-hint   
+        Your password is forceable in
+        %strong#time ...
     = f.input :password_confirmation
   = f.input :nickname, :hint => '<strong class="public">Public</strong> &mdash; Shown on your profile and elsewhere. Not included in anonymous survey results. Rather than revealing your name, provide an anonymous nickname.'.html_safe
   = f.input :pic, :label => 'Profile Pic', :hint => '<strong class="public">Public</strong> &mdash; Shown on your profile and elsewhere. Not included in anonymous survey results.'.html_safe do 

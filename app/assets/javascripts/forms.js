@@ -34,6 +34,7 @@ $(document).ready(function () {
   $(tab_with_errors).closest('.tabs').tabs('select', tab_with_errors.index()-1);
   $('.tagit-new input').autoGrowInput({minWidth:60, maxWidth:520, comfortZone:20})
   $('.tagit-new input').width('60px');
+  $('.password-stregth').pwdstr('#time');
 });
 
 function focus_first_form_field() {
