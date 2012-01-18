@@ -1,7 +1,9 @@
 - if member_signed_in?    
   - content_for :body_content_left do  
-    = simple_form_for @status, :url => your_statuses_path, :html => {:novalidate => true, :class => 'status'}, :remote => true do |f|
-      = f.input :body, :placeholder => "What's new, #{current_member.nickname}?", :label => false
+    = simple_form_for @status, :url => member_statuses_path, :html => {:novalidate => true, :class => 'status'}, :remote => true do |f|
+      = f.input :body, :label => false do 
+        = avatar(current_member, 24)
+        = f.input_field :body, :placeholder => "What's new, #{current_member.nickname}?"
       #status-extra{:style => 'display:none'}
         = f.input :tag_list, :label => false, :input_html => {:class => 'tags', :"data-seperator" => ',', :placeholder => 'Tag it!'}, :hint => 'Categorize this status with any words you want. Hit Enter or type a comma to delimit each tag.'
         %button.button{:icon => 'ui-icon-signal-diag'} Share

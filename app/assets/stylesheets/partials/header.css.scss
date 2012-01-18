@@ -18,7 +18,8 @@
         a 
           { 
           background: url(/assets/soepi-logo-dark-bg.png) no-repeat;
-          text-indent: -99999px;
+          text-indent: -9999px;
+          overflow: hidden;
           display: block;
           height: 62px;
           width: 133px;
@@ -252,4 +253,12 @@
         }
       }
     }
+  
+html.ie6 , html.ie7 , html.ie8 
+  {
+  #q
+    {
+    background: #111 url(/assets/search.png) 7px 7px no-repeat;
+    }
+  }
   

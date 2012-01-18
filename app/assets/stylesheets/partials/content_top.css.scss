@@ -41,6 +41,7 @@
     
   h1#page-title
     {   
+    @include clearfix;
     margin: 0 0 10px 0;
     padding: 0;
     font-weight: 200;
@@ -122,6 +123,18 @@
     h1, h2, h3, h4, h5
       {
       color: #222;
+      }
+    }
+  }
+  
+html.ie6, html.ie7, html.ie8 
+  {
+  .bp #content-top 
+    {
+    
+    #details
+      {
+      background: #111;
       }
     }
   }

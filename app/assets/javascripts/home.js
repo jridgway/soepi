@@ -1,5 +1,3 @@
-var notifications_page = 1;
-
 $(document).ready(function () {
   $('#home-accordian').accordion({
     autoHeight: false, 

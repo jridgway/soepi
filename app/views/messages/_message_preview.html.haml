@@ -1,10 +1,10 @@
 %li[message]
   %a{:href => message_path(message), :class => (message.seen_by?(current_member.id) ? 'seen' : 'unseen'), :name => message.id}
-    %p.subject 
+    %span.subject 
       %strong #{message.member.nickname} 
       #{timeago message.created_at}: #{message.body}
-    %ul.members.reset
+    %span.members.reset
       - message.members.each do |recipient|
-        %li
+        %span.member
           = avatar(recipient, 20, false)
           %span #{recipient.nickname}

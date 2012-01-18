@@ -1,7 +1,9 @@
 class Members::StatusesController < ApplicationController
+  before_filter :authenticate_member!, :only => [:create, :destroy]
   before_filter :load_tags, :only => [:index, :by_tag]
   before_filter :load_facebook_meta, :only => [:show, :code, :output, :edit, :update]
   layout Proc.new { |controller| controller.request.xhr? ? 'ajax' : 'two_column' }  
+  
   def index 
     @statuses = MemberStatus.page(params[:page]).per(10)
   end 
@@ -10,6 +12,21 @@ class Members::StatusesController < ApplicationController
     @tag = ActsAsTaggableOn::Tag.find params[:tag]
     @statuses = MemberStatus.tagged_with(@tag).page(params[:page])
     render :action => 'index'
+  end
+    
+  def create 
+    @status = current_member.statuses.build params[:member_status]
+    @status.save
+  end
+  
+  def destroy 
+    current_member.statuses.destroy params[:id]
+    if request.xhr?
+      render :text => "$('#status_#{params[:id]}').remove();"
+    else
+      flash[:notice] = 'Your status was deleted.'
+      redirect_to root_path
+    end
   end
   
   protected   

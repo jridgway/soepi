@@ -95,22 +95,15 @@
       margin: 0 0 5px 0;
       }
     
-    ul.members
+    span.members
       {
-      float: left;
+      display: block;
+      margin: 5px 0 0 0;
       
-      li 
-        {
-        float: left;
-        margin: 0 2px 0 0;
-        padding: 0;
-        border: none;
-        background: none;
-        
+      span.member 
+        {        
         &:hover
           {
-          border: none;
-          background: none;
           padding: 0;
           }
           

@@ -57,11 +57,23 @@
 
 .bp.two-column-wide .tabs .listing li .inner
   {
-  width: 460px;  
+  width: 459px;  
   }
 
 .bp.one-column .tabs .listing li .inner
   {
-  width: 830px;  
+  width: 829px;  
   }
   
+html.ie6 , html.ie7 , html.ie8 
+  {
+  .bp.two-column-wide .tabs .listing li .inner
+    {
+    width: 440px;  
+    }
+  
+  .bp.one-column .tabs .listing li .inner
+    {
+    width: 810px;  
+    }
+  }

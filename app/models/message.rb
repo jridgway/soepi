@@ -23,7 +23,9 @@ class Message < ActiveRecord::Base
   after_create :mark_parent_unseen!
   after_create :deliver_messages!
   
-  def validate 
+  validate :at_least_one_recipient
+  
+  def at_least_one_recipient 
     if parent_message.nil? and recipient_nicknames.empty?
       errors.add :recipient_nicknames, 'You must include at least one valid nickname' 
     end

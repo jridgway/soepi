@@ -426,3 +426,14 @@ form.participant_response
       }
     }
   }
+  
+html.ie6, html.ie7, html.ie8 
+  {
+  .survey #participate2.button
+    {
+    width: 945px;
+    margin: 15px;
+    display: inline-block;
+    }
+  }
+  

@@ -87,7 +87,7 @@ module ApplicationHelper
       img = image_tag(member.pic.thumb("#{size}x#{size}#").url, :class => 'avatar', :alt => member.nickname)
     end
     if linked
-      link_to img, member_path(member), :title => member.nickname
+      link_to img, member_path(member), :title => member.nickname, :class => 'avatar'
     else
       img
     end

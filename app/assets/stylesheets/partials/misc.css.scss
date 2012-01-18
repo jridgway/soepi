@@ -233,25 +233,25 @@
       }
     }
   
-  #container .ui-state-highlight
-    {
-    padding: 5px 10px;
-    margin: 0 0 10px 0;
-    background: $gray;
-    color: $dark_brown;
-    border: none;
-    
-    h1, h2, h3, h4, h5, h6 
+    #container .ui-state-highlight
       {
+      padding: 5px 10px;
+      margin: 0 0 10px 0;
+      background: $gray;
       color: $dark_brown;
+      border: none;
+      
+      h1, h2, h3, h4, h5, h6 
+        {
+        color: $dark_brown;
+        }
+      
+      .ui-icon.ui-icon-info
+        {
+        float: left;
+        margin: 2px 5px 0 0;
+        }
       }
-    
-    .ui-icon.ui-icon-info
-      {
-      float: left;
-      margin: 2px 5px 0 0;
-      }
-    }
     
     .tabs.ui-tabs.ui-widget.ui-widget-content.ui-corner-all
       {
@@ -311,10 +311,7 @@
     {
     display: none;
     }
-  }
   
-.bp 
-  {
   h3.ui-accordion-header 
     {
     color: #fff;
@@ -342,84 +339,88 @@
     background: transparent;
     border: 1px solid #444;
     }
-  }
   
-.bp .ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all
-  {
-  -moz-box-shadow: 0 7px 10px #222;
-  -webkit-box-shadow: 0 7px 10px #222;
-  box-shadow: 0 7px 10px #222;
-  -moz-border-radius-bottomleft: 4px;
-  -moz-border-radius-bottomright: 4px;
-  -webkit-border-bottom-left-radius: 4px;
-  -webkit-border-bottom-right-radius: 4px;
-  border-bottom-left-radius: 4px;
-  border-bottom-right-radius: 4px;
-  -moz-border-radius-topleft: 4px;
-  -webkit-border-top-left-radius: 4px;
-  border-top-left-radius: 4px;
-  background: #fff;
-  max-height: 300px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  margin: 0;
-  padding: 0;
-    
-  li
+  .ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all
     {
-    list-style-type: none !important;
-    max-height: 50px;
-    overflow: hidden;
+    -moz-box-shadow: 0 7px 10px #222;
+    -webkit-box-shadow: 0 7px 10px #222;
+    box-shadow: 0 7px 10px #222;
+    -moz-border-radius-bottomleft: 4px;
+    -moz-border-radius-bottomright: 4px;
+    -webkit-border-bottom-left-radius: 4px;
+    -webkit-border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    -moz-border-radius-topleft: 4px;
+    -webkit-border-top-left-radius: 4px;
+    border-top-left-radius: 4px;
+    background: #fff;
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
     margin: 0;
     padding: 0;
-    
-    h4
-      {
-      clear: none;
-      }
-    
-    a 
-      {
-      color: #000;
-      @include clearfix;
-      }
-    
-    a.ui-corner-all.ui-state-hover
-      {
-      -moz-border-radius: 0px;
-      -webkit-border-radius: 0px;
-      border-radius: 0px;
-      text-decoration: none;
-      background: $blue;
-      color: #000;
       
-      h4, small 
+    li
+      {
+      list-style-type: none !important;
+      max-height: 50px;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+      
+      h4
+        {
+        clear: none;
+        }
+      
+      a 
         {
         color: #000;
+        @include clearfix;
+        }
+      
+      a.ui-corner-all.ui-state-hover
+        {
+        -moz-border-radius: 0px;
+        -webkit-border-radius: 0px;
+        border-radius: 0px;
+        text-decoration: none;
+        background: $blue;
+        color: #000;
+        
+        h4, small 
+          {
+          color: #000;
+          }
+        }
+              
+      img
+        {
+        float: left;
+        margin: 0 7px 7px 0;
+        height: 40px;
+        width: 40px;
+        }
+        
+      h4
+        {
+        margin: 0 0 2px 0 !important;
+        padding: 0;
+        font-size: 12px;
+        color: #333;
+        }
+    
+      small
+        {
+        color: #808080;
+        display: block;
+        float: left;
         }
       }
-            
-    img
-      {
-      float: left;
-      margin: 0 7px 7px 0;
-      height: 40px;
-      width: 40px;
-      }
-      
-    h4
-      {
-      margin: 0 0 2px 0 !important;
-      padding: 0;
-      font-size: 12px;
-      color: #333;
-      }
-  
-    small
-      {
-      color: #808080;
-      display: block;
-      float: left;
-      }
     }
+  }
+  
+html.ie6, html.ie7, html.ie8 
+  {    
   }

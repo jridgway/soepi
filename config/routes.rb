@@ -8,8 +8,6 @@ Soepi::Application.routes.draw do
   get '/your/surveys', :controller => 'welcome', :action => 'surveys', :as => :your_surveys
   get '/your/reports', :controller => 'welcome', :action => 'reports', :as => :your_reports
   get '/your/statuses', :controller => 'welcome', :action => 'statuses', :as => :your_statuses
-  post '/your/statuses', :controller => 'welcome', :action => 'create_status', :as => :create_status
-  delete '/your/statuses', :controller => 'welcome', :action => 'create_status', :as => :destroy_status
   get '/your/follows', :controller => 'welcome', :action => 'follows', :as => :your_follows
   get '/your/member_followers', :controller => 'welcome', :action => 'member_followers', :as => :your_member_followers
 
@@ -41,7 +39,7 @@ Soepi::Application.routes.draw do
     end
   end
   
-  resources :member_statuses, :controller => 'members/statuses', :path => '/statuses', :only => [:index, :show] do 
+  resources :member_statuses, :controller => 'members/statuses', :path => '/statuses', :only => [:index, :show, :create, :destroy] do 
     collection do
       get '(page/:page)', :action => 'index'
       get 'tagged/:tag(/page/:page)', :action => 'by_tag'

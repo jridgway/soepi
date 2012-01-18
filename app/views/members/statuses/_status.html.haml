@@ -1,7 +1,7 @@
 = avatar(status.member, 60)
-%h3
-  #{link_to status.member.nickname, status.member} wrote:
 .inner
+  %h3
+    #{link_to status.member.nickname, status.member} wrote:
   .expandable
     = format_and_link_member_references(status.body).html_safe
   %ul.attributes

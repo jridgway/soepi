@@ -139,7 +139,7 @@ fieldset
     }
     
   div.input input[type=text], div.input input[type=tel], div.input input[type=email], 
-  div.input input[type=number], div.input input[type=password], div.input textarea, div.input select
+  div.input input[type=number], div.input input[type=password], div.input textarea
     {
     width: 500px;
     -moz-border-radius: 4px;
@@ -177,10 +177,20 @@ fieldset
     {
     width: auto;
     max-width: 500px;
+    border: none;
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
     border-radius: 4px;
     margin: 0 2px 0 0; 
+    padding: 3px 3px 3px 0;
+    background: #3a3a3a !important;
+    color: #eee;
+    }
+  
+  div.input select option
+    {
+    background: #3a3a3a !important;
+    color: #eee;
     }
     
   div.input textarea
@@ -324,20 +334,21 @@ fieldset
   div.input input[type=text], div.input input[type=tel], div.input input[type=email], 
   div.input input[type=number], div.input input[type=password], div.input textarea, div.input select
     {
-    width: 425px !important;
+    width: 425px;
     }
     
   textarea
     {
-    width: 424px !important;
-    max-width: 424px !important;
+    width: 424px;
+    max-width: 424px;
     }
   
   ul.tagit 
     {
-    width: 430px !important;
+    width: 430px;
     }
   }
+  
 
 .bp.one-column form.simple_form, #new-participant.ui-dialog-content
   {
@@ -504,17 +515,16 @@ fieldset ul.tagit
   {
   width: 100%;
   }
-  
 
 
 html.ie6 , html.ie7 , html.ie8 
-  {
+  {    
   .simple_form 
     {   
     div.input input[type=text], div.input input[type=file], div.input input[type=tel], div.input input[type=email], 
-    div.input input[type=number], div.input input[type=password], div.input textarea, div.input select
+    div.input input[type=number], div.input input[type=password], div.input textarea, div.input select, ul.tagit
       {
-      background: #232323 !important;
+      background: #333 url(/assets/bg-light.png) !important;
       }
     }
   }

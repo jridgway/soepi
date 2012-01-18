@@ -18,11 +18,6 @@ class WelcomeController < ApplicationController
     @statuses = current_member.statuses.page(params[:page]).per(20)
   end
   
-  def create_status
-    @status = current_member.statuses.build params[:member_status]
-    @status.save
-  end
-  
   def surveys
     @surveys = current_member.surveys.page(params[:page]).per(20)
   end
