@@ -1,9 +1,12 @@
-%ul.listing.reset
-  - @follows.each do |follow|
-    %li[follow]      
-      - case follow.followable_type when 'Survey' then
-        = render :partial => '/surveys/survey', :locals => {:survey => follow.followable}        
-      - when 'Member' then
-        = render :partial => '/members/member', :locals => {:member => follow.followable} 
-= paginate @follows, :remote => true
+- if @follows.empty?
+  %p You are not following anyone. 
+- else 
+  %ul.listing.reset
+    - @follows.each do |follow|
+      %li[follow]      
+        - case follow.followable_type when 'Survey' then
+          = render :partial => '/surveys/survey', :locals => {:survey => follow.followable}        
+        - when 'Member' then
+          = render :partial => '/members/member', :locals => {:member => follow.followable} 
+  = paginate @follows, :remote => true
 = javascript_tag 'init_common_elements();'

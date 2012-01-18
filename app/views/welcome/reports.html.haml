@@ -1,6 +1,10 @@
-%ul.listing.reset
-  - @reports.each do |report|
-    %li[report]
-      = render :partial => '/reports/report', :locals => {:report => report}
-= paginate  @reports, :remote => true
+- if @reports.empty?
+  %p You have not created a report.
+  %p= link_to 'Create a Report', new_report_path, :class => 'button', :icon => 'ui-icon-document'  
+- else 
+  %ul.listing.reset
+    - @reports.each do |report|
+      %li[report]
+        = render :partial => '/reports/report', :locals => {:report => report}
+  = paginate  @reports, :remote => true
 = javascript_tag 'init_common_elements();'

@@ -1,6 +1,9 @@
-%ul.listing.reset
-  - @statuses.each do |status|
-    %li[status]
-      = render :partial => '/members/statuses/status', :locals => {:status => status}
-= paginate  @statuses, :remote => true
+- if @statuses.empty?
+  %p You have not updated your status. Use the "What's new, #{current_member.nickname}" box at the top of this page to inform others.
+- else 
+  %ul.listing.reset
+    - @statuses.each do |status|
+      %li[status]
+        = render :partial => '/members/statuses/status', :locals => {:status => status}
+  = paginate  @statuses, :remote => true
 = javascript_tag 'init_common_elements();'

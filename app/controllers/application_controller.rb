@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
   layout Proc.new { |controller| controller.request.xhr? ? 'ajax' : 'two_column' }
-  before_filter :authenticate_admins, :set_member_return_to, :force_no_cache_control
+  before_filter :set_member_return_to, :force_no_cache_control
   helper_method :cache_expirary, :cache_expirary_in_seconds, :current_participant, :current_member_pin, :member_return_to,
     :avatar_url, :member_contact_us_path,  :message_members_path
     
@@ -33,14 +33,6 @@ class ApplicationController < ActionController::Base
           Member.confirmed.tag_counts(:start_at => 6.months.ago, :limit => 50) +
           MemberStatus.tag_counts(:start_at => 6.months.ago, :limit => 50)
         )[0..49].sort {|a,b| a.count <=> b.count}.sort {|a,b| a.name <=> b.name}
-    end
-    
-    def authenticate_admins
-      unless Rails.env.development?
-        authenticate_or_request_with_http_basic do |username, password|
-          username == "admin" && password == "results"
-        end
-      end
     end
   
     def admin_only!

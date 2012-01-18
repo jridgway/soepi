@@ -1,6 +1,10 @@
-%ul.listing.reset
-  - @surveys.each do |survey|
-    %li[survey]
-      = render :partial => '/surveys/survey', :locals => {:survey => survey}
-= paginate  @surveys, :remote => true
+- if @surveys.empty?
+  %p You have not created a survey. 
+  %p= link_to 'Create a Survey', new_survey_path, :class => 'button', :icon => 'ui-icon-document'      
+- else 
+  %ul.listing.reset
+    - @surveys.each do |survey|
+      %li[survey]
+        = render :partial => '/surveys/survey', :locals => {:survey => survey}
+  = paginate  @surveys, :remote => true
 = javascript_tag 'init_common_elements();'

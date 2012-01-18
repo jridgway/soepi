@@ -1,6 +1,9 @@
-%ul.listing.reset
-  - @member_followers.each do |follower|
-    %li[follower]      
-      = render :partial => '/members/member', :locals => {:member => follower}
-= paginate @member_followers, :remote => true
+- if @member_followers.empty?
+  %p No one is following you. (Have you launched a survey or published a report? Are you following anyone?)
+- else 
+  %ul.listing.reset
+    - @member_followers.each do |follower|
+      %li[follower]      
+        = render :partial => '/members/member', :locals => {:member => follower}
+  = paginate @member_followers, :remote => true
 = javascript_tag 'init_common_elements();'
