@@ -4,6 +4,7 @@
  * the top of the compiled file, but it's generally better to create a new file per style scope.
  *= require_self
  *= require partials/jquery_ui_1_8_16_custom
+ *= require partials/jquery_qtip
  *= require partials/layouts
  *= require partials/formatting
  *= require partials/header
@@ -18,6 +19,11 @@
  *= require partials/messages
  *= require partials/listing
  *= require partials/sign_in
+ *= require partials/reports
+ *= require partials/home
  *= require partials/misc
+ *= require codemirror
+ *= require codemirror/themes/night
+ *= require partials/simple-hint
  *= require partials/print
-*/ 
+*/

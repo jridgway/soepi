@@ -1,13 +1,8 @@
 require 'open-uri'
 
 class Mailer < Devise::Mailer
-  default from: "no-reply@soepi.org"
+  default from: "contact@soepi.org"
   layout 'mailer'
-  
-  def pin(member)
-    inline_layout_images
-    mail to: member.email
-  end
 
   def notifications(member, notifications2)
     @member = member
