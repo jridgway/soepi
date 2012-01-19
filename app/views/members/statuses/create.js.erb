@@ -8,7 +8,11 @@
       $(this).remove();
     }
   }).show('blind');
-  $('#member_status_body').css('height','20px').val('');
+  $('#member_status_body').val('');
+  $('#member_status_body').blur();
+  $('#member_status_body').css('height','20px');
+  $('#status-extra').hide('blind');
   $('input.tags, textarea.tags').tagit('removeAll');
+  $('input.tags, textarea.tags').blur();
   init_common_elements();
 <% end %>

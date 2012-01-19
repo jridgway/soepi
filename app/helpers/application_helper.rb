@@ -147,7 +147,7 @@ module ApplicationHelper
   def link_member_references(body)
     body_2 = body
     body.scan(/@\w+/) do |nickname|
-      if member_referenced = Member.find_by_nickname(nickname[1..-1])
+      if member_referenced = Member.where('nickname ilike ?', nickname[1..-1]).first
         body_2 = body_2.gsub(/#{nickname}\b/, link_to("@#{member_referenced.nickname}", member_path(member_referenced)))
       end
     end
