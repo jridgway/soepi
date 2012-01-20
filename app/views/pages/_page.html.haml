@@ -1,20 +1,6 @@
 %h3
-  = link_to page.title, page
+  = link_to page.title, page_path(page)
 %p #{truncate(strip_tags(page.body), :length => 200)}
 %p 
   Page last updated 
   = timeago page.updated_at
-
-.page
-  = avatar(page.member, 60)
-  .inner
-    %h3
-      = link_to page.member.nickname, member_path(page.member)
-      \/
-      %strong= link_to page.title, page_path(page)
-    %ul.attributes
-      %li Status: #{page.state_human}
-      %li Survey posted: #{timeago page.created_at}
-      - unless page.tags.empty?
-        %li Tagged: #{tag_list_links(page)}
-    %p #{truncate(page.description, :length => 200)}

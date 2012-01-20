@@ -1,6 +1,8 @@
 class Page < ActiveRecord::Base
-  validates_presence_of :title
   has_many :assets, :as => :assetable
+  belongs_to :member
+  
+  validates_presence_of :title
   
   searchable do
     text :title
