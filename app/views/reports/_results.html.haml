@@ -1,26 +1,12 @@
 #run-results{:title => 'Results'}
-  - if current_member.booting_ec2_instance?
-    %h3 
-      We are starting your own R server. This could take a minute. Please wait.
-    %p
-      = image_tag 'ajax-loader.gif', :class => 'ajax-loader'
-  - else
-    - if @report.passing? or @report.failing?
-      #results-actions
-        = link_to 'Annotate and Publish these Results', edit_report_path(@report), :class => 'button'
-      #plots
-        %h3 Plots
-        %ul.reset
-          - @report.plots.each do |plot|
-            %li
-              = link_to image_tag(plot.plot.thumb('250x250#').url(:format => :png)), plot.plot.url(:format => :png), :target => '_blank' 
-      #output
-        %h3 Output
-        = simple_format @report.output
-    - else 
-      %h3 
-        We are running your R script. This could take a minute. Please wait. 
-      %p
-        = image_tag 'ajax-loader.gif', :class => 'ajax-loader'
-      
-  
+  #results-actions
+    = link_to 'Annotate and Publish these Results', edit_report_path(@report), :class => 'button'
+  #plots
+    %h3 Plots
+    %ul.reset
+      - @report.plots.each do |plot|
+        %li
+          = link_to image_tag(plot.plot.thumb('250x250#').url(:format => :png)), plot.plot.url(:format => :png), :target => '_blank' 
+  #output
+    %h3 Output
+    = simple_format @report.output    

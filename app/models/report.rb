@@ -4,6 +4,7 @@ class Report < ActiveRecord::Base
   belongs_to :forked_from, :class_name => 'Report'
   has_many :forks, :class_name => 'Report', :foreign_key => :forked_from_id
   has_and_belongs_to_many :surveys
+  belongs_to :job, :class_name => '::Delayed::Job', :foreign_key => :job_id 
   
   accepts_nested_attributes_for :plots
 
@@ -54,18 +55,13 @@ class Report < ActiveRecord::Base
   end
   
   state_machine :state, :initial => :pending do
-    state :preparing_to_run
     state :running
     state :passing
     state :failing
     state :published 
-    
-    event :prepare_to_run do 
-      transition [:pending, :passing, :failing, :published] => :preparing_to_run
-    end
 
     event :run do
-      transition :preparing_to_run => :running
+      transition [:pending, :passing, :failing, :published] => :running
     end
 
     event :passed do
@@ -79,12 +75,14 @@ class Report < ActiveRecord::Base
     event :publish do
       transition :passing => :published
     end
-    
-    after_transition any => :preparing_to_run do |report, transition|
-      report.update_attribute :output, nil
-    end
 
     after_transition any => :running do |report, transition|
+      unless report.member.get_ec2_instance.try(:state).to_s == 'running'
+        Pusher["report_#{report.id}"].trigger('booting', 'booting')
+        report.member.create_ec2_instance!
+      end
+      Pusher["report_#{report.id}"].trigger('running', 'running')
+      report.update_attribute :output, nil
       report.member.update_attribute :ec2_last_accessed_at, Time.now
       ec2_instance = report.member.get_ec2_instance
       local_script_name = Tempfile.new report.member.nickname + 'script'
@@ -97,8 +95,11 @@ class Report < ActiveRecord::Base
       report.update_attribute :output, output      
       if output.include?('Execution halted')
         report.failed! 
+        Pusher["report_#{report.id}"].trigger('failed', 'failed')
       else
         report.passed!
+        Pusher["report_#{report.id}"].trigger('passed', 'passed')
+        Pusher["report_#{report.id}"].trigger('retrieving_plots', 'Retrieving plots...')
         ec2_instance.ssh("convert -density 300 -resize 1000x1000\> -quality 100 Rplots.pdf Rplots.png")
         (0..1000).each do |i|
           begin
@@ -121,12 +122,14 @@ class Report < ActiveRecord::Base
             end
             local_page_name.delete 
             ec2_instance.ssh "rm #{remote_page_name}"
+            Pusher["report_#{report.id}"].trigger('retrieving_plots', "Retrieved plot #{i + 1}...")
           rescue Net::SCP::Error
             report.plots.where('position >= ?', i + 1).destroy_all
             break 
           end
         end
         ec2_instance.ssh "rm Rplots.pdf"
+        Pusher["report_#{report.id}"].trigger('finished', report.state)
       end
     end
     

@@ -2,7 +2,7 @@ class ReportsController < ApplicationController
   before_filter :load_report, :except => [:new, :create, :index, :pending, :published, :passing, :failing, :by_tag]
   before_filter :authenticate_member!, :except => [:index, :pending, :published, :passing, :failing, 
     :by_tag, :show, :view_code, :output, :surveys]
-  before_filter :owner_only, :only => [:edit, :update, :destroy, :publish, :code, 
+  before_filter :owner_only, :only => [:edit, :update, :destroy, :publish, :code, :results,
     :save_and_run, :save_and_continue, :save_and_exit]
   before_filter :load_tags, :only => [:index, :by_tag]
   before_filter :load_facebook_meta, :except => [:new, :create, :index, :pending, :published, :passing, :failing, :by_tag]
@@ -94,18 +94,10 @@ class ReportsController < ApplicationController
   
   def save_and_run
     @report.update_attribute :code, params[:report][:code] if params[:report] and params[:report][:code]
-    @job_id = params[:job_id]
-    if current_member.get_ec2_instance.try(:state).to_s == 'running'
-      unless @report.preparing_to_run? or params[:job_id]
-        @report.prepare_to_run!
+    current_member.transaction do 
+      unless @report.job or @report.running?
         @job_id = @report.delay.run!.id
-      end
-    else
-      current_member.transaction do 
-        if not current_member.booting_ec2_instance?
-          current_member.update_attribute :booting_ec2_instance, true
-          current_member.delay.create_ec2_instance!
-        end
+        @report.update_attribute :job_id, @job_id
       end
     end
   end 

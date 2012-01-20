@@ -82,6 +82,7 @@ Soepi::Application.routes.draw do
       get 'output'
       get 'surveys(/page/:page)', :action => 'surveys', :as => :surveys
       get 'code'
+      get 'results'
       get 'view_code'
     end
     collection do 

@@ -1,0 +1,8 @@
+$('#run-results').remove();
+$('body').append("<%= escape_javascript(render(:partial => 'results')) %>");
+$('#run-results').dialog({width:900, height:600, modal:true, zIndex:9, resizable:false});
+init_common_elements();
+$('.report-state').html('<%= escape_javascript @report.state_human %>');
+<% if @report.passing? %>
+  $('#publish').show();
+<% end %>

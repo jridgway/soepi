@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120120144655) do
+ActiveRecord::Schema.define(:version => 20120120184429) do
 
   create_table "age_groups", :force => true do |t|
     t.string   "label"
@@ -748,6 +748,7 @@ ActiveRecord::Schema.define(:version => 20120120144655) do
     t.text     "output"
     t.text     "conclusion"
     t.integer  "forked_from_id"
+    t.integer  "job_id"
   end
 
   add_index "reports", ["slug"], :name => "index_reports_on_slug", :unique => true
