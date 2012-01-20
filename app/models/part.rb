@@ -1,4 +1,6 @@
 class Part < ActiveRecord::Base
+  has_many :assets, :as => :assetable
+  
   validates_presence_of :name
   
   def self.find_or_set(name, body='', raw=false)

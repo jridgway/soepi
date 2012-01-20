@@ -1,5 +1,6 @@
 class Page < ActiveRecord::Base
   validates_presence_of :title
+  has_many :assets, :as => :assetable
   
   searchable do
     text :title

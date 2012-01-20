@@ -1,21 +1,10 @@
-- if not defined?(show_owner) or show_owner
-  .survey
-    = avatar(survey.member, 60) if not defined?(show_owner) or show_owner
-    .inner
-      %h3
-        - if not defined?(show_owner) or show_owner
-          = link_to survey.member.nickname, member_path(survey.member)
-          \/
-        %strong= link_to survey.title, survey_path(survey)
-      %ul.attributes
-        %li Status: #{survey.state_human}
-        %li Survey posted: #{timeago survey.created_at}
-        - unless survey.tags.empty?
-          %li Tagged: #{tag_list_links(survey)}
-      %p #{truncate(survey.description, :length => 200)}
-- else
-  .survey
-    %h3= link_to survey.title, survey_path(survey)
+.survey
+  = avatar(survey.member, 60)
+  .inner
+    %h3
+      = link_to survey.member.nickname, member_path(survey.member)
+      \/
+      %strong= link_to survey.title, survey_path(survey)
     %ul.attributes
       %li Status: #{survey.state_human}
       %li Survey posted: #{timeago survey.created_at}

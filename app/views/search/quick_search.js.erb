@@ -25,7 +25,7 @@
       {
         :label => result.title,
         :logo => %{<img src="/assets/soepi-logo-light-bg.png" width="50" />},
-        :description => result.path.gsub(' - ', ' &gt; ').html_safe,
+        :description => truncate(result.body, :size => 20),
         :value => "/#{result.to_param}"
       }
   end

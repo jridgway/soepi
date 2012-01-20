@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120116173434) do
+ActiveRecord::Schema.define(:version => 20120120144655) do
 
   create_table "age_groups", :force => true do |t|
     t.string   "label"
@@ -24,6 +24,22 @@ ActiveRecord::Schema.define(:version => 20120116173434) do
   create_table "age_groups_targets", :id => false, :force => true do |t|
     t.integer "target_id"
     t.integer "age_group_id"
+  end
+
+  create_table "assets", :force => true do |t|
+    t.string   "assetable_type"
+    t.integer  "assetable_id"
+    t.string   "file"
+    t.string   "file_uid"
+    t.string   "file_mime_type"
+    t.string   "file_name"
+    t.integer  "file_size"
+    t.integer  "file_width"
+    t.string   "file_height"
+    t.string   "file_image_uid"
+    t.string   "file_image_ext"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "census_geo_profiles", :force => true do |t|
@@ -576,7 +592,7 @@ ActiveRecord::Schema.define(:version => 20120116173434) do
     t.datetime "updated_at"
     t.string   "slug"
     t.boolean  "raw",              :default => false
-    t.string   "author_nickname"
+    t.integer  "member_id"
   end
 
   add_index "pages", ["slug"], :name => "index_pages_on_slug"
