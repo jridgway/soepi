@@ -13,7 +13,8 @@ task :terminte_inactive_ec2_instances => :environment do
     )
     
   connection.servers.each do |server|
-    if server.image_id == 'ami-29ff3440' and server.try(:state).to_s == 'running' and not Member.find_by_ec2_instance_id(server.id)
+    if server.image_id == 'ami-29ff3440' and server.try(:state).to_s == 'running' and 
+    not Member.find_by_ec2_instance_id(server.id) and server.key_name != 'fog_default_development'
       server.destroy
     end  
   end
