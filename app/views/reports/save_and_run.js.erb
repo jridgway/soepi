@@ -2,7 +2,7 @@ $('#please-wait, #run-results').remove();
 $('body').append("<%= escape_javascript(render(:partial => 'running')) %>");
 $('#run-results').dialog({width:500, height:200, modal:true, zIndex:9, resizable:false}).show('blind');
 
-$.getScript('http://js.pusher.com/1.11/pusher.min.js', function() {
+$.getScript('https://d3ds63zw57jt09.cloudfront.net/1.10/pusher.min.js', function() {
   <% if Rails.env.development? %>
     // Enable pusher logging - don't include this in production
     Pusher.log = function(message) {
@@ -14,7 +14,7 @@ $.getScript('http://js.pusher.com/1.11/pusher.min.js', function() {
     // Flash fallback logging - don't include this in production
     WEB_SOCKET_DEBUG = true;
   
-    var pusher = new Pusher('61a69531bcb17dc34606');
+    var pusher = new Pusher('61a69531bcb17dc34606', {encrypted: true});
     var channel = pusher.subscribe('report_<%= @report.id %>');
     channel.bind('booting', function(data) {
       $('#run-results h3').html('We are booting your R server. Please wait.');
@@ -36,7 +36,7 @@ $.getScript('http://js.pusher.com/1.11/pusher.min.js', function() {
       $.getScript('results');
     });
   <% elsif Rails.env.production? %>
-    var pusher = new Pusher('a5985f452f5ea502591e');
+    var pusher = new Pusher('a5985f452f5ea502591e', {encrypted: true});
     var channel = pusher.subscribe('report_<%= @report.id %>');
     channel.bind('my_event', function(data) {
       alert(data);
