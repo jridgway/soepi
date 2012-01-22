@@ -1,6 +1,7 @@
 class MemberStatus < ActiveRecord::Base
   belongs_to :member
   has_and_belongs_to_many :member_references, :class_name => 'Member'
+  has_many :notifications, :as => :notifiable, :dependent => :destroy
   
   acts_as_taggable
   
@@ -33,7 +34,11 @@ class MemberStatus < ActiveRecord::Base
     end
   
     def notify!
-      member.member_followers.each {|m| m.delay.notify!(self, "#{member.nickname}'s status was updated")}
       member_references.each {|m| m.delay.notify!(self, "#{member.nickname} referred to you in his/her status update")}
+      member.member_followers.each do |m| 
+        if not member_reference_ids.include? m.id
+          m.delay.notify!(self, "#{member.nickname}'s status was updated")
+        end
+      end
     end
 end
