@@ -4,43 +4,36 @@ $('#run-results').dialog({width:500, height:200, modal:true, zIndex:9, resizable
 
 $.getScript('https://d3dy5gmtp8yhk7.cloudfront.net/1.11/pusher.min.js', function() {
   <% if Rails.env.development? %>
-    // Enable pusher logging - don't include this in production
     Pusher.log = function(message) {
       if(window.console && window.console.log) {
         window.console.log(message);
       }
     };
-  
-    // Flash fallback logging - don't include this in production
-    WEB_SOCKET_DEBUG = true;
-  
+    WEB_SOCKET_DEBUG = true;  
     var pusher = new Pusher('61a69531bcb17dc34606', {encrypted: true});
     var channel = pusher.subscribe('report_<%= @report.id %>');
-    channel.bind('booting', function(data) {
-      $('#run-results h3').html('We are booting your R server. Please wait.');
-    });
-    channel.bind('running', function(data) {
-      $('#run-results h3').html('We are running your script. Please wait.');
-    });
-    channel.bind('failed', function(data) {
-      $('#run-results h3').html('Your script failed. Please wait for the results.');
-    });
-    channel.bind('passed', function(data) {
-      $('#run-results h3').html('Your script passed. Please wait for the results.');
-    });
-    channel.bind('retrieving_plots', function(data) {
-      $('#run-results h3').html(data);
-    });
-    channel.bind('finished', function(data) {
-      $('.report-state').html('Finished. Loading results...');
-      $.getScript('results');
-    });
   <% elsif Rails.env.production? %>
     var pusher = new Pusher('a5985f452f5ea502591e', {encrypted: true});
     var channel = pusher.subscribe('report_<%= @report.id %>');
-    channel.bind('my_event', function(data) {
-      alert(data);
-    });
   <% end %>
+  channel.bind('booting', function(data) {
+    $('#run-results h3').html('We are booting your R server. Please wait.');
+  });
+  channel.bind('running', function(data) {
+    $('#run-results h3').html('We are running your script. Please wait.');
+  });
+  channel.bind('failed', function(data) {
+    $('#run-results h3').html('Your script failed. Please wait for the results.');
+  });
+  channel.bind('passed', function(data) {
+    $('#run-results h3').html('Your script passed. Please wait for the results.');
+  });
+  channel.bind('retrieving_plots', function(data) {
+    $('#run-results h3').html(data);
+  });
+  channel.bind('finished', function(data) {
+    $('.report-state').html('Finished. Loading results...');
+    $.getScript('results');
+  });
 });
 
