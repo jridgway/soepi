@@ -1,0 +1,8 @@
+#new-status{:title => "Update Your Status In Response To: #{@status.body.gsub('@', '')}"}
+  = simple_form_for @status, :url => member_statuses_path, :html => {:novalidate => true, :class => 'status'}, :remote => true do |f|
+    = f.input :body, :label => false do 
+      .input
+        = avatar(current_member, 24)
+        = f.input_field :body
+      = f.input :tag_list, :label => false, :input_html => {:class => 'tags', :"data-seperator" => ',', :placeholder => 'Tag it!'}, :hint => 'Categorize this status with any words you want. Hit Enter or type a comma to delimit each tag.'
+      %button.button{:type => 'submit', :icon => 'ui-icon-signal-diag'} Share

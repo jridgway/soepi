@@ -1,0 +1,70 @@
+@import "common";
+
+.bp
+  {      
+  form.status
+    {
+    @include clearfix;
+    margin-bottom: 15px;
+    
+    .input
+      {
+      a.avatar
+        {
+        float: left;
+        margin: 5px 10px 0 0;
+        }
+    
+      #member_status_body
+        {
+        height: 20px;
+        width: 526px;
+        max-width: 526px;
+        padding: 10px;
+        font-family: inherit;
+        }
+      }
+      
+    ul.tagit
+      {
+      width: 542px !important;
+      margin-left: 35px;
+      }
+    
+    #status-extra 
+      {
+      float: left;
+      }
+    
+    button
+      {
+      margin-left: 495px;
+      }
+    }
+    
+  .member_status
+    {
+    @include clearfix;
+    position: relative;
+    overflow: visible;
+    
+    .actions
+      {
+      display: none;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      -moz-box-shadow: 0 0 10px #111;
+      -webkit-box-shadow: 0 0 10px #111;
+      box-shadow: 0 0 10px #111;
+      }
+    
+    &:hover 
+      {      
+      .actions
+        {
+        display: block;
+        }
+      }
+    }
+  }

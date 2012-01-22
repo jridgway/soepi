@@ -6,4 +6,4 @@
       %li[status]
         = render :partial => '/members/statuses/status', :locals => {:status => status}
   = paginate  @statuses, :remote => true
-= javascript_tag 'init_common_elements();'
+= javascript_tag 'init_common_elements(); show_hide_member_related();'

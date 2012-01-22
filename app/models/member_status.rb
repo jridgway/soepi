@@ -12,6 +12,10 @@ class MemberStatus < ActiveRecord::Base
   
   default_scope order('created_at desc')
   
+  def reply_to_members
+    (["@#{member.nickname}"] + member_references.collect {|m| "@#{m.nickname}"}).join(', ')
+  end
+  
   protected
     
     def empty_message
@@ -30,6 +34,6 @@ class MemberStatus < ActiveRecord::Base
   
     def notify!
       member.member_followers.each {|m| m.delay.notify!(self, "#{member.nickname}'s status was updated")}
-      member_references.each {|m| m.delay.notify!(self, "#{member.nickname} wrote about you")}
+      member_references.each {|m| m.delay.notify!(self, "#{member.nickname} referred to you in his/her status update")}
     end
 end

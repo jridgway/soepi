@@ -1,0 +1,15 @@
+$('#new-status').remove();
+$('body').append('<%= escape_javascript render(:template => '/members/statuses/_new.html.haml') %>');
+$('#new-status').dialog({width:630, height:350, modal:true}).show('blind');
+init_common_elements();
+init_form_tips();
+init_tagit();
+init_placeholder();
+var status_start = $('#new-status #member_status_body').val().indexOf(',');
+var status_end = $('#new-status #member_status_body').val().replace(',', ' ').indexOf(',');
+if(status_start > 0) {
+  if(status_end < 0) {
+    status_end = $('#new-status #member_status_body').val().length;
+  }
+  setTimeout("$('#new-status #member_status_body').caret(status_start, status_end);", 500);
+}

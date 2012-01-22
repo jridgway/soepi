@@ -1,4 +1,5 @@
 <% unless @status.new_record? %>
+  $('#new-status').remove();
   $('body').append('<div id="alert" title="Alert"><p>Your status was sent!</p></div>');
   $('#alert').dialog({
     modal:true, 

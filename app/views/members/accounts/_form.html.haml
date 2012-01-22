@@ -2,7 +2,7 @@
   = f.input :email, :as => :email, :hint => '<strong class="private">Private</strong>  &mdash; Not revealed to the public.'.html_safe
   - if @member.password_required?
     = f.input :password do 
-      = f.input_field :password, :class => 'password-stregth'
+      = f.input_field :password, :class => 'password-strength'
       .inline-hint   
         Your password is forceable in
         %strong#time ...

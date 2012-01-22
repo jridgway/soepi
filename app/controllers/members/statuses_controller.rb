@@ -13,6 +13,11 @@ class Members::StatusesController < ApplicationController
     @statuses = MemberStatus.tagged_with(@tag).page(params[:page])
     render :action => 'index'
   end
+  
+  def new 
+    @status = current_member.statuses.build params[:member_status]
+    @status.body = params[:reply_to_members]
+  end
     
   def create 
     @status = current_member.statuses.build params[:member_status]
@@ -21,9 +26,7 @@ class Members::StatusesController < ApplicationController
   
   def destroy 
     current_member.statuses.destroy params[:id]
-    if request.xhr?
-      render :text => "$('#status_#{params[:id]}').remove();"
-    else
+    unless request.xhr?
       flash[:notice] = 'Your status was deleted.'
       redirect_to root_path
     end

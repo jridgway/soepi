@@ -20,6 +20,7 @@
  *= require partials/listing
  *= require partials/sign_in
  *= require partials/reports
+ *= require partials/statuses
  *= require partials/home
  *= require partials/misc
  *= require codemirror

@@ -1,14 +1,6 @@
 $(document).ready(function () {
   setTimeout("focus_first_form_field();", 100);
-  $('input.tags, textarea.tags').tagit({allowSpaces:true});
-  $('input.tags, textarea.tags').each(function() {
-    if($(this).closest('.input').find('[placeholder]').length > 0) {
-      $(this).closest('.input').find('.tagit-new input').attr(
-        'placeholder', $(this).closest('.input').find('[placeholder]').attr('placeholder'));
-    };
-  });
-  $('form.uneditable .tagit-close').remove();
-  $('form.uneditable .tagit input:visible').remove();
+  init_tagit();
   init_placeholder();
   $('#participant_ethnicity_ids_1').live('change', function() {
     if($(this).attr('checked')) {
@@ -34,7 +26,7 @@ $(document).ready(function () {
   $(tab_with_errors).closest('.tabs').tabs('select', tab_with_errors.index()-1);
   $('.tagit-new input').autoGrowInput({minWidth:60, maxWidth:520, comfortZone:20})
   $('.tagit-new input').width('60px');
-  $('.password-stregth').pwdstr('#time');
+  $('.password-strength').pwdstr('#time');
 });
 
 function focus_first_form_field() {
@@ -47,10 +39,22 @@ function focus_first_form_field() {
   }
 }
 
+function init_tagit() {
+  $('input.tags, textarea.tags').tagit({allowSpaces:true});
+  $('input.tags, textarea.tags').each(function() {
+    if($(this).closest('.input').find('[placeholder]').length > 0) {
+      $(this).closest('.input').find('.tagit-new input').attr(
+        'placeholder', $(this).closest('.input').find('[placeholder]').attr('placeholder'));
+    };
+  });
+  $('form.uneditable .tagit-close').remove();
+  $('form.uneditable .tagit input:visible').remove();
+}
+
 function init_placeholder() {
   if(!Modernizr.input.placeholder) {
     $('[placeholder]').each(function() {
-      if($(this).hasClass('tags')) {
+      if($(this).parent().hasClass('tagit-new')) {alert(1);
         if($(this).val() == '') {
           var target = $(this).closest('.input').find('.tagit-new input');
           $(target).val($(this).attr('placeholder'));
@@ -60,7 +64,7 @@ function init_placeholder() {
             }
           });
           $(target).blur(function() {
-            if($(this).closest('.input').find('ul.tagit').children().length == 1) {
+            if($(this).closest('.input').find('ul.tagit').children().length <= 1) {
               $(target).val($(this).attr('placeholder'));
             }
           });

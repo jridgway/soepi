@@ -39,7 +39,7 @@ Soepi::Application.routes.draw do
     end
   end
   
-  resources :member_statuses, :controller => 'members/statuses', :path => '/statuses', :only => [:index, :show, :create, :destroy] do 
+  resources :member_statuses, :controller => 'members/statuses', :path => '/statuses', :only => [:index, :show, :new, :create, :destroy] do 
     collection do
       get '(page/:page)', :action => 'index'
       get 'tagged/:tag(/page/:page)', :action => 'by_tag'

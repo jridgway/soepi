@@ -1,48 +1,7 @@
 @import "common";
-@import "compass/css3/opacity";
 
 .bp.home
-  {
-  form.status
-    {
-    @include clearfix;
-    margin-bottom: 15px;
-    
-    .input
-      {
-      a.avatar
-        {
-        float: left;
-        margin: 5px 10px 0 0;
-        }
-    
-      #member_status_body
-        {
-        height: 20px;
-        width: 526px;
-        max-width: 526px;
-        padding: 10px;
-        font-family: inherit;
-        }
-      }
-      
-    ul.tagit
-      {
-      width: 542px;
-      margin-left: 35px;
-      }
-    
-    #status-extra 
-      {
-      float: left;
-      }
-    
-    button
-      {
-      float: right;
-      }
-    }
-  
+  {  
   #your
     {
     margin-bottom: 15px;
