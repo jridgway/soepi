@@ -53,6 +53,7 @@
       <% if current_member.admin? %>
         $('.owner-only').show();
         $('.owner-only-not-admins[data-member-id!=<%= current_member.id %>]').hide();
+        $('.owner-only-until-published').show(); 
         $('.admins-only').show();
         $('.not-admin').hide();
       <% end %> 
