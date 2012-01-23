@@ -78,7 +78,9 @@ class Message < ActiveRecord::Base
         members_to_notify = members.where('member_id != ?', member_id)
       end
       members_to_notify.each do |member|
-        Mailer.new_message(member, self).deliver
+        if member.subscription_messages?
+          Mailer.delay.new_message(member, self).deliver
+        end
       end
     end
 end
