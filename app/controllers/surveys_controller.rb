@@ -1,5 +1,3 @@
-require 'csv'
-
 class SurveysController < ApplicationController
   before_filter :load_survey, :only => [:show, :forks, :demographics, :downloads, :reports, :forkit, :launch, 
     :reject, :request_changes, :participate, :create_response, :store_pin, :new_participant, :create_participant, 
