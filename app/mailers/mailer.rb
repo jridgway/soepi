@@ -1,25 +1,25 @@
 require 'open-uri'
 
 class Mailer < Devise::Mailer
-  default from: "contact@soepi.org"
+  default from: "no-reply@soepi.org"
   layout 'mailer'
 
-  def notifications(member, notifications2)
+  def new_notifications(member, notifications)
     @member = member
-    @notifications = notifications2
+    @notifications = notifications
     inline_layout_images
-    setup_mail(member, :notifications)
+    setup_mail(member, :new_notifications)
   end
 
-  def message3(member, message2)
+  def new_message(member, message)
     @member = member
-    @message = message2
+    @message = message
     results = open avatar_url(@message.member, 60)
     @avatar_key = @message.member.nickname + '.' + results.content_type.split('/').last
     attachments.inline[@avatar_key] = results.read
     attachments.inline['respond.gif'] = File.read(Rails.root.join('app', 'assets', 'images', 'respond.gif'))
     inline_layout_images
-    setup_mail(member, :message3)
+    setup_mail(member, :new_message)
   end
 
   def inline_layout_images(others={})

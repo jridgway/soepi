@@ -8,17 +8,21 @@ class Notification < ActiveRecord::Base
   scope :unseen, where('seen = false')
   scope :seen, where('seen = true')
   
-  def self.deliver_undelivered_notifications!
-    last_delivery_at = Setting.find_or_set :last_notifications_delivered_at, 1.year.ago
-    Setting.set :last_notifications_delivered_at, Time.now
-    member_ids = select('distinct member_id').where('created_at > ?', last_delivery_at).collect(&:member_id)
-    member_ids.each do |member_id|
-      member = Member.find(member_id)
-      notifications = where('created_at > ? and member_id = ?', last_delivery_at, member_id)
-      Mailer.notifications(member, notifications).deliver
-      puts "Delivered #{notifications.length} notifications to #{member.nickname}"
+  def self.deliver_notifications!
+    member_ids = with_exclusive_scope {
+        where('notifications.created_at > members.last_notifications_delivered_at or members.last_notifications_delivered_at is null').
+        select('distinct member_id').joins('join members on members.id = notifications.member_id').
+        collect(&:member_id)
+      }
+    Member.find(member_ids).each do |member|
+      if member.last_notifications_delivered_at.nil?
+        notifications = member.notifications
+      else
+        notifications = member.notifications.where('created_at > ?', member.last_notifications_delivered_at)
+      end
+      member.update_attribute :last_notifications_delivered_at, Time.now
+      Mailer.new_notifications(member, notifications).deliver
+      logger.info "Delivered #{notifications.length} notifications to #{member.nickname}"
     end
-  rescue  
-    Setting.set :last_notifications_delivered_at, last_delivery_at
   end
 end

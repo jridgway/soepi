@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120120184429) do
+ActiveRecord::Schema.define(:version => 20120123170059) do
 
   create_table "age_groups", :force => true do |t|
     t.string   "label"
@@ -480,14 +480,14 @@ ActiveRecord::Schema.define(:version => 20120120184429) do
   create_table "members", :force => true do |t|
     t.string   "password_salt"
     t.string   "email"
-    t.string   "encrypted_password",            :limit => 128, :default => "",    :null => false
+    t.string   "encrypted_password",              :limit => 128, :default => "",    :null => false
     t.string   "reset_password_token"
     t.datetime "remember_created_at"
     t.string   "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string   "authentication_token"
-    t.integer  "failed_attempts",                              :default => 0
+    t.integer  "failed_attempts",                                :default => 0
     t.string   "unlock_token"
     t.datetime "locked_at"
     t.string   "nickname"
@@ -502,22 +502,23 @@ ActiveRecord::Schema.define(:version => 20120120184429) do
     t.string   "pic_image_ext"
     t.string   "timezone"
     t.string   "language"
-    t.boolean  "informed_consent",                             :default => false
-    t.boolean  "terms_of_use",                                 :default => false
-    t.boolean  "subscription_notifications",                   :default => true
-    t.boolean  "subscription_messages",                        :default => true
-    t.boolean  "subscription_news",                            :default => true
+    t.boolean  "informed_consent",                               :default => false
+    t.boolean  "terms_of_use",                                   :default => false
+    t.boolean  "subscription_notifications",                     :default => true
+    t.boolean  "subscription_messages",                          :default => true
+    t.boolean  "subscription_news",                              :default => true
     t.integer  "year_registered"
-    t.boolean  "admin",                                        :default => false
-    t.boolean  "subscription_charts",                          :default => true
-    t.boolean  "privacy_dont_use_my_gravatar",                 :default => false
-    t.boolean  "privacy_dont_list_me",                         :default => false
+    t.boolean  "admin",                                          :default => false
+    t.boolean  "subscription_charts",                            :default => true
+    t.boolean  "privacy_dont_use_my_gravatar",                   :default => false
+    t.boolean  "privacy_dont_list_me",                           :default => false
     t.string   "slug"
-    t.boolean  "subscription_weekly_summaries",                :default => true
-    t.integer  "credits",                                      :default => 10
+    t.boolean  "subscription_weekly_summaries",                  :default => true
+    t.integer  "credits",                                        :default => 10
     t.string   "ec2_instance_id"
-    t.boolean  "booting_ec2_instance",                         :default => false
+    t.boolean  "booting_ec2_instance",                           :default => false
     t.datetime "ec2_last_accessed_at"
+    t.datetime "last_notifications_delivered_at"
   end
 
   add_index "members", ["confirmation_token"], :name => "index_members_on_confirmation_token", :unique => true
