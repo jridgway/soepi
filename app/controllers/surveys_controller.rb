@@ -13,7 +13,8 @@ class SurveysController < ApplicationController
   
   caches_action :index, :drafting, :rejected, :review_requested, :launched, :published, 
     :you_created, :by_tag, :show, :edit, 
-    :cache_path => Proc.new {|controller| cache_expirary_key(controller.params)}
+    :cache_path => Proc.new {|controller| cache_expirary_key(controller.params)}, 
+    :expires_in => 2.hours
   cache_sweeper :surveys_sweeper, :only => [:create, :update, :destroy, :submit_for_review, :request_changes, 
     :launch, :reject, :close]
 

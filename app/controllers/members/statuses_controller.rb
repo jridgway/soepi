@@ -3,6 +3,10 @@ class Members::StatusesController < ApplicationController
   before_filter :load_tags, :only => [:index, :by_tag]
   before_filter :load_facebook_meta, :only => [:show, :code, :output, :edit, :update]
   layout Proc.new { |controller| controller.request.xhr? ? 'ajax' : 'two_column' }  
+  caches_action [:index, :by_tag], 
+    :cache_path => Proc.new {|controller| cache_expirary_key(controller.params)}, 
+    :expires_in => 2.hours
+  cache_sweeper :statuses_sweeper, :only => [:create, :destroy]
   
   def index 
     @statuses = MemberStatus.page(params[:page]).per(10)
@@ -47,5 +51,9 @@ class Members::StatusesController < ApplicationController
         :image_url => "#{request.protocol}#{request.host_with_port}/assets/soepi-logo-light-bg.png",
         :type => 'MemberStatus'
       }
+    end
+    
+    def cache_expirary_key(params)
+      params.merge :cache_expirary_key => Rails.cache.read(:statuses_cache_expirary_key)
     end
 end

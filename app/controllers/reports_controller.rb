@@ -7,6 +7,11 @@ class ReportsController < ApplicationController
   before_filter :load_tags, :only => [:index, :by_tag]
   before_filter :load_facebook_meta, :except => [:new, :create, :index, :pending, :published, :passing, :failing, :by_tag]
   layout Proc.new { |controller| controller.request.xhr? ? 'ajax' : 'one_column' }
+  caches_action [:index, :pending, :published, :passing, :failing, :by_tag, :show, :view_code, :output, :surveys], 
+    :cache_path => Proc.new {|controller| cache_expirary_key(controller.params)}, 
+    :expires_in => 2.hours
+  cache_sweeper :reports_sweeper, :only => [:create, :update, :destroy, :save_and_run, :save_and_continue, 
+    :save_and_exit, :forkit, :publish]
   
   def index 
     @reports = Report.published.page(params[:page]).per(10)
@@ -151,5 +156,9 @@ class ReportsController < ApplicationController
         :image_url => "#{request.protocol}#{request.host_with_port}/assets/soepi-logo-light-bg.png",
         :type => 'Report'
       }
+    end
+    
+    def cache_expirary_key(params)
+      params.merge :cache_expirary_key => Rails.cache.read(:reports_cache_expirary_key)
     end
 end
