@@ -32,6 +32,7 @@ class ParticipantsController < ApplicationController
         with f, params[f] unless params[f].blank?
       end
       facet :gender, :age_group, :races, :ethnicities, :education
+      paginate :page => params[:page], :per_page => 10
     end
     render :layout => 'two_column'
   end
