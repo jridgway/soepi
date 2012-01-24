@@ -36,7 +36,7 @@ class Report < ActiveRecord::Base
   end
   
   searchable do
-    text :title
+    text :title, :boost => 5.0
     text :introduction
     text :conclusion
     text :code

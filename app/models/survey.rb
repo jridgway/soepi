@@ -39,7 +39,7 @@ class Survey < ActiveRecord::Base
   validate :settings_for_draft
   
   searchable do
-    text :title
+    text :title, :boost => 5.0
     text :description
     text :purpose_of_survey
     text :uses_of_results

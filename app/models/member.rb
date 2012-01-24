@@ -27,7 +27,7 @@ class Member < ActiveRecord::Base
     :omniauthable, :confirmable, :token_authenticatable, :lockable
 
   searchable do
-    text :nickname
+    text :nickname, :boost => 10.0
     boolean :published do 
       confirmed? and not privacy_dont_list_me?
     end
