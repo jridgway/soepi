@@ -38,7 +38,7 @@ class Member < ActiveRecord::Base
   attr_protected :admin, :credits
 
   attr_accessible :remove_pic, :pic, :email, :password, :password_confirmation, :remember_me,
-    :nickname, :timezone, :tag_list, :informed_consent, :terms_of_use,
+    :nickname, :tag_list, :informed_consent, :terms_of_use,
     :subscription_notifications, :subscription_weekly_summaries, :subscription_messages, :subscription_news, 
     :privacy_dont_use_my_gravatar, :privacy_dont_list_me
 
@@ -47,7 +47,7 @@ class Member < ActiveRecord::Base
   validates_property :mime_type, :of => :pic, :in => %w(image/jpeg image/png image/gif image/tiff), 
     :message => 'must be a jpg, png, gif, or tiff image'
 
-  validates_presence_of :nickname, :timezone
+  validates_presence_of :nickname
   validates_uniqueness_of :nickname
   validate :unallowed_nicknames
   validates_length_of :nickname, :minimum => 3, :maximum => 15, :allow_blank => true
@@ -101,26 +101,26 @@ class Member < ActiveRecord::Base
   def apply_omniauth(omniauth, omniauth_user_hash)
     case omniauth['provider']
       when 'facebook' then
-        self.first_name = omniauth['user_info']['first_name'] if first_name.blank?
-        self.last_name = omniauth['user_info']['last_name'] if last_name.blank?
+        #self.first_name = omniauth['user_info']['first_name'] if first_name.blank?
+        #self.last_name = omniauth['user_info']['last_name'] if last_name.blank?
         if omniauth_user_hash
           self.email = omniauth_user_hash['email'] if email.blank?
-          if gender.blank? and (gender=Gender.find_by_label(omniauth_user_hash['gender'].titleize))
-            self.gender = gender
-          end
-          if timezone.blank?
-            self.timezone = ActiveSupport::TimeZone.all.select {|z| z.utc_offset/3600 == omniauth_user_hash['timezone'].to_i}.first.name
-          end
-          self.language = omniauth_user_hash['locale'] if language.blank?
+          #if gender.blank? and (gender=Gender.find_by_label(omniauth_user_hash['gender'].titleize))
+          #  self.gender = gender
+          #end
+          #if timezone.blank?
+          #  self.timezone = ActiveSupport::TimeZone.all.select {|z| z.utc_offset/3600 == omniauth_user_hash['timezone'].to_i}.first.name
+          #end
+          #self.language = omniauth_user_hash['locale'] if language.blank?
         end
       when 'twitter' then
-        if omniauth_user_hash
-          self.first_name = omniauth_user_hash['name'].split.first if first_name.blank?
-          self.last_name = omniauth_user_hash['name'].split.last if last_name.blank?
-        end
+        #if omniauth_user_hash
+        #  self.first_name = omniauth_user_hash['name'].split.first if first_name.blank?
+        #  self.last_name = omniauth_user_hash['name'].split.last if last_name.blank?
+        #end
       when 'linked_in', 'google' then
-        self.first_name = omniauth['user_info']['first_name'] if first_name.blank?
-        self.last_name = omniauth['user_info']['last_name'] if last_name.blank?
+        #self.first_name = omniauth['user_info']['first_name'] if first_name.blank?
+        #self.last_name = omniauth['user_info']['last_name'] if last_name.blank?
         self.email = omniauth['user_info']['email'] if email.blank?
       else
         self.email = omniauth['user_info']['email'] if omniauth['user_info'] and email.blank?

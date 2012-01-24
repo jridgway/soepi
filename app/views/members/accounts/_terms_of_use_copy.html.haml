@@ -1,6 +1,6 @@
 #terms-of-use.copy{:style => 'display:none', :title => 'Terms of Use'}
-  - if (terms_of_use = Page.find_by_title('Terms of Use')) and !terms_of_use[:"Body"].blank?
-    = terms_of_use[:"Body"].html_safe
+  - if (terms_of_use = Page.find_by_title('Terms')) and !terms_of_use.blank?
+    = link_member_references(RDiscount.new(terms_of_use.body).to_html).html_safe
   - else
     :markdown
       ## 1. Terms 

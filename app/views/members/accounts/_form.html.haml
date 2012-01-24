@@ -1,5 +1,5 @@
 = field_set_tag 'Account' do
-  = f.input :email, :as => :email, :hint => '<strong class="private">Private</strong>  &mdash; Not revealed to the public.'.html_safe
+  = f.input :email, :as => :email, :required => true, :hint => '<strong class="private">Private</strong>  &mdash; Not revealed to the public.'.html_safe
   - if @member.password_required?
     = f.input :password do 
       = f.input_field :password, :class => 'password-strength'
@@ -7,7 +7,7 @@
         Your password is forceable in
         %strong#time ...
     = f.input :password_confirmation
-  = f.input :nickname, :hint => '<strong class="public">Public</strong> &mdash; Shown on your profile and elsewhere. Not included in anonymous survey results. Rather than revealing your name, provide an anonymous nickname.'.html_safe
+  = f.input :nickname, :hint => '<strong class="public">Public</strong> &mdash; Shown on your profile and elsewhere. Not included in anonymous survey results. <br/></br/><strong>Tip</strong>: Rather than revealing your name, provide an anonymous nickname.'.html_safe
   = f.input :pic, :label => 'Profile Pic', :hint => '<strong class="public">Public</strong> &mdash; Shown on your profile and elsewhere. Not included in anonymous survey results.'.html_safe do 
     = f.file_field :pic
   - if @member.pic and @member.pic.url
@@ -21,7 +21,6 @@
       %strong NOTE: 
       Alternatively, upload your pic to <a href="http://www.gravatar.com" target="_blank">Gravatar.com</a>.
   = f.input :tag_list, :label => 'Tags', :input_html => {:class => 'tags', :"data-seperator" => ','}, :hint => 'Describe yourself with a few words. Hit Enter or type a comma to delimit each tag.'
-  = f.input :timezone, :as => :time_zone, :priority => /US/, :include_blank => true
 - if @member.new_record?
   = render :partial => '/members/accounts/subscriptions_form', :locals => {:f => f}
   = render :partial => '/members/accounts/privacy_form', :locals => {:f => f}

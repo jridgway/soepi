@@ -1,6 +1,6 @@
 #informed-consent.copy{:style => 'display:none', :title => 'Informed Consent'}
-  - if (informed_consent = Page.find_by_title('Informed Consent')) and !informed_consent[:"Body"].blank?
-    = informed_consent[:"Body"].html_safe
+  - if (informed_consent = Page.find_by_title('Informed Consent')) and !informed_consent.body.blank?
+    = link_member_references(RDiscount.new(informed_consent.body).to_html).html_safe
   - else
     :markdown
       ## Purpose of SoEpi:

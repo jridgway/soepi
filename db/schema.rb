@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120123170059) do
+ActiveRecord::Schema.define(:version => 20120124210324) do
 
   create_table "age_groups", :force => true do |t|
     t.string   "label"
@@ -500,7 +500,6 @@ ActiveRecord::Schema.define(:version => 20120123170059) do
     t.integer  "pic_height"
     t.string   "pic_image_uid"
     t.string   "pic_image_ext"
-    t.string   "timezone"
     t.string   "language"
     t.boolean  "informed_consent",                               :default => false
     t.boolean  "terms_of_use",                                   :default => false
