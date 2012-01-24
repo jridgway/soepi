@@ -11,9 +11,8 @@ class SurveysController < ApplicationController
   before_filter :owner_or_admins_only_until_published!, :only => [:edit, :demographics, :downloads, :reports]
   before_filter :load_tags, :only => [:index, :recent, :you_created, :by_tag]
   
-  enable_esi
-  
-  caches_action :index, :drafting, :rejected, :you_created, :by_tag, :show, :edit, 
+  caches_action :index, :drafting, :rejected, :review_requested, :launched, :published, 
+    :you_created, :by_tag, :show, :edit, 
     :cache_path => Proc.new {|controller| cache_expirary_key(controller.params)}
   cache_sweeper :surveys_sweeper, :only => [:create, :update, :destroy, :submit_for_review, :request_changes, 
     :launch, :reject, :close]
