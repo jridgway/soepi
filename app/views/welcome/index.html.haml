@@ -27,7 +27,7 @@
         = render :template => 'welcome/notifications'
       
   - content_for :body_content_right do
-    - cache :expires_in => 15.minutes do 
+    - cache "home_member_top_right", :expires_in => 15.minutes do 
       - if Part.set?(:home_member_top_right)
         .highlight
           = link_member_references(RDiscount.new(Part.find_or_set(:home_member_top_right)).to_html).html_safe

@@ -1,4 +1,4 @@
-- cache :expires_in => 15.minutes do 
+- cache "tags-#{controller_name}", :expires_in => 15.minutes do 
   - if @tags and not @tags.empty?
     %h3 Recent Tags
     %ul#tags
