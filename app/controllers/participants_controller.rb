@@ -2,7 +2,7 @@ class ParticipantsController < ApplicationController
   before_filter :authenticate_member!, :except => [:index, :gmap, :by_city, :by_categories, :by_anonymous_key, :show]
   before_filter :load_default_facets, :except => [:by_facets]
   layout Proc.new { |controller| controller.request.xhr? ? 'ajax' : 'one_column' }
-  caches_action [:index, :gmap, :by_categories, :show, :show_responses], 
+  caches_action :index, :gmap, :by_categories, :show, :show_responses, 
     :cache_path => Proc.new {|controller| controller.params}, 
     :expires_in => 1.hour
    

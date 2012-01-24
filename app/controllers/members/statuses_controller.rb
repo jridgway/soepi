@@ -3,7 +3,7 @@ class Members::StatusesController < ApplicationController
   before_filter :load_tags, :only => [:index, :by_tag]
   before_filter :load_open_graph_meta, :only => [:show, :code, :output, :edit, :update]
   layout Proc.new { |controller| controller.request.xhr? ? 'ajax' : 'two_column' }  
-  caches_action [:index, :by_tag], 
+  caches_action :index, :by_tag, 
     :cache_path => Proc.new {|controller| cache_expirary_key(controller.params)}, 
     :expires_in => 2.hours
   cache_sweeper :statuses_sweeper, :only => [:create, :destroy]

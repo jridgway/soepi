@@ -7,7 +7,7 @@ class ReportsController < ApplicationController
   before_filter :load_tags, :only => [:index, :by_tag]
   before_filter :load_open_graph_meta, :except => [:new, :create, :index, :pending, :published, :passing, :failing, :by_tag]
   layout Proc.new { |controller| controller.request.xhr? ? 'ajax' : 'one_column' }
-  caches_action [:index, :pending, :published, :passing, :failing, :by_tag, :show, :view_code, :output, :surveys], 
+  caches_action :index, :pending, :published, :passing, :failing, :by_tag, :show, :view_code, :output, :surveys, 
     :cache_path => Proc.new {|controller| cache_expirary_key(controller.params)}, 
     :expires_in => 2.hours
   cache_sweeper :reports_sweeper, :only => [:create, :update, :destroy, :save_and_run, :save_and_continue, 

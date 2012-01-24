@@ -2,7 +2,7 @@ class Members::ProfilesController < ApplicationController
   before_filter :load_member, :except => [:index, :publishers, :by_tag, :my_profile, :autocomplete]
   before_filter :load_tags, :only => [:index, :publishers, :by_tag]
   before_filter :load_open_graph_meta, :only => [:show, :reports, :following, :followed_by]
-  caches_action [:index, :publishers, :by_tag, :autocomplete], 
+  caches_action :index, :publishers, :by_tag, :autocomplete, 
     :cache_path => Proc.new {|controller| controller.params}, 
     :expires_in => 1.hour
 
