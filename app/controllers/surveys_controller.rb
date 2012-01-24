@@ -2,7 +2,7 @@ class SurveysController < ApplicationController
   before_filter :load_survey, :only => [:show, :forks, :demographics, :downloads, :reports, :forkit, :launch, 
     :reject, :request_changes, :participate, :create_response, :store_pin, :new_participant, :create_participant, 
     :followed_by, :close]
-  before_filter :load_facebook_meta, :only => [:show, :forks, :forkit, :launch, :reject, :participate,
+  before_filter :load_open_graph_meta, :only => [:show, :forks, :forkit, :launch, :reject, :participate,
     :create_response, :update_pin, :generate_and_send_new_pin, :followed_by]
   before_filter :authenticate_member!, :except => [:index, :launched, :published, :show, :forks, :sharing, 
     :by_tag, :followed_by, :edit, :questions, :demographics, :downloads, :reports]
@@ -278,8 +278,8 @@ class SurveysController < ApplicationController
       @survey = @followable = Survey.find(params[:id])
     end
 
-    def load_facebook_meta
-      @facebook_meta = {
+    def load_open_graph_meta
+      @open_graph_meta = {
         :url => survey_url(@survey),
         :title => @survey.title,
         :description => @survey.description,

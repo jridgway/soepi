@@ -1,7 +1,7 @@
 class Members::StatusesController < ApplicationController
   before_filter :authenticate_member!, :only => [:create, :destroy]
   before_filter :load_tags, :only => [:index, :by_tag]
-  before_filter :load_facebook_meta, :only => [:show, :code, :output, :edit, :update]
+  before_filter :load_open_graph_meta, :only => [:show, :code, :output, :edit, :update]
   layout Proc.new { |controller| controller.request.xhr? ? 'ajax' : 'two_column' }  
   caches_action [:index, :by_tag], 
     :cache_path => Proc.new {|controller| cache_expirary_key(controller.params)}, 
@@ -42,9 +42,9 @@ class Members::StatusesController < ApplicationController
       @tags = MemberStatus.tag_counts :start_at => 2.months.ago, :limit => 100
     end
 
-    def load_facebook_meta
+    def load_open_graph_meta
       @member_status = MemberStatus.find params[:id] 
-      @facebook_meta = {
+      @open_graph_meta = {
         :url => member_status_url(@member_status),
         :title => @member_status.member.nickname,
         :description => @member_status.body,

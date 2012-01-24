@@ -5,7 +5,7 @@ class ReportsController < ApplicationController
   before_filter :owner_only, :only => [:edit, :update, :destroy, :publish, :code, :results,
     :save_and_run, :save_and_continue, :save_and_exit]
   before_filter :load_tags, :only => [:index, :by_tag]
-  before_filter :load_facebook_meta, :except => [:new, :create, :index, :pending, :published, :passing, :failing, :by_tag]
+  before_filter :load_open_graph_meta, :except => [:new, :create, :index, :pending, :published, :passing, :failing, :by_tag]
   layout Proc.new { |controller| controller.request.xhr? ? 'ajax' : 'one_column' }
   caches_action [:index, :pending, :published, :passing, :failing, :by_tag, :show, :view_code, :output, :surveys], 
     :cache_path => Proc.new {|controller| cache_expirary_key(controller.params)}, 
@@ -147,9 +147,9 @@ class ReportsController < ApplicationController
       @tags = Report.published.tag_counts :start_at => 2.months.ago, :limit => 100
     end
 
-    def load_facebook_meta
+    def load_open_graph_meta
       @report = Report.find params[:id] 
-      @facebook_meta = {
+      @open_graph_meta = {
         :url => report_url(@report),
         :title => @report.title,
         :description => @report.introduction,

@@ -1,11 +1,11 @@
-- if @facebook_meta
+- if @open_graph_meta
   .sharing
-    %span.st_facebook_large{:st_title => @facebook_meta[:title], :st_url => @facebook_meta[:url], :st_image => @facebook_meta[:image_url], :st_summary => @facebook_meta[:description]}
-    %span.st_twitter_large{:st_title => @facebook_meta[:title], :st_url => @facebook_meta[:url], :st_image => @facebook_meta[:image_url], :st_summary => @facebook_meta[:description]}
-    %span.st_yahoo_large{:st_title => @facebook_meta[:title], :st_url => @facebook_meta[:url], :st_image => @facebook_meta[:image_url], :st_summary => @facebook_meta[:description]}
-    %span.st_gbuzz_large{:st_title => @facebook_meta[:title], :st_url => @facebook_meta[:url], :st_image => @facebook_meta[:image_url], :st_summary => @facebook_meta[:description]}
-    %span.st_email_large{:st_title => @facebook_meta[:title], :st_url => @facebook_meta[:url], :st_image => @facebook_meta[:image_url], :st_summary => @facebook_meta[:description]}
-    %span.st_sharethis_large{:st_title => @facebook_meta[:title], :st_url => @facebook_meta[:url], :st_image => @facebook_meta[:image_url], :st_summary => @facebook_meta[:description]}
+    %span.st_facebook_large{:st_title => @open_graph_meta[:title], :st_url => @open_graph_meta[:url], :st_image => @open_graph_meta[:image_url], :st_summary => @open_graph_meta[:description]}
+    %span.st_twitter_large{:st_title => @open_graph_meta[:title], :st_url => @open_graph_meta[:url], :st_image => @open_graph_meta[:image_url], :st_summary => @open_graph_meta[:description]}
+    %span.st_yahoo_large{:st_title => @open_graph_meta[:title], :st_url => @open_graph_meta[:url], :st_image => @open_graph_meta[:image_url], :st_summary => @open_graph_meta[:description]}
+    %span.st_gbuzz_large{:st_title => @open_graph_meta[:title], :st_url => @open_graph_meta[:url], :st_image => @open_graph_meta[:image_url], :st_summary => @open_graph_meta[:description]}
+    %span.st_email_large{:st_title => @open_graph_meta[:title], :st_url => @open_graph_meta[:url], :st_image => @open_graph_meta[:image_url], :st_summary => @open_graph_meta[:description]}
+    %span.st_sharethis_large{:st_title => @open_graph_meta[:title], :st_url => @open_graph_meta[:url], :st_image => @open_graph_meta[:image_url], :st_summary => @open_graph_meta[:description]}
   :javascript
     var switchTo5x=true;
   %script{:src => "https://ws.sharethis.com/button/buttons.js", :type => "text/javascript"}

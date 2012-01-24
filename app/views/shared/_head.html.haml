@@ -5,12 +5,12 @@
   %meta{:name => 'description', :content => meta_description(yield(:meta_description))} 
   %meta{:name => 'keywords', :content => meta_keywords(yield(:meta_keywords))}
   = esi_render :partial => '/members/accounts/csrf_meta_tags'
-  - if @facebook_meta    
-    %meta{:property => "og:url", :content => @facebook_meta[:url]}/
-    %meta{:property => "og:title", :content => @facebook_meta[:title]}/
-    %meta{:name => 'description', :content => @facebook_meta[:description]}
-    %meta{:property => "og:image", :content => @facebook_meta[:image_url]}/
-    %meta{:property => "og:type", :content => @facebook_meta[:type]}/
+  - if @open_graph_meta    
+    %meta{:property => "og:url", :content => @open_graph_meta[:url]}/
+    %meta{:property => "og:title", :content => @open_graph_meta[:title]}/
+    %meta{:name => 'description', :content => @open_graph_meta[:description]}
+    %meta{:property => "og:image", :content => @open_graph_meta[:image_url]}/
+    %meta{:property => "og:type", :content => @open_graph_meta[:type]}/
   = stylesheet_link_tag 'screen', :media => 'screen'
   = stylesheet_link_tag 'print', :media => 'print'
   = javascript_tag %{var controller_name = '#{controller_name}'; var action_name = '#{action_name}';}

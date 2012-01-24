@@ -7,7 +7,7 @@ class SurveyQuestionsController < ApplicationController
   def index
     @questions = @survey.questions.roots.all
     @question = @survey.questions.new params[:survey_question]
-    @facebook_meta = {
+    @open_graph_meta = {
       :url => survey_url(@survey),
       :title => @survey.title,
       :description => @survey.description,

@@ -1,7 +1,7 @@
 class Members::ProfilesController < ApplicationController
   before_filter :load_member, :except => [:index, :publishers, :by_tag, :my_profile, :autocomplete]
   before_filter :load_tags, :only => [:index, :publishers, :by_tag]
-  before_filter :load_facebook_meta, :only => [:show, :reports, :following, :followed_by]
+  before_filter :load_open_graph_meta, :only => [:show, :reports, :following, :followed_by]
   caches_action [:index, :publishers, :by_tag, :autocomplete], 
     :cache_path => Proc.new {|controller| controller.params}, 
     :expires_in => 1.hour
@@ -72,8 +72,8 @@ class Members::ProfilesController < ApplicationController
       end
     end
 
-    def load_facebook_meta
-      @facebook_meta = {
+    def load_open_graph_meta
+      @open_graph_meta = {
         :url => member_url(@member),
         :title => @member.nickname,
         :description => @member.tags.join(', '),
