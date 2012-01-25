@@ -135,7 +135,9 @@ Soepi::Application.routes.draw do
     resources :participant_responses
   end
   
-  resources :pages, :only => [:show], :path => '/'
+  resources :pages, :only => [:show], :path => '/', :constraints => lambda{ |req|  
+      (req.env["REQUEST_PATH"] =~ /\/members\/auth\//).nil? 
+    }
   
   # Temp patch until fix is posted for rails_admin
   match '/members/sign_out', :controller => 'devise/sessions', :action => 'destroy'
@@ -143,8 +145,4 @@ Soepi::Application.routes.draw do
   mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
    
   root :to => 'welcome#index'
-  
-  #match '*path' => 'pages#show', :constraints => lambda{ |req|  
-  #  (req.env["REQUEST_PATH"] =~ /\/members\/auth\//).nil? 
-  #}
 end
