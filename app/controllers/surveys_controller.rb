@@ -9,7 +9,7 @@ class SurveysController < ApplicationController
   before_filter :admin_only!, :only => [:drafting, :review_requested, :rejected, :launch, :reject, :request_changes]
   before_filter :owner_only!, :only => [:update, :destroy, :close, :submit_for_review]
   before_filter :owner_or_admins_only_until_published!, :only => [:edit, :demographics, :downloads, :reports]
-  before_filter :load_tags, :only => [:index, :recent, :you_created, :by_tag]
+  before_filter :load_tags, :only => [:index, :by_tag]
   
   caches_action :index, :drafting, :rejected, :review_requested, :launched, :published, 
     :you_created, :by_tag, :show, :edit, 
