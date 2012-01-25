@@ -12,7 +12,7 @@
         %td= simple_format response.question.body
         %td
           - case response.question.qtype
-          - when 'Select One' then 
+          - when 'Select One', 'Yes/No', 'True/False' then 
             = response.single_choice.label
           - when 'Select Multiple' then 
             = '<ol><li>' + response.multiple_choices.collect(&:label).join('<li/><li>') + '</li></ol>'
