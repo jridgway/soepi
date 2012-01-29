@@ -143,12 +143,13 @@ class Participant < ActiveRecord::Base
         end
       end
       if target.target_by_survey? and target.survey_ids.length > 0
+        survey_ids_taken = surveys.collect(&:survey_id)
         if target.require_all_surveys?
-          if target.survey_ids.select {|s_id| survey_ids.include?(s_id)}.length != target.survey_ids.length
+          if target.survey_ids.select {|s_id| survey_ids_taken.include?(s_id)}.length != target.survey_ids.length
             qualifies = false
           end
         else
-          if target.survey_ids.select {|s_id| survey_ids.include?(s_id)}.length == 0
+          if target.survey_ids.select {|s_id| survey_ids_taken.include?(s_id)}.length == 0
             qualifies = false
           end
         end
