@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120124210324) do
+ActiveRecord::Schema.define(:version => 20120127193117) do
 
   create_table "age_groups", :force => true do |t|
     t.string   "label"
@@ -938,6 +938,7 @@ ActiveRecord::Schema.define(:version => 20120124210324) do
     t.datetime "updated_at"
     t.string   "state"
     t.string   "location_type",       :default => "address"
+    t.boolean  "require_all_surveys", :default => true
   end
 
 end

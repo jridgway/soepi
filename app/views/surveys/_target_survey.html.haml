@@ -1,0 +1,4 @@
+%li
+  = hidden_field_tag 'survey[target_attributes][survey_ids][]', survey.id, :id => "survey_target_attributes_survey_ids_#{survey.id}"
+  %button{:class => 'remove-target-survey button', :icon => 'ui-icon-closethick', :type => 'button'} Remove
+  = render :partial => '/surveys/survey', :locals => {:survey => survey}

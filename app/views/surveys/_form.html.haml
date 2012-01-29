@@ -21,7 +21,8 @@
   #targeting
     = f.fields_for :target do |f2|
       .target
-        = f2.input :target_by_location, :input_html => {:class => 'check'}
+        .outer
+          = f2.input :target_by_location, :input_html => {:class => 'check'}
         .inner
           .input
             %label Location
@@ -54,25 +55,41 @@
               #by-region
                 = f2.association :regions, :label => 'Regions', :collection => Region.all.collect {|i| [i.label, i.id]}, :as => :check_boxes
       .target
-        = f2.input :target_by_age_group, :input_html => {:class => 'check'}
+        .outer
+          = f2.input :target_by_age_group, :input_html => {:class => 'check'}
         .inner
           = f2.association :age_groups, :label => 'Age Groups', :collection => AgeGroup.all.collect {|i| [i.label, i.id]}, :as => :check_boxes
       .target
-        = f2.input :target_by_gender, :input_html => {:class => 'check'}
+        .outer
+          = f2.input :target_by_gender, :input_html => {:class => 'check'}
         .inner
           = f2.association :genders, :label => 'Genders', :collection => Gender.all.collect {|i| [i.label, i.id]}, :as => :check_boxes
       .target
-        = f2.input :target_by_ethnicity, :input_html => {:class => 'check'}
+        .outer
+          = f2.input :target_by_ethnicity, :input_html => {:class => 'check'}
         .inner
           = f2.association :ethnicities, :label => 'Ethnicities', :collection => Ethnicity.all.collect {|i| [i.label, i.id]}, :as => :check_boxes, :label => 'Hispanic, Latino, or Spanish origin?'
       .target
-        = f2.input :target_by_race, :input_html => {:class => 'check'}
+        .outer
+          = f2.input :target_by_race, :input_html => {:class => 'check'}
         .inner
           = f2.association :races, :label => 'Races', :collection => Race.all.collect {|i| [i.label, i.id]}, :as => :check_boxes
       .target
-        = f2.input :target_by_education, :input_html => {:class => 'check'}
+        .outer
+          = f2.input :target_by_education, :input_html => {:class => 'check'}
         .inner
           = f2.association :educations, :label => 'Educations', :collection => Education.all.collect {|i| [i.label, i.id]}, :as => :check_boxes
+      .target
+        .outer
+          = f2.input :target_by_survey, :input_html => {:class => 'check'}
+        .inner
+          = f2.input :require_all_surveys, :as => :radio, :label => 'Require', :collection => [['All surveys to be taken', true], ['At least one survey to be taken', false]]
+          = f2.association :surveys do 
+            %ol#target-surveys.listing.reset
+              - @survey.target.surveys.each do |survey|
+                = render :partial => 'target_survey', :locals => {:survey => survey}
+            .actions
+              = link_to 'Find and Add a Survey', find_and_add_target_survey_surveys_path, :remote => true, :icon => 'ui-icon-search', :secondary_icon => 'ui-icon-plusthick', :class => 'button'
   #irb
     = f.input :irb, :label => 'This survey was certified by an <a hint="An institutional review board (IRB), also known as an independent ethics committee (IEC) or ethical review board (ERB), is a committee that has been formally designated to approve, monitor, and review biomedical and behavioral research involving humans with the aim to protect the rights and welfare of the research subjects. [Source: Wikipedia]">Institutional Review Board (IRB)</a>.'.html_safe
     #irb-inner

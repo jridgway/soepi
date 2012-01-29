@@ -142,6 +142,17 @@ class Participant < ActiveRecord::Base
           qualifies = false
         end
       end
+      if target.target_by_survey? and target.survey_ids.length > 0
+        if target.require_all_surveys?
+          if target.survey_ids.select {|s_id| survey_ids.include?(s_id)}.length != target.survey_ids.length
+            qualifies = false
+          end
+        else
+          if target.survey_ids.select {|s_id| survey_ids.include?(s_id)}.length == 0
+            qualifies = false
+          end
+        end
+      end
     end
     qualifies
   end

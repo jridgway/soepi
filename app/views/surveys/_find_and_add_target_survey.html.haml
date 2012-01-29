@@ -1,0 +1,13 @@
+#target-surveys-results{:title => 'Find and Add a Survey'}
+  = form_tag find_and_add_target_survey_surveys_path, :remote => true, :method => 'get', :id => 'target-survey-search' do 
+    = text_field_tag :keywords, @keywords, :placeholder => 'Search...'
+    = submit_tag 'Search', :name => nil
+  - if @results.results.length > 0 
+    %ul.reset.listing
+      - @results.results.each do |survey|
+        %li
+          = link_to 'Add', add_target_survey_surveys_path(:survey_id => survey.id), :method => :put, :remote => true, :class => 'add-survey button', :icon => 'ui-icon-plusthick'
+          = render :partial => '/surveys/survey', :locals => {:survey => survey}
+    = paginate @results, :remote => true
+  - else
+    %p No surveys found.

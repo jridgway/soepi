@@ -1,7 +1,7 @@
 Soepi::Application.routes.draw do
   get '/search(/:page)', :controller => 'search', :action => 'index', :as => :search
   get '/quick_search', :controller => 'search', :action => 'quick_search'
-  
+
   get '/subscribe', :controller => 'welcome', :action => 'subscribe', :as => :subscribe
   post '/subscribe', :controller => 'welcome', :action => 'subscribe', :as => :new_subscriber
   get '/your/notifications', :controller => 'welcome', :action => 'notifications', :as => :your_notifications
@@ -22,7 +22,7 @@ Soepi::Application.routes.draw do
     put '/members/follow_toggle/:followable_type/:followable_id', :controller => 'members/accounts', :action => 'follow_toggle', :as => :follow_toggle
     match '/members/load_current_member', :controller => 'members/accounts', :action => 'load_current_member'
   end
-  
+
   resources :members, :controller => 'members/profiles', :path => '/members', :only => [:index, :show] do 
     collection do
       get '(page/:page)', :action => 'index'
@@ -104,6 +104,8 @@ Soepi::Application.routes.draw do
       get 'open(/page/:page)', :action => 'launched', :as => :launched
       get 'published(/page/:page)', :action => 'published', :as => :published
       get 'tagged/:tag(/page/:page)', :action => 'by_tag', :as => :tagged
+      get 'find_and_add_target_survey', :action => 'find_and_add_target_survey', :as => :find_and_add_target_survey
+      put 'add_target_survey', :action => 'add_target_survey', :as => :add_target_survey
     end
     member do
       put 'submit_for_review'
@@ -135,7 +137,7 @@ Soepi::Application.routes.draw do
     resources :participant_responses
   end
   
-  resources :pages, :only => [:show], :path => '/', :constraints => lambda{ |req|  
+  resources :pages, :only => [:show], :path => '/', :constraints => lambda { |req|  
       (req.env["REQUEST_PATH"] =~ /\/members\/auth\//).nil? 
     }
   

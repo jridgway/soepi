@@ -1,0 +1,4 @@
+$('#target-surveys-results').remove();
+$('body').append('<%= escape_javascript render(:template => '/surveys/_find_and_add_target_survey.html.haml') %>');
+$('#target-surveys-results').dialog({width:620, height:500, modal:true, resizable:false});
+init_common_elements();

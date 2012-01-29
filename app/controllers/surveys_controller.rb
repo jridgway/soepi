@@ -124,6 +124,19 @@ class SurveysController < ApplicationController
       redirect_to_back_or(survey_path(@survey))
     end
   end
+  
+  def find_and_add_target_survey
+    @keywords = params[:keywords]
+    @results = Survey.search do 
+      keywords params[:keywords]
+      with :published, true
+      paginate :page => params[:page], :per_page => 10
+    end
+  end
+  
+  def add_target_survey
+    @survey = Survey.find params[:survey_id]
+  end
 
   def submit_for_review
     @survey = current_member.surveys.find params[:id]

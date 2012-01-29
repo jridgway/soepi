@@ -410,9 +410,9 @@ function load_new_choice_options(current) {
 function init_targeting() {
   $('.check').change(function() {
     if($(this).attr('checked')) {
-      $(this).parent().next('.inner').show('blind');
+      $(this).closest('.target').find('.inner').show('blind');
     } else {
-      $(this).parent().next('.inner').hide('blind');
+      $(this).closest('.target').find('.inner').hide('blind');
     }
   });
   $('.check').change();
@@ -453,6 +453,7 @@ function init_targeting() {
   $('#targeting .tabs li.ui-tabs-selected a span').removeClass('ui-icon-cancel');
   $('#targeting .tabs li.ui-tabs-selected a span').addClass('ui-icon-check');
   init_targeting_map();
+  init_targeting_survey();
 }
       
 var geocoder;
@@ -596,5 +597,12 @@ function update_position() {
         $('#survey_target_attributes_lng').val(marker.get('position').lng());
       }
     }
+  });
+}
+
+function init_targeting_survey() {
+  $('.remove-target-survey').live('click', function() {
+    $(this).closest('li').find('input[type="hidden"]').val('');
+    $(this).closest('li').hide('explode');
   });
 }

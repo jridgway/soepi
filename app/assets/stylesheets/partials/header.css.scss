@@ -93,7 +93,7 @@
                   }
                 }
                 
-              #notifications-quick-look .pop-nav-inner, #account-quick-look .pop-nav-inner
+              #account-quick-look .pop-nav-inner
                 {
                 position: absolute;
                 top: 30px;
@@ -166,16 +166,6 @@
                     height: 1px;
                     }
                   }
-                }
-              }
-              
-            #notifications-quick-look .pop-nav-inner
-              {
-              left: 119px;
-              
-              ul li a 
-                {
-                width: 250px !important;
                 }
               }
             }
