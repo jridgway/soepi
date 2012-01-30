@@ -4,3 +4,4 @@ if($('#target-surveys #survey_<%= @survey.id %>').length == 0) {
   $('#survey_target_attributes_survey_ids_<%= @survey.id %>').val(<%= @survey.id %>);
   $('#survey_target_attributes_survey_ids_<%= @survey.id %>').closest('li').show();
 }
+init_common_elements();
