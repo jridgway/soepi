@@ -405,15 +405,33 @@ class Survey < ActiveRecord::Base
     downloads.where(:dtype => 'data_dictionary').first
   end
   
-  def calculate_question_totals
-    questions.each do |question|
-      case question.qtype
-        when 'Single Choice', 'Yes/No', 'True/False' then
-        when 'Multiple Choice' then
-        when 'Numeric' then
-        when 'Date', 'Date/Time', 'Time' then
+  def set_weights!
+    census = Census.find_by_year(created_at.year)
+    if target.target_by_location?
+      case target.location_type 
+        when 'address' then 
+          if not target.city.blank? 
+            geos = census.geos.where(:city => target.city, :state => target.state)
+          elsif not target.state.blank?
+            geos = census.geos.where(:state => target.state)
+          elsif not target.country.blank? and target.country != 'US'
+            geos = census.geos.where(:state => target.state)
+            return false
+          end
+        when 'vicinity' then
+          unless target.lat.blank? or target.lng.blank? or target.radius.blank?
+            census.geos.near([target.lat, target.lng], target.radius, :km)
+          end
+        when 'region' then
+          unless target.lat.blank? or target.lng.blank? or target.radius.blank?
+            census.geos.near([target.lat, target.lng], target.radius, :km)
+          end
+        else return false
       end
+    else
+      census.geos
     end
+    weights = {}
   end
 
   protected

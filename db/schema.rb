@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120127193117) do
+ActiveRecord::Schema.define(:version => 20120130170722) do
 
   create_table "age_groups", :force => true do |t|
     t.string   "label"
@@ -47,7 +47,6 @@ ActiveRecord::Schema.define(:version => 20120127193117) do
     t.string  "stusab",      :limit => 4
     t.string  "chariter",    :limit => 4
     t.string  "cifsn",       :limit => 4
-    t.string  "logrecno",    :limit => 7
     t.decimal "dpsf0010001",              :precision => 12, :scale => 2
     t.decimal "dpsf0010002",              :precision => 12, :scale => 2
     t.decimal "dpsf0010003",              :precision => 12, :scale => 2
@@ -234,6 +233,7 @@ ActiveRecord::Schema.define(:version => 20120127193117) do
     t.decimal "dpsf0220002",              :precision => 12, :scale => 2
     t.decimal "dpsf0230001",              :precision => 12, :scale => 2
     t.decimal "dpsf0230002",              :precision => 12, :scale => 2
+    t.integer "logrecno"
   end
 
   create_table "census_geos", :force => true do |t|
@@ -244,28 +244,27 @@ ActiveRecord::Schema.define(:version => 20120127193117) do
     t.string  "geocomp",   :limit => 2
     t.string  "chariter",  :limit => 3
     t.string  "cifsn",     :limit => 2
-    t.string  "logrecno",  :limit => 3
     t.string  "region",    :limit => 1
     t.string  "division",  :limit => 1
     t.string  "state",     :limit => 2
     t.string  "county",    :limit => 3
     t.string  "countycc",  :limit => 2
     t.string  "countysc",  :limit => 2
-    t.string  "cousub",    :limit => 3
+    t.string  "cousub",    :limit => 5
     t.string  "cousubcc",  :limit => 2
     t.string  "cousubsc",  :limit => 2
-    t.string  "place",     :limit => 3
+    t.string  "place",     :limit => 5
     t.string  "placecc",   :limit => 2
     t.string  "placesc",   :limit => 2
     t.string  "tract",     :limit => 6
     t.string  "blkgrp",    :limit => 1
     t.string  "block",     :limit => 4
     t.string  "iuc",       :limit => 2
-    t.string  "concit",    :limit => 3
+    t.string  "concit",    :limit => 5
     t.string  "concitcc",  :limit => 2
     t.string  "concitsc",  :limit => 2
     t.string  "aianhh",    :limit => 4
-    t.string  "aianhhfp",  :limit => 3
+    t.string  "aianhhfp",  :limit => 5
     t.string  "aianhhcc",  :limit => 2
     t.string  "aihhtli",   :limit => 1
     t.string  "aitsce",    :limit => 3
@@ -273,15 +272,15 @@ ActiveRecord::Schema.define(:version => 20120127193117) do
     t.string  "aitscc",    :limit => 2
     t.string  "ttract",    :limit => 6
     t.string  "tblkgrp",   :limit => 1
-    t.string  "anrc",      :limit => 3
+    t.string  "anrc",      :limit => 5
     t.string  "anrccc",    :limit => 2
-    t.string  "cbsa",      :limit => 3
+    t.string  "cbsa",      :limit => 5
     t.string  "cbsasc",    :limit => 2
-    t.string  "metdiv",    :limit => 3
+    t.string  "metdiv",    :limit => 5
     t.string  "csa",       :limit => 3
-    t.string  "necta",     :limit => 3
+    t.string  "necta",     :limit => 5
     t.string  "nectasc",   :limit => 2
-    t.string  "nectadiv",  :limit => 3
+    t.string  "nectadiv",  :limit => 5
     t.string  "cnecta",    :limit => 3
     t.string  "cbsapci",   :limit => 1
     t.string  "nectapci",  :limit => 1
@@ -295,7 +294,7 @@ ActiveRecord::Schema.define(:version => 20120127193117) do
     t.string  "vtd",       :limit => 6
     t.string  "vtdi",      :limit => 1
     t.string  "reserve2",  :limit => 3
-    t.string  "zcta5",     :limit => 3
+    t.string  "zcta5",     :limit => 5
     t.string  "submcd",    :limit => 3
     t.string  "submcdcc",  :limit => 2
     t.string  "sdelm",     :limit => 3
@@ -339,6 +338,7 @@ ActiveRecord::Schema.define(:version => 20120127193117) do
     t.string  "nmemi",     :limit => 1
     t.string  "puma",      :limit => 3
     t.string  "reserved",  :limit => 18
+    t.integer "logrecno"
   end
 
   create_table "censuses", :force => true do |t|
@@ -920,7 +920,6 @@ ActiveRecord::Schema.define(:version => 20120127193117) do
   create_table "targets", :force => true do |t|
     t.boolean  "target_by_location",  :default => false
     t.string   "city"
-    t.string   "postal_code"
     t.string   "country"
     t.float    "radius"
     t.float    "lat"

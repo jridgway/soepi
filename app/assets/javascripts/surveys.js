@@ -441,9 +441,9 @@ function init_targeting() {
       $('#survey_target_attributes_location_type').val('region');
     }
   });
-  if($('#survey_target_attributes_location_type').val() == 'address') {
+  if($('#survey_target_attributes_location_type').val() == 'vicinity') {
     $('#targeting .tabs').tabs('select', 0);
-  } else if($('#survey_target_attributes_location_type').val() == 'vicinity') {
+  } else if($('#survey_target_attributes_location_type').val() == 'address') {
     $('#targeting .tabs').tabs('select', 1);
   } else if($('#survey_target_attributes_location_type').val() == 'region') {
     $('#targeting .tabs').tabs('select', 2);

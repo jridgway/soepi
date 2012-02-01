@@ -18,6 +18,7 @@
 //= require tips
 //= require surveys
 //= require reports
+//= require addresses
 //= require markerclusterer
 //= require highcharts
 //= require highcharts-theme

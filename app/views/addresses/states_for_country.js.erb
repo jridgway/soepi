@@ -1,0 +1,35 @@
+$('#<%= params[:field_prefix] %>-state-container').remove();
+$('#<%= params[:field_id] %>').closest('.input').after('<%= escape_javascript render(:template => '/addresses/_states_for_country.html.haml') %>');
+$('#<%= params[:field_id] %>').closest('form').find('.address-extra').show();
+$('#<%= params[:field_prefix] %>_state').change(function () {
+  if($('#<%= params[:field_prefix] %>_country').val() == 'US') {
+    var url = '/addresses/cities_for_country_and_state_autocomplete?current_state=' + 
+      $('#<%= params[:field_prefix] %>_state').val();
+    $('#<%= params[:field_prefix] %>_city').autocomplete('destroy');
+    $('#<%= params[:field_prefix] %>_city').autocomplete({
+      minLength: 1,
+      delay: 0,
+      source: function(request, response) {
+        var term = request.term;
+        if(term in city_cache) {
+          response(city_cache[term]);
+          return;
+        }
+        lastXhr = $.getJSON(url, request, function(data, status, xhr) {
+          city_cache[term] = data;
+          if(xhr === lastXhr) {
+            response(data);
+          }
+        });
+      }
+    });
+    if($('#<%= params[:field_prefix] %>_state').val() == '') {
+      $('#<%= params[:field_prefix] %>_city').closest('.address-extra').hide();
+    } else {
+      $('#<%= params[:field_prefix] %>_city').closest('.address-extra').show();
+    }
+  } else {
+    $('#<%= params[:field_prefix] %>_city').autocomplete('destroy');
+  }
+});
+$('#<%= params[:field_prefix] %>_state').change();

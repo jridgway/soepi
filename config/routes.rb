@@ -10,6 +10,9 @@ Soepi::Application.routes.draw do
   get '/your/statuses', :controller => 'welcome', :action => 'statuses', :as => :your_statuses
   get '/your/follows', :controller => 'welcome', :action => 'follows', :as => :your_follows
   get '/your/member_followers', :controller => 'welcome', :action => 'member_followers', :as => :your_member_followers
+  
+  get '/addresses/states_for_country', :to => 'addresses#states_for_country'
+  get '/addresses/cities_for_country_and_state_autocomplete', :to => 'addresses#cities_for_country_and_state_autocomplete'
 
   devise_for :members, :controllers => {:registrations => 'members/accounts', :sessions => 'members/sessions', :omniauth_callbacks => 'members/omniauth_callbacks'} do
     match '/members/change_password', :controller => 'members/accounts', :action => 'change_password', :as => :member_change_password

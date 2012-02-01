@@ -30,22 +30,19 @@
             .tabs
               %ul
                 %li
-                  %a{:href => '#by-address'} 
-                    %span.ui-icon &nbsp;
-                    By Address
-                %li
                   %a{:href => '#by-vicinity'} 
                     %span.ui-icon &nbsp;
                     By Vicinity
+                %li
+                  %a{:href => '#by-address'} 
+                    %span.ui-icon &nbsp;
+                    By City
                 %li
                   %a{:href => '#by-region'} 
                     %span.ui-icon &nbsp;
                     By Region
               #by-address
-                = f2.input :city
-                = f2.input :state
-                = f2.input :postal_code
-                = f2.input :country, :priority => priority_countries, :include_blank => true
+                = render :partial => '/addresses/country_select', :locals => {:field_prefix => 'survey_target_attributes', :field_prefix_name => 'survey[target_attributes]', :object => @survey.target, :f => f2, :postal_code => false}
               #by-vicinity
                 #map-canvas
                 = f2.input :approximate_address, :label => 'Address', :hint => 'Enter an approximate address. Coordinates will be generated based on your input.'

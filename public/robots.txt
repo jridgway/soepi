@@ -4,4 +4,9 @@
 User-agent: *
 Disallow: /members/sign_in/
 Disallow: /members/sign_up/
+Disallow: /statuses/new
+Disallow: /surveys/new
+Disallow: /surveys/edit
+Disallow: /reports/new
+Disallow: /reports/edit
 Disallow: /admin/

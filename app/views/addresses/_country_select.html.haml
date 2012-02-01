@@ -1,0 +1,5 @@
+= f.input :country, :priority => priority_countries, :input_html => {:class => 'country', :"data-field-prefix" => field_prefix, :"data-field-prefix-name" => field_prefix_name, :"data-current-state" => object.state}
+.address-extra{:style => 'display:none'}
+  = f.input :city
+  - if not defined?(postal_code) or postal_code
+    = f.input :postal_code
