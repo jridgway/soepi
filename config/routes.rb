@@ -141,7 +141,8 @@ Soepi::Application.routes.draw do
   end
   
   resources :pages, :only => [:show], :path => '/', :constraints => lambda { |req|  
-      (req.env["REQUEST_PATH"] =~ /\/members\/auth\//).nil? 
+      (req.env["REQUEST_PATH"] =~ /\/members\/auth\//).nil? and 
+      (req.env["REQUEST_PATH"] =~ /\/admin(\/.*)?/).nil?
     }
   
   # Temp patch until fix is posted for rails_admin
