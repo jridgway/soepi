@@ -1,7 +1,10 @@
 %li[message]
   %a{:href => message_path(message), :class => (message.seen_by?(current_member.id) ? 'seen' : 'unseen'), :name => message.id}
     %span.subject 
-      %strong #{message.member.nickname} 
+      - if message.member 
+        %strong #{message.member.nickname} 
+      - else 
+        %strong [Member canceled account]
       #{timeago message.created_at}: #{message.body}
     %span.members.reset
       - message.members.each do |recipient|

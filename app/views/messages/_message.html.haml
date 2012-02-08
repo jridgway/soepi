@@ -1,6 +1,9 @@
 %li[message]
   %a{:name => message.id}
-  = avatar(message.member, 40)
-  .inner
-    = simple_format %{<strong>#{link_to message.member.nickname, message.member}</strong> #{timeago message.created_at}: #{auto_link message.body}}.html_safe
-    
+  - if message.member
+    = avatar(message.member, 40)
+    .inner
+      = simple_format %{<strong>#{link_to message.member.nickname, message.member}</strong> #{timeago message.created_at}: #{auto_link message.body}}.html_safe
+  - else
+    .inner
+      = simple_format %{<strong>[Member canceled account]</strong> #{timeago message.created_at}: #{auto_link message.body}}.html_safe
