@@ -4,7 +4,7 @@ class Message < ActiveRecord::Base
   has_many :members, :through => :message_members, :source => :member, :uniq => true, 
     :select => 'members.*, lower(nickname) as lower_nickname', :order => 'lower_nickname asc'
   belongs_to :parent_message, :class_name => 'Message', :foreign_key => 'message_id'
-  has_many :responses, :class_name => 'Message', :order => 'created_at asc'
+  has_many :responses, :class_name => 'Message', :order => 'created_at asc', :dependent => :destroy
   
   attr_accessor :recipient_nicknames
 

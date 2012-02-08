@@ -6,7 +6,7 @@ class Member < ActiveRecord::Base
   has_many :messages, :dependent => :nullify
   has_many :message_members, :class_name => 'MessageMember', :dependent => :nullify
   has_many :messages_received, :through => :message_members, :source => :message
-  has_many :statuses, :class_name => 'MemberStatus'
+  has_many :statuses, :class_name => 'MemberStatus', :dependent => :destroy
   has_and_belongs_to_many :status_references, :class_name => 'MemberStatus'
 
   scope :confirmed, where('confirmed_at is not null')

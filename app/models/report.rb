@@ -1,8 +1,8 @@
 class Report < ActiveRecord::Base
   belongs_to :member
-  has_many :plots, :class_name => 'ReportPlot'
+  has_many :plots, :class_name => 'ReportPlot', :dependent => :nullify
   belongs_to :forked_from, :class_name => 'Report'
-  has_many :forks, :class_name => 'Report', :foreign_key => :forked_from_id
+  has_many :forks, :class_name => 'Report', :foreign_key => :forked_from_id, :dependent => :nullify
   has_and_belongs_to_many :surveys
   belongs_to :job, :class_name => '::Delayed::Job', :foreign_key => :job_id 
   

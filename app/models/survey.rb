@@ -1,15 +1,12 @@
 class Survey < ActiveRecord::Base
   belongs_to :member
-  has_many :members, :class_name => 'MemberSurvey'
-  has_many :participants, :class_name => 'ParticipantSurvey'
-  has_many :questions, :class_name => 'SurveyQuestion'
-  has_many :comments, :class_name => 'SurveyComment'
-  has_one :target, :as => :targetable
-  has_and_belongs_to_many :targets
-  has_many :forks, :class_name => 'Survey', :foreign_key => :forked_from_id
+  has_many :participants, :class_name => 'ParticipantSurvey', :dependent => :destroy
+  has_many :questions, :class_name => 'SurveyQuestion', :dependent => :destroy
+  has_one :target, :as => :targetable, :dependent => :destroy
+  has_many :forks, :class_name => 'Survey', :foreign_key => :forked_from_id, :dependent => :nullify
   belongs_to :forked_from, :class_name => 'Survey'
-  has_many :notifications, :as => :notifiable
-  has_many :downloads, :class_name => 'SurveyDownload'
+  has_many :notifications, :as => :notifiable, :dependent => :destroy
+  has_many :downloads, :class_name => 'SurveyDownload', :dependent => :destroy
   has_and_belongs_to_many :reports
 
   accepts_nested_attributes_for :target

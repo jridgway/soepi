@@ -3,7 +3,6 @@ class SurveyQuestion < ActiveRecord::Base
   has_many :choices, :class_name => 'SurveyQuestionChoice', :dependent => :destroy
   has_many :responses, :class_name => 'ParticipantResponse', :dependent => :destroy, :foreign_key => 'question_id'
   belongs_to :parent_choice, :class_name => 'SurveyQuestionChoice', :foreign_key => 'survey_question_choice_id'
-  has_many :r_script_inputs
   has_many :survey_downloads
 
   accepts_nested_attributes_for :choices, :allow_destroy => true
