@@ -118,15 +118,16 @@ class Survey < ActiveRecord::Base
 
     after_transition any => :review_requested do |survey, transition|
       Member.admins.each {|m| m.delay.notify!(survey, "#{survey.member.nickname} submitted a survey for review")}
+      survey.member.delay.notify!(survey, 'Your survey was received for review')
     end
 
     after_transition any => :rejected do |survey, transition|
-      survey.member.delay.notify!(survey, 'Sorry, your survey was rejected.')
+      survey.member.delay.notify!(survey, 'Sorry, your survey was rejected')
       survey.member_followers.each {|m| m.delay.notify!(self, "#{survey.member.nickname}'s survey was rejected")}
     end
 
     after_transition any => :launched do |survey, transition|
-      survey.member.notify!(survey, 'Yay, your survey has launched!')
+      survey.member.notify!(survey, 'Yay, your survey has launched')
       survey.member_followers.each {|m| m.notify!(self, "#{survey.member.nickname}'s survey was opened for participation")}
     end
 

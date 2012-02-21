@@ -7,7 +7,7 @@
 - content_for :body_content_left do
   %p#no-questions.text-align-center{:style => 'display:none'} You have not added any questions yet. Click "Add a Question" to the right to begin.
   #results{:style => 'display:none'}
-  #root-questions-container.not-ordering{:class => (@survey.editable? ? 'editable' : 'not-editable')}
+  #root-questions-container.not-ordering{:class => (@survey.editable? ? 'editable' : 'not-editable') + ' ' + ((@survey.published? or @survey.closed? or @survey.launched?) ? 'results-available' : 'results-not-available')}
     %ol#root-questions
       - @questions.each do |question|
         = render :partial => 'question', :locals => {:question => question}
@@ -15,7 +15,7 @@
 - content_for :body_content_right do 
   %input{:type => 'text', :placeholder => 'Find a question', :id => 'question-search'} 
   %a{:icon => 'ui-icon-arrowthick-1-w', :class => 'button', :id => 'all-questions', :style => 'display:none', :href => '#all'} All Questions
-  - unless @survey.drafting?
+  - unless @survey.drafting? or @survey.review_requested?
     #key-mappings
       %h5 Shortcuts
       %p

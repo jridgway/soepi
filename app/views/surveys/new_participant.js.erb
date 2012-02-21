@@ -3,7 +3,12 @@ $('#require-pin, #new-participant').remove();
 $('body').append("<%= escape_javascript(render(:partial => 'new_participant')) %>");
 $('#new-participant').dialog({modal:true, width:980, resizable:false, close: function(){$('.error2').qtip('destroy');}});
 init_common_elements();
-init_form_tips();
-init_form_errors($('#new-participant .input'));
-$('.ui-widget-overlay').height($(document).height());
-$(window).scrollTo(0);
+$('form select.country').change();
+setTimeout('init_reset_of_participiant_form()', 500);
+
+function init_reset_of_participiant_form() {
+  init_form_tips();
+  init_form_errors($('#new-participant .input'));
+  $('.ui-widget-overlay').height($(document).height());
+  $(window).scrollTo(0);
+}

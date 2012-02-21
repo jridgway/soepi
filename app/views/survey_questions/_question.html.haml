@@ -4,12 +4,12 @@
       .top-actions
         = link_to 'Edit', edit_survey_question_path(:survey_id => question.survey, :id => question.id), :class => 'button edit', :remote => true
         = link_to 'Delete', survey_question_path(:survey_id => question.survey, :id => question.id), :class => 'button destroy'
-    %p
-      - if @survey.published? or @survey.closed? or @survey.launched?
-        %strong
-          %a{:href => "##{question.id}"}= question.label
-      - else
-        %strong= question.label
+    .expandable
+      %strong
+        - if @survey.published? or @survey.closed? or @survey.launched?
+          %a{:href => "##{question.id}"}= question.body
+        - else
+          = question.body
     %p
       %small #{question.qtype} | #{question.required? ? 'Required' : 'Optional'} | ID=#{question.id}
   - unless question.choices.empty? 

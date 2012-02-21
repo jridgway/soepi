@@ -10,7 +10,7 @@ class ParticipantSurvey < ActiveRecord::Base
   belongs_to :next_question, :class_name => 'SurveyQuestion'
   has_many :responses, :class_name => 'ParticipantResponse'
 
-  validates_presence_of :participant_id, :survey_id, :city, :state, :postal_code, :country,
+  validates_presence_of :participant_id, :survey_id, :country,
     :age_group_id, :gender_id, :ethnicity_ids, :race_ids, :education_id, :next_question_id
 
   before_create :apply_participant, :set_next_question

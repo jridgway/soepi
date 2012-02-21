@@ -22,6 +22,24 @@
         max-width: 526px;
         padding: 10px;
         font-family: inherit;
+        color: #fff;
+        }
+      
+      #member_status_body::-webkit-input-placeholder 
+        {
+        color:  #fff;
+        }
+      #member_status_body:focus::-webkit-input-placeholder 
+        {
+        color:  #666;
+        }
+      #member_status_body:-moz-placeholder 
+        {
+        color:  #fff;
+        }
+      #member_status_body:focus:-moz-placeholder 
+        {
+        color:  #666;
         }
       }
       

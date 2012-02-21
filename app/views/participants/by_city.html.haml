@@ -5,10 +5,7 @@
 
 - content_for :body_content_left do
   = simple_form_for @participant, :url => by_city_participants_path do |f|
-    = f.input :city, :required => false
-    = f.input :state, :collection => states, :required => false
-    = f.input :postal_code, :required => false
-    = f.input :country, :priority => priority_countries, :required => false
+    = render :partial => '/addresses/country_select', :locals => {:field_prefix => 'participant', :field_prefix_name => 'participant', :object => @participant, :f => f}
     .actions
       = f.submit 'Search', :class => 'button'
   - if @participants  

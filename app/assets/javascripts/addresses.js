@@ -1,7 +1,7 @@
 var city_cache={}, lastXhr;
 
 $(document).ready(function() {
-  $('form select.country').change(function() {
+  $('form select.country').live('change', function() {
     $.get('/addresses/states_for_country' +
       '?country=' + $(this).val() + 
       '&field_prefix=' + $(this).attr('data-field-prefix') + 

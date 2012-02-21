@@ -18,24 +18,21 @@
       = link_to "Followed By (#{@survey.followings.count})", followed_by_survey_path(@survey)
 - if action_name == 'show'
   - content_for :body_content_more_details do 
-    .not-owner{:'data-member-id' => @survey.member_id}
-      %h4.status Status: #{@survey.state_human}
-      - if @survey.review_requested?
-        .not-admin
+    - unless @survey.launched?
+      .not-owner{:'data-member-id' => @survey.member_id}
+        %h4.status Status: #{@survey.state_human}
+        - if @survey.review_requested?
+          .not-admin
+            %p This survey hasn't launched. Please come back later to participate.
+        - elsif @survey.closed?
+          %p 
+            This survey has closed. See the Questions, Demographics, and Downloads pages for the results.
+        - elsif @survey.published?
+          %p This survey has closed and the results were published. See the Questions, Demographics, and Downloads pages for the results.
+        - elsif @survey.rejected?
+          %p This survey was rejected during review.
+        - elsif @survey.drafting?
           %p This survey hasn't launched. Please come back later to participate.
-      - elsif @survey.closed?
-        %p 
-          This survey has closed. See the Questions, Demographics, and Downloads pages for the results.
-      - elsif @survey.published?
-        %p This survey has closed and the results were published. See the Questions, Demographics, and Downloads pages for the results.
-      - elsif @survey.rejected?
-        %p This survey was rejected during review.
-      - elsif @survey.drafting?
-        %p This survey hasn't launched. Please come back later to participate.
-      - else
-        %p 
-          To participate in this survey, click the "Participate in this Survey" button at the 
-          bottom or the "Partipate" button to the top right. 
     .owner-only-not-admins{:'data-member-id' => @survey.member_id}
       - unless @survey.new_record?
         %h4.status Status: #{@survey.state_human}

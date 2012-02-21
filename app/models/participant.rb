@@ -13,8 +13,7 @@ class Participant < ActiveRecord::Base
   scope :completes, where('complete = true')
   scope :incompletes, where('complete = false or comeplete is null')
   
-  validates_presence_of :city, :state, :postal_code, :country, 
-    :birthmonth, :gender_id, :ethnicity_ids, :race_ids, :education_id
+  validates_presence_of :country, :birthmonth, :gender_id, :ethnicity_ids, :race_ids, :education_id
   validates_presence_of :pin, :on => :create
   validates_length_of :pin, :minimum => 5, :allow_blank => true, :on => :create
 

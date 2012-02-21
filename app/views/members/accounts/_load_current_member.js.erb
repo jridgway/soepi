@@ -37,6 +37,9 @@
     $('.current-member-unseen-messages-count').html(current_member['unseen_messages_count']);
     $('body').append("<%= escape_javascript(render(:partial => '/members/accounts/flash')) %>");
     $('#alert').dialog({modal:true, zIndex:9, minWidth:400}).show('blind');
+    if($('#more-details').find(':visible').length == 0) {
+      $('#more-details').hide();
+    }
   });
   
   <% if current_member %> 

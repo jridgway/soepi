@@ -1,5 +1,4 @@
-.input.select.required{:id => "#{params[:field_prefix]}-state-container"}
-  %label{:class => 'state required', :for => "#{params[:field_prefix]}_state"}
-    %abbr{:title => 'required'} *
+.input.select.optional{:id => "#{params[:field_prefix]}-state-container"}
+  %label{:class => 'state optional', :for => "#{params[:field_prefix]}_state"}
     State
   = select_tag "#{params[:field_prefix_name]}[state]", options_for_select(@states, params[:current_state]), :id => "#{params[:field_prefix]}_state", :include_blank => true
