@@ -145,9 +145,6 @@ Soepi::Application.routes.draw do
       (req.env["REQUEST_PATH"] =~ /\/admin(\/.*)?/).nil?
     }
   
-  # Temp patch until fix is posted for rails_admin
-  match '/members/sign_out', :controller => 'devise/sessions', :action => 'destroy'
-  
   mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
    
   root :to => 'welcome#index'

@@ -1,17 +1,23 @@
 source 'http://rubygems.org'
 
-gem 'rails', '= 3.1.3'
+gem 'rails', '3.2.1'
 
 gem 'pg'
 
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'sass-rails',   '~> 3.1.5'
-  gem 'coffee-rails', '~> 3.1.1'
+  gem 'sass-rails',   '~> 3.2.3'
+  gem 'coffee-rails', '~> 3.2.1'
+
+  # See https://github.com/sstephenson/execjs#readme for more supported runtimes
+  # gem 'therubyracer'
+
   gem 'uglifier', '>= 1.0.3'
-  gem 'compass', :git => 'git://github.com/chriseppstein/compass.git'
+  
+  gem 'compass-rails'
 end
+
 
 gem 'jquery-rails'
 
@@ -25,10 +31,11 @@ end
 
 gem 'kaminari'
 gem 'dragonfly'
+gem 'delayed_job_active_record'
 gem 'rails_admin', :git => 'git://github.com/sferik/rails_admin.git'
 gem 'devise', '= 1.4.5'
 gem 'omniauth', '= 0.3.2'
-gem 'state_machine', '= 1.0.0'
+gem 'state_machine', '= 1.1.2'
 gem 'us_states_select'
 gem 'countries'
 gem 'simple_form'
@@ -48,10 +55,9 @@ gem 'thin'
 gem 'fog', '= 1.0.0'
 gem 'jquery-rails'
 gem 'rack-cache', :require => 'rack/cache'
-gem 'rack', '1.3.5'
+gem 'rack', '1.4.0'
 gem 'deep_cloneable', '~> 1.3.0'
 gem 'codemirror-rails'
-gem 'delayed_job'
 gem 'easy_esi'
 gem 'rubyzip'
 gem 'rack-canonical-host'
@@ -60,7 +66,6 @@ gem 'hominid'
 gem 'pusher'
 
 group :development do
-  gem 'rails-dev-tweaks', '~> 0.5.0'
   gem 'cities'
 end
 
