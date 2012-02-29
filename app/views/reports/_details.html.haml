@@ -12,3 +12,5 @@
       = link_to 'Output', output_report_path(@report)
     %li
       = link_to "Surveys (#{@report.surveys.count})", surveys_report_path(@report)
+    %li
+      = link_to "Forks (#{@report.forks.count})", forks_report_path(@report)

@@ -1,13 +1,13 @@
 class ReportsController < ApplicationController
   before_filter :load_report, :except => [:new, :create, :index, :pending, :published, :passing, :failing, :by_tag]
   before_filter :authenticate_member!, :except => [:index, :pending, :published, :passing, :failing, 
-    :by_tag, :show, :view_code, :output, :surveys]
+    :by_tag, :show, :view_code, :output, :surveys, :forks]
   before_filter :owner_only, :only => [:edit, :update, :destroy, :publish, :code, :results,
     :save_and_run, :save_and_continue, :save_and_exit]
   before_filter :load_tags, :only => [:index, :by_tag]
   before_filter :load_open_graph_meta, :except => [:new, :create, :index, :pending, :published, :passing, :failing, :by_tag]
   layout Proc.new { |controller| controller.request.xhr? ? 'ajax' : 'one_column' }
-  caches_action :index, :pending, :published, :passing, :failing, :by_tag, :show, :view_code, :output, :surveys, 
+  caches_action :index, :pending, :published, :passing, :failing, :by_tag, :show, :view_code, :output, :surveys, :forks, 
     :cache_path => Proc.new {|controller| cache_expirary_key(controller.params)}, 
     :expires_in => 2.hours
   cache_sweeper :reports_sweeper, :only => [:create, :update, :destroy, :save_and_run, :save_and_continue, 
@@ -73,6 +73,11 @@ class ReportsController < ApplicationController
   
   def surveys
     @surveys = @report.surveys.page(params[:page]).per(10)
+  end
+
+  def forks
+    @forks = @report.forks.page(params[:page])
+    render :layout => 'one_column'
   end
   
   def edit

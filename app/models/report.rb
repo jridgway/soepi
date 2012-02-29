@@ -166,7 +166,9 @@ class Report < ActiveRecord::Base
   protected
     
     def init_code
-      self.code = "# Your code goes here\n\nhello_world <- function(arg1) {\n  print(arg1)\n}\n\nhello_world('hello world');"
+      if code.blank?
+        self.code = "# Your code goes here\n\nhello_world <- function(arg1) {\n  print(arg1)\n}\n\nhello_world('hello world');"
+      end
     end
   
     def set_survey_references

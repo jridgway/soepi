@@ -84,6 +84,7 @@ Soepi::Application.routes.draw do
       put 'forkit' 
       get 'output'
       get 'surveys(/page/:page)', :action => 'surveys', :as => :surveys
+      get 'forks(/page/:page)', :action => 'forks', :as => :forks
       get 'code'
       get 'results'
       get 'view_code'
