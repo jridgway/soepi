@@ -8,6 +8,8 @@ class Page < ActiveRecord::Base
   attr_protected :lft, :rgt, :depth, :path, :url
   
   before_save :set_path, :set_url
+  after_save :clear_cache
+  after_destroy :clear_cache
   
   scope :published, where('state = ?', 'published')
   
@@ -63,5 +65,9 @@ class Page < ActiveRecord::Base
       else
         slug
       end
+    end
+    
+    def clear_cache
+      Rails.cache.write :pages_cache_expirary_key, rand.to_s[2..-1]
     end
 end

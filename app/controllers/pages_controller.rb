@@ -1,7 +1,7 @@
 class PagesController < ApplicationController
   layout 'one_column'
   caches_action :show,
-    :cache_path => Proc.new {|controller| controller.params}, 
+    :cache_path => Proc.new {|controller| cache_expirary_key(controller.params)}, 
     :expires_in => 15.minutes
 
   def show
@@ -13,4 +13,10 @@ class PagesController < ApplicationController
       render_404
     end
   end
+  
+  protected
+    
+    def cache_expirary_key(params)
+      params.merge :cache_expirary_key => Rails.cache.read(:pages_cache_expirary_key)
+    end
 end

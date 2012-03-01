@@ -1,7 +1,7 @@
 - content_for :body_content do
   %section[@page]
     #pages-sidebar
-      - cache "pages_index", :expires_in => 15.minutes do
+      - cache "pages_index_#{Rails.cache.read(:pages_cache_expirary_key)}", :expires_in => 15.minutes do
         #pages-index.pop-nav
           %a#pages-index-button.pop-nav-link{:href => '/support'}
             Pages Index
