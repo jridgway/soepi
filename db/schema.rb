@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120130170722) do
+ActiveRecord::Schema.define(:version => 20120229192023) do
 
   create_table "age_groups", :force => true do |t|
     t.string   "label"
@@ -593,6 +593,12 @@ ActiveRecord::Schema.define(:version => 20120130170722) do
     t.string   "slug"
     t.boolean  "raw",              :default => false
     t.integer  "member_id"
+    t.integer  "parent_id"
+    t.integer  "lft"
+    t.integer  "rgt"
+    t.integer  "depth"
+    t.string   "url"
+    t.string   "path"
   end
 
   add_index "pages", ["slug"], :name => "index_pages_on_slug"

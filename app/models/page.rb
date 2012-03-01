@@ -4,6 +4,13 @@ class Page < ActiveRecord::Base
   
   validates_presence_of :title
   
+  acts_as_nested_set
+  attr_protected :lft, :rgt, :depth, :path, :url
+  
+  before_save :set_path, :set_url
+  
+  scope :published, where('state = ?', 'published')
+  
   searchable do
     text :title
     text :body
@@ -14,7 +21,7 @@ class Page < ActiveRecord::Base
   end
   
   extend FriendlyId
-  friendly_id :title, :use => :slugged
+  friendly_id :title, :use => [:scoped, :slugged], :scope => :parent
   
   def body_title
     if use_custom_title?
@@ -27,4 +34,34 @@ class Page < ActiveRecord::Base
   def human 
     title
   end
+  
+  def to_param
+    url
+  end
+  
+  protected 
+    
+    def set_path
+      self.path = set_path_helper
+    end
+    
+    def set_path_helper
+      if parent
+        parent.set_path_helper + ' &raquo; ' + title
+      else
+        title
+      end
+    end
+    
+    def set_url
+      self.url = set_url_helper
+    end
+    
+    def set_url_helper
+      if parent
+        parent.set_url_helper + '/' + slug
+      else
+        slug
+      end
+    end
 end

@@ -5,12 +5,12 @@
     #menu
       .primary
         %ul
+          %li
+            = link_to 'Support', '/support'
           %li.visitors-only
             = link_to 'Sign Up', new_member_registration_path
           %li.visitors-only
             = link_to 'Sign In', new_member_session_path
-          %li.members-only
-            = link_to 'Sign out', destroy_member_session_path(:member_return_to => request.url), :method => 'delete'
           %li#account-quick-look.members-only.pop-nav
             = link_to 'Account', edit_member_registration_path, :class => 'pop-nav-link'
             .pop-nav-inner 
@@ -29,6 +29,8 @@
                   = link_to 'Sign In Tokens', member_tokens_path
                 %li
                   = link_to 'Cancel Account', member_cancel_account_path
+                %li
+                  = link_to 'Sign out', destroy_member_session_path(:member_return_to => request.url), :method => 'delete'
           %li.members-only
             = link_to "Messages (<span class='current-member-unseen-messages-count'>...</span>)".html_safe, unread_messages_path
           %li.welcome    

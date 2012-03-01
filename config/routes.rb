@@ -141,12 +141,14 @@ Soepi::Application.routes.draw do
     resources :participant_responses
   end
   
-  resources :pages, :only => [:show], :path => '/', :constraints => lambda { |req|  
+  mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
+    
+  match '*path' => 'pages#show', :constraints => lambda { |req|  
       (req.env["REQUEST_PATH"] =~ /\/members\/auth\//).nil? and 
       (req.env["REQUEST_PATH"] =~ /\/admin(\/.*)?/).nil?
     }
-  
-  mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
+    
+  resources :pages, :only => 'show', :path => '/'
    
   root :to => 'welcome#index'
 end

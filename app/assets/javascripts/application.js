@@ -13,6 +13,7 @@
 //= require simple-hint
 //= require r-hint
 //= require main
+//= require pages
 //= require home
 //= require forms
 //= require tips

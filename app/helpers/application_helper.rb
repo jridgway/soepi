@@ -1,4 +1,11 @@
-module ApplicationHelper  
+module ApplicationHelper 
+  def page_path_linked(page)
+    unless page.ancestors.empty?
+      (page.ancestors.collect {|p| link_to(p.title, page_path(p))}.join(' &raquo; ') +
+      ' &raquo; ' + page.title).html_safe
+    end
+  end
+ 
   def home?
     true if request.path == '/'
   end
