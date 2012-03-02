@@ -30,6 +30,11 @@ input:focus:-moz-placeholder {
   color: #C6C6C6;
   font-size: 1em;
   }
+  
+.bp .input.hidden
+  {
+  display: none;
+  }
 
 .simple_form.report
   {
@@ -237,10 +242,10 @@ fieldset
       }
     }
   
-  div.input.radio, div.input.check_boxes
+  div.input.radio_buttons, div.input.check_boxes
     {
     
-    label.check_boxes, label.radio
+    label.check_boxes, label.collection_radio_buttons
       {
       margin: 2px 2px 2px 10px;
       }
@@ -262,7 +267,7 @@ fieldset
         margin: 0;
         }
       
-      label.collection_radio, label.collection_check_boxes
+      label.collection_radio_buttons, label.collection_check_boxes
         {
         width: auto;
         font-weight: normal;
@@ -297,7 +302,7 @@ fieldset
     }
   }
 
-.bp.two-column form.simple_form fieldset div.input.radio span, .bp.two-column form.simple_form fieldset div.input.check_boxes span
+.bp.two-column form.simple_form fieldset div.input.radio_buttons span, .bp.two-column form.simple_form fieldset div.input.check_boxes span
   {
   width: 495px;
   }
@@ -378,7 +383,7 @@ fieldset
     width: 525px;
     }
   
-  div.input.radio, div.input.check_boxes
+  div.input.radio_buttons, div.input.check_boxes
     {    
     span
       {
