@@ -42,9 +42,9 @@ function init_form_tips() {
       event_show = 'mouseenter';
       event_hide = 'mouseleave';
     } else if($(this).children('.tagit').length > 0) {
-      target = $(this).find('.tagit .tagit-new input:visible');
-    } else if($(this).find('input[type!="hidden"], select, textarea').length > 0) {
-      target = $(this).find('input[type!="hidden"], select, textarea');
+      target = $(this).children('.tagit .tagit-new input:visible');
+    } else if($(this).children('input[type!="hidden"], select, textarea').length > 0) {
+      target = $(this).children('input[type!="hidden"], select, textarea');
     } else {
       target = $(this);
     }
