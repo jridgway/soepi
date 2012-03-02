@@ -2,7 +2,14 @@ class AddressesController < ApplicationController
   layout nil
 
   def states_for_country
-    @states = Country.new(params[:country]).states.collect {|s| s.last['name']}.sort {|a,b| a <=> b}.collect {|s| s.force_encoding('UTF-8')}
+    if params[:country].blank?
+      render :nothing => true
+    else
+      @states = Country.new(params[:country]).states.
+        collect {|s| s.last['name']}.
+        sort {|a,b| a <=> b}.
+        collect {|s| s.force_encoding('UTF-8')}
+    end
   end
   
   def cities_for_country_and_state_autocomplete
