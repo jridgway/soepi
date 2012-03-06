@@ -33,6 +33,8 @@ class Member < ActiveRecord::Base
     end
     integer :id
   end
+  
+  handle_asynchronously :solr_index
 
   attr_accessor :remove_pic, :participant, :pin
   attr_protected :admin, :credits

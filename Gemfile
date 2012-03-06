@@ -18,7 +18,6 @@ group :assets do
   gem 'compass-rails'
 end
 
-
 gem 'jquery-rails'
 
 # To use debugger
@@ -33,8 +32,13 @@ gem 'kaminari'
 gem 'dragonfly'
 gem 'delayed_job_active_record'
 gem 'rails_admin', :git => 'git://github.com/sferik/rails_admin.git'
-gem 'devise', '= 1.4.5'
-gem 'omniauth', '= 0.3.2'
+gem 'devise', '= 2.0.4'
+gem 'omniauth-facebook'
+gem 'omniauth-twitter'
+gem 'omniauth-google-apps'
+gem 'omniauth-yahoo'
+gem 'omniauth-github'
+gem 'omniauth-openid'
 gem 'state_machine', '= 1.1.2'
 gem 'us_states_select'
 gem 'countries'

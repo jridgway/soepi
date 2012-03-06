@@ -58,6 +58,8 @@ class Survey < ActiveRecord::Base
     integer :id
   end
   
+  handle_asynchronously :solr_index
+  
   def settings_for_draft
     if drafting? and state_was == 'drafting'
       if irb?

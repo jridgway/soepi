@@ -54,6 +54,8 @@ class Report < ActiveRecord::Base
     integer :id
   end
   
+  handle_asynchronously :solr_index
+  
   state_machine :state, :initial => :pending do
     state :running
     state :passing
