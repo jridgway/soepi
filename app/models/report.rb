@@ -1,6 +1,6 @@
 class Report < ActiveRecord::Base
   belongs_to :member
-  has_many :plots, :class_name => 'ReportPlot', :dependent => :nullify
+  has_many :plots, :class_name => 'ReportPlot', :dependent => :destroy
   belongs_to :forked_from, :class_name => 'Report'
   has_many :forks, :class_name => 'Report', :foreign_key => :forked_from_id, :dependent => :nullify
   has_and_belongs_to_many :surveys
