@@ -7,7 +7,7 @@
     = render :partial => '/members/shared/auth_providers' 
     %h2 Or, use the form below:
   
-  = simple_form_for(resource, :html => {:multipart => true, :novalidate => true, :class => 'validate'}, :as => resource_name, :url => registration_path(resource_name)) do |f|
+  = simple_form_for(resource, :html => {:multipart => true, :novalidate => true, :class => 'validate'}, :as => resource_name, :url => main_app.member_registration_path) do |f|
     - unless session[:omniauth].nil? or @member.errors.empty?
       #error_explanation
         %h2 

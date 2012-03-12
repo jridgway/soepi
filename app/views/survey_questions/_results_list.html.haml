@@ -2,7 +2,7 @@
   %p
     %strong No responses yet.
 - else
-  = paginate totals, :remote => true
+  = will_paginate totals, :remote => true
   #text-responses
     %ul.reset
       - totals.each do |response|
@@ -11,4 +11,4 @@
             = link_to "Participant #{response.participant.anonymous_key}", participant_path(response.participant)
             wrote:
           = simple_format response.text_response
-  = paginate totals, :remote => true
+  = will_paginate totals, :remote => true

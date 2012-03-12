@@ -8,12 +8,11 @@
     %small#facets-chosen
       Categories Chosen:
       = facets_chosen
-    %h3 
-      Found #{pluralize(@facets.total, 'Participants')} 
+    %h3 Found #{pluralize(@facets.total, 'Participants')} 
     %ul.reset
       - @facets.results.each do |participant|
         %li
           = render :partial => 'participant', :locals => {:participant => participant}
-    = paginate @facets
+    = will_paginate @facets.results
   
 = render :partial => "/shared/content_page"

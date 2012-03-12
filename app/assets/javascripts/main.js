@@ -21,6 +21,7 @@ $(document).ready(function () {
   init_common_elements();
   init_nickname_autocomplete();
   init_external_links();
+  Shadowbox.init();
 });
 
 function member_return_to() {
@@ -48,7 +49,7 @@ function init_pop_navs() {
     event.stopPropagation();
     return false;
   });
-  $('body').click(function(event) {
+  $('html').click(function(event) {
     pop_nav_was_visible = $('.pop-nav-inner:visible');
     $('.pop-nav-link').removeClass('active');
     $('.pop-nav-inner').hide();
@@ -64,7 +65,7 @@ function select_nav_item() {
 
 
 function init_sign_in_links() {
-  $('a[href="/members/sign_in"]').live('click', function () {
+  $('a[href^="/account/sign_in"]').live('click', function () {
     sign_in_dialog();
     return false;
   });
@@ -77,7 +78,7 @@ function sign_in_dialog(return_to) {
   if($('#sign-in-dialog').length == 0) {
     $('body').append('<div id="sign-in-dialog" style="display:none" title="Sign In">' +
       '<img src="/assets/ajax-loader.gif" class="ajax-loader" /></div>');
-    $('#sign-in-dialog').load('/members/sign_in?xhr=1&member_return_to=' + return_to, function () {
+    $('#sign-in-dialog').load('/account/sign_in?xhr=1&member_return_to=' + return_to, function () {
       init_common_elements();
     });
   } 
@@ -274,24 +275,4 @@ function init_external_links() {
       }
     }
   });
-}
-
-function select_details_menu_item() {
-  var relative = jQuery.url.attr('relative').replace(/\?.*/, '').replace(/#.*/, '').replace(/\/+$/, '');
-  var available_items = 0;
-  $('#details ul.menu li').each(function(index, value) {
-    if($(this).css('display') != 'none') {
-      available_items += 1;
-    }
-  });
-  if(available_items == 0) {
-    $('#details').hide();
-  } else {
-    $('#details').show();
-    $('#details ul.menu li a').each(function() {
-      if($(this).attr('href') == relative || $(this).attr('href') == unescape(relative)) {
-        $(this).addClass('active');
-      }
-    });
-  }
 }

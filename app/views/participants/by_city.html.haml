@@ -9,11 +9,11 @@
     .actions
       = f.submit 'Search', :class => 'button'
   - if @participants  
-    %h3= page_entries_info @participants
+    %h3.clear Showing #{@participants.length} of #{@participants.total_entries} Participants
     %ul.reset
       - @participants.each do |participant|
         %li
           = render :partial => 'participant', :locals => {:participant => participant}
-    = paginate @participants
+    = will_paginate @participants
   
 = render :partial => "/shared/content_page"

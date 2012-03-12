@@ -8,6 +8,6 @@
         %li
           = link_to 'Add', add_target_survey_surveys_path(:survey_id => survey.id), :method => :put, :remote => true, :class => 'add-survey button', :icon => 'ui-icon-plusthick'
           = render :partial => '/surveys/survey', :locals => {:survey => survey}
-    = paginate @results, :remote => true
+    = will_paginate @results, :remote => true
   - else
     %p No surveys found.

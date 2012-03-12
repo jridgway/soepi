@@ -1,0 +1,8 @@
+%div[page]
+  = link_to image_tag('/assets/soepi-logo-dark-bg.png', :width => "62", :style => 'border:none'), refinery.url_for(page.url)
+  .inner
+    %h3
+      = link_to page.title, refinery.url_for(page.url)
+    %ul.attributes
+      %li Last Updated: #{timeago page.updated_at}
+    = truncate_html(page.content_for(:body), :length => 200)

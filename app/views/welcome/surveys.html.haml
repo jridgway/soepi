@@ -6,5 +6,5 @@
     - @surveys.each do |survey|
       %li[survey]
         = render :partial => '/surveys/survey', :locals => {:survey => survey}
-  = paginate  @surveys, :remote => true
+  = will_paginate  @surveys, :remote => true
 = javascript_tag 'init_common_elements();'

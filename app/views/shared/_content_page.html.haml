@@ -6,7 +6,7 @@
     :body_content_more_details => nil,
     :body_content => nil,
     :body_content_left => nil,
-    :body_content_right => nil,
+    :body_content_right => nil
   }
   sections.each_pair do |sym, html|
     html_2 = yield(sym).html_safe

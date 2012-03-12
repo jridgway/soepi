@@ -3,7 +3,7 @@
 
 - content_for :body_content_left do 
 
-  = simple_form_for(resource, :as => resource_name, :url => unlock_path(resource_name), :html => { :method => :post }) do |f|
+  = simple_form_for(resource, :as => resource_name, :url => main_app.member_unlock_path, :html => { :method => :post }) do |f|
     = f.input :email
     .actions
       = f.submit "Resend unlock instructions", :class => 'button'

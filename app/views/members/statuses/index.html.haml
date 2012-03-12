@@ -17,6 +17,6 @@
       - @statuses.each do |status|
         %li
           = render :partial => 'status', :locals => {:status => status}
-    = paginate @statuses        
+    = will_paginate @statuses        
   
 = render :partial => "/shared/content_page"

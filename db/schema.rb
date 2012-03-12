@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120306183828) do
+ActiveRecord::Schema.define(:version => 20120308151701) do
 
   create_table "age_groups", :force => true do |t|
     t.string   "label"
@@ -24,22 +24,6 @@ ActiveRecord::Schema.define(:version => 20120306183828) do
   create_table "age_groups_targets", :id => false, :force => true do |t|
     t.integer "target_id"
     t.integer "age_group_id"
-  end
-
-  create_table "assets", :force => true do |t|
-    t.string   "assetable_type"
-    t.integer  "assetable_id"
-    t.string   "file"
-    t.string   "file_uid"
-    t.string   "file_mime_type"
-    t.string   "file_name"
-    t.integer  "file_size"
-    t.integer  "file_width"
-    t.string   "file_height"
-    t.string   "file_image_uid"
-    t.string   "file_image_ext"
-    t.datetime "created_at"
-    t.datetime "updated_at"
   end
 
   create_table "census_geo_profiles", :force => true do |t|
@@ -574,33 +558,6 @@ ActiveRecord::Schema.define(:version => 20120306183828) do
     t.integer "occupation_id"
   end
 
-  create_table "pages", :force => true do |t|
-    t.string   "title",                                 :null => false
-    t.text     "body"
-    t.text     "css"
-    t.text     "javascript"
-    t.string   "browser_title"
-    t.string   "custom_title"
-    t.boolean  "use_custom_title", :default => false
-    t.string   "meta_keywords"
-    t.string   "meta_description"
-    t.string   "redirect_url"
-    t.string   "state",            :default => "draft"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "slug"
-    t.boolean  "raw",              :default => false
-    t.integer  "member_id"
-    t.integer  "parent_id"
-    t.integer  "lft"
-    t.integer  "rgt"
-    t.integer  "depth"
-    t.string   "url"
-    t.string   "path"
-  end
-
-  add_index "pages", ["slug"], :name => "index_pages_on_slug"
-
   create_table "participant_responses", :force => true do |t|
     t.integer  "participant_id"
     t.integer  "question_id"
@@ -672,20 +629,6 @@ ActiveRecord::Schema.define(:version => 20120306183828) do
     t.integer "race_id"
   end
 
-  create_table "parts", :force => true do |t|
-    t.string   "name"
-    t.text     "body"
-    t.string   "url_regex"
-    t.text     "css"
-    t.text     "javascript"
-    t.datetime "show_at"
-    t.datetime "hide_at"
-    t.string   "state",      :default => "draft"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.boolean  "raw",        :default => false
-  end
-
   create_table "races", :force => true do |t|
     t.string   "label"
     t.integer  "position"
@@ -698,18 +641,153 @@ ActiveRecord::Schema.define(:version => 20120306183828) do
     t.integer "race_id"
   end
 
-  create_table "rails_admin_histories", :force => true do |t|
-    t.text     "message"
-    t.string   "username"
-    t.integer  "item"
-    t.string   "table"
-    t.integer  "month"
-    t.integer  "year",       :limit => 8
-    t.datetime "created_at"
-    t.datetime "updated_at"
+  create_table "refinery_images", :force => true do |t|
+    t.string   "image_mime_type"
+    t.string   "image_name"
+    t.integer  "image_size"
+    t.integer  "image_width"
+    t.integer  "image_height"
+    t.string   "image_uid"
+    t.string   "image_ext"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
   end
 
-  add_index "rails_admin_histories", ["item", "table", "month", "year"], :name => "index_rails_admin_histories"
+  create_table "refinery_inquiries_inquiries", :force => true do |t|
+    t.string   "name"
+    t.string   "email"
+    t.string   "phone"
+    t.text     "message"
+    t.boolean  "spam",       :default => false
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
+  end
+
+  add_index "refinery_inquiries_inquiries", ["id"], :name => "index_refinery_inquiries_inquiries_on_id"
+
+  create_table "refinery_page_part_translations", :force => true do |t|
+    t.integer  "refinery_page_part_id"
+    t.string   "locale"
+    t.text     "body"
+    t.datetime "created_at",            :null => false
+    t.datetime "updated_at",            :null => false
+  end
+
+  add_index "refinery_page_part_translations", ["locale"], :name => "index_refinery_page_part_translations_on_locale"
+  add_index "refinery_page_part_translations", ["refinery_page_part_id"], :name => "index_f9716c4215584edbca2557e32706a5ae084a15ef"
+
+  create_table "refinery_page_parts", :force => true do |t|
+    t.integer  "refinery_page_id"
+    t.string   "title"
+    t.text     "body"
+    t.integer  "position"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+  end
+
+  add_index "refinery_page_parts", ["id"], :name => "index_refinery_page_parts_on_id"
+  add_index "refinery_page_parts", ["refinery_page_id"], :name => "index_refinery_page_parts_on_refinery_page_id"
+
+  create_table "refinery_page_translations", :force => true do |t|
+    t.integer  "refinery_page_id"
+    t.string   "locale"
+    t.string   "title"
+    t.string   "custom_slug"
+    t.string   "menu_title"
+    t.string   "slug"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+  end
+
+  add_index "refinery_page_translations", ["locale"], :name => "index_refinery_page_translations_on_locale"
+  add_index "refinery_page_translations", ["refinery_page_id"], :name => "index_d079468f88bff1c6ea81573a0d019ba8bf5c2902"
+
+  create_table "refinery_pages", :force => true do |t|
+    t.integer  "parent_id"
+    t.string   "path"
+    t.string   "slug"
+    t.boolean  "show_in_menu",        :default => true
+    t.string   "link_url"
+    t.string   "menu_match"
+    t.boolean  "deletable",           :default => true
+    t.boolean  "draft",               :default => false
+    t.boolean  "skip_to_first_child", :default => false
+    t.integer  "lft"
+    t.integer  "rgt"
+    t.integer  "depth"
+    t.string   "view_template"
+    t.string   "layout_template"
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
+  end
+
+  add_index "refinery_pages", ["depth"], :name => "index_refinery_pages_on_depth"
+  add_index "refinery_pages", ["id"], :name => "index_refinery_pages_on_id"
+  add_index "refinery_pages", ["lft"], :name => "index_refinery_pages_on_lft"
+  add_index "refinery_pages", ["parent_id"], :name => "index_refinery_pages_on_parent_id"
+  add_index "refinery_pages", ["rgt"], :name => "index_refinery_pages_on_rgt"
+
+  create_table "refinery_resources", :force => true do |t|
+    t.string   "file_mime_type"
+    t.string   "file_name"
+    t.integer  "file_size"
+    t.string   "file_uid"
+    t.string   "file_ext"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
+  create_table "refinery_roles", :force => true do |t|
+    t.string "title"
+  end
+
+  create_table "refinery_roles_users", :id => false, :force => true do |t|
+    t.integer "user_id"
+    t.integer "role_id"
+  end
+
+  add_index "refinery_roles_users", ["role_id", "user_id"], :name => "index_refinery_roles_users_on_role_id_and_user_id"
+  add_index "refinery_roles_users", ["user_id", "role_id"], :name => "index_refinery_roles_users_on_user_id_and_role_id"
+
+  create_table "refinery_settings", :force => true do |t|
+    t.string   "name"
+    t.text     "value"
+    t.boolean  "destroyable",     :default => true
+    t.string   "scoping"
+    t.boolean  "restricted",      :default => false
+    t.string   "form_value_type"
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
+  end
+
+  add_index "refinery_settings", ["name"], :name => "index_refinery_settings_on_name"
+
+  create_table "refinery_user_plugins", :force => true do |t|
+    t.integer "user_id"
+    t.string  "name"
+    t.integer "position"
+  end
+
+  add_index "refinery_user_plugins", ["name"], :name => "index_refinery_user_plugins_on_name"
+  add_index "refinery_user_plugins", ["user_id", "name"], :name => "index_refinery_user_plugins_on_user_id_and_name", :unique => true
+
+  create_table "refinery_users", :force => true do |t|
+    t.string   "username",               :null => false
+    t.string   "email",                  :null => false
+    t.string   "encrypted_password",     :null => false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
+    t.integer  "sign_in_count"
+    t.datetime "remember_created_at"
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
+  end
+
+  add_index "refinery_users", ["id"], :name => "index_refinery_users_on_id"
 
   create_table "regions", :force => true do |t|
     t.string   "label"
@@ -762,15 +840,18 @@ ActiveRecord::Schema.define(:version => 20120306183828) do
     t.integer "survey_id"
   end
 
-  create_table "settings", :force => true do |t|
-    t.string   "name"
-    t.text     "value"
-    t.string   "content_type", :default => "Plain"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+  create_table "seo_meta", :force => true do |t|
+    t.integer  "seo_meta_id"
+    t.string   "seo_meta_type"
+    t.string   "browser_title"
+    t.string   "meta_keywords"
+    t.text     "meta_description"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
   end
 
-  add_index "settings", ["name"], :name => "index_settings_on_name", :unique => true
+  add_index "seo_meta", ["id"], :name => "index_seo_meta_on_id"
+  add_index "seo_meta", ["seo_meta_id", "seo_meta_type"], :name => "index_seo_meta_on_seo_meta_id_and_seo_meta_type"
 
   create_table "survey_downloads", :force => true do |t|
     t.integer  "survey_id",       :null => false

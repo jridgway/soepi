@@ -14,12 +14,12 @@ class ReportsController < ApplicationController
     :save_and_exit, :forkit, :publish]
   
   def index 
-    @reports = Report.published.page(params[:page]).per(10)
+    @reports = Report.published.page(params[:page])
     render :layout => 'two_column'
   end
   
   def pending 
-    @reports = Report.pending.page(params[:page]).per(10)
+    @reports = Report.pending.page(params[:page])
     render :action => 'index'
   end
   
@@ -72,7 +72,7 @@ class ReportsController < ApplicationController
   end
   
   def surveys
-    @surveys = @report.surveys.page(params[:page]).per(10)
+    @surveys = @report.surveys.page(params[:page])
   end
 
   def forks

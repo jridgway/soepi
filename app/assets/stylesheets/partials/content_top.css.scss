@@ -53,9 +53,15 @@
       color: #fff;
       }
     
-    strong
+    #breadcrumbs
       {
-      font-weight: 600;
+      font-size: 0.6em;
+      color: #ccc;
+      
+      a 
+        {
+        color: #ccc;
+        }
       }
     
     img
@@ -78,7 +84,8 @@
   
   #details
     {
-    @include container;
+    @include pie-clearfix;
+    overflow: visible;
     width: 930px;
     margin: 15px 0;
     padding: 10px;

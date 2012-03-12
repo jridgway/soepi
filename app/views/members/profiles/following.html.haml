@@ -9,6 +9,6 @@
           = render :partial => '/surveys/survey', :locals => {:survey => follow.followable}        
         - when 'Member' then
           = render :partial => '/members/member', :locals => {:member => follow.followable} 
-  = paginate @follows
+  = will_paginate @follows
   
 = render :partial => "/shared/content_page"

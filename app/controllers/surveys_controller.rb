@@ -19,38 +19,38 @@ class SurveysController < ApplicationController
     :launch, :reject, :close]
 
   def index
-    @surveys = Survey.live.page(params[:page]).per(10)
+    @surveys = Survey.live.page(params[:page])
     render :layout => 'two_column'
   end
 
   def launched
-    @surveys = Survey.launched.page(params[:page]).per(10)
+    @surveys = Survey.launched.page(params[:page])
     render :action => 'index', :layout => 'one_column'
   end
 
   def published
-    @surveys = Survey.published.page(params[:page]).per(10)
+    @surveys = Survey.published.page(params[:page])
     render :action => 'index', :layout => 'one_column'
   end
 
   def drafting
-    @surveys = Survey.drafting.page(params[:page]).per(10)
+    @surveys = Survey.drafting.page(params[:page])
     render :action => 'index', :layout => 'one_column'
   end
 
   def review_requested
-    @surveys = Survey.review_requested.page(params[:page]).per(10)
+    @surveys = Survey.review_requested.page(params[:page])
     render :action => 'index', :layout => 'one_column'
   end
 
   def rejected
-    @surveys = Survey.rejected.page(params[:page]).per(10)
+    @surveys = Survey.rejected.page(params[:page])
     render :action => 'index', :layout => 'one_column'
   end
 
   def by_tag
     @tag = ActsAsTaggableOn::Tag.find params[:tag]
-    @surveys = Survey.tagged_with(@tag).live.page(params[:page]).per(10)
+    @surveys = Survey.tagged_with(@tag).live.page(params[:page])
     render :action => 'index'
   end
 
@@ -64,12 +64,12 @@ class SurveysController < ApplicationController
   end
   
   def downloads
-    @downloads = @survey.downloads.page(params[:page]).per(10)
+    @downloads = @survey.downloads.page(params[:page])
     render :layout => 'one_column'
   end
 
   def reports
-    @reports = @survey.reports.page(params[:page]).per(10)
+    @reports = @survey.reports.page(params[:page])
     render :layout => 'one_column'
   end
 

@@ -20,6 +20,16 @@ end
 
 gem 'jquery-rails'
 
+# Refinery CMS
+gem 'refinerycms', '~> 2.0.1'
+
+# Specify additional Refinery CMS Extensions here (all optional):
+# gem 'refinerycms-i18n', :git => 'git://github.com/parndt/refinerycms-i18n.git'
+# gem 'refinerycms-blog', '~> 2.0.1'
+gem 'refinerycms-inquiries', '~> 2.0.0'
+# gem 'refinerycms-page-images', '~> 2.0.0'
+gem 'refinerycms-ckeditor'
+
 # To use debugger
 # gem 'ruby-debug19', :require => 'ruby-debug'
 
@@ -28,10 +38,9 @@ group :test do
   gem 'turn', :require => false
 end
 
-gem 'kaminari'
+gem 'haml'
 gem 'dragonfly'
 gem 'delayed_job_active_record'
-gem 'rails_admin', :git => 'git://github.com/sferik/rails_admin.git'
 gem 'devise', '= 2.0.4'
 gem 'omniauth-facebook'
 gem 'omniauth-twitter'
@@ -49,10 +58,9 @@ gem 'encrypted-cookies'
 gem 'awesome_nested_set'
 gem 'exception_notification'
 gem 'sunspot_rails'
-gem 'sunspot_with_kaminari', '~> 0.1'
 gem 'gravatar_image_tag'
 gem 'acts_as_followable'
-gem 'friendly_id', '~> 4.0.0.beta8'
+gem 'friendly_id'
 gem 'geocoder'
 gem 'rails_autolink'
 gem 'thin'
@@ -71,6 +79,7 @@ gem 'pusher'
 
 group :development do
   gem 'cities'
+  gem 'sunspot_solr'
 end
 
 group :production do

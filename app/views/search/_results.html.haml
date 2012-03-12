@@ -7,6 +7,6 @@
         = render :partial => '/reports/report', :locals => {:report => result}     
       - when 'Member' then
         = render :partial => '/members/member', :locals => {:member => result} 
-      - when 'Page' then 
-        = render :partial => '/pages/page', :locals => {:page => result} 
-= paginate @results
+      - when 'Refinery::Page' then 
+        = render :partial => '/refinery/pages/page', :locals => {:page => result} 
+= will_paginate @results.results

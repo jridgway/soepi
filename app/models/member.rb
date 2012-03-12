@@ -9,7 +9,6 @@ class Member < ActiveRecord::Base
   has_many :statuses, :class_name => 'MemberStatus', :dependent => :destroy
   has_and_belongs_to_many :status_references, :class_name => 'MemberStatus'
 
-  scope :confirmed, where('confirmed_at is not null')
   scope :admins, where(:admin => true)
   scope :listable, where('privacy_dont_list_me = false or privacy_dont_list_me is null')
   scope :publishers, where(%{
@@ -24,12 +23,25 @@ class Member < ActiveRecord::Base
   acts_as_followable
 
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable,
-    :omniauthable, :confirmable, :token_authenticatable, :lockable
+    :omniauthable, :token_authenticatable, :lockable
+    
+  def login
+    email
+  end
+  
+  attr_accessor :login
+  attr_accessible :login
+  
+  def self.find_for_database_authentication(warden_conditions)
+    conditions = warden_conditions.dup
+    login = conditions.delete(:login)
+    where(conditions).where(["lower(email) = :value", { :value => login.downcase }]).first
+  end
 
   searchable do
     text :nickname, :boost => 10.0
     boolean :published do 
-      confirmed? and not privacy_dont_list_me?
+      not privacy_dont_list_me?
     end
     integer :id
   end

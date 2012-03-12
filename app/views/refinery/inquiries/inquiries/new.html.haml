@@ -1,0 +1,14 @@
+= render :partial => '/shared/pages_common'
+
+- content_for :body_content do
+  = @page.content_for(:body).html_safe
+  .inquiries
+    = simple_form_for [refinery, :inquiries, @inquiry] do |f|
+      = f.input :name
+      = f.input :email
+      = f.input :phone, :as => :string
+      = f.input :message
+      .actions
+        = f.button :submit, 'Send Message'
+
+= render :partial => '/shared/content_page'

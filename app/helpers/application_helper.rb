@@ -1,7 +1,18 @@
 module ApplicationHelper 
-  def page_path_linked(page)
-    unless page.ancestors.empty?
-      (page.ancestors.collect {|p| link_to(p.title, page_path(p))}.join(' &raquo; ') +
+  def sub_menu_page
+    unless @sub_menu_page
+      if @page.present? 
+        @sub_menu_page = @page.self_and_ancestors.where(:depth => 1).first
+      end
+    end
+    @sub_menu_page
+  end
+
+  def page_breadcrumbs(page)
+    if page.ancestors.empty?
+      page.title
+    else
+      (page.ancestors.collect {|p| link_to(p.title, refinery.url_for(p.url))}.join(' &raquo; ') +
       ' &raquo; ' + page.title).html_safe
     end
   end
@@ -20,42 +31,34 @@ module ApplicationHelper
     end
   end
   
-  def browser_title(title)
+  def browser_title_2(title)
     if title.blank? and @page.present? 
-      if @page.browser_title.blank?
-        if @page.use_custom_title?
-          title = @page.custom_title
-        else
-          title = @page.title
-        end
-      else
-        title = @page.browser_title
-      end
+      title = @page.title
     end
     if title.blank?
-      Setting.find_or_set(:site_name, 'SoEpi Inc')
+      Refinery::Core.site_name
     else
-      "#{title} - #{Setting.find_or_set(:site_name, 'SoEpi Inc')}"
+      "#{title} - #{Refinery::Core.site_name}"
     end
   end
   
-  def meta_description(description)
+  def meta_description_2(description)
     if description.blank? and @page.present? 
       description = @page.meta_description
     end
     if description.blank?
-      Setting.find_or_set(:meta_description, '')
+      Refinery::Setting.find_or_set(:meta_description, '')
     else
       description
     end
   end
   
-  def meta_keywords(keywords)
+  def meta_keywords_2(keywords)
     if keywords.blank? and @page.present? 
       keywords = @page.meta_keywords
     end
     if keywords.blank?
-      Setting.find_or_set(:meta_keywords, '')
+      Refinery::Setting.find_or_set(:meta_keywords, '')
     else
       keywords
     end
@@ -94,7 +97,7 @@ module ApplicationHelper
       img = image_tag(member.pic.thumb("#{size}x#{size}#").url, :class => 'avatar', :alt => member.nickname)
     end
     if linked
-      link_to img, member_path(member), :title => member.nickname, :class => 'avatar'
+      link_to img, main_app.member_path(member), :title => member.nickname, :class => 'avatar'
     else
       img
     end
@@ -116,24 +119,6 @@ module ApplicationHelper
       :icon => 'ui-icon-star',
       :followable_type => followable.class.to_s, 
       :followable_id => followable.id
-  end
-  
-  def page_entries_info(collection, options = {})
-    collection_name = options[:collection_name] || (collection.empty?? 'entry' : collection.first.class.name.underscore.sub('_', ' '))
-    if collection.num_pages < 2
-      case collection.size
-      when 0; info = "No #{collection_name.pluralize} found"
-      when 1; info = "Displaying <strong>1</strong> #{collection_name}"
-      else;   info = "Displaying <strong>all #{collection.size}</strong> #{collection_name.pluralize}"
-      end
-    else
-      info = %{Displaying #{collection_name.pluralize} <strong>%d&ndash;%d</strong> of <strong>%d</strong> in total}% [
-        collection.offset_value + 1,
-        collection.offset_value + collection.length,
-        collection.total_count
-      ]
-    end
-    info.html_safe
   end
   
   def facets_chosen

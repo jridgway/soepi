@@ -10,6 +10,6 @@
       - @forks.each do |survey|
         %li
           = render :partial => 'survey', :locals => {:survey => survey}
-    = paginate @forks
+    = will_paginate @forks
     
 = render :partial => "/shared/content_page"

@@ -1,7 +1,7 @@
-- content_for :body_content_title do
-  Subscribe to Our Newsletter
+= render :partial => '/shared/pages_common'
 
-- content_for :body_content_left do
+- content_for :body_content do
+  = @page.content_for(:body).html_safe if @page
   = simple_form_for :subscriber, :action => new_subscriber_path, :method => 'post' do |f|
     = f.input :email
     = f.input :first_name, :required => false
@@ -9,10 +9,5 @@
     = f.input :unsubscribe, :as => :boolean
     .actions
       = f.submit 'Submit', :class => 'button'
-
-- content_for :body_content_right do 
-  - if Part.set?(:home_member_top_right)
-    .highlight
-      = link_member_references(RDiscount.new(Part.find_or_set(:home_member_top_right)).to_html).html_safe
     
 = render :partial => "/shared/content_page"

@@ -3,9 +3,14 @@
 = render :partial => '/surveys/details'
   
 - content_for :body_content do  
-  %ul#reports.listing.reset
-    - @reports.each do |report|
-      %li= render :partial => '/reports/report', :locals => {:report => report}
-  = paginate @reports
+  - if @reports.empty?
+    %p 
+      No one has yet to create a report based on this survey.
+      = link_to 'Create a Report', new_report_path, :class => 'restrict-to-members button', :icon => 'ui-icon-document'
+  - else
+    %ul#reports.listing.reset
+      - @reports.each do |report|
+        %li= render :partial => '/reports/report', :locals => {:report => report}
+    = will_paginate @reports
     
 = render :partial => "/shared/content_page"

@@ -6,7 +6,7 @@
           id: <%= current_member.id %>,
           name: '<%= current_member.name %>',
           nickname: '<%= current_member.nickname %>',
-          nickname_linked: '<%= link_to current_member.nickname, member_path(current_member) %>',
+          nickname_linked: '<%= link_to current_member.nickname, main_app.member_path(current_member) %>',
           pic: '<%= escape_javascript avatar(current_member) %>',
           unseen_messages_count: '<%= Message.involving_member_unseen(current_member.id).count %>'
         }
@@ -99,6 +99,10 @@
   function select_details_menu_item() {
     var relative = jQuery.url.attr('relative').replace(/\?.*/, '').replace(/#.*/, '').replace(/\/+$/, '');
     var available_items = 0;
+    if(controller_name == 'pages' || controller_name == 'welcome' || controller_name == 'inquiries') {
+      $('#details').show();
+      return;
+    }
     $('#details ul.menu li').each(function(index, value) {
       if($(this).css('display') != 'none') {
         available_items += 1;

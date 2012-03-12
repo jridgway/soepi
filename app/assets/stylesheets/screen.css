@@ -24,6 +24,7 @@
  *= require partials/home
  *= require partials/pages
  *= require partials/misc
+ *= require partials/shadowbox
  *= require codemirror
  *= require codemirror/themes/night
  *= require partials/simple-hint

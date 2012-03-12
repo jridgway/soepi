@@ -1,7 +1,7 @@
 = render :partial => "/members/accounts/common"
 
 - content_for :body_content do
-  - simple_form_for resource, :html => {:method => :put}, :url => member_update_privacy_path  do |f|
+  - simple_form_for resource, :html => {:method => :put}, :url =>  main_app.member_update_privacy_path  do |f|
     = render :partial => '/members/accounts/privacy_form', :locals => {:f => f}    
     .actions
       = f.submit 'Update', :class => 'button'

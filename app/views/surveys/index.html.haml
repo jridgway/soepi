@@ -27,7 +27,7 @@
       - @surveys.each do |survey|
         %li
           = render :partial => 'survey', :locals => {:survey => survey}
-    = paginate @surveys
+    = will_paginate @surveys
 
 - content_for :body_content_toolbar do 
   = link_to 'Create a Survey', new_survey_path, :class => 'restrict-to-members button', :icon => 'ui-icon-document'        

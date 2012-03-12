@@ -8,6 +8,6 @@
       - @reports.each do |report|
         %li
           = render :partial => '/reports/report', :locals => {:report => report}
-    = paginate @reports    
+    = will_paginate @reports    
   
 = render :partial => "/shared/content_page"

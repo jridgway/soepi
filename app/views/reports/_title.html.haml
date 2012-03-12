@@ -14,7 +14,7 @@
       %li 
         Forked from: #{link_to @report.forked_from.member.nickname, member_path(@report.forked_from.member)} 
         \/ 
-        #{link_to @report.forked_from.title, survey_path(@report.forked_from)}
+        #{link_to @report.forked_from.title, report_path(@report.forked_from)}
     %li Posted: #{timeago @report.created_at}
     - unless @report.tags.empty?
       %li Tagged: #{tag_list_links(@report)}

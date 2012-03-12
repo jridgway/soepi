@@ -17,5 +17,5 @@
           = render :partial => '/members/member', :locals => {:member => notification.notifiable}   
         - when 'MemberStatus' then
           = render :partial => '/members/statuses/status', :locals => {:status => notification.notifiable} 
-  = paginate @notifications, :remote => true
+  = will_paginate @notifications, :remote => true
 = javascript_tag 'init_common_elements(); show_hide_member_related();'

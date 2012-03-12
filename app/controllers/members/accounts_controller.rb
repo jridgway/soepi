@@ -1,5 +1,5 @@
 class Members::AccountsController < Devise::RegistrationsController
-  prepend_before_filter :authenticate_scope!, :except => [:new, :create, :load_current_member]
+  prepend_before_filter :authenticate_member_2!, :except => [:new, :create, :load_current_member]
   layout Proc.new { |controller| 
     %w{new create}.include?(controller.action_name) ? 'two_column' : (controller.request.xhr? ? 'ajax' : 'one_column')
   }
@@ -27,13 +27,14 @@ class Members::AccountsController < Devise::RegistrationsController
   end
 
   def update_password
-    if resource.update_attributes(params[resource_name])
+    @member = current_member
+    if @member.update_attributes(params[:member])
       set_flash_message :notice, :updated if is_navigational_format?
-      sign_in resource_name, resource, :bypass => true
-      respond_with resource, :location => member_change_password_path
+      sign_in :member, @member, :bypass => true
+      respond_with @member, :location => member_change_password_path
     else
-      clean_up_passwords(resource)
-      render_with_scope :change_password
+      clean_up_passwords(@member)
+      render :action => 'change_password'
     end
   end
 

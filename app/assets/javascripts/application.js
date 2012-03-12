@@ -22,6 +22,7 @@
 //= require addresses
 //= require markerclusterer
 //= require highcharts
+//= require shadowbox
 //= require highcharts-theme
 //= require distance_widget
 //= require uservoice

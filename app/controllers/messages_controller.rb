@@ -3,11 +3,11 @@ class MessagesController < ApplicationController
   layout Proc.new { |controller| controller.request.xhr? ? 'ajax' : 'one_column' }
 
   def index
-    @messages = Message.involving_member(current_member.id).roots.recent.page(params[:page]).per(10)
+    @messages = Message.involving_member(current_member.id).roots.recent.page(params[:page])
   end
 
   def unread
-    @messages = Message.involving_member_unseen(current_member.id).recent.page(params[:page]).per(10)
+    @messages = Message.involving_member_unseen(current_member.id).recent.page(params[:page])
     render :action => 'index'
   end
   

@@ -1,7 +1,7 @@
 = render :partial => "/members/accounts/common"
 
 - content_for :body_content do
-  = simple_form_for(@participant, :url => participants_path, :html => {:novalidate => true, :class => 'validate'}) do |f|
+  = simple_form_for(@participant, :url => member_update_participant_path, :html => {:novalidate => true, :class => 'validate'}) do |f|
     = render :partial => 'form', :locals => {:f => f}
     .actions
       = f.submit 'Update', :class => 'button'

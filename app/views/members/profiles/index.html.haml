@@ -19,6 +19,6 @@
       - @members.each do |member|
         %li
           = render :partial => '/members/member', :locals => {:member => member}
-    = paginate @members     
+    = will_paginate @members     
   
 = render :partial => "/shared/content_page"

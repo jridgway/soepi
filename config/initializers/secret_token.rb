@@ -4,4 +4,4 @@
 # If you change this key, all old signed cookies will become invalid!
 # Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
-Soepi::Application.config.secret_token = '521317d53b8133135318d722267f9f46fdc68d6ae51b572a195b76902824bf3910d596416727c85fd9b412e852afb0885a9cae409c8641b083c8c67e7e45ad23'
+Soepi::Application.config.secret_token = '3dfdc6f23f27324a8c83db9c9f703da1639c6c22ae72464165288eb5e45430e30022f842ad92f82c8553fd43b95a8ab6f681b7b48fccb2d7df5293faab4bb700'

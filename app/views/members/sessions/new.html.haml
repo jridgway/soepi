@@ -7,7 +7,7 @@
   = render :partial => 'members/shared/auth_providers'
 
   %h2 Or, use your email and password:
-  = simple_form_for(:member, :as => resource_name, :url => session_path(resource_name), :html => {:class => 'sign_in_form'}) do |f|
+  = simple_form_for(:member, :as => resource_name, :url => main_app.member_session_path, :html => {:class => 'sign_in_form'}) do |f|
     = f.input :email
     = f.input :password
     = f.input :remember_me, :as => :boolean

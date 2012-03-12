@@ -5,25 +5,14 @@ class ApplicationController < ActionController::Base
   helper_method :cache_expirary, :cache_expirary_in_seconds, :current_participant, :current_member_pin, :member_return_to,
     :avatar_url, :member_contact_us_path,  :message_members_path
   enable_esi
-  
-  rescue_from ActiveRecord::RecordNotFound do
-    if Rails.env.development?
-      raise
-    else
-      render_404
-    end
-  end
 
   protected
-  
-    def render_404
-      respond_to do |type|
-        type.html { 
-            @page = Page.find('page-not-found')
-            load_default_tags
-            render :template => '/pages/show', :layout => 'two_column_wide', :status => "404 Not Found"
-          }
-        type.all {render :nothing => true, :status => '404 Not Found'}
+    
+    def authenticate_member_2!
+      unless current_member
+        flash[:notice] = t('devise.failure.unauthenticated')
+        redirect_to main_app.new_member_session_path(:member_return_to => request.path)
+        false
       end
     end
     
@@ -31,7 +20,7 @@ class ApplicationController < ActionController::Base
       @tags = (
           Survey.live.tag_counts(:start_at => 6.months.ago, :limit => 50) +
           Report.tag_counts(:start_at => 6.months.ago, :limit => 50) +
-          Member.confirmed.tag_counts(:start_at => 6.months.ago, :limit => 50) +
+          Member.tag_counts(:start_at => 6.months.ago, :limit => 50) +
           MemberStatus.tag_counts(:start_at => 6.months.ago, :limit => 50)
         )[0..49].sort {|a,b| a.count <=> b.count}.sort {|a,b| a.name <=> b.name}
     end

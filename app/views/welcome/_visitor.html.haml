@@ -7,11 +7,13 @@
       #sign-in-links
         = link_to 'Sign In', new_member_session_path, :class => 'button', :icon => 'ui-icon-key'
         = link_to 'Sign Up', new_member_registration_path, :class => 'button', :icon => 'ui-icon-arrowthick-1-n'
-        = link_to 'Browse', participants_path, :class => 'button', :icon => 'ui-icon-zoomin'
+        = link_to 'Learn More', '/docs/about', :class => 'button', :icon => 'ui-icon-zoomin'
     #inner
       #about
         %h2 Connecting Communities and Health Investigators...
-        %p SoEpi is a 501(c)(3) non-profit organization committed to better health via online social epidemiology.
+        %p 
+          SoEpi is a 501(c)(3) non-profit organization committed to better health via online social epidemiology.
+          %a{:href => '/docs/about'} Learn More &raquo;
       #features
         #home-accordian
           %h3
@@ -22,27 +24,27 @@
               <strong>free</strong> and <strong>anonymous</strong>. It's available for <strong>anyone</strong> to use,
               and it includes advanced features, such as <strong>targeting</strong>&mdash;based on age, gender, 
               location, surveys taken, education, race and ethnicity&mdash;and <strong>question branching</strong>.
-              %a{:href => '/support'} Learn More &raquo;
+              %a{:href => '/docs/about/anonymous-surveys'} Learn More &raquo;
           %h3
             %a{:href => '#open-database'} Open Database
           #open-database
             %p
               As our participants are completely anonymous, all survey <strong>results</strong> are available for 
               <strong>browsing</strong> and <strong>download</strong>. 
-              %a{:href => '/support'} Learn More &raquo;
+              %a{:href => '/docs/about/open-database'} Learn More &raquo;
           %h3
             %a{:href => '#r-based-reports'} R-based Reports
           #r-based-reports
             %p
               Write unadulterated <strong>R</strong> scripts to generate plots, then annotate and publish them 
               as reports. We've integrated R into our site, so that analyzing surveys results couldn't be easier. 
-              %a{:href => '/support'} Learn More &raquo;
+              %a{:href => '/docs/about/r-based-reports'} Learn More &raquo;
           %h3
-            %a{:href => '#community'} Community
-          #community
+            %a{:href => '#communication-and-collaboration'} Communication and Collaboration
+          #communication-and-collaboration
             %p
               Communicate, plan, organize and take action by <strong>following</strong> your fellow SoEpi members and posting
               your own <strong>status updates</strong>, <strong>surveys</strong>, and <strong>reports</strong>.
-              %a{:href => '/support'} Learn More &raquo;
+              %a{:href => '/docs/about/communication-and-collaboration'} Learn More &raquo;
     %footer#footer
       = render :partial => "/shared/footer"

@@ -9,7 +9,7 @@ class Members::StatusesController < ApplicationController
   cache_sweeper :statuses_sweeper, :only => [:create, :destroy]
   
   def index 
-    @statuses = MemberStatus.page(params[:page]).per(10)
+    @statuses = MemberStatus.page(params[:page])
   end 
   
   def by_tag

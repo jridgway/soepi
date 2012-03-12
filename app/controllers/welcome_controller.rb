@@ -1,7 +1,7 @@
 class WelcomeController < ApplicationController
   def index
     if member_signed_in?
-      @notifications = current_member.notifications.page(params[:page]).per(20)
+      @notifications = current_member.notifications.page(params[:page])
       if request.xhr?
         render :action => 'notifications'
       else
@@ -15,26 +15,27 @@ class WelcomeController < ApplicationController
   end
   
   def statuses
-    @statuses = current_member.statuses.page(params[:page]).per(20)
+    @statuses = current_member.statuses.page(params[:page])
   end
   
   def surveys
-    @surveys = current_member.surveys.page(params[:page]).per(20)
+    @surveys = current_member.surveys.page(params[:page])
   end
   
   def reports
-    @reports = current_member.reports.page(params[:page]).per(20)
+    @reports = current_member.reports.page(params[:page])
   end
   
   def follows
-    @follows = current_member.follows.page(params[:page]).per(20)
+    @follows = current_member.follows.page(params[:page])
   end
   
   def member_followers
-    @member_followers = current_member.member_followers.page(params[:page]).per(20)
+    @member_followers = current_member.member_followers.page(params[:page])
   end
   
   def subscribe
+    @page = Refinery::Page.find_by_slug('subscribe')
     if request.post? and params[:subscriber] and not params[:subscriber][:email].blank?
       h = Hominid::API.new(ENV['SOEPI_MAILCHIMP_KEY'], {:secure => true, :timeout => 60})
       if params[:subscriber][:unsubscribe] == '1'
@@ -50,7 +51,7 @@ class WelcomeController < ApplicationController
       end
       redirect_to_back_or(root_path)
     else
-      render :layout => 'two_column_wide'
+      render :layout => 'one_column'
     end
   end
 end

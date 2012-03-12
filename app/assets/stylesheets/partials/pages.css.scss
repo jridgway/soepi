@@ -1,135 +1,58 @@
 @import "common";
 
 .bp 
-  {
-  #toc 
+  { 
+  #details #menu
+    {    
+    ul
+      {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      
+      li 
+        {
+        list-style: none;
+        margin: 0;
+        padding: 0 10px;
+        float: left;
+        
+        ul 
+          {
+          display: none;
+          }
+        }
+      }
+    }
+  
+  #pages-submenu
     {
+    float: right;
+    margin: 0 0 15px 15px;
+    max-width: 250px;
+    
     strong
       {
       display: block;
-      font-size: 16px;
-      margin: 10px 0;
+      margin: 0;
       }
-    }  
-    
-  #pages-sidebar
-    {
-    float: right;
-    margin: 15px;
-    width: 350px;
-    position: relative;
-    
-    #pages-index
-      {
-      height: 34px;
-      margin: 0 auto 30px auto;
       
-      #pages-index-button
+    ul 
+      {
+      margin: 10px 0 15px 0;
+      padding: 0;
+      
+      ul 
         {
-        display: block;
-        background: #eee;
-        color: #333;
-        font-size: 16px;
-        margin: 0;
-        padding: 5px 10px 5px 10px;
-        width: 122px;
-        text-align: right;
-        -moz-border-radius: 4px;
-        -webkit-border-radius: 4px;
-        position: absolute;
-        right: 0;
-        z-index: 1;
+        margin: 7px 0 7px 0;
         
-        .ui-icon
+        li 
           {
-          float: right;
-          margin: 5px 0 0 7px;
+          margin-left: 20px;
+          padding-left: 0;
+          list-style-type: circle;
           }
         }
-        
-      #pages-index-panel
-        {
-        display: none;
-        position: absolute;
-        top: 0;
-        right: 0;
-        background: #eee;
-        border: none;
-        -moz-border-radius: 4px;
-        -webkit-border-radius: 4px;
-        border-radius: 4px;
-        -moz-box-shadow: 0 0 15px #111;
-        -webkit-box-shadow: 0 0 15px #111;
-        -o-box-shadow: 0 0 15px #111;
-        box-shadow: 0px 0px 15px #111;
-        color: #333;
-        padding: 35px 0 0 0;
-        width: 500px;
-        
-        .inner
-          {
-          border-top: 1px solid #999;
-          max-height: 400px;
-          overflow: auto;
-          
-          ol 
-            {
-            margin: 0;
-            padding: 0;
-            
-            li 
-              {
-              margin: 0;
-              padding: 0;
-              
-              &:last-child a
-                {
-                -moz-border-radius-bottomleft: 4px;
-                -moz-border-radius-bottomright: 4px;
-                -webkit-border-bottom-left-radius: 4px;
-                -webkit-border-bottom-right-radius: 4px;
-                border-bottom-left-radius: 4px;
-                border-bottom-right-radius: 4px;
-                }
-              }
-              
-            li.depth-0 a 
-              {
-              font-weight: 600;
-              } 
-            
-            li.depth-1 a
-              {
-              font-weight: 100;
-              }
-            
-            li.depth-2 a
-              {
-              font-style: italic;
-              }
-            
-            li.depth-3 a, li.depth-4 a, li.depth-5 a 
-              {
-              font-size: 0.8em;
-              }
-        
-            a 
-              {
-              color: #000;
-              padding: 3px 15px;
-              margin: 0;
-              display: block;
-              
-              &:hover
-                {
-                background: $blue;
-                color: #fff;
-                text-decoration: none;
-                }
-              }
-            }
-          }
-        }
-      }  
+      }
     }
   }

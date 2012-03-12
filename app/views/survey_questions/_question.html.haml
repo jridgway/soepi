@@ -11,7 +11,7 @@
         - else
           = question.body
     %p
-      %small #{question.qtype} | #{question.required? ? 'Required' : 'Optional'} | ID=#{question.id}
+      %small #{question.qtype} | #{question.required? ? 'Required' : 'Optional'}
   - unless question.choices.empty? 
     %ol.choices
       - question.choices.each do |choice|

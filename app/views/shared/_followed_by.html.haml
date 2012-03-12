@@ -3,4 +3,4 @@
   - @followings.each do |follow|
     %li
       = render :partial => '/members/member', :locals => {:member => follow}
-= paginate @followings
+= will_paginate @followings

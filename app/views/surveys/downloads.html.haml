@@ -25,6 +25,6 @@
               %li
                 %label Size:
                 = number_to_human_size download.asset_size
-      = paginate @downloads
+      = will_paginate @downloads
     
 = render :partial => "/shared/content_page"

@@ -8,6 +8,6 @@
       - @forks.each do |report|
         %li
           = render :partial => 'report', :locals => {:report => report}
-    = paginate @forks
+    = will_paginate @forks
     
 = render :partial => "/shared/content_page"

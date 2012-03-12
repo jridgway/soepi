@@ -8,6 +8,6 @@
       - @surveys.each do |survey|
         %li
           = render :partial => '/surveys/survey', :locals => {:survey => survey}
-    = paginate @surveys   
+    = will_paginate @surveys   
   
 = render :partial => "/shared/content_page"

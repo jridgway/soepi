@@ -7,18 +7,18 @@ class Members::ProfilesController < ApplicationController
     :expires_in => 1.hour
 
   def index
-    @members = Member.listable.page(params[:page]).per(30)
+    @members = Member.listable.paginate(:page => params[:page], :per_page => 30)
     render :action => 'index'
   end
   
   def publishers
-    @members = Member.listable.publishers.page(params[:page]).per(30)
+    @members = Member.listable.publishers.paginate(:page => params[:page], :per_page => 30)
     render :action => 'index'
   end
 
   def by_tag
     @tag = ActsAsTaggableOn::Tag.find params[:tag]
-    @members = Member.tagged_with(@tag).listable.page(params[:page]).per(30)
+    @members = Member.tagged_with(@tag).listable.paginate(:page => params[:page], :per_page => 30)
     render :action => 'index'
   end
 
@@ -38,12 +38,12 @@ class Members::ProfilesController < ApplicationController
   end
 
   def following
-    @follows = @member.follows.page(params[:page]).per(10)
+    @follows = @member.follows.page(params[:page])
     render :layout => 'one_column'
   end
 
   def followed_by
-    @followings = @member.member_followers.page(params[:page]).per(10)
+    @followings = @member.member_followers.page(params[:page])
     render :layout => 'one_column'
   end
 

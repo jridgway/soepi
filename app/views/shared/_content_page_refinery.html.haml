@@ -1,0 +1,14 @@
+= render :partial => '/shared/pages_common'
+
+- content_for :body_content do
+  #pages-submenu
+    #toc{:style => 'display:none'}
+      %h3 In This Doc
+      %ul.inner
+    - if sub_menu_page
+      %h3 See Also
+      = render :partial => '/refinery/menu', :locals => {:roots => refinery_menu_pages.select {|m| m.parent_id == sub_menu_page.id}}
+  %h1#page-title-actual= @page.title
+  #page-content
+    = @page.content_for(:body).to_s.html_safe   
+= render :partial => '/shared/content_page'

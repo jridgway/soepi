@@ -4,7 +4,7 @@
   %h2
     Cancelling your account is permanent and cannot be undone:
   %p
-    = link_to "Cancel My Account", registration_path(resource_name), :confirm => "Are you sure?", :method => :delete, :class => 'button'
+    = link_to "Cancel My Account",  main_app.member_registration_path, :confirm => "Are you sure?", :method => :delete, :class => 'button'
     or
     = link_to "Back", :back
       
