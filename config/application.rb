@@ -64,7 +64,7 @@ module Soepi
     config.middleware.insert 0, 'Dragonfly::Middleware', :images
     
     config.assets.precompile += ['screen.css', 'print.css', 'refinery/ckeditor.css', 
-      'refinery/pages/docs/about/skins/kama/editor.css', 'refinery/pages/docs/about/lang/en.js']
+      'ckeditor/ckeditor', 'refinery/ckeditor', 'refinery/ckeditor']
     config.assets.initialize_on_precompile = false
   end
 end
