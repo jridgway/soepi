@@ -62,8 +62,5 @@ module Soepi
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
     config.middleware.insert 0, 'Dragonfly::Middleware', :images
-    
-    config.assets.precompile += ['screen.css', 'print.css']
-    config.assets.initialize_on_precompile = false
   end
 end

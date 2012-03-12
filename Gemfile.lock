@@ -1,3 +1,9 @@
+GIT
+  remote: git://github.com/jridgway/refinerycms-ckeditor.git
+  revision: 7e9793ac99636d3d395598f9d8f761c4e94a0c83
+  specs:
+    refinerycms-ckeditor (0.1.0)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -217,7 +223,6 @@ GEM
     refinerycms-authentication (2.0.1)
       devise (~> 2.0.0)
       refinerycms-core (= 2.0.1)
-    refinerycms-ckeditor (0.1.0)
     refinerycms-core (2.0.1)
       acts_as_indexed (~> 0.7.7)
       awesome_nested_set (~> 2.1.0)
@@ -349,7 +354,7 @@ DEPENDENCIES
   rails_autolink
   rdiscount
   refinerycms (~> 2.0.1)
-  refinerycms-ckeditor
+  refinerycms-ckeditor!
   refinerycms-inquiries (~> 2.0.0)
   rubyzip
   sass-rails (~> 3.2.3)
