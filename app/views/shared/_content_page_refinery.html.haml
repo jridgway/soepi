@@ -5,9 +5,9 @@
     #toc{:style => 'display:none'}
       %h3 In This Doc
       %ul.inner
-    - if sub_menu_page
+    - unless sub_menu_page_roots.empty? 
       %h3 See Also
-      = render :partial => '/refinery/menu', :locals => {:roots => refinery_menu_pages.select {|m| m.parent_id == sub_menu_page.id}}
+      = render :partial => '/refinery/menu', :locals => {:roots => sub_menu_page_roots}
   %h1#page-title-actual= @page.title
   #page-content
     = @page.content_for(:body).to_s.html_safe   

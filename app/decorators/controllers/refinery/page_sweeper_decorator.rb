@@ -1,4 +1,4 @@
-Refinery::PageSweeperController.class_eval do 
+Refinery::PageSweeper.class_eval do 
   protected
   
     def expire_cache

@@ -7,6 +7,13 @@ module ApplicationHelper
     end
     @sub_menu_page
   end
+  
+  def sub_menu_page_roots
+    unless @sub_menu_page_roots
+      @sub_menu_page_roots = refinery_menu_pages.select {|m| m.parent_id == sub_menu_page.id}
+    end
+    @sub_menu_page_roots
+  end
 
   def page_breadcrumbs(page)
     if page.ancestors.empty?
