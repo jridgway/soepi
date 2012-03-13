@@ -5,4 +5,4 @@
       = link_to page.title, refinery.url_for(page.url)
     %ul.attributes
       %li Last Updated: #{timeago page.updated_at}
-    = truncate_html(page.content_for(:body), :length => 200)
+    = truncate(strip_tags(page.content_for(:body)), :length => 200)
