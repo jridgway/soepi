@@ -8,5 +8,5 @@
         %li
           = link_to image_tag(plot.plot.thumb('250x250#').url(:format => :png)), plot.plot.url(:format => :png), :target => '_blank' 
   #output
-    %h3 Output
+    %h3.clear Output
     = simple_format @report.output    
