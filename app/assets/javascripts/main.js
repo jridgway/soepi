@@ -21,7 +21,7 @@ $(document).ready(function () {
   init_common_elements();
   init_nickname_autocomplete();
   init_external_links();
-  Shadowbox.init();
+  Shadowbox.init({overlayColor:'#999'});
 });
 
 function member_return_to() {
