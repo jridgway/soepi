@@ -1,7 +1,9 @@
 = render :partial => '/shared/pages_common'
 
 - content_for :body_content do
-  = @page.content_for(:body).html_safe
+  - if @page
+    %h1#page-title-actual= @page.title
+    = @page.content_for(:body).html_safe 
   .inquiries
     = simple_form_for [refinery, :inquiries, @inquiry] do |f|
       = f.input :name

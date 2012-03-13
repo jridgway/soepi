@@ -1,7 +1,9 @@
 = render :partial => '/shared/pages_common'
 
 - content_for :body_content do
-  = @page.content_for(:body).html_safe if @page
+  - if @page
+    %h1#page-title-actual= @page.title
+    = @page.content_for(:body).html_safe 
   = simple_form_for :subscriber, :action => new_subscriber_path, :method => 'post' do |f|
     = f.input :email
     = f.input :first_name, :required => false
