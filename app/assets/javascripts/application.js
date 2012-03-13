@@ -21,6 +21,7 @@
 //= require reports
 //= require addresses
 //= require markerclusterer
+//= require ckeditor
 //= require highcharts
 //= require shadowbox
 //= require highcharts-theme

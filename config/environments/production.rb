@@ -22,7 +22,7 @@ Soepi::Application.configure do
   config.assets.compile = true
 
   # Generate digests for assets URLs
-  config.assets.digest = true
+  config.assets.digest = false
   
   config.assets.js_compressor  = :uglifier
   config.assets.css_compressor = :scss

@@ -63,9 +63,7 @@ module Soepi
     config.assets.version = '1.0'
     config.middleware.insert 0, 'Dragonfly::Middleware', :images
     
-    config.assets.precompile += %w(screen.css print.css refinery/refinery.css refinery/ckeditor.css
-      admin.js refinery/refinery.js refinery/wymeditor.js wymeditor/lang/en.js wymeditor/skins/refinery/skin.js
-      ckeditor/ckeditor.js refinery/ckeditor.js)
+    config.assets.precompile += %w(screen.css print.css ckeditor.css)
     config.assets.initialize_on_precompile = false
   end
 end

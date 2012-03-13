@@ -28,7 +28,7 @@ gem 'refinerycms', '~> 2.0.1'
 # gem 'refinerycms-blog', '~> 2.0.1'
 gem 'refinerycms-inquiries', '~> 2.0.0'
 # gem 'refinerycms-page-images', '~> 2.0.0'
-gem 'refinerycms-ckeditor', :git => 'git://github.com/jridgway/refinerycms-ckeditor.git'
+gem 'refinerycms-ckeditor'
 
 # To use debugger
 # gem 'ruby-debug19', :require => 'ruby-debug'
