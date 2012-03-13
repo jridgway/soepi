@@ -10,9 +10,9 @@ require "sprockets/railtie"
 
 if defined?(Bundler)
   # If you precompile assets before deploying to production, use this line
-  Bundler.require(*Rails.groups(:assets => %w(development test)))
+  # Bundler.require(*Rails.groups(:assets => %w(development test)))
   # If you want your assets lazily compiled in production, use this line
-  # Bundler.require(:default, :assets, Rails.env)
+  Bundler.require(:default, :assets, Rails.env)
 end
 
 module Soepi
@@ -62,5 +62,10 @@ module Soepi
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
     config.middleware.insert 0, 'Dragonfly::Middleware', :images
+    
+    config.assets.precompile += %w(screen.css print.css refinery/refinery.css refinery/ckeditor.css
+      admin.js refinery/refinery.js refinery/wymeditor.js wymeditor/lang/en.js wymeditor/skins/refinery/skin.js
+      ckeditor/ckeditor.js refinery/ckeditor.js)
+    config.assets.initialize_on_precompile = false
   end
 end
