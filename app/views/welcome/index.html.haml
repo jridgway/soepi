@@ -27,6 +27,8 @@
         = render :template => 'welcome/notifications'
       
   - content_for :body_content_right do
+    %p
+      Need help? #{link_to 'Contact us', main_app.new_message_path(:members => Member.admins.collect(&:nickname).join('-'))}!
     .block
       = link_to 'Create a Survey', new_survey_path, :class => 'restrict-to-members button', :icon => 'ui-icon-document'        
       = link_to 'Create a Report', new_report_path, :class => 'restrict-to-members button', :icon => 'ui-icon-document'     

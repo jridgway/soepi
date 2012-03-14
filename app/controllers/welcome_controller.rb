@@ -7,7 +7,7 @@ class WelcomeController < ApplicationController
       else
         @status = current_member.statuses.build
         load_default_tags
-        render :layout => 'two_column_wide'   
+        render :layout => 'two_column'   
       end
     else
       render :layout => 'blank'
