@@ -7,5 +7,5 @@
   %li= link_to 'About', '/docs/about'
   %li= link_to 'Contact', '/contact'
 .copyright
-  Copyright &copy; #{Time.now.year} #{Refinery::Setting.find_or_set(:site_name, "SoEpi, Inc")} All Rights Reserved
+  Copyright &copy; #{Time.now.year} #{Refinery::Core.site_name}
   
