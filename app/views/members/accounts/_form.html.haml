@@ -25,7 +25,11 @@
   = render :partial => '/members/accounts/subscriptions_form', :locals => {:f => f}
   = render :partial => '/members/accounts/privacy_form', :locals => {:f => f}
   = field_set_tag 'Agreements' do 
-    = render :partial => '/members/accounts/informed_consent_copy'
-    = f.input :informed_consent, :as => :boolean, :label => 'I have read and understand the <a href="#" onclick="$(\'#informed-consent\').dialog({modal:true, width:600, height:300}); return false">Informed Consent</a>.'.html_safe
-    = render :partial => '/members/accounts/terms_of_use_copy'
-    = f.input :terms_of_use, :as => :boolean, :label => 'I have read and agree to the <a href="#" onclick="$(\'#terms-of-use\').dialog({modal:true, width:600, height:300}); return false">Terms of Use</a>.'
+    #informed-consent.copy{:style => 'display:none', :title => 'Informed Consent'}
+      %h1#page-title-actual= Refinery::Page.find('informed-consent').title
+      #page-content= Refinery::Page.find('informed-consent').content_for(:body).html_safe
+    = f.input :informed_consent, :as => :boolean, :label => 'I have read and understand the <a href="#" onclick="$(\'#informed-consent\').dialog({modal:true, width:800, height:600}); return false">Informed Consent</a>.'.html_safe
+    #terms-of-use{:style => 'display:none', :title => 'Terms and Conditions of Use'}
+      %h1#page-title-actual= Refinery::Page.find('terms').title
+      #page-content= Refinery::Page.find('terms').content_for(:body).html_safe
+    = f.input :terms_of_use, :as => :boolean, :label => 'I have read and agree to the <a href="#" onclick="$(\'#terms-of-use\').dialog({modal:true, width:800, height:600}); return false">Terms and Conditions of Use</a>.'
