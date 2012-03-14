@@ -54,7 +54,7 @@ class Message < ActiveRecord::Base
         new_recipient_nicknames = []
         recipient_nicknames.split(/,\s*/).each do |nickname| 
           unless nickname == member.nickname or nickname.blank?
-            if recipient = Member.where('nickname ilike ?', nickname.strip).first
+            if recipient = Member.where('nickname ilike ? and (privacy_dont_list_me = false or privacy_dont_list_me is null)', nickname.strip).first
               self.members << recipient
               new_recipient_nicknames << recipient.nickname
             end
