@@ -5,7 +5,7 @@
     #toc{:style => 'display:none'}
       %h3 In This Doc
       %ul.inner
-    - if sub_menu_page_roots 
+    - if sub_menu_page_roots and sub_menu_page_roots.length > 0
       %h3 See Also
       = render :partial => '/refinery/menu', :locals => {:roots => sub_menu_page_roots}
   %h1#page-title-actual= @page.title
