@@ -10,7 +10,9 @@ module ApplicationHelper
   
   def sub_menu_page_roots
     unless @sub_menu_page_roots
-      @sub_menu_page_roots = refinery_menu_pages.select {|m| m.parent_id == sub_menu_page.id}
+      if sub_menu_page
+        @sub_menu_page_roots = refinery_menu_pages.select {|m| m.parent_id == sub_menu_page.id}
+      end
     end
     @sub_menu_page_roots
   end
