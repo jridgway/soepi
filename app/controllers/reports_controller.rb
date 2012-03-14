@@ -138,6 +138,8 @@ class ReportsController < ApplicationController
   
     def load_report
       @report ||= Report.find params[:id]
+    rescue 
+      error_404
     end 
   
     def owner_only

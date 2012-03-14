@@ -51,11 +51,15 @@ class ParticipantsController < ApplicationController
   def show
     @participant = Participant.find params[:id]
     render :layout => 'two_column'
+  rescue 
+    error_404
   end
   
   def show_responses
     @participant = Participant.find params[:id]
     @survey_taken = @participant.surveys.find params[:survey_taken_id]
+  rescue 
+    error_404
   end
   
   def new 

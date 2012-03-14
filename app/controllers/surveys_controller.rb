@@ -289,6 +289,8 @@ class SurveysController < ApplicationController
 
     def load_survey
       @survey = @followable = Survey.find(params[:id])
+    rescue 
+      error_404
     end
 
     def load_open_graph_meta

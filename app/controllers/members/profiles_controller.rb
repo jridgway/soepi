@@ -63,6 +63,8 @@ class Members::ProfilesController < ApplicationController
 
     def load_member
       @member = @followable = Member.find(params[:id])
+    rescue 
+      error_404
     end
 
     def load_tags
