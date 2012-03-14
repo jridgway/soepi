@@ -40,12 +40,12 @@ class WelcomeController < ApplicationController
       h = Hominid::API.new(ENV['SOEPI_MAILCHIMP_KEY'], {:secure => true, :timeout => 60})
       if params[:subscriber][:unsubscribe] == '1'
         begin
-          h.list_unsubscribe(Setting.find_or_set('mailchimp_newsletter_list_id', '8d5bc6cad8'), params[:subscriber][:email], true, true, true)
+          h.list_unsubscribe(Refinery::Setting.find_or_set('mailchimp_newsletter_list_id', '8d5bc6cad8'), params[:subscriber][:email], true, true, true)
         rescue 
         end
         flash[:notice] = "Sorry, we removed you from our list."
       else
-        h.list_subscribe(Setting.find_or_set('mailchimp_newsletter_list_id', '8d5bc6cad8'), params[:subscriber][:email], 
+        h.list_subscribe(Refinery::Setting.find_or_set('mailchimp_newsletter_list_id', '8d5bc6cad8'), params[:subscriber][:email], 
           {'FNAME' => params[:subscriber][:first_name], 'LNAME' => params[:subscriber][:last_name]}, 'html', false, true, true)
         flash[:notice] = "Yay, we added you to our list!"
       end
