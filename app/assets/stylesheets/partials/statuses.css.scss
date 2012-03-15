@@ -9,6 +9,8 @@
     
     .input
       {
+      margin: 0;
+      
       a.avatar
         {
         float: left;
@@ -18,9 +20,10 @@
       #member_status_body
         {
         height: 20px;
-        width: 526px;
-        max-width: 526px;
+        width: 645px;
+        max-width: 645px;
         padding: 10px;
+        margin: 0 0 5px 0;
         font-family: inherit;
         color: #fff;
         }
@@ -45,7 +48,7 @@
       
     ul.tagit
       {
-      width: 542px !important;
+      width: 662px !important;
       margin-left: 35px;
       }
     
@@ -56,7 +59,8 @@
     
     button
       {
-      margin-left: 495px;
+      margin-left: 610px;
+      margin-top: 15px;
       }
     }
     

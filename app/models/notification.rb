@@ -10,7 +10,7 @@ class Notification < ActiveRecord::Base
   
   def self.deliver_notifications!
     member_ids = with_exclusive_scope {
-        where('members.subscription_notifications == true and ' +
+        where('members.subscription_notifications = true and ' +
           '(notifications.created_at > members.last_notifications_delivered_at or members.last_notifications_delivered_at is null)').
         select('distinct member_id').joins('join members on members.id = notifications.member_id').
         collect(&:member_id)
