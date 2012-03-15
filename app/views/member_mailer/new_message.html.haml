@@ -1,0 +1,21 @@
+%p #{@member.nickname},
+%p You've received the following message:
+%table{:border => "0", :cellpadding => "10", :cellspacing => "0", :width => "100%"}
+  %tr
+    %td
+      %table{:border => "0", :cellpadding => "10", :cellspacing => "0", :width => "100%", :bgcolor => "efefef"}
+        %tr
+          %td{:valign => "top", :width => 60}
+            = image_tag attachments[@avatar_key].url
+          %td{:valign => "top"}
+            = simple_format(%{<strong>#{link_to @message.member.nickname, main_app.member_path(@message.member, :only_path => false)}</strong>: #{auto_link @message.body}}).html_safe
+        %tr
+          %td{:colspan => '2', :align => 'center'}
+            = link_to image_tag(attachments['respond.gif'].url), main_app.message_path((@message.parent_message || @message), :only_path => false, :anchor => 'new')
+- if Message.involving_member_unseen(@member.id).count > 0 
+  %p 
+    #{link_to 'Click here', main_app.unread_messages_path(:only_path => false)} to view your unread messages.
+%p
+  Thanks,
+  %br/
+  SoEpi
