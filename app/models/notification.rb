@@ -22,7 +22,7 @@ class Notification < ActiveRecord::Base
         notifications = member.notifications.where('created_at > ?', member.last_notifications_delivered_at)
       end
       member.update_attribute :last_notifications_delivered_at, Time.now
-      Mailer.new_notifications(member, notifications).deliver
+      MemberMailer.new_notifications(member, notifications).deliver
       logger.info "Delivered #{notifications.length} notifications to #{member.nickname}"
     end
   end

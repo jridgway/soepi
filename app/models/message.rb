@@ -79,7 +79,7 @@ class Message < ActiveRecord::Base
       end
       members_to_notify.each do |member|
         if member.subscription_messages?
-          Mailer.delay.new_message(member, self)
+          MemberMailer.delay.new_message(member, self)
         end
       end
     end

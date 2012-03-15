@@ -64,10 +64,6 @@ class Participant < ActiveRecord::Base
     [city, state, postal_code, country].compact.join(', ')
   end
 
-  def deliver_pin!
-    Mailer.pin(self).deliver
-  end
-
   def self.find_by_member(member)
     find_by_anonymous_key generate_anonymous_key(member)
   end
