@@ -3,7 +3,7 @@
 %ul
   - @notifications.each do |notification|
     %li
-      = link_to notification.message, main_app.url_for(notification.notifiable, :only_path => false)
+      = link_to notification.message, main_app.url_for(notification.notifiable), :only_path => false
 %p
   Thanks,
   %br/
