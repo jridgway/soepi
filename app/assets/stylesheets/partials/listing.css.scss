@@ -40,40 +40,50 @@
     }
   }
 
+.bp.two-column .listing li .inner
+  {
+  width: 570px !important;  
+  }
+
 .bp.two-column-wide .listing li .inner
   {
-  width: 505px;  
+  width: 505px !important;  
   }
 
 .bp.one-column .listing li .inner
   {
-  width: 875px;  
+  width: 875px !important;  
   }
 
 .bp .tabs .listing li .inner
   {
-  width: 830px;  
+  width: 830px !important;  
   }
 
 .bp.two-column-wide .tabs .listing li .inner
   {
-  width: 459px;  
+  width: 459px !important;  
   }
 
 .bp.one-column .tabs .listing li .inner
   {
-  width: 829px;  
+  width: 829px !important;  
   }
   
 html.ie6 , html.ie7 , html.ie8 
   {
+  .bp.two-column .tabs .listing li .inner
+    {
+    width: 510px !important;  
+    }
+    
   .bp.two-column-wide .tabs .listing li .inner
     {
-    width: 440px;  
+    width: 440px !important;  
     }
   
   .bp.one-column .tabs .listing li .inner
     {
-    width: 810px;  
+    width: 810px !important;  
     }
   }
