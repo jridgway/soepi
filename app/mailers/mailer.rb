@@ -8,7 +8,7 @@ class Mailer < Devise::Mailer
     @member = member
     @notifications = notifications
     inline_layout_images
-    setup_mail(member, :new_notifications)
+    mail(:to => member.email, :subject => "Notifications")
   end
 
   def new_message(member, message)
@@ -19,7 +19,7 @@ class Mailer < Devise::Mailer
     attachments.inline[@avatar_key] = results.read
     attachments.inline['respond.gif'] = File.read(Rails.root.join('app', 'assets', 'images', 'respond.gif'))
     inline_layout_images
-    setup_mail(member, :new_message)
+    mail(:to => member.email, :subject => "New Message")
   end
 
   def inline_layout_images(others={})
