@@ -1,5 +1,5 @@
 class Members::TokensController < ApplicationController
-  prepend_before_filter :authenticate_member!
+  prepend_before_filter :authenticate_member_2!
 
   def index
     @member_tokens = current_member.tokens
