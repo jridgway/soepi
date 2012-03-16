@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120308151701) do
+ActiveRecord::Schema.define(:version => 20120316191822) do
 
   create_table "age_groups", :force => true do |t|
     t.string   "label"
@@ -481,6 +481,7 @@ ActiveRecord::Schema.define(:version => 20120308151701) do
     t.boolean  "booting_ec2_instance",                           :default => false
     t.datetime "ec2_last_accessed_at"
     t.datetime "last_notifications_delivered_at"
+    t.datetime "reset_password_sent_at"
   end
 
   add_index "members", ["confirmation_token"], :name => "index_members_on_confirmation_token", :unique => true
