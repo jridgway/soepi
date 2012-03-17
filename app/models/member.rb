@@ -25,18 +25,6 @@ class Member < ActiveRecord::Base
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable,
     :omniauthable, :token_authenticatable, :lockable
     
-  def login
-    email
-  end
-  
-  attr_accessor :login
-  attr_accessible :login
-  
-  def self.find_for_database_authentication(warden_conditions)
-    conditions = warden_conditions.dup
-    login = conditions.delete(:login)
-    where(conditions).where(["lower(email) = :value", { :value => login.downcase }]).first
-  end
 
   searchable do
     text :nickname, :boost => 10.0
