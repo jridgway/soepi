@@ -1,0 +1,77 @@
+@import "common";
+@import "compass/css3/opacity";
+
+#content-above-top
+  {  
+  #step-1 .inner, #step-2 .inner, #step-3 .inner
+    {
+    background: #eee;
+    color: #333;
+    padding: 5px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;  
+    display: block;
+    border: 1px solid #eee;
+    @include opacity(0.5);
+    font-size: 0.8em;
+    
+    h4
+      {
+      margin: 0 0 5px 0;
+      padding: 0;
+      color: #333;
+      }
+      
+    p 
+      {
+      padding: 0;
+      margin: 0;
+      }
+      
+    &.current, &:hover
+      {
+      background: $blue;
+      color: #fff;
+      text-decoration: none;
+      cursor: pointer; 
+      border: 1px solid #fff;
+      @include opacity(1);
+      
+      h4
+        {
+        color: #fff;
+        }
+      }
+      
+    &.not-active
+      {
+      background: #eee;
+      color: #333;
+      text-decoration: none;
+      cursor: default; 
+      border: 1px solid #eee;
+      
+      h4
+        {
+        color: #333;
+        }
+      }
+    }
+  
+  #step-1
+    {
+    @include column(8);
+    }
+    
+  #step-2
+    {
+    @include column(8);
+    }
+    
+  #step-3
+    {
+    @include column(8, true);
+    }
+    
+  }

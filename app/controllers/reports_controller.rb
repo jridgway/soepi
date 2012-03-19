@@ -85,7 +85,12 @@ class ReportsController < ApplicationController
   
   def update
     if @report.update_attributes params[:report] 
-      flash[:notice] = 'Your report was saved.'
+      if params[:commit] == 'Publish' and @report.passing?       
+        @report.publish!
+        flash[:notice] = 'Your report was saved and published.'
+      else
+        flash[:notice] = 'Your report was saved.'
+      end
       redirect_to report_path(@report)
     else
       render :action => 'edit'
@@ -121,12 +126,6 @@ class ReportsController < ApplicationController
     flash[:notice] = 'Your report was saved.'
     redirect_to report_path(@report)
   end 
-  
-  def publish 
-    @report.publish!
-    flash[:notice] = 'Your report was published.'
-    redirect_to_back_or(report_path(@report))
-  end  
 
   def forkit
     new_report = @report.forkit!(current_member.id)

@@ -84,7 +84,6 @@ Soepi::Application.routes.draw do
       put 'save_and_run'
       put 'save_and_continue'
       put 'save_and_exit'
-      put 'publish' 
       put 'forkit' 
       get 'output'
       get 'surveys(/page/:page)', :action => 'surveys', :as => :surveys

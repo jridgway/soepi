@@ -1,0 +1,29 @@
+- if @survey.drafting?
+  - content_for :body_content_above_top do 
+    #step-1
+      - if @survey.new_record?
+        .inner{:class => (controller_name == 'surveys' and %w(new create edit update).include?(action_name) ? 'current' : '')}
+          %h4 Step 1:
+          %p Provide a title and settings.
+      - else
+        %a.inner{:href => edit_survey_path(@survey)}
+          %h4 Step 1:
+          %p Provide a title and settings.
+    #step-2
+      - if @survey.new_record?
+        .inner.not-active
+          %h4 Step 2:
+          %p Add questions.
+      - else
+        %a.inner.current{:href => survey_questions_path(:survey_id => @survey)}
+          %h4 Step 2:
+          %p Add questions.
+    #step-3
+      - if @survey.new_record?
+        #launch3.inner.not-active
+          %h4 Step 3:
+          %p Launch your survey!
+      - else
+        #launch3.inner
+          %h4 Step 3:
+          %p Launch your survey!

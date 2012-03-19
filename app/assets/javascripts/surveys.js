@@ -14,7 +14,7 @@ $(document).ready(function() {
     init_survey_question_form();
   }
   if(controller_name == 'survey_questions' || controller_name == 'surveys') {    
-    $('#launch').click(function() {
+    $('#launch, #launch3').click(function() {
       $('#launch-message').dialog({width:520, height:250, modal:true, zIndex:9, resizable:false}).show('blind');
     });
     $('#cancel-launch').click(function() {
@@ -25,6 +25,9 @@ $(document).ready(function() {
     });
     $('#cancel-launch2').click(function() {
       $('#launch2-message').dialog('destroy');
+    });
+    $('#launch3').click(function() {
+      $('#launch3-message').dialog({width:520, height:175, modal:true, zIndex:9, resizable:false}).show('blind');
     });
     $('#request-changes').click(function() {
       $('#request-changes-message').dialog({width:620, height:175, modal:true, zIndex:9, resizable:false}).show('blind');

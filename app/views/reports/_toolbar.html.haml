@@ -8,13 +8,6 @@
         .bottom-actions
           = link_to 'Delete', report_path(@report), :method => 'delete', :class => 'button'
           %button{:id => 'cancel-delete', :class => 'button'} Cancel
-      %button{:id => 'publish', :icon => 'ui-icon-signal-diag', :class => 'button restrict-to-members', :style => (@report.passing? ? '' : 'display:none')} Publish
-      #publish-message{:style => 'display:none', :title => 'Publish this Report'}
-        %p 
-          Are you sure you want to <strong>publish</strong> this report? 
-        .bottom-actions
-          = link_to 'Publish', publish_report_path(@report), :method => 'put', :class => 'button'
-          %button{:id => 'cancel-publish', :class => 'button'} Cancel
   - unless @report.new_record?
     %button{:id => 'forkit', :icon => 'ui-icon-shuffle', :class => 'button restrict-to-members'} Fork
     #forkit-message{:style => 'display:none', :title => 'Fork this Report'}

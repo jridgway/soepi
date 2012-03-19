@@ -22,6 +22,7 @@
  *= require partials/reports
  *= require partials/statuses
  *= require partials/home
+ *= require partials/steps
  *= require partials/pages
  *= require partials/misc
  *= require partials/shadowbox

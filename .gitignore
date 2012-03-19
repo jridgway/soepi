@@ -13,6 +13,7 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
+/log
 
 solr/data
 lib/tasks/generate_survey_data.rake

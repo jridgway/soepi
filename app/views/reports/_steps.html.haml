@@ -1,0 +1,30 @@
+- unless @report.published?
+  - content_for :body_content_above_top do 
+    #steps{:'data-member-id' => @report.member_id, :'data-state' => @report.state}
+      #step-1
+        - if @report.new_record?
+          .inner.current
+            %h4 Step 1:
+            %p Provide a title and description.
+        - else
+          %a.inner{:href => edit_report_path(@report), :class => (%w(new create edit update).include?(action_name) and not @report.passing? ? 'current' : '')}
+            %h4 Step 1:
+            %p Provide a title and description.
+      #step-2
+        - if @report.new_record? 
+          .inner
+            %h4 Step 2:
+            %p Write and run your script.
+        - else
+          %a.inner{:href => code_report_path(:report_id => @report), :class => (@report.passing? ? '' : 'current')}
+            %h4 Step 2:
+            %p Write and run your script.
+      #step-3
+        - unless @report.new_record?
+          %a#publish-and-annotate.inner.current{:href => edit_report_path(@report), :style => (@report.passing? ? 'display:block' : 'display:none')}
+            %h4 Step 3:
+            %p Annotate and publish your report!
+          
+        #publish-and-annotate-2.inner.not-active{:style => (@report.passing? ? 'display:none' : 'display:block')}
+          %h4 Step 3:
+          %p Annotate and publish your report!

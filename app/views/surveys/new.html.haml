@@ -1,11 +1,13 @@
+= render :partial => '/surveys/steps'
+
 - content_for :body_content_title do 
-  New Survey: Settings
+  New Survey
       
-- content_for :body_content do  
+- content_for :body_content_left do  
   = simple_form_for @survey, :html => {:novalidate => true, :class => 'survey'} do |f|
     = render :partial => '/surveys/form', :locals => {:f => f}
     .actions
-      = f.submit 'Submit', :class => 'button'
+      = f.submit 'Next Step &raquo;'.html_safe, :class => 'button'
       = link_to 'Cancel', surveys_path
       
 = render :partial => "/shared/content_page"

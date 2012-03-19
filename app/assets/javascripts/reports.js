@@ -6,12 +6,6 @@ $(document).ready(function() {
     $('#cancel-delete').click(function() {
       $('#delete-message').dialog('destroy');
     });
-    $('#publish').click(function() {
-      $('#publish-message').dialog({width:520, height:175, modal:true, zIndex:9, resizable:false}).show('blind');
-    });
-    $('#cancel-publish').click(function() {
-      $('#publish-message').dialog('destroy');
-    });
     $('#forkit').click(function() {
       $('#forkit-message').dialog({width:520, height:200, modal:true, zIndex:9, resizable:false}).show('blind');
     });

@@ -130,9 +130,9 @@ class Report < ActiveRecord::Base
             break 
           end
         end
-        ec2_instance.ssh "rm Rplots.pdf"
-        Pusher["report_#{report.id}"].trigger('finished', report.state)
       end
+      ec2_instance.ssh "rm Rplots.pdf"
+      Pusher["report_#{report.id}"].trigger('finished', report.state)
     end
     
     after_transition any => :published do |report, transition|

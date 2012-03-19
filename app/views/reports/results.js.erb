@@ -4,5 +4,12 @@ $('#run-results').dialog({width:900, height:600, modal:true, zIndex:9, resizable
 init_common_elements();
 $('.report-state').html('<%= escape_javascript @report.state_human %>');
 <% if @report.passing? %>
-  $('#publish').show();
+  $('#publish-and-annotate').show();
+  $('#publish-and-annotate-2').hide();
+  $('#step-2 a.inner').removeClass('current');
+<% else %>
+  $('#publish-and-annotate').hide();
+  $('#publish-and-annotate-2').show();
+  $('#publish-and-annotate-2').removeClass('current');
+  $('#step-2 a.inner').addClass('current');
 <% end %>

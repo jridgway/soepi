@@ -25,6 +25,12 @@ body.bp
     -webkit-border-radius: 4px;
     border-radius: 4px;
     background: #2F2F2F url(/assets/bg-dark.png);
+    
+    #content-above-top
+      {
+      @include container;
+      margin-bottom: 30px;
+      }
     }
   } 
 

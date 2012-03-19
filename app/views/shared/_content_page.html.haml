@@ -1,5 +1,6 @@
 :ruby
   sections = {
+    :body_content_above_top => nil,
     :body_content_title => nil,
     :body_content_toolbar => nil,
     :body_content_details => nil,
@@ -12,6 +13,10 @@
     html_2 = yield(sym).html_safe
     sections[sym] = html_2 unless html_2.blank?
   end
+  
+- unless sections[:body_content_above_top].blank?
+  #content-above-top
+    = sections[:body_content_above_top]
 
 #content-top
   - unless sections[:body_content_toolbar].blank?
