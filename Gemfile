@@ -76,6 +76,7 @@ gem 'rack-canonical-host'
 gem 'rack-ssl', :require => 'rack/ssl'
 gem 'hominid'
 gem 'pusher'
+gem 'newrelic_rpm'
 
 group :development do
   gem 'cities'

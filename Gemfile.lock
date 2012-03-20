@@ -133,6 +133,7 @@ GEM
     net-scp (1.0.4)
       net-ssh (>= 1.99.1)
     net-ssh (2.1.4)
+    newrelic_rpm (3.3.2.1)
     nokogiri (1.5.0)
     oauth (0.4.5)
     oauth2 (0.5.2)
@@ -333,6 +334,7 @@ DEPENDENCIES
   haml
   hominid
   jquery-rails
+  newrelic_rpm
   omniauth-facebook
   omniauth-github
   omniauth-google-apps
