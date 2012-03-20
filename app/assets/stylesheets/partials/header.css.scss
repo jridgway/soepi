@@ -14,7 +14,7 @@
   
       h1#logo
         {
-        @include column(4);
+        @include column(5);
         
         a 
           { 
@@ -26,14 +26,26 @@
           width: 135px;
           }
         }
+        
+      #like-buttons
+        {
+        @include column(4);
+        
+        .inner
+          {
+          margin-top: 15px;
+          clear: both;
+          }
+        }
       
       #start  
         {    
+        
         #menu
           {        
           .primary 
             {      
-            @include column(20, true);
+            @include column(15, true);
             position: relative;
             height: 33px;
             
@@ -188,7 +200,7 @@
             
           .secondary
             {
-            @include column(20, true);
+            @include column(15, true);
             margin-top: 10px;
             
             ul

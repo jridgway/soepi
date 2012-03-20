@@ -11,6 +11,9 @@
     %meta{:name => 'description', :content => @open_graph_meta[:description]}
     %meta{:property => "og:image", :content => @open_graph_meta[:image_url]}/
     %meta{:property => "og:type", :content => @open_graph_meta[:type]}/
+  %meta{:content => Refinery::Setting.find_or_set(:site_name, "SoEpi.org | Social Epidemiology. For Everyone."), :itemprop => "name"}
+  %meta{:content => Refinery::Setting.find_or_set(:site_description, "SoEpi is a 501(c)(3) nonprofit dedicated to improving health via online social epidemiology. SoEpi’s goal is to empower the public in understanding public health issues and taking action to solve them. SoEpi does this by providing four free online services to the public, including: (1) anonymous surveys, (2) an open database of survey results, (3) R‐based analysis and reporting, and (4) communication and collaboration tools."), :itemprop => "description"}
+  %meta{:content => "https://secure.soepi.org/assets/soepi-logo-light-bg.png", :itemprop => "image"}/
   = stylesheet_link_tag 'screen', :media => 'screen'
   = stylesheet_link_tag 'print', :media => 'print'
   = javascript_tag %{var controller_name = '#{controller_name}'; var action_name = '#{action_name}';}
