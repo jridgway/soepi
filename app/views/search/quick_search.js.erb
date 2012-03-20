@@ -24,7 +24,7 @@
     when 'Refinery::Page' then
       {
         :label => result.title,
-        :logo => %{<img src="/assets/soepi-logo-light-bg.png" width="50" />},
+        :logo => %{<img src="/favicon-large.png" width="50" />},
         :description => truncate(strip_tags(result.content_for(:body)), :length => 40).to_s,
         :value => refinery.url_for(result.url)
       }
