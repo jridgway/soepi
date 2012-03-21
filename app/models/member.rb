@@ -136,7 +136,7 @@ class Member < ActiveRecord::Base
   
   def email_for_gravatar
     if privacy_dont_use_my_gravatar? 
-      "m.#{member.nickname}@soepi.org" 
+      "m.#{nickname}@soepi.org" 
     else
       email
     end
