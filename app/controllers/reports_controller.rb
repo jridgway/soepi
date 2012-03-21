@@ -139,10 +139,10 @@ class ReportsController < ApplicationController
       @report ||= Report.find params[:id]
     rescue 
       error_404
+      false
     end 
   
-    def owner_only
-      load_report unless @report      
+    def owner_only    
       unless member_signed_in? and current_member.id == @report.member_id
         flash[:alert] = 'Permission denied.'
         redirect_to reports_path
@@ -154,7 +154,6 @@ class ReportsController < ApplicationController
     end
 
     def load_open_graph_meta
-      @report = Report.find params[:id] 
       @open_graph_meta = {
         :url => report_url(@report),
         :title => @report.title,

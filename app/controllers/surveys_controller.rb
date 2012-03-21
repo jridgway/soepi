@@ -1,5 +1,5 @@
 class SurveysController < ApplicationController
-  before_filter :load_survey, :only => [:show, :forks, :demographics, :downloads, :reports, :forkit, :launch, 
+  prepend_before_filter :load_survey, :only => [:edit, :show, :forks, :demographics, :downloads, :reports, :forkit, :launch, 
     :reject, :request_changes, :participate, :create_response, :store_pin, :new_participant, :create_participant, 
     :followed_by, :close]
   before_filter :load_open_graph_meta, :only => [:show, :forks, :forkit, :launch, :reject, :participate,
@@ -291,6 +291,7 @@ class SurveysController < ApplicationController
       @survey = @followable = Survey.find(params[:id])
     rescue 
       error_404
+      false
     end
 
     def load_open_graph_meta
@@ -331,7 +332,6 @@ class SurveysController < ApplicationController
     end
   
     def owner_only!
-      load_survey unless @survey
       unless member_signed_in? and current_member.id == @survey.member_id
         flash[:alert] = 'Insufficient privileges.'
         redirect_to_back_or(survey_path(@survey))
@@ -340,7 +340,6 @@ class SurveysController < ApplicationController
     end
     
     def owner_or_admins_only_until_published!
-      load_survey unless @survey
       unless @survey.published? or @survey.closed? or 
       (member_signed_in? and (current_member.id == @survey.member_id or current_member.admin?))
         flash[:alert] = 'Insufficient privileges. You must wait until this survey has been closed.'
