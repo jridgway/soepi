@@ -1,4 +1,6 @@
 class WelcomeController < ApplicationController
+  caches_action :subscribe, :expires_in => 2.hours
+
   def index
     if member_signed_in?
       @notifications = current_member.notifications.page(params[:page])

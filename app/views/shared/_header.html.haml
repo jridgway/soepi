@@ -1,56 +1,57 @@
-#header-inner
-  %h1#logo
-    = link_to 'SoEpi', main_app.root_path, :title => 'SoEpi', :title => 'SoEpi is a 501(c)(3) non-profit organization committed to better health via online, social epidemiology.'
-  #like-buttons
-    .inner
-      #fb-root
-      .fb-like{"data-href" => "https://www.facebook.com/pages/SoEpi/203689719658843", "data-layout" => "button_count", "data-send" => "false", "data-show-faces" => "false", "data-width" => "100"}
-      .g-plusone{"data-href" => "https://secure.soepi.org"}
-  #start
-    #menu
-      .primary
-        %ul
-          %li
-            = link_to 'Docs', '/docs'
-          %li.spacer
-            %span.ui-icon.ui-icon-grip-dotted-vertical
-          %li.visitors-only
-            = link_to 'Sign Up', main_app.new_member_registration_path
-          %li.visitors-only
-            = link_to 'Sign In', main_app.new_member_session_path
-          %li#account-quick-look.members-only.pop-nav
-            = link_to 'Account', main_app.edit_member_registration_path, :class => 'pop-nav-link'
-            .pop-nav-inner 
-              %ul           
-                %li
-                  = link_to 'Settings', main_app.edit_member_registration_path
-                %li
-                  = link_to 'Change Password', main_app.member_change_password_path
-                %li
-                  = link_to 'Participant Record', main_app.member_edit_participant_path
-                %li
-                  = link_to 'Subscriptions', main_app.member_subscriptions_path
-                %li
-                  = link_to 'Privacy', main_app.member_privacy_path
-                %li
-                  = link_to 'Sign In Tokens', main_app.member_tokens_path
-                %li
-                  = link_to 'Cancel Account', main_app.member_cancel_account_path
-                %li
-                  = link_to 'Sign out', main_app.destroy_member_session_path(:member_return_to => request.url), :method => 'delete'
-          %li.members-only
-            = link_to "Messages (<span class='current-member-unseen-messages-count'>...</span>)".html_safe, main_app.unread_messages_path
-          %li.welcome    
-            %span.current-member-pic
-            %span.current-member-nickname-linked
-      .secondary
-        #search
-          = form_tag main_app.url_for(:controller => '/search', :action => 'index', :page => 1), :method => 'get', :id => 'quicksearch' do 
-            = text_field_tag :q, @q, :placeholder => 'Search...'
-            = submit_tag 'Search', :name => nil
-        %ul
-          %li= link_to 'Surveys', main_app.surveys_path
-          %li= link_to 'Participants', main_app.participants_path
-          %li= link_to 'Reports', main_app.reports_path
-          %li= link_to 'Statuses', main_app.member_statuses_path
-          %li= link_to 'Members', main_app.members_path
+- cache 'header', :expires_in => 2.hours do 
+  #header-inner
+    %h1#logo
+      = link_to 'SoEpi', main_app.root_path, :title => 'SoEpi', :title => 'SoEpi is a 501(c)(3) non-profit organization committed to better health via online, social epidemiology.'
+    #like-buttons
+      .inner
+        #fb-root
+        .fb-like{"data-href" => "https://www.facebook.com/pages/SoEpi/203689719658843", "data-layout" => "button_count", "data-send" => "false", "data-show-faces" => "false", "data-width" => "100"}
+        .g-plusone{"data-href" => "https://secure.soepi.org"}
+    #start
+      #menu
+        .primary
+          %ul
+            %li
+              = link_to 'Docs', '/docs'
+            %li.spacer
+              %span.ui-icon.ui-icon-grip-dotted-vertical
+            %li.visitors-only
+              = link_to 'Sign Up', main_app.new_member_registration_path
+            %li.visitors-only
+              = link_to 'Sign In', main_app.new_member_session_path
+            %li#account-quick-look.members-only.pop-nav
+              = link_to 'Account', main_app.edit_member_registration_path, :class => 'pop-nav-link'
+              .pop-nav-inner 
+                %ul           
+                  %li
+                    = link_to 'Settings', main_app.edit_member_registration_path
+                  %li
+                    = link_to 'Change Password', main_app.member_change_password_path
+                  %li
+                    = link_to 'Participant Record', main_app.member_edit_participant_path
+                  %li
+                    = link_to 'Subscriptions', main_app.member_subscriptions_path
+                  %li
+                    = link_to 'Privacy', main_app.member_privacy_path
+                  %li
+                    = link_to 'Sign In Tokens', main_app.member_tokens_path
+                  %li
+                    = link_to 'Cancel Account', main_app.member_cancel_account_path
+                  %li
+                    = link_to 'Sign out', main_app.destroy_member_session_path(:member_return_to => request.url), :method => 'delete'
+            %li.members-only
+              = link_to "Messages (<span class='current-member-unseen-messages-count'>...</span>)".html_safe, main_app.unread_messages_path
+            %li.welcome    
+              %span.current-member-pic
+              %span.current-member-nickname-linked
+        .secondary
+          #search
+            = form_tag main_app.url_for(:controller => '/search', :action => 'index', :page => 1), :method => 'get', :id => 'quicksearch' do 
+              = text_field_tag :q, @q, :placeholder => 'Search...'
+              = submit_tag 'Search', :name => nil
+          %ul
+            %li= link_to 'Surveys', main_app.surveys_path
+            %li= link_to 'Participants', main_app.participants_path
+            %li= link_to 'Reports', main_app.reports_path
+            %li= link_to 'Statuses', main_app.member_statuses_path
+            %li= link_to 'Members', main_app.members_path

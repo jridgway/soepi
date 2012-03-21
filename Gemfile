@@ -76,13 +76,17 @@ gem 'rack-canonical-host'
 gem 'rack-ssl', :require => 'rack/ssl'
 gem 'hominid'
 gem 'pusher'
-gem 'newrelic_rpm'
 
 group :development do
   gem 'cities'
   gem 'sunspot_solr'
 end
 
+group :development_cached do
+  gem 'sunspot_solr'
+end
+
 group :production do
   gem 'dalli'
+  gem 'newrelic_rpm'
 end

@@ -1,11 +1,12 @@
-%ul
-  %li= link_to 'Privacy', '/docs/privacy'
-  %li= link_to 'Terms', '/docs/terms'
-  %li= link_to 'Donate', '/docs/donate'
-  %li= link_to 'Volunteer', '/docs/volunteer'
-  %li= link_to 'Subscribe', main_app.subscribe_path
-  %li= link_to 'About', '/docs/about'
-  %li= link_to 'Contact', '/contact'
-.copyright
-  Copyright &copy; #{Time.now.year} #{Refinery::Core.site_name}
+- cache 'footer', :epires_in => 2.hours do 
+  %ul
+    %li= link_to 'Privacy', '/docs/privacy'
+    %li= link_to 'Terms', '/docs/terms'
+    %li= link_to 'Donate', '/docs/donate'
+    %li= link_to 'Volunteer', '/docs/volunteer'
+    %li= link_to 'Subscribe', main_app.subscribe_path
+    %li= link_to 'About', '/docs/about'
+    %li= link_to 'Contact', '/contact'
+  .copyright
+    Copyright &copy; #{Time.now.year} #{Refinery::Core.site_name}
   

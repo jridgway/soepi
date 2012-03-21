@@ -1,12 +1,14 @@
 - content_for :body_content_toolbar do
-  .members-only
-    = link_to 'Contact Us', main_app.new_message_path(:members => Member.admins.collect(&:nickname).join('-')), :class => 'button'
-  .visitors-only
-    = link_to 'Contact Us', '/contact', :class => 'button'
+  - cache 'pages-contact-button', :expires_in => 2.hours.minutes do 
+    .members-only
+      = link_to 'Contact Us', main_app.new_message_path(:members => Member.admins.collect(&:nickname).join('-')), :class => 'button'
+    .visitors-only
+      = link_to 'Contact Us', '/contact', :class => 'button'
 
 - if @page.present?    
   - content_for :body_content_title do 
     #breadcrumbs= page_breadcrumbs @page
     
   - content_for :body_content_details do
-    = render :partial => '/refinery/menu', :locals => {:menu_levels => 1, :roots => refinery_menu_pages.select {|m| m.parent_id == refinery_menu_pages.first[:id]}}
+    - cache 'pages-menu', :expires_in => 15.minutes do 
+      = render :partial => '/refinery/menu', :locals => {:menu_levels => 1, :roots => refinery_menu_pages.select {|m| m.parent_id == refinery_menu_pages.first[:id]}}
