@@ -13,6 +13,7 @@
     %meta{:property => "og:type", :content => @open_graph_meta[:type]}/
   = javascript_tag %{var controller_name = '#{controller_name}'; var action_name = '#{action_name}';}
   = javascript_tag %{var homepage = #{request.path == main_app.root_path};}
+  %script{:src => 'https://maps.google.com/maps/api/js?sensor=false'}
   = javascript_include_tag 'application'
   = esi_render :partial => '/members/accounts/load_current_member.js'
   = javascript_tag yield(:javascript)
@@ -26,7 +27,6 @@
     = stylesheet_link_tag 'print', :media => 'print'
     /[if lt IE 9]
       %script{:src => 'https://html5shiv.googlecode.com/svn/trunk/html5.js'}
-    %script{:src => 'https://maps.google.com/maps/api/js?sensor=false'}
     %link{:rel => "shortcut icon", :href => "/favicon.ico", :type => "image/x-icon"}
     - unless (page_code = Refinery::Setting.find_or_set(:analytics_page_code, 'UA-xxxxxx-x').to_s.strip).blank?
       = render :template => '/shared/_analytics.js.erb', :locals => {:page_code => page_code}
