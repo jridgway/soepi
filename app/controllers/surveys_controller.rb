@@ -1,7 +1,7 @@
 class SurveysController < ApplicationController
   prepend_before_filter :load_survey, :only => [:edit, :show, :forks, :demographics, :downloads, :reports, :forkit, :launch, 
     :reject, :request_changes, :participate, :create_response, :store_pin, :new_participant, :create_participant, 
-    :followed_by, :close]
+    :followed_by, :close, :submit_for_review]
   before_filter :load_open_graph_meta, :only => [:show, :forks, :forkit, :launch, :reject, :participate,
     :create_response, :update_pin, :generate_and_send_new_pin, :followed_by]
   before_filter :authenticate_member!, :except => [:index, :launched, :published, :show, :forks, :sharing, 
@@ -332,7 +332,7 @@ class SurveysController < ApplicationController
     end
   
     def owner_only!
-      unless member_signed_in? and current_member.id == @survey.member_id
+      if member_signed_in? and current_member.id != @survey.member_id
         flash[:alert] = 'Insufficient privileges.'
         redirect_to_back_or(survey_path(@survey))
         false
