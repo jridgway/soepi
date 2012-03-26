@@ -1,5 +1,5 @@
 class SurveysController < ApplicationController
-  prepend_before_filter :load_survey, :only => [:edit, :show, :forks, :demographics, :downloads, :reports, :forkit, :launch, 
+  prepend_before_filter :load_survey, :only => [:edit, :update, :show, :forks, :demographics, :downloads, :reports, :forkit, :launch, 
     :reject, :request_changes, :participate, :create_response, :store_pin, :new_participant, :create_participant, 
     :followed_by, :close, :submit_for_review]
   before_filter :load_open_graph_meta, :only => [:show, :forks, :forkit, :launch, :reject, :participate,
@@ -99,7 +99,6 @@ class SurveysController < ApplicationController
   end
 
   def update
-    @survey = current_member.surveys.find params[:id]
     if @survey.editable?
       if @survey.update_attributes params[:survey]
         flash[:alert] = 'Your survey was successfully updated.'
@@ -157,7 +156,7 @@ class SurveysController < ApplicationController
 
   def request_changes
     if @survey.request_changes!
-      flash[:alert] = 'The status of the survey is now "Changes Requested." Please compose a message to the member describing your requests.'
+      flash[:alert] = 'The status of the survey is now "Drafting." Please compose a message to the member describing your requests.'
       redirect_to new_message_path(:members => @survey.member.nickname)
     else
       flash[:alert] = 'Changes to the survey have NOT been requested.'
