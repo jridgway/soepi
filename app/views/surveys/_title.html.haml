@@ -8,12 +8,13 @@
   %strong= link_to @survey.title, survey_path(@survey)
   %ul.attributes
     %li Status: #{@survey.state_human}
-    - if @survey.forked_from
-      %li 
-        Forked from: #{link_to @survey.forked_from.member.nickname, member_path(@survey.forked_from.member)} 
-        \/ 
-        #{link_to @survey.forked_from.title, survey_path(@survey.forked_from)}
+    - unless @survey.launched? or @survey.drafting?
+      - if @survey.forked_from
+        %li 
+          Forked from: #{link_to @survey.forked_from.member.nickname, member_path(@survey.forked_from.member)} 
+          \/ 
+          #{link_to @survey.forked_from.title, survey_path(@survey.forked_from)}
+      - unless @survey.tags.empty?
+        %li Tagged: #{tag_list_links(@survey)}
     %li 
       Posted: #{timeago @survey.created_at}
-    - unless @survey.tags.empty?
-      %li Tagged: #{tag_list_links(@survey)}

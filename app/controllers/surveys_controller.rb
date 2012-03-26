@@ -8,11 +8,10 @@ class SurveysController < ApplicationController
     :by_tag, :followed_by, :edit, :questions, :demographics, :downloads, :reports]
   before_filter :admin_only!, :only => [:drafting, :review_requested, :rejected, :launch, :reject, :request_changes]
   before_filter :owner_only!, :only => [:update, :destroy, :close, :submit_for_review]
-  before_filter :owner_or_admins_only_until_published!, :only => [:edit, :demographics, :downloads, :reports]
+  before_filter :owner_or_admins_only_until_published!, :only => [:edit, :forks, :followed_by, :demographics, :downloads, :reports]
   before_filter :load_tags, :only => [:index, :by_tag]
   
-  caches_action :index, :drafting, :rejected, :review_requested, :launched, :published, 
-    :you_created, :by_tag, :show, :edit, 
+  caches_action :index, :drafting, :rejected, :review_requested, :launched, :published, :by_tag, :show, :edit, 
     :cache_path => Proc.new {|controller| cache_expirary_key(controller.params)}, 
     :expires_in => 2.hours
   cache_sweeper :surveys_sweeper, :only => [:create, :update, :destroy, :submit_for_review, :request_changes, 
@@ -216,7 +215,7 @@ class SurveysController < ApplicationController
             render :text => "alert('We are sorry, you do not qualify for this survey.'); enable_button($('#participate')); enable_button($('#participate2'));"
           end
         else
-          render :text => "alert('You cannot participate in your own survey.');'));"
+          render :text => "alert('You cannot participate in your own survey.');"
         end
       end
     else

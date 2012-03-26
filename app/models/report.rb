@@ -11,9 +11,6 @@ class Report < ActiveRecord::Base
 
   acts_as_taggable
   acts_as_followable
-  
-  extend FriendlyId
-  friendly_id :title, :use => :slugged
 
   validates :title, :presence => true
   
@@ -164,6 +161,10 @@ class Report < ActiveRecord::Base
       new_report.save!
       return new_report
     end
+  end
+  
+  def to_param
+    "#{id} #{title}".parameterize
   end
   
   protected

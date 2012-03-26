@@ -23,15 +23,10 @@ class Survey < ActiveRecord::Base
 
   acts_as_taggable
   acts_as_followable
-  
-  extend FriendlyId
-  friendly_id :title, :use => :slugged
 
-  validates_presence_of :title, :description, :purpose_of_survey, :uses_of_results,
-    :time_required_in_minutes, :member_id
+  validates_presence_of :title, :description, :purpose_of_survey, :uses_of_results, :member_id
   validates_length_of :title, :minimum => 3
-  validates_numericality_of :time_required_in_minutes, :cohort_interval_in_days,
-    :cohort_range_in_days, :minimum => 1, :allow_blank => true
+  validates_numericality_of :cohort_interval_in_days, :cohort_range_in_days, :minimum => 1, :allow_blank => true
   validates_numericality_of :cohort_range_in_days, :minimum => 1, :allow_blank => true
   validate :settings_for_draft
   
@@ -246,19 +241,6 @@ class Survey < ActiveRecord::Base
     c[0].downcase if c
   end
 
-  def self.time_required_options
-    [
-      ['Less than a minute', 1],
-      ['Five minutes', 5],
-      ['Ten minutes', 10],
-      ['Fifteen minutes', 15],
-      ['Half an hour', 30],
-      ['An hour', 60],
-      ['An hour and a half', 90],
-      ['Two hours or more', 120]
-    ]
-  end
-
   def self.cohort_interval_options
     [
       ['Every day', 1.0],
@@ -432,6 +414,10 @@ class Survey < ActiveRecord::Base
       census.geos
     end
     weights = {}
+  end
+  
+  def to_param
+    "#{id} #{title}".parameterize
   end
 
   protected

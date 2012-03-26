@@ -1,5 +1,29 @@
 @import "common";
 
+#survey-sidebar
+  {
+  float: right;
+  margin: 0 0 15px 15px;
+  width: 350px;
+  }
+  
+#survey-share
+  {
+  margin: 30px auto;
+  text-align: center;
+  }
+
+#participate
+  {
+  width: 322px;
+  color: #fff;
+  
+  &.ui-state-active
+    {
+    color: #333;
+    }
+  }
+
 #target-surveys
   {
   margin: 10px 0 0 150px;

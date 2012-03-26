@@ -5,9 +5,14 @@
       = link_to survey.member.nickname, member_path(survey.member)
       \/
       %strong= link_to survey.title, survey_path(survey)
-    %ul.attributes
-      %li Status: #{survey.state_human}
-      %li Survey posted: #{timeago survey.created_at}
-      - unless survey.tags.empty?
-        %li Tagged: #{tag_list_links(survey)}
-    %p #{truncate(survey.description, :length => 200)}
+    - if survey.launched? or survey.drafting?
+      %ul.attributes
+        %li Status: #{survey.state_human}
+        %li Survey posted: #{timeago survey.created_at}
+    - else
+      %ul.attributes
+        %li Status: #{survey.state_human}
+        %li Survey posted: #{timeago survey.created_at}
+        - unless survey.tags.empty?
+          %li Tagged: #{tag_list_links(survey)}
+      %p #{truncate(survey.description, :length => 200)}

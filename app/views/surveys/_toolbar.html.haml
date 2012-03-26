@@ -1,80 +1,79 @@
 - content_for :body_content_toolbar do 
   = followable_link @survey
-  - unless @survey.new_record?
-    %button{:id => 'forkit', :icon => 'ui-icon-shuffle', :class => 'button restrict-to-members'} Fork
-    #forkit-message{:style => 'display:none', :title => 'Fork this Survey'}
-      %p
-        By forking this survey, you will create a new survey with the same settings and questions as this survey. The new survey will
-        begin as a draft, so that you can make changes before launching it.
-      %p 
-        Are you sure you want to <strong>fork</strong> this survey? 
-      .bottom-actions
-        = link_to 'Fork', forkit_survey_path(@survey), :method => 'put', :class => 'button'
-        %button{:id => 'cancel-forkit', :class => 'button'} Cancel
-  .not-owner{:'data-member-id' => @survey.member_id}
-    - if @survey.review_requested?
-      .admins-only
-        %button{:id => 'request-changes', :icon => 'ui-icon-comment', :class => 'button'} Request Changes
-        #request-changes-message{:style => 'display:none', :title => 'Request Changes to this Survey'}
-          %p
-            %strong Please review the entire survey with your team before requesting changes to it.
-          %p 
-            Are you sure you want to <strong>request changes</strong> to this survey? 
-          .bottom-actions
-            = link_to 'Request Changes', request_changes_survey_path(@survey), :class => 'button', :method => 'put'
-            %button{:id => 'cancel-request-changes', :class => 'button'} Cancel
-        %button{:id => 'reject', :icon => 'ui-icon-cancel', :class => 'button'} Reject
-        #reject-message{:style => 'display:none', :title => 'Reject this Survey'}
-          %p
-            %strong Please review the entire survey with your team before rejecting it.
-          %p 
-            Are you sure you want to <strong>reject</strong> this survey? 
-          .bottom-actions
-            = link_to 'Reject', reject_survey_path(@survey), :class => 'button', :method => 'put'
-            %button{:id => 'cancel-reject', :class => 'button'} Cancel
-        %button{:id => 'launch2', :icon => 'ui-icon-notice', :class => 'button'} Launch
-        #launch2-message{:style => 'display:none', :title => 'Launch this Survey'}
-          %p
-            %strong Please review the entire survey with your team before launching it.
-          %p 
-            Are you sure you want to <strong>launch</strong> this survey? 
-          .bottom-actions
-            = link_to 'Launch', launch_survey_path(@survey), :class => 'button', :method => 'put'
-            %button{:id => 'cancel-launch2', :class => 'button'} Cancel
-    - elsif @survey.launched?
-      = link_to 'Participate', participate_survey_path(@survey), :icon => 'ui-icon-play', :class => 'button restrict-to-members', :id => 'participate', :method => 'put', :remote => true
-  .owner-only-not-admins{:'data-member-id' => @survey.member_id}
-    - if @survey.editable?
-      %button{:id => 'delete', :icon => 'ui-icon-trash', :class => 'button'} Delete
-      #delete-message{:style => 'display:none', :title => 'Delete this Survey'}
-        %p 
-          Are you sure you want to <strong>delete</strong> this survey? 
-        .bottom-actions
-          = link_to 'Delete', survey_path(@survey), :method => 'delete', :class => 'button'
-          %button{:id => 'cancel-delete', :class => 'button'} Cancel
+  %span.owner-only-until-published{:'data-member-id' => @survey.member_id, :'data-state' => @survey.state}
     - unless @survey.new_record?
-      - case @survey.state when 'drafting' then
-        %button{:id => 'launch', :icon => 'ui-icon-notice', :class => 'button'} Launch
-        #launch-message{:style => 'display:none', :title => 'Launch this Survey'}
+      %button{:id => 'forkit', :icon => 'ui-icon-shuffle', :class => 'button restrict-to-members'} Fork
+      #forkit-message{:style => 'display:none', :title => 'Fork this Survey'}
+        %p
+          By forking this survey, you will create a new survey with the same settings and questions as this survey. The new survey will
+          begin as a draft, so that you can make changes before launching it.
+        %p 
+          Are you sure you want to <strong>fork</strong> this survey? 
+        .bottom-actions
+          = link_to 'Fork', forkit_survey_path(@survey), :method => 'put', :class => 'button'
+          %button{:id => 'cancel-forkit', :class => 'button'} Cancel
+    .not-owner{:'data-member-id' => @survey.member_id}
+      - if @survey.review_requested?
+        .admins-only
+          %button{:id => 'request-changes', :icon => 'ui-icon-comment', :class => 'button'} Request Changes
+          #request-changes-message{:style => 'display:none', :title => 'Request Changes to this Survey'}
+            %p
+              %strong Please review the entire survey with your team before requesting changes to it.
+            %p 
+              Are you sure you want to <strong>request changes</strong> to this survey? 
+            .bottom-actions
+              = link_to 'Request Changes', request_changes_survey_path(@survey), :class => 'button', :method => 'put'
+              %button{:id => 'cancel-request-changes', :class => 'button'} Cancel
+          %button{:id => 'reject', :icon => 'ui-icon-cancel', :class => 'button'} Reject
+          #reject-message{:style => 'display:none', :title => 'Reject this Survey'}
+            %p
+              %strong Please review the entire survey with your team before rejecting it.
+            %p 
+              Are you sure you want to <strong>reject</strong> this survey? 
+            .bottom-actions
+              = link_to 'Reject', reject_survey_path(@survey), :class => 'button', :method => 'put'
+              %button{:id => 'cancel-reject', :class => 'button'} Cancel
+          %button{:id => 'launch2', :icon => 'ui-icon-notice', :class => 'button'} Launch
+          #launch2-message{:style => 'display:none', :title => 'Launch this Survey'}
+            %p
+              %strong Please review the entire survey with your team before launching it.
+            %p 
+              Are you sure you want to <strong>launch</strong> this survey? 
+            .bottom-actions
+              = link_to 'Launch', launch_survey_path(@survey), :class => 'button', :method => 'put'
+              %button{:id => 'cancel-launch2', :class => 'button'} Cancel
+    .owner-only-not-admins{:'data-member-id' => @survey.member_id}
+      - if @survey.editable?
+        %button{:id => 'delete', :icon => 'ui-icon-trash', :class => 'button'} Delete
+        #delete-message{:style => 'display:none', :title => 'Delete this Survey'}
           %p 
-            Before we launch your survey, we will review it to make sure it meets our 
-            <a href="/about/guidlines" target="_blank">guidelines</a>. If it does not meet our guidlines,
-            we'll ask that you make changes and resubmit it. 
-          %p
-            You will not be able to edit your survey while we review it 
-            nor after it has launched. Moreover, once launched, you will only be able to close your survey, 
-            not delete it. 
+            Are you sure you want to <strong>delete</strong> this survey? 
           .bottom-actions
-            = link_to 'Submit for Review', submit_for_review_survey_path(@survey), :class => 'button', :method => 'put'
-            %button{:id => 'cancel-launch', :class => 'button'} Cancel
-      - when 'launched' then
-        %button{:id => 'close', :icon => 'ui-icon-locked', :secondary_icon => 'ui-icon-signal-diag', :class => 'button'} Close and Publish
-        #close-message{:style => 'display:none', :title => 'Close and Publish this Survey'}
-          %p Once closed and published, members will not be allowed to participate in the survey, and the results will be made available for everyone.
-          %p You cannot undo this action. Are you sure you want to <strong>close</strong> this survey?
-          .bottom-actions
-            = link_to 'Close and Publish', close_survey_path(@survey), :class => 'button', :method => 'put'
-            %button{:id => 'cancel-close', :class => 'button'} Cancel
-  - if @survey.live?
-    = render :partial => '/shared/sharing'
+            = link_to 'Delete', survey_path(@survey), :method => 'delete', :class => 'button'
+            %button{:id => 'cancel-delete', :class => 'button'} Cancel
+      - unless @survey.new_record?
+        - case @survey.state when 'drafting' then
+          %button{:id => 'launch', :icon => 'ui-icon-notice', :class => 'button'} Launch
+          #launch-message{:style => 'display:none', :title => 'Launch this Survey'}
+            %p 
+              Before we launch your survey, we will review it to make sure it meets our 
+              <a href="/docs/survey-guidelines" target="_blank">guidelines</a>. If it does not meet our guidlines,
+              we'll ask that you make changes and resubmit it. 
+            %p
+              You will not be able to edit your survey while we review it 
+              nor after it has launched. Moreover, once launched, you will only be able to close your survey, 
+              not delete it. 
+            .bottom-actions
+              = link_to 'Submit for Review', submit_for_review_survey_path(@survey), :class => 'button', :method => 'put'
+              %button{:id => 'cancel-launch', :class => 'button'} Cancel
+        - when 'launched' then
+          %button{:id => 'close', :icon => 'ui-icon-locked', :secondary_icon => 'ui-icon-signal-diag', :class => 'button'} Close and Publish
+          #close-message{:style => 'display:none', :title => 'Close and Publish this Survey'}
+            %p Once closed and published, members will not be allowed to participate in the survey, and the results will be made available for everyone.
+            %p You cannot undo this action. Are you sure you want to <strong>close</strong> this survey?
+            .bottom-actions
+              = link_to 'Close and Publish', close_survey_path(@survey), :class => 'button', :method => 'put'
+              %button{:id => 'cancel-close', :class => 'button'} Cancel
+    - if @survey.live?
+      = render :partial => '/shared/sharing'
     

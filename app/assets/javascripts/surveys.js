@@ -9,6 +9,14 @@ $.extend($.expr[':'], {
 });
 
 $(document).ready(function() {
+  $('#participate').click(function(e) {
+    if(!$('#survey-participation-agreement').is(':checked')) {
+      $('#survey-participation-agreement-container').show('shake', 50);
+      e.preventDefault();
+      return false;
+    }
+  });
+  $('#survey-participation-agreement').change();
   init_survey_form();
   if(controller_name == 'survey_questions') {
     init_survey_question_form();
@@ -265,7 +273,6 @@ function init_survey_question_form() {
 }
 
 function load_content(hash) {
-  console.log(hash);
   if(hash == '' || hash == 'all') {
     show_all_questions();
   } else {

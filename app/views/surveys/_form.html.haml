@@ -12,12 +12,11 @@
       %a{:href => '#schedule'} Schedule
       
   #descriptions
-    = f.input :title, :hint => 'Give a clear, descriptive yet enticing title.'
-    = f.input :description, :hint => 'Describe your survey in full. If your title hooks visitors, your description is what you\'ll pull them in with.'
-    = f.input :tag_list, :label => 'Tags', :input_html => {:class => 'tags', :"data-seperator" => ','}, :hint => 'Categorize this survey with any words you want. Hit Enter or type a comma to delimit each tag.'
-    = f.input :purpose_of_survey, :hint => 'What is the purpose of this survey? Be concise.'
-    = f.input :uses_of_results, :hint => 'How will you use the results? Be concise.'
-    = f.input :time_required_in_minutes, :as => :select, :collection => Survey.time_required_options, :label => 'Estimated time required', :hint => 'How long will it take for participants to complete this survey?'
+    = f.input :title, :hint => 'Give a simple title that does NOT reveal the purpose of your survey, otherwise the results may be biased. For example, if this were a survey looking at a potential link between cancer and high fructose corn syrup, you may choose "High Fructose Corn Syrup" as your title without the "Cancer" keyword in it.'
+    = f.input :description, :hint => 'Describe your survey in full. Your description is NOT shown to partcipants prior to taking the survey. Your description is for our staff, and for the public once the survey has been published.'
+    = f.input :tag_list, :label => 'Tags', :input_html => {:class => 'tags', :"data-seperator" => ','}, :hint => 'Categorize this survey with any words you want. Hit Enter or type a comma to delimit each tag. Your tags are not shown until the survey is published'
+    = f.input :purpose_of_survey, :hint => 'What is the purpose of this survey? Your purpose is NOT shown to partcipants prior to taking the survey. Your purpose is for our staff, and for the public once the survey has been published.'
+    = f.input :uses_of_results, :hint => 'How will you use the results? Your use of the reuslts is NOT shown to partcipants prior to taking the survey. Your use of the reuslts is for our staff, and for the public once the survey has been published.'
   #targeting
     = f.fields_for :target do |f2|
       .target

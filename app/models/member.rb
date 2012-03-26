@@ -61,9 +61,13 @@ class Member < ActiveRecord::Base
   after_create :set_mailchimp_1!
   after_update :set_mailchimp_2!
   before_destroy :destroy_ec2_instance!
+  
+  def owner?(object)
+    true if id == object.try(:member_id)
+  end
 
   def unallowed_nicknames
-    if %w{soepi admin administrator epi}.include? nickname.to_s.downcase.strip
+    if %w{soepi admin administrator epi surveys reports petitions groups}.include? nickname.to_s.downcase.strip
       errors.add :nickname, 'this nickname is not allowed'
     end
   end

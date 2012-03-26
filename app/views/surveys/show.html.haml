@@ -1,40 +1,27 @@
-= render :partial => '/surveys/steps'
-= render :partial => '/surveys/title'      
+= render :partial => '/surveys/steps' 
+= render :partial => '/surveys/title'  
 = render :partial => '/surveys/toolbar'
 = render :partial => '/surveys/details'
   
 - content_for :body_content do
-  .survey
-    %section
-      %h3 Description
-      = simple_format @survey.description
-    %section
-      %h3 Purpose of This Survey
-      = simple_format @survey.purpose_of_survey
-    %section
-      %h3 Uses of Results
-      = simple_format @survey.uses_of_results
-    - unless @survey.organization_name.blank?
-      %section
-        %h3 Organization
-        %p
-          = @survey.organization_name
-          %br/
-          = @survey.organization_phone
-          %br/
-          = mail_to @survey.organization_email, @survey.organization_email
-    %section
-      %h3 Estimated Time Required
-      %p
-        = "#{@survey.time_required_in_minutes} minutes"
-    - if @survey.cohort?
-      %section
-        %h3 Following Surveys
-        %p 
-          We wish to survey participants of this survey
-          #{@survey.cohort_interval_in_days_human} for #{@survey.cohort_range_in_days_human}.
-    - if @survey.launched?
-      .not-owner{:'data-member-id' => @survey.member_id}
-        = link_to 'Participate in this Survey', participate_survey_path(@survey), :icon => 'ui-icon-play', :class => 'button restrict-to-members', :id => 'participate2', :method => 'put', :remote => true
-            
+  - if @survey.launched?
+    #survey-sidebar
+      #survey-participation.highlight
+        %h1 Participate in Survey: 
+        %h2= @survey.title
+        %p#survey-participation-agreement-container
+          %input{:type => 'checkbox', :id => 'survey-participation-agreement'} 
+          %label{:for => 'survey-participation-agreement'}= Refinery::Setting.find_or_set(:survey_participation_agreement, 'I agree to participate in this survey and I acknowledge that I have been informed of the risks and benefits of doing so.')
+        %p= link_to 'Participate in this Survey', participate_survey_path(@survey), :icon => 'ui-icon-play', :class => 'button restrict-to-members', :id => 'participate', :method => 'put', :remote => true
+      #survey-share
+        %h4 Please share this survey!
+        = render :partial => '/shared/sharing_large'
+    - cache 'survey-informed-consent' do 
+      %h1#page-title-actual= Refinery::Page.find('informed-consent').title
+      #page-content= Refinery::Page.find('informed-consent').content_for(:body).html_safe
+  - else
+    %p 
+      This survey has not yet opened. Please come back later to partcipate in it.    
+      For your convenience, if you choose to follow this survey, we'll notify you when it opens for participation.
+      Click the "Follow" button at the top right. 
 = render :partial => "/shared/content_page"

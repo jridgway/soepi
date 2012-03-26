@@ -30,6 +30,9 @@
     $('.state-not-published[data-state="published"]').hide();
     init_sign_in_links();
     select_details_menu_item();
+    if($('#content-above-top :visible').length == 0) {
+      $('#content-above-top').hide();
+    }
     $('.current-member-name').html(current_member['name']);
     $('.current-member-nickname').html(current_member['nickname']);
     $('.current-member-nickname-linked').html(current_member['nickname_linked']);
@@ -99,6 +102,10 @@
   function select_details_menu_item() {
     var relative = jQuery.url.attr('relative').replace(/\?.*/, '').replace(/#.*/, '').replace(/\/+$/, '');
     var available_items = 0;
+    if($('#details ul.menu').css('display') == 'none') {
+      $('#details').hide();
+      return;
+    }
     if(controller_name == 'pages' || controller_name == 'welcome' || controller_name == 'inquiries') {
       $('#details').show();
       return;

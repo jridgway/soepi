@@ -5,7 +5,7 @@
         - if @report.new_record?
           .inner.current
             %h4 Step 1:
-            %p Provide a title and description.
+            %p Provide a title and tags.
         - else
           %a.inner{:href => edit_report_path(@report), :class => (%w(new create edit update).include?(action_name) and not @report.passing? ? 'current' : '')}
             %h4 Step 1:
