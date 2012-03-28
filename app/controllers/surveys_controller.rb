@@ -1,5 +1,5 @@
 class SurveysController < ApplicationController
-  prepend_before_filter :load_survey, :only => [:edit, :update, :show, :revert_to_version, :versions, :compare_versions, 
+  prepend_before_filter :load_survey, :only => [:edit, :update, :destroy, :show, :revert_to_version, :versions, :compare_versions, 
     :forks, :demographics, :downloads, :reports, :forkit, :launch, :reject, :request_changes, :participate, 
     :create_response, :store_pin, :new_participant, :create_participant, :followed_by, :close, :submit_for_review]
   before_filter :load_open_graph_meta, :only => [:show, :versions, :forks, :forkit, :launch, :reject, :participate,
@@ -116,7 +116,6 @@ class SurveysController < ApplicationController
   end
 
   def destroy
-    @survey = current_member.surveys.find params[:id]
     if @survey.editable?(current_member)
       @survey.destroy
       flash[:alert] = 'Your survey was deleted.'
@@ -358,7 +357,7 @@ class SurveysController < ApplicationController
     end
   
     def owner_only!
-      if not @survey or (member_signed_in? and current_member.id != @survey.member_id)
+      if member_signed_in? and current_member.id != @survey.member_id
         flash[:alert] = 'Insufficient privileges.'
         redirect_to survey_path(@survey)
         false
@@ -366,7 +365,7 @@ class SurveysController < ApplicationController
     end
   
     def owner_or_admins_only!
-      if not @survey or (member_signed_in? and current_member.id != @survey.member_id and not current_member.admin?)
+      if member_signed_in? and current_member.id != @survey.member_id and not current_member.admin?
         flash[:alert] = 'Insufficient privileges.'
         redirect_to survey_path(@survey)
         false
@@ -374,8 +373,8 @@ class SurveysController < ApplicationController
     end
     
     def owner_or_admins_only_until_published!
-      unless (@survey and (@survey.published? or @survey.closed? or 
-      (member_signed_in? and (current_member.id == @survey.member_id or current_member.admin?))))
+      unless @survey.published? or @survey.closed? or 
+      (member_signed_in? and (current_member.id == @survey.member_id or current_member.admin?))
         flash[:alert] = 'Insufficient privileges. You must wait until this survey has been closed.'
         redirect_to survey_path(@survey)
       end

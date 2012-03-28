@@ -121,7 +121,7 @@ class ReportsController < ApplicationController
   end
   
   def destroy 
-    current_member.reports.destroy params[:id]
+    @report.destroy
     if request.xhr?
       render :text => "$('#run-results').remove();"
     else
@@ -169,14 +169,14 @@ class ReportsController < ApplicationController
     end 
   
     def owner_only    
-      unless @report and member_signed_in? and current_member.id == @report.member_id
+      unless member_signed_in? and current_member.id == @report.member_id
         flash[:alert] = 'Permission denied.'
         redirect_to reports_path
       end
     end  
     
     def owner_or_admins_only
-      unless @report and (member_signed_in? and (current_member.id == @report.member_id or current_member.admin?))
+      unless (member_signed_in? and (current_member.id == @report.member_id or current_member.admin?))
         flash[:alert] = 'Insufficient privileges.'
         redirect_to survey_path(@survey)
       end
