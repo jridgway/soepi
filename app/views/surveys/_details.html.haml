@@ -1,5 +1,5 @@
 - content_for :body_content_details do
-  - cache "survey-details-#{@survey.id}-#{@survey.state}", :expires_in => 15.minutes do 
+  - cache "survey-details-#{@survey.id}-#{@survey.updated_at}-#{@survey.state}", :expires_in => 15.minutes do 
     %ul.menu.owner-only-until-published{:'data-member-id' => @survey.member_id, :'data-state' => @survey.state}
       %li
         = link_to 'Settings', edit_survey_path(@survey)
