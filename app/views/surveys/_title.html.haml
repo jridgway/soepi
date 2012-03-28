@@ -16,6 +16,7 @@
           #{link_to @survey.forked_from.title, survey_path(@survey.forked_from)}
       - unless @survey.tags.empty?
         %li Tagged: #{tag_list_links(@survey)}
-    %li.owner-only{:'data-member-id' => @survey.member_id} Current version: #{@survey.versions.current.position}
+    - if @survey.versions.current
+      %li.owner-only{:'data-member-id' => @survey.member_id} Current version: #{@survey.versions.current.position}
     %li 
       Posted: #{timeago @survey.created_at}

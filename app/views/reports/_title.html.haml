@@ -17,5 +17,6 @@
         #{link_to @report.forked_from.title, report_path(@report.forked_from)}
     - unless @report.tags.empty?
       %li Tagged: #{tag_list_links(@report)}
-    %li.owner-only{:'data-member-id' => @report.member_id} Current version: #{@report.versions.current.position}
+    - if @report.versions.current
+      %li.owner-only{:'data-member-id' => @report.member_id} Current version: #{@report.versions.current.position}
     %li Posted: #{timeago @report.created_at}
