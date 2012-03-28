@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  versionable_id: 1
+  versionable_type: MyString
+  member_id: 1
+  data: MyText
+
+two:
+  versionable_id: 1
+  versionable_type: MyString
+  member_id: 1
+  data: MyText

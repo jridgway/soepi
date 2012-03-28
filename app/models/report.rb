@@ -11,6 +11,21 @@ class Report < ActiveRecord::Base
 
   acts_as_taggable
   acts_as_followable
+  
+  include Extensions::Versionable
+  include Extensions::ReportForDiff
+  
+  amoeba do 
+    enable
+    exclude_field :member
+    exclude_field :plots
+    exclude_field :forked_from
+    exclude_field :forks
+    exclude_field :surveys
+    exclude_field :notifications
+    exclude_field :job
+    include_field :taggings
+  end
 
   validates :title, :presence => true
   
@@ -165,6 +180,18 @@ class Report < ActiveRecord::Base
   
   def to_param
     "#{id} #{title}".parameterize
+  end
+
+  def load_version(version)
+    Report.class 
+    report = Marshal.load(Base64.decode64(version.data))
+    self.attributes = report.attributes.except('id', 'state')
+    self.taggings = report.taggings
+    self
+  end
+  
+  def may_edit?(member)
+    true if member_id == member.id or member.admin?
   end
   
   protected

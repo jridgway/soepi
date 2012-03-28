@@ -7,7 +7,7 @@
 = render :partial => '/surveys/details'
 
 - content_for :body_content do  
-  = simple_form_for @survey, :html => {:novalidate => true, :class => 'survey ' + ((@survey.editable? and @survey.member == current_member) ? 'editable' : 'uneditable')} do |f|
+  = simple_form_for @survey, :html => {:novalidate => true, :class => 'survey ' + (@survey.editable?(current_member) ? 'editable' : 'uneditable')} do |f|
     = render :partial => '/surveys/form', :locals => {:f => f}
     .actions
       = f.submit 'Update', :class => 'button'

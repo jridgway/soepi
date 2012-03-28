@@ -15,3 +15,5 @@
         = link_to "Forks (#{@survey.forks.live_or_drafting.count})", forks_survey_path(@survey)
       %li
         = link_to "Followed By (#{@survey.followings.count})", followed_by_survey_path(@survey)
+      %li.owner-only{:'data-member-id' => @survey.member_id}
+        = link_to "Versions (#{@survey.versions.count})", versions_survey_path(@survey)

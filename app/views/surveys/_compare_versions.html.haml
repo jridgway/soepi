@@ -1,0 +1,9 @@
+#compare-versions{:title => "Version #{@version_a.position} by #{@version_a.member.nickname} created at #{@version_a.updated_at}"}
+  = simple_form_for :version_b, :url => compare_versions_survey_path(@survey, :version_a_id => @version_a.id), :method => 'get', :remote => true do |f|
+    %h2 Compare version #{@version_a.position} to:
+    = f.input :id, :label => false, :collection => @versions, :value => @version_b, :as => :select
+  - if @version_b
+    #diff.clear
+      %h2 Results:
+      %pre.clear= @version_a.compare(@version_b)
+  

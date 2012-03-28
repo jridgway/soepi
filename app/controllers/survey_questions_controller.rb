@@ -1,5 +1,5 @@
 class SurveyQuestionsController < ApplicationController
-  before_filter :authenticate_member!, :except => [:index, :results]
+  before_filter :authenticate_member_2!, :except => [:index, :results]
   before_filter :load_survey
   before_filter :validate_editable, :only => [:new, :create, :edit, :update, :destroy]
   layout Proc.new {|controller| controller.request.xhr? ? 'ajax' : 'two_column'}
@@ -32,6 +32,7 @@ class SurveyQuestionsController < ApplicationController
       @question = @survey.questions.new params[:survey_question]
     end
     if @question.save
+      @survey.version!(current_member.id)
       @question_just_added = @question
       @question = @survey.questions.build params[:survey_question]
       @question.body = '' 
@@ -47,6 +48,7 @@ class SurveyQuestionsController < ApplicationController
     @question = @survey.questions.find(params[:id])
     @choice_changed = (@question.survey_question_choice_id.to_i != params[:survey_question][:survey_question_choice_id].to_i)
     if @question.update_attributes params[:survey_question]
+      @survey.version!(current_member.id)
       @question.reload
     end
     @participant_response = ParticipantResponse.new
@@ -54,11 +56,13 @@ class SurveyQuestionsController < ApplicationController
 
   def update_positions
     @survey.update_question_positions! params[:survey_question]
+    @survey.version!(current_member.id)
     render :nothing => true
   end
 
   def destroy
     @question = @survey.questions.find(params[:id])
+    @survey.version!(current_member.id)
     @question.destroy
   end
 
@@ -83,7 +87,7 @@ class SurveyQuestionsController < ApplicationController
     end
     
     def validate_editable
-      unless @survey.editable?
+      unless @survey.editable?(current_member)
         if request.xhr?
           render :text => "alert('You cannot edit this survey.')"
         else

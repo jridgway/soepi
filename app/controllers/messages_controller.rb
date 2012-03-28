@@ -1,5 +1,5 @@
 class MessagesController < ApplicationController
-  before_filter :authenticate_member!
+  before_filter :authenticate_member_2!
   layout Proc.new { |controller| controller.request.xhr? ? 'ajax' : 'one_column' }
 
   def index

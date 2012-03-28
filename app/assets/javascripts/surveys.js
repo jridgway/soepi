@@ -9,6 +9,9 @@ $.extend($.expr[':'], {
 });
 
 $(document).ready(function() {
+  $('#version_b_id').live('change', function () {
+    $(this).closest('form').submit();
+  });
   $('#participate').click(function(e) {
     if(!$('#survey-participation-agreement').is(':checked')) {
       $('#survey-participation-agreement-container').show('shake', 50);

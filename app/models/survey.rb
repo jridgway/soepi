@@ -1,7 +1,9 @@
-class Survey < ActiveRecord::Base
+class Survey < ActiveRecord::Base  
   belongs_to :member
   has_many :participants, :class_name => 'ParticipantSurvey', :dependent => :destroy
   has_many :questions, :class_name => 'SurveyQuestion', :dependent => :destroy
+  has_many :root_questions, :class_name => 'SurveyQuestion', :dependent => :destroy, 
+    :conditions => "survey_question_choice_id is null or survey_question_choice_id = 0"
   has_one :target, :as => :targetable, :dependent => :destroy
   has_many :forks, :class_name => 'Survey', :foreign_key => :forked_from_id, :dependent => :nullify
   belongs_to :forked_from, :class_name => 'Survey'
@@ -23,6 +25,15 @@ class Survey < ActiveRecord::Base
 
   acts_as_taggable
   acts_as_followable
+  include Extensions::Versionable
+  include Extensions::SurveyForDiff
+  
+  amoeba do 
+    enable
+    include_field :root_questions
+    include_field :target
+    include_field :taggings
+  end
 
   validates_presence_of :title, :description, :purpose_of_survey, :uses_of_results, :member_id
   validates_length_of :title, :minimum => 3
@@ -146,8 +157,14 @@ class Survey < ActiveRecord::Base
     %w{published launched closed}.include? state
   end
 
-  def editable?
-    true unless live? or review_requested? or rejected?
+  def editable?(member)
+    if member  
+      if member.id != member_id
+        true unless live? or rejected?
+      else
+        true unless live? or review_requested? or rejected?
+      end
+    end
   end
 
   def forkit!(member_id)
@@ -183,6 +200,18 @@ class Survey < ActiveRecord::Base
         end
       end
     end
+  end
+
+  def load_version(version)
+    SurveyQuestion.class 
+    SurveyQuestionChoice.class 
+    Target.class
+    survey = Marshal.load(Base64.decode64(version.data))
+    self.attributes = survey.attributes.except('id', 'state')
+    self.root_questions = survey.root_questions
+    self.target = survey.target
+    self.taggings = survey.taggings
+    self
   end
   
   def state_human

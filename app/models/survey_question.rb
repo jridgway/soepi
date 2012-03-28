@@ -4,6 +4,13 @@ class SurveyQuestion < ActiveRecord::Base
   has_many :responses, :class_name => 'ParticipantResponse', :dependent => :destroy, :foreign_key => 'question_id'
   belongs_to :parent_choice, :class_name => 'SurveyQuestionChoice', :foreign_key => 'survey_question_choice_id'
   has_many :survey_downloads
+  
+  include Extensions::SurveyQuestionForDiff
+  
+  amoeba do 
+    enable
+    include_field :choices
+  end
 
   accepts_nested_attributes_for :choices, :allow_destroy => true
 

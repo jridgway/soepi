@@ -1,0 +1,26 @@
+= render :partial => '/surveys/steps'
+= render :partial => '/surveys/title'        
+= render :partial => '/surveys/toolbar'
+= render :partial => '/surveys/details'
+  
+- content_for :body_content do
+  - if @versions.empty?
+    %p No versions found.
+  - else
+    %ul#versions.listing.reset
+      - @versions.each do |version|
+        %li{:class => (version.current? ? 'current' : '')}
+          %h2 Version #{version.position}
+          = avatar(version.member, 60)
+          %h4
+            = link_to version.member.nickname, version.member
+            = timeago version.updated_at
+          .actions
+            - if version.current?
+              - if @versions.length > 1
+                = link_to 'Compare Changes', compare_versions_survey_path(@survey, :version_a_id => version.id), :class => 'button', :icon => 'ui-icon-zoomin', :remote => true
+            - elsif @survey.drafting?
+              = link_to 'Revert to this Version', revert_to_version_survey_path(:version_id => version.id), :method => 'put', :class => 'button', :icon => 'ui-icon-arrowreturnthick-1-w'
+    = will_paginate @versions
+    
+= render :partial => "/shared/content_page"

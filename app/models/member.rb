@@ -8,6 +8,7 @@ class Member < ActiveRecord::Base
   has_many :messages_received, :through => :message_members, :source => :message
   has_many :statuses, :class_name => 'MemberStatus', :dependent => :destroy
   has_and_belongs_to_many :status_references, :class_name => 'MemberStatus'
+  has_many :versions, :dependent => :nullify
 
   scope :admins, where(:admin => true)
   scope :listable, where('privacy_dont_list_me = false or privacy_dont_list_me is null')

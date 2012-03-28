@@ -1,7 +1,35 @@
 @import "common";
 
 .bp
-  {  
+  {
+  #versions
+    {
+    li 
+      {
+      -moz-border-radius: 4px;
+      -webkit-border-radius: 4px;
+      border-radius: 4px;
+      border: 1px solid #444;
+      padding: 10px;
+      
+      &.current
+        {
+        border: 1px solid $purple;
+        }
+      
+      h2
+        {
+        margin-top: 0;
+        padding-top: 0;
+        }
+
+      .actions
+        {
+        font-size: 0.8em;
+        }
+      }
+    }
+    
   #participants-map
     {
     width: 700px;

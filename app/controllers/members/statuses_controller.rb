@@ -1,5 +1,5 @@
 class Members::StatusesController < ApplicationController
-  before_filter :authenticate_member!, :only => [:create, :destroy]
+  before_filter :authenticate_member_2!, :only => [:create, :destroy]
   before_filter :load_tags, :only => [:index, :by_tag]
   before_filter :load_open_graph_meta, :only => [:show, :code, :output, :edit, :update]
   layout Proc.new { |controller| controller.request.xhr? ? 'ajax' : 'two_column' }  

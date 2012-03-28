@@ -3,6 +3,13 @@ class SurveyQuestionChoice < ActiveRecord::Base
   has_and_belongs_to_many :multiple_responses, :class_name => 'ParticipantResponse'
   has_many :single_responses, :class_name => 'ParticipantResponse'
   has_many :child_questions, :class_name => 'SurveyQuestion', :dependent => :destroy
+  
+  include Extensions::SurveyQuestionChoiceForDiff
+  
+  amoeba do 
+    enable
+    include_field :child_questions
+  end
 
   default_scope order('position asc, created_at asc')
 

@@ -1,5 +1,5 @@
 class ParticipantResponsesController < ApplicationController
-  before_filter :authenticate_member!, :find_survey
+  before_filter :authenticate_member_2!, :find_survey
 
   def index
     @questions = @survey.questions.all

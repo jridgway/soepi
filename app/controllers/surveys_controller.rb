@@ -1,13 +1,14 @@
 class SurveysController < ApplicationController
-  prepend_before_filter :load_survey, :only => [:edit, :update, :show, :forks, :demographics, :downloads, :reports, :forkit, :launch, 
-    :reject, :request_changes, :participate, :create_response, :store_pin, :new_participant, :create_participant, 
-    :followed_by, :close, :submit_for_review]
-  before_filter :load_open_graph_meta, :only => [:show, :forks, :forkit, :launch, :reject, :participate,
+  prepend_before_filter :load_survey, :only => [:edit, :update, :show, :revert_to_version, :versions, :compare_versions, 
+    :forks, :demographics, :downloads, :reports, :forkit, :launch, :reject, :request_changes, :participate, 
+    :create_response, :store_pin, :new_participant, :create_participant, :followed_by, :close, :submit_for_review]
+  before_filter :load_open_graph_meta, :only => [:show, :versions, :forks, :forkit, :launch, :reject, :participate,
     :create_response, :update_pin, :generate_and_send_new_pin, :followed_by]
-  before_filter :authenticate_member!, :except => [:index, :launched, :published, :show, :forks, :sharing, 
+  before_filter :authenticate_member_2!, :except => [:index, :launched, :published, :show, :forks, :sharing, 
     :by_tag, :followed_by, :edit, :questions, :demographics, :downloads, :reports]
   before_filter :admin_only!, :only => [:drafting, :review_requested, :rejected, :launch, :reject, :request_changes]
-  before_filter :owner_only!, :only => [:update, :destroy, :close, :submit_for_review]
+  before_filter :owner_or_admins_only!, :only => [:update, :destroy, :revert_to_version, :versions, :compare_versions, 
+    :close, :submit_for_review]
   before_filter :owner_or_admins_only_until_published!, :only => [:edit, :forks, :followed_by, :demographics, :downloads, :reports]
   before_filter :load_tags, :only => [:index, :by_tag]
   
@@ -86,6 +87,8 @@ class SurveysController < ApplicationController
   def create
     @survey = current_member.surveys.new params[:survey]
     if @survey.save
+      @survey.version!(current_member.id)
+      flash[:notice] = 'Your survey has been saved. You can add questions now, or come back later when you are ready.'
       redirect_to survey_questions_path(@survey)
     else
       render :action => 'new', :layout => 'one_column'
@@ -98,8 +101,9 @@ class SurveysController < ApplicationController
   end
 
   def update
-    if @survey.editable?
+    if @survey.editable?(current_member)
       if @survey.update_attributes params[:survey]
+        @survey.version!(current_member.id)
         flash[:alert] = 'Your survey was successfully updated.'
         redirect_to edit_survey_path(@survey)
       else
@@ -113,7 +117,7 @@ class SurveysController < ApplicationController
 
   def destroy
     @survey = current_member.surveys.find params[:id]
-    if @survey.editable?
+    if @survey.editable?(current_member)
       @survey.destroy
       flash[:alert] = 'Your survey was deleted.'
       redirect_to root_path
@@ -121,6 +125,31 @@ class SurveysController < ApplicationController
       flash[:alert] = 'You cannot delete this survey.'
       redirect_to_back_or(survey_path(@survey))
     end
+  end
+  
+  def versions
+    @versions = @survey.versions.page(params[:page])
+  end
+  
+  def compare_versions
+    @version_a = @survey.versions.find(params[:version_a_id])
+    @versions = @survey.versions.where('id != ?', @version_a.id)
+    if params[:version_b] and params[:version_b][:id].to_i > 0
+      @version_b = @survey.versions.find(params[:version_b][:id]) 
+    else 
+      @version_b = @versions.first 
+    end
+  end
+  
+  def revert_to_version
+    if @survey.drafting?
+      @version = @survey.versions.find(params[:version_id]) 
+      @survey.revert_to_version!(params[:version_id])
+      flash[:notice] = "You have reverted this survey to version #{@version.position}."
+    else
+      flash[:notice] = "You cannot edit this survey."
+    end
+    redirect_to versions_survey_path(@survey)
   end
   
   def find_and_add_target_survey
@@ -137,7 +166,6 @@ class SurveysController < ApplicationController
   end
 
   def submit_for_review
-    @survey = current_member.surveys.find params[:id]
     if @survey.questions.empty?
       flash[:alert] = 'You must add at least one question before launching your survey. ' +
         'Your survey has not been submitted for review. '
@@ -332,7 +360,15 @@ class SurveysController < ApplicationController
     def owner_only!
       if member_signed_in? and current_member.id != @survey.member_id
         flash[:alert] = 'Insufficient privileges.'
-        redirect_to_back_or(survey_path(@survey))
+        redirect_to survey_path(@survey)
+        false
+      end
+    end
+  
+    def owner_or_admins_only!
+      if member_signed_in? and current_member.id != @survey.member_id and not current_member.admin?
+        flash[:alert] = 'Insufficient privileges.'
+        redirect_to survey_path(@survey)
         false
       end
     end
@@ -341,7 +377,7 @@ class SurveysController < ApplicationController
       unless @survey.published? or @survey.closed? or 
       (member_signed_in? and (current_member.id == @survey.member_id or current_member.admin?))
         flash[:alert] = 'Insufficient privileges. You must wait until this survey has been closed.'
-        redirect_to_back_or(survey_path(@survey))
+        redirect_to survey_path(@survey)
       end
     end
 end

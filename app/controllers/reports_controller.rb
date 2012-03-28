@@ -1,8 +1,8 @@
 class ReportsController < ApplicationController
   before_filter :load_report, :except => [:new, :create, :index, :pending, :published, :passing, :failing, :by_tag]
-  before_filter :authenticate_member!, :except => [:index, :pending, :published, :passing, :failing, 
+  before_filter :authenticate_member_2!, :except => [:index, :pending, :published, :passing, :failing, 
     :by_tag, :show, :view_code, :output, :surveys, :forks]
-  before_filter :owner_only, :only => [:edit, :update, :destroy, :publish, :code, :results,
+  before_filter :owner_or_admins_only, :only => [:edit, :update, :destroy, :publish, :code, :results,
     :save_and_run, :save_and_continue, :save_and_exit]
   before_filter :load_tags, :only => [:index, :by_tag]
   before_filter :load_open_graph_meta, :except => [:new, :create, :index, :pending, :published, :passing, :failing, :by_tag]
@@ -52,6 +52,7 @@ class ReportsController < ApplicationController
     @report = current_member.reports.build params[:report]
     if @report.save 
       flash[:notice] = 'Your report was created. You may now begin writing code to generate plots.'
+      @report.version!(current_member.id)
       redirect_to code_report_path(@report)
     else
       render :action => 'new'
@@ -71,6 +72,27 @@ class ReportsController < ApplicationController
   def output
   end
   
+  def versions
+    @versions = @report.versions.page(params[:page])
+  end
+  
+  def compare_versions
+    @version_a = @report.versions.find(params[:version_a_id])
+    @versions = @report.versions.where('id != ?', @version_a.id)
+    if params[:version_b] and params[:version_b][:id].to_i > 0
+      @version_b = @report.versions.find(params[:version_b][:id]) 
+    else
+      @version_b = @versions.first 
+    end
+  end
+  
+  def revert_to_version
+    @version = @report.versions.find(params[:version_id]) 
+    @report.revert_to_version!(params[:version_id])
+    flash[:notice] = "You have reverted this report to version #{@version.position}."
+    redirect_to versions_report_path(@report)
+  end
+  
   def surveys
     @surveys = @report.surveys.page(params[:page])
   end
@@ -85,6 +107,7 @@ class ReportsController < ApplicationController
   
   def update
     if @report.update_attributes params[:report] 
+      @report.version!(current_member.id)
       if params[:commit] == 'Publish' and @report.passing?       
         @report.publish!
         flash[:notice] = 'Your report was saved and published.'
@@ -109,6 +132,7 @@ class ReportsController < ApplicationController
   
   def save_and_run
     @report.update_attribute :code, params[:report][:code] if params[:report] and params[:report][:code]
+    @report.version!(current_member.id)
     current_member.transaction do 
       unless @report.job or @report.running?
         @job_id = @report.delay.run!.id
@@ -119,10 +143,12 @@ class ReportsController < ApplicationController
   
   def save_and_continue
     @report.update_attribute :code, params[:report][:code]
+    @report.version!(current_member.id)
   end 
   
   def save_and_exit
     @report.update_attribute :code, params[:report][:code]
+    @report.version!(current_member.id)
     flash[:notice] = 'Your report was saved.'
     redirect_to report_path(@report)
   end 
@@ -147,7 +173,14 @@ class ReportsController < ApplicationController
         flash[:alert] = 'Permission denied.'
         redirect_to reports_path
       end
-    end   
+    end  
+    
+    def owner_or_admins_only
+      unless (member_signed_in? and (current_member.id == @report.member_id or current_member.admin?))
+        flash[:alert] = 'Insufficient privileges.'
+        redirect_to survey_path(@survey)
+      end
+    end 
 
     def load_tags
       @tags = Report.published.tag_counts :start_at => 2.months.ago, :limit => 100

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120316191822) do
+ActiveRecord::Schema.define(:version => 20120326230501) do
 
   create_table "age_groups", :force => true do |t|
     t.string   "label"
@@ -995,6 +995,17 @@ ActiveRecord::Schema.define(:version => 20120316191822) do
     t.string   "state"
     t.string   "location_type",       :default => "address"
     t.boolean  "require_all_surveys", :default => true
+  end
+
+  create_table "versions", :force => true do |t|
+    t.integer  "versionable_id"
+    t.string   "versionable_type"
+    t.integer  "member_id"
+    t.text     "data"
+    t.boolean  "current",          :default => false
+    t.integer  "position"
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
   end
 
 end

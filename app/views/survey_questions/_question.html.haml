@@ -1,6 +1,6 @@
 %li[question]{:'data-question-id' => question.id, :'data-question-required' => question.required.to_s, :'data-question-qtype' => question.qtype}
   .handle
-    - if @survey.editable? and @survey.member_id == current_member.id
+    - if @survey.editable?(current_member)
       .top-actions
         = link_to 'Edit', edit_survey_question_path(:survey_id => question.survey, :id => question.id), :class => 'button edit', :remote => true
         = link_to 'Delete', survey_question_path(:survey_id => question.survey, :id => question.id), :class => 'button destroy'

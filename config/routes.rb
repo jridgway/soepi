@@ -91,6 +91,9 @@ Soepi::Application.routes.draw do
       get 'code'
       get 'results'
       get 'view_code'
+      get 'versions(/page/:page)', :action => 'versions', :as => :versions
+      get 'compare_versions'
+      put 'revert_to_version'
     end
     collection do 
       get '(page/:page)', :action => 'index'
@@ -131,6 +134,9 @@ Soepi::Application.routes.draw do
       put 'forkit'
       get 'forks(/page/:page)', :action => 'forks', :as => :forks
       get 'followed-by(/page/:page)', :action => 'followed_by', :as => :followed_by
+      get 'versions(/page/:page)', :action => 'versions', :as => :versions
+      get 'compare_versions'
+      put 'revert_to_version'
     end
     resources :survey_questions, :path => 'questions', :as => :questions do
       member do        
