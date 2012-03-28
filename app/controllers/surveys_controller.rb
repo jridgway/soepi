@@ -358,7 +358,7 @@ class SurveysController < ApplicationController
     end
   
     def owner_only!
-      if member_signed_in? and current_member.id != @survey.member_id
+      if not @survey or (member_signed_in? and current_member.id != @survey.member_id)
         flash[:alert] = 'Insufficient privileges.'
         redirect_to survey_path(@survey)
         false
@@ -366,7 +366,7 @@ class SurveysController < ApplicationController
     end
   
     def owner_or_admins_only!
-      if member_signed_in? and current_member.id != @survey.member_id and not current_member.admin?
+      if not @survey or (member_signed_in? and current_member.id != @survey.member_id and not current_member.admin?)
         flash[:alert] = 'Insufficient privileges.'
         redirect_to survey_path(@survey)
         false
@@ -374,8 +374,8 @@ class SurveysController < ApplicationController
     end
     
     def owner_or_admins_only_until_published!
-      unless @survey.published? or @survey.closed? or 
-      (member_signed_in? and (current_member.id == @survey.member_id or current_member.admin?))
+      unless (@survey and (@survey.published? or @survey.closed? or 
+      (member_signed_in? and (current_member.id == @survey.member_id or current_member.admin?))))
         flash[:alert] = 'Insufficient privileges. You must wait until this survey has been closed.'
         redirect_to survey_path(@survey)
       end
