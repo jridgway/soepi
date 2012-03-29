@@ -483,6 +483,12 @@ var map;
 var marker;
     
 function init_targeting_map() {
+  try {
+    google;
+  } catch(e) {
+    return false;
+  }
+  
   if($('#map-canvas').length == 0) {
     return false;
   }
