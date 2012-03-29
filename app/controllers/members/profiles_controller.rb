@@ -63,6 +63,10 @@ class Members::ProfilesController < ApplicationController
 
     def load_member
       @member = @followable = Member.find(params[:id])
+      if @member.privacy_dont_list_me? and request.path != member_path(@member)
+        redirect_to member_path(@member)
+        false
+      end
     rescue 
       error_404
     end

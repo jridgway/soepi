@@ -1,13 +1,16 @@
 = render :partial => 'common'
       
 - content_for :body_content do
-  - if @statuses.empty?
-    %p No statuses found.
+  - if @member.privacy_dont_list_me?
+    %h3 This member does not wish to be listed.
   - else
-    %ul#statuses.listing.reset
-      - @statuses.each do |status|
-        %li
-          = render :partial => '/members/statuses/status', :locals => {:status => status}
-    = will_paginate @statuses    
+    - if @statuses.empty?
+      %p No statuses found.
+    - else
+      %ul#statuses.listing.reset
+        - @statuses.each do |status|
+          %li
+            = render :partial => '/members/statuses/status', :locals => {:status => status}
+      = will_paginate @statuses    
   
 = render :partial => "/shared/content_page"
