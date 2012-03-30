@@ -7,23 +7,6 @@ class ApplicationController < ActionController::Base
   enable_esi
 
   protected
-  
-    def owner_only!
-      if member_signed_in? and not (current_member.admin? or current_member.id == @survey.member_id)
-        flash[:alert] = 'Insufficient privileges.'
-        redirect_to survey_path(@survey)
-        false
-      end
-    end
-  
-    def owner_or_collaborators_only!
-      if member_signed_in? and not (current_member.admin? or current_member.id == @survey.member_id or 
-      @survey.collaborators.collect(&:member_id).include?(current_member.id))
-        flash[:alert] = 'Insufficient privileges.'
-        redirect_to survey_path(@survey)
-        false
-      end
-    end
     
     def authenticate_member_2!
       unless current_member
@@ -74,7 +57,7 @@ class ApplicationController < ActionController::Base
   
     def after_sign_out_path_for(resource)    
       if resource.is_a?(Member) or resource == :member
-        root_path
+        main_app.new_member_session_path(:member_return_to => member_return_to)
       else
         super
       end

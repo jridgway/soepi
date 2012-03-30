@@ -10,7 +10,6 @@ class Survey < ActiveRecord::Base
   has_many :notifications, :as => :notifiable, :dependent => :destroy
   has_many :downloads, :class_name => 'SurveyDownload', :dependent => :destroy
   has_and_belongs_to_many :reports
-  has_many :collaborators, :as => :collaborable, :dependent => :destroy
   
   attr_accessor :changes_requested_by
 
@@ -31,6 +30,7 @@ class Survey < ActiveRecord::Base
   acts_as_followable
   include Extensions::Versionable
   include Extensions::SurveyForDiff
+  include Extensions::Collaborable
   
   amoeba do 
     enable

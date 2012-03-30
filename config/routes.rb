@@ -106,7 +106,6 @@ Soepi::Application.routes.draw do
     collection do 
       get '(page/:page)', :action => 'index'
       get 'pending(/page/:page)', :action => 'pending', :as => :pending
-      get 'published(/page/:page)', :action => 'published', :as => :published
       get 'passing(/page/:page)', :action => 'passing', :as => :passing
       get 'failing(/page/:page)', :action => 'failing', :as => :failing
       get 'tagged/:tag(/page/:page)', :action => 'by_tag', :as => :tagged

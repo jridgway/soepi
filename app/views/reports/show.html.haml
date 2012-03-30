@@ -1,17 +1,20 @@
 = render :partial => 'common'
       
 - content_for :body_content do
-  - unless @report.introduction.blank?
-    %h2 Introduction
-    = simple_format @report.introduction
-  - @report.plots.each do |plot|
-    .plot-container
-      %h2 Plot #{plot.position}
-      .description= simple_format plot.description
-      .plot
-        = link_to image_tag(plot.plot.thumb('950x600>').url(:format => :png)), plot.plot.url(:format => :png), :target => '_blank'
-  - unless @report.conclusion.blank?
-    %h2 Conclusion
-    = simple_format @report.conclusion
+  - if @report.published?
+    - unless @report.introduction.blank?
+      %h2 Introduction
+      = simple_format @report.introduction
+    - @report.plots.each do |plot|
+      .plot-container
+        %h2 Plot #{plot.position}
+        .description= simple_format plot.description
+        .plot
+          = link_to image_tag(plot.plot.thumb('950x600>').url(:format => :png)), plot.plot.url(:format => :png), :target => '_blank'
+    - unless @report.conclusion.blank?
+      %h2 Conclusion
+      = simple_format @report.conclusion
+  - else
+    %p This report has not been published yet.
   
 = render :partial => "/shared/content_page"

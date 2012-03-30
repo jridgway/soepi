@@ -2,7 +2,7 @@ class Member < ActiveRecord::Base
   has_many :tokens, :class_name => 'MemberToken', :dependent => :destroy
   has_many :surveys, :dependent => :destroy 
   has_many :reports, :dependent => :destroy
-  has_many :collaborations, :dependent => :destroy, :class_name => 'Collaboration'
+  has_many :collaborations, :dependent => :destroy, :class_name => 'Collaborator'
   has_many :notifications, :dependent => :destroy
   has_many :messages, :dependent => :nullify
   has_many :message_members, :class_name => 'MessageMember', :dependent => :nullify
@@ -64,12 +64,21 @@ class Member < ActiveRecord::Base
   before_destroy :destroy_ec2_instance!
   
   def surveys_owned_and_collaborating(page=nil)
-    Survey.joins("join collaborators on collaborators.collaborable_type = 'Survey' and collaborable_id = surveys.id").
+    Survey.joins("left outer join collaborators on collaborators.collaborable_type = 'Survey' and collaborable_id = surveys.id").
       where('surveys.member_id = :id or collaborators.member_id = :id', :id => id).page(page)
+  end
+  
+  def reports_owned_and_collaborating(page=nil)
+    Report.joins("left outer join collaborators on collaborators.collaborable_type = 'Report' and collaborable_id = reports.id").
+      where('reports.member_id = :id or collaborators.member_id = :id', :id => id).page(page)
   end
   
   def owner?(object)
     true if id == object.try(:member_id)
+  end
+  
+  def collaborator?(collaborable)
+    collaborable.collaborator_ids_a.include?(id)
   end
 
   def unallowed_nicknames

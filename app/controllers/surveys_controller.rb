@@ -1,6 +1,7 @@
 class SurveysController < ApplicationController
-  prepend_before_filter :load_survey, :except => [:new, :create, :add_target_survey, 
+  before_filter :load_survey, :except => [:new, :create, :add_target_survey, 
     :index, :drafting, :review_requested, :rejected, :launched, :published, :by_tag]
+  
   before_filter :authenticate_member_2!, :except => [:index, :launched, :published, :by_tag, 
     :show, :edit, :forks, :followed_by, :demographics, :downloads, :reports, :collaborators]
   before_filter :admin_only!, :only => [:drafting, :review_requested, :rejected, :launch, :reject, :request_changes]
@@ -365,14 +366,32 @@ class SurveysController < ApplicationController
     def cache_expirary_key(params)
       params.merge :cache_expirary_key => Rails.cache.read(:surveys_cache_expirary_key)
     end
-    
-    def owner_or_collaborators_only_until_published!
-      if not (@survey.published? or @survey.closed?) and 
-      member_signed_in? and not (current_member.admin? or current_member.id == @survey.member_id or 
-      @survey.collaborators.collect(&:member_id).include?(current_member.id))
+  
+    def owner_only!
+      if not member_signed_in? or not (current_member.admin? or current_member.id == @survey.member_id)
         flash[:alert] = 'Insufficient privileges.'
         redirect_to survey_path(@survey)
         false
+      end
+    end
+  
+    def owner_or_collaborators_only!
+      if not member_signed_in? or 
+      not (current_member.admin? or current_member.owner?(@survey) or current_member.collaborator?(@survey))
+        flash[:alert] = 'Insufficient privileges.'
+        redirect_to survey_path(@survey)
+        false
+      end
+    end
+    
+    def owner_or_collaborators_only_until_published!
+      unless @survey.published? or @survey.closed?
+        if not member_signed_in? or 
+        not (current_member.admin? or current_member.owner?(@survey) or current_member.collaborator?(@survey))
+          flash[:alert] = 'Insufficient privileges.'
+          redirect_to survey_path(@survey)
+          false
+        end
       end
     end
 end

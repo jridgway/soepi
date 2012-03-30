@@ -61,25 +61,15 @@
       $('.members-only').show();
       $('.owner-only[data-member-id=<%= current_member.id %>]').show();
       $('.owner-only-until-published[data-member-id=<%= current_member.id %>]').show();
-      $('.not-owner[data-member-id!=<%= current_member.id %>]').show();  
-      $('.owner-only-until-published[data-member-id=<%= current_member.id %>').each(function() {
-        if($(this).attr('data-state') == 'published' || $(this).attr('data-state') == 'closed') {
-          $(this).show();
-        }
-      });
-      $('.owner-and-collaborators-only, .owner-and-collaborators-only-until-published').each(function() {
-        if($.inArray(<%= current_member.id %>, $(this).attr('data-collaborator-ids').split(','))) {
-          $(this).show();
-        }
-      });
-      $('.not-owner-or-collaborators').each(function() {
-        if(! $.inArray(<%= current_member.id %>, $(this).attr('data-collaborator-ids').split(','))) {
-          $(this).show();
-        }
-      });
       $('.owner-and-collaborators-only-until-published[data-member-id=<%= current_member.id %>]').show();
-      $('.owner-and-collaborators-only-until-published').each(function() {
+      $('.not-owner[data-member-id!=<%= current_member.id %>]').show();  
+      $('.owner-and-collaborators-only, .owner-and-collaborators-only-until-published[data-collaborator-ids!=""]').each(function() {
         if($.inArray(<%= current_member.id %>, $(this).attr('data-collaborator-ids').split(','))) {
+          $(this).show();
+        }
+      });
+      $('.not-owner-or-collaborators[data-collaborator-ids!=""]').each(function() {
+        if(! $.inArray(<%= current_member.id %>, $(this).attr('data-collaborator-ids').split(','))) {
           $(this).show();
         }
       });

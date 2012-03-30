@@ -29,10 +29,19 @@ class Members::StatusesController < ApplicationController
   end
   
   def destroy 
-    current_member.statuses.destroy params[:id]
-    unless request.xhr?
-      flash[:notice] = 'Your status was deleted.'
-      redirect_to root_path
+    if @status = MemberStatus.find(params[:id]) and (current_member.admin? or current_member.owner?(@status))
+      @status.destroy      
+      unless request.xhr?
+        flash[:notice] = 'Your status was deleted.'
+        redirect_to root_path
+      end
+    else  
+      if request.xhr?
+        render :text => %{alert('You cannot remove another member\'s status');}
+      else
+        flash[:notice] = 'You cannot remove another member\'s status'
+        redirect_to root_path
+      end
     end
   end
   

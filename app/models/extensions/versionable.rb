@@ -11,12 +11,12 @@ module Extensions
     end
        
     module InstanceMethods
-      def version!(member_id)
-        if current_version and current_version.member_id == member_id and 
+      def version!(member_id_2)
+        if current_version and current_version.member_id == member_id_2 and 
         current_version.updated_at >= 10.minutes.ago and current_version.position == versions.count
           update_version!(current_version)
         else
-          create_version!(member_id)
+          create_version!(member_id_2)
         end
       end
       
@@ -55,11 +55,17 @@ module Extensions
           current_version
         end
       
-        def create_version!(member_id)
+        def create_version!(member_id_2)
           Version.transaction do 
+            member_2 = Member.find(member_id_2)
             versions.update_all :current => false
-            version = versions.create :data => versionable_dup, :member_id => member_id, 
+            version = versions.create :data => versionable_dup, :member_id => member_id_2, 
               :current => true, :position => (versions.count + 1)
+            members_to_notifiy = collaborators.select {|c| c.member_id != member_id_2}.collect(&:member).compact
+            if member_id_2 != member_id
+              members_to_notifiy << member
+            end 
+            members_to_notifiy.each {|m| m.delay.notify!(self, "#{member_2.nickname} created version #{version.position}")}
             return version
           end
         end

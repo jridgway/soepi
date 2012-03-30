@@ -6,7 +6,6 @@ class Report < ActiveRecord::Base
   has_and_belongs_to_many :surveys
   has_many :notifications, :as => :notifiable, :dependent => :destroy
   belongs_to :job, :class_name => '::Delayed::Job', :foreign_key => :job_id 
-  has_many :collaborators, :as => :collaborable, :dependent => :destroy
   
   accepts_nested_attributes_for :plots
 
@@ -15,6 +14,7 @@ class Report < ActiveRecord::Base
   
   include Extensions::Versionable
   include Extensions::ReportForDiff
+  include Extensions::Collaborable
   
   amoeba do 
     enable
@@ -192,7 +192,7 @@ class Report < ActiveRecord::Base
   end
   
   def may_edit?(member)
-    true if member_id == member.id or member.admin?
+    true if member and (member.admin? or member.id == member_id or collaborator_ids_a.include?(member.id))
   end
   
   protected

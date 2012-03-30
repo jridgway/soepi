@@ -1,13 +1,18 @@
 class ReportsController < ApplicationController
-  before_filter :load_report, :except => [:new, :create, :index, :pending, :published, :passing, :failing, :by_tag]
-  before_filter :authenticate_member_2!, :except => [:index, :pending, :published, :passing, :failing, 
-    :by_tag, :show, :view_code, :output, :surveys, :forks]
-  before_filter :owner_or_admins_only, :only => [:edit, :update, :destroy, :publish, :code, :results,
-    :save_and_run, :save_and_continue, :save_and_exit]
+  before_filter :load_report, :except => [:new, :create, :index, :pending, :passing, :failing, :by_tag]
+  
+  before_filter :authenticate_member_2!, :except => [:index, :pending, :passing, :failing, 
+    :by_tag, :show, :view_code, :output, :surveys, :collaborators, :forks]
+  before_filter :owner_only!, :only => [:publish, :destroy]
+  before_filter :owner_or_collaborators_only!, :only => [:edit, :update, :code, :results,
+    :save_and_run, :save_and_continue, :save_and_exit, :revert_to_version, :versions, :compare_versions]
+    
   before_filter :load_tags, :only => [:index, :by_tag]
-  before_filter :load_open_graph_meta, :except => [:new, :create, :index, :pending, :published, :passing, :failing, :by_tag]
+  before_filter :load_open_graph_meta, :except => [:new, :create, :index, :pending, :passing, :failing, :by_tag]
+  
   layout Proc.new { |controller| controller.request.xhr? ? 'ajax' : 'one_column' }
-  caches_action :index, :pending, :published, :passing, :failing, :by_tag, :show, :view_code, :output, :surveys, :forks, 
+  
+  caches_action :index, :pending, :passing, :failing, :by_tag, :show, :view_code, :output, :surveys, :forks, 
     :cache_path => Proc.new {|controller| cache_expirary_key(controller.params)}, 
     :expires_in => 2.hours
   cache_sweeper :reports_sweeper, :only => [:create, :update, :destroy, :save_and_run, :save_and_continue, 
@@ -23,19 +28,14 @@ class ReportsController < ApplicationController
     render :action => 'index'
   end
   
-  def published
-    @reports = Report.published.page(params[:page])
-    render :action => 'index'
-  end
-  
   def passing
     @reports = Report.passing.page(params[:page])
-    render :action => 'index', :layout => 'two_column'
+    render :action => 'index'
   end
   
   def failing
     @reports = Report.failing.page(params[:page])
-    render :action => 'index', :layout => 'two_column'
+    render :action => 'index'
   end
   
   def by_tag
@@ -88,9 +88,18 @@ class ReportsController < ApplicationController
   
   def revert_to_version
     @version = @report.versions.find(params[:version_id]) 
-    @report.revert_to_version!(params[:version_id])
+    @report.revert_to_version!(params[:version_id], current_member)
     flash[:notice] = "You have reverted this report to version #{@version.position}."
     redirect_to versions_report_path(@report)
+  end
+  
+  def collaborators
+    @collaborators = @report.collaborators.page(params[:page])
+    if member_signed_in? and (current_member.admin? or current_member.owner?(@report)) 
+      render :layout => 'two_column'
+    else
+      render :layout => 'one_column'
+    end
   end
   
   def surveys
@@ -168,19 +177,22 @@ class ReportsController < ApplicationController
       false
     end 
   
-    def owner_only    
-      unless member_signed_in? and current_member.id == @report.member_id
-        flash[:alert] = 'Permission denied.'
-        redirect_to reports_path
-      end
-    end  
-    
-    def owner_or_admins_only
-      unless (member_signed_in? and (current_member.id == @report.member_id or current_member.admin?))
+    def owner_only!
+      if not member_signed_in? or not (current_member.admin? or current_member.owner?(@report))
         flash[:alert] = 'Insufficient privileges.'
-        redirect_to survey_path(@survey)
+        redirect_to report_path(@report)
+        false
       end
-    end 
+    end
+  
+    def owner_or_collaborators_only!
+      if not member_signed_in? or 
+      not (current_member.admin? or current_member.owner?(@report) or current_member.collaborator?(@report))
+        flash[:alert] = 'Insufficient privileges.'
+        redirect_to report_path(@report)
+        false
+      end
+    end
 
     def load_tags
       @tags = Report.published.tag_counts :start_at => 2.months.ago, :limit => 100

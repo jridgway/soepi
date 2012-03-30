@@ -17,5 +17,5 @@
         = link_to "Followed By (#{@survey.followings.count})", followed_by_survey_path(@survey)
       %li.owner-and-collaborators-only{:'data-member-id' => @survey.member_id, :'data-collaborator-ids' => @survey.collaborator_ids}
         = link_to "Versions (#{@survey.versions.count})", versions_survey_path(@survey)
-      %li.owner-and-collaborators-only{:'data-member-id' => @survey.member_id, :'data-collaborator-ids' => @survey.collaborator_ids}
+      %li.owner-and-collaborators-only-until-published{:'data-member-id' => @survey.member_id, :'data-collaborator-ids' => @survey.collaborator_ids}
         = link_to "Collaborators (#{@survey.collaborators.count})", collaborators_survey_path(@survey)

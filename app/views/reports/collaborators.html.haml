@@ -1,0 +1,13 @@
+= render :partial => '/reports/common'
+  
+- if member_signed_in? and (current_member.admin? or current_member.owner?(@report))
+  - content_for :body_content_left do
+    = render :partial => '/collaborators/index', :locals => {:collaborable => @report}
+    
+  - content_for :body_content_right do
+    = render :partial => '/collaborators/sidebar', :locals => {:collaborable => @report}
+- else
+  - content_for :body_content do
+    = render :partial => '/collaborators/index', :locals => {:collaborable => @report}
+    
+= render :partial => "/shared/content_page"

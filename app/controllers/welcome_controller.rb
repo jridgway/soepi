@@ -25,7 +25,7 @@ class WelcomeController < ApplicationController
   end
   
   def reports
-    @reports = current_member.reports.page(params[:page])
+    @reports = current_member.reports_owned_and_collaborating.page(params[:page])
   end
   
   def follows

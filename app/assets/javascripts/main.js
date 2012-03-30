@@ -265,6 +265,28 @@ function init_message_recipient_nicknames() {
 	}
 }
 
+function init_collaboration_nicknames() {
+	if($('#collaborator_nickname').length > 0) {
+	  $("#collaborator_nickname").bind("keydown", function(event) {
+    	if(event.keyCode === $.ui.keyCode.TAB && $(this).data("autocomplete").menu.active) {
+    		event.preventDefault();
+    	}
+    })
+    .autocomplete({
+    	source: '/members/autocomplete.js',
+    	focus: function() {
+    		return false;
+    	}
+    })
+    .data("autocomplete")._renderItem = function(ul, item) {
+      return $("<li></li>")
+        .data("item.autocomplete", item)
+        .append('<a>' + item.logo + '<h4>' + item.label + '</h4><small>' + item.description + '</small></a>')
+        .appendTo(ul);
+    }
+	}
+}
+
 var external_re = new RegExp( "^https?:\/\/(?!" + location.hostname + ").*$" );
 
 function init_external_links() {
