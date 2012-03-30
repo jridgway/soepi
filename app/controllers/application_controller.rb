@@ -55,6 +55,14 @@ class ApplicationController < ActionController::Base
       end
     end
   
+    def after_sign_up_path_for(resource)
+      if resource.is_a?(Member) or resource == :member
+        member_return_to
+      else
+        super
+      end
+    end
+  
     def after_sign_out_path_for(resource)    
       if resource.is_a?(Member) or resource == :member
         main_app.new_member_session_path(:member_return_to => member_return_to)
