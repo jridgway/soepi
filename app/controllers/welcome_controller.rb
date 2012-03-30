@@ -21,7 +21,7 @@ class WelcomeController < ApplicationController
   end
   
   def surveys
-    @surveys = current_member.surveys.page(params[:page])
+    @surveys = current_member.surveys_owned_and_collaborating.page(params[:page])
   end
   
   def reports

@@ -11,7 +11,7 @@
       }
     }
   
-  #members.listing 
+  #members.listing, #collaborators.listing
     {
     float: left;
     clear: both;
@@ -25,6 +25,7 @@
       margin: 0 10px 5px 0;
       white-space: nowrap;
       overflow: hidden;
+      line-height: 15px;
       
       h3
         {
@@ -36,7 +37,38 @@
       small 
         {
         font-size: 0.7em;
-        white-space: normal;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        -o-text-overflow: ellipsis;
+        -moz-binding: url(/xml/ellipsis.xml#ellipsis);
+        }
+      }
+    }
+    
+  #collaborators.listing
+    {
+    li 
+      {
+      position: relative;
+      
+      .actions
+        {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        -moz-box-shadow: 0 0 20px #111;
+        -webkit-box-shadow: 0 0 20px #111;
+        box-shadow: 0 0 20px #111;
+        display: none;
+        }
+        
+      &:hover
+        {
+        .actions
+          {
+          display:block;
+          }
         }
       }
     }

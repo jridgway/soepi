@@ -1,0 +1,16 @@
+= render :partial => '/surveys/steps'
+= render :partial => '/surveys/title'        
+= render :partial => '/surveys/toolbar'
+= render :partial => '/surveys/details'
+  
+- if member_signed_in? and (current_member.admin? or current_member.owner?(@survey))
+  - content_for :body_content_left do
+    = render :partial => '/collaborators/index', :locals => {:collaborable => @survey}
+    
+  - content_for :body_content_right do
+    = render :partial => '/collaborators/sidebar', :locals => {:collaborable => @survey}
+- else
+  - content_for :body_content do
+    = render :partial => '/collaborators/index', :locals => {:collaborable => @survey}
+    
+= render :partial => "/shared/content_page"

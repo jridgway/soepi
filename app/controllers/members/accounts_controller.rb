@@ -10,6 +10,12 @@ class Members::AccountsController < Devise::RegistrationsController
       session[:omniauth] = nil
       session[:omniauth_user_hash] = nil
     end
+    unless cookies.encrypted[:collaborator_key].blank?
+      if collaborator = Collaborator.find_by_key(cookies.encrypted[:collaborator_key])
+        @member.apply_collaborator(collaborator)
+        cookies.encrypted[:collaborator_key] = nil
+      end
+    end
   end
 
   def update

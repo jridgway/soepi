@@ -1,0 +1,7 @@
+$('#new-collaborator').remove();
+$('body').append('<%= escape_javascript render(:partial => 'new.html.haml') %>');
+$('#new-collaborator').dialog({modal:true, width:800, height:400, resizable:false,
+  beforeClose: function() {
+    $('.error2').qtip('destroy');
+  }});
+init_common_elements();

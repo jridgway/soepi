@@ -1,7 +1,8 @@
 class SurveyQuestionsController < ApplicationController
   before_filter :authenticate_member_2!, :except => [:index, :results]
   before_filter :load_survey
-  before_filter :validate_editable, :only => [:new, :create, :edit, :update, :destroy]
+  before_filter :owner_or_collaborators_only_until_published!
+  before_filter :authorize_edit!, :only => [:new, :create, :edit, :update, :destroy]
   layout Proc.new {|controller| controller.request.xhr? ? 'ajax' : 'two_column'}
 
   def index
@@ -78,15 +79,19 @@ class SurveyQuestionsController < ApplicationController
 
     def load_survey
       @survey = Survey.find params[:survey_id]
-      unless @survey.published? or @survey.closed? or 
-      (member_signed_in? and (current_member.id == @survey.member_id or current_member.admin?))
-        flash[:alert] = 'Insufficient privileges. You must wait until this survey has been closed.'
+    end
+    
+    def owner_or_collaborators_only_until_published!
+      if not (@survey.published? or @survey.closed?) and 
+      member_signed_in? and not (current_member.admin? or current_member.id == @survey.member_id or 
+      @survey.collaborators.collect(&:member_id).include?(current_member.id))
+        flash[:alert] = 'Insufficient privileges.'
         redirect_to survey_path(@survey)
         false
       end
     end
     
-    def validate_editable
+    def authorize_edit!
       unless @survey.editable?(current_member)
         if request.xhr?
           render :text => "alert('You cannot edit this survey.')"

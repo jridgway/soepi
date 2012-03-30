@@ -14,12 +14,16 @@ class MemberMailer < ActionMailer::Base
   def new_message(member, message)
     @member = member
     @message = message
-    results = open avatar_url(@message.member, 60)
-    @avatar_key = @message.member.nickname + '.' + results.content_type.split('/').last
-    attachments.inline[@avatar_key] = results.read
     attachments.inline['respond.gif'] = File.read(Rails.root.join('app', 'assets', 'images', 'respond.gif'))
     inline_layout_images
     mail(:to => member.email, :subject => "New Message")
+  end
+
+  def collaboration_key(collaborator)
+    @collaborator = collaborator
+    @member = collaborator.collaborable.member
+    inline_layout_images
+    mail(:to => collaborator.email, :subject => "Collaborate with #{@member.nickname}")
   end
 
   def inline_layout_images(others={})

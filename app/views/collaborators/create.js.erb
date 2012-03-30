@@ -1,0 +1,10 @@
+<% if @collaborator.errors.empty? %>
+  $('.error2').qtip('destroy');
+  $('#collaborators').prepend('<%= escape_javascript render(:template => '/collaborators/_collaborator.html.haml', :locals => {:collaborator => @collaborator}) %>');
+  $('#new-collaborator').remove();
+  $('#no-collaborators').hide();
+<% else %>
+  $('#new-collaborator').html('<%= escape_javascript render(:template => '/collaborators/_new.html.haml') %>');
+  init_form_errors($('#new-collaborator .input'));
+<% end %>
+init_common_elements();

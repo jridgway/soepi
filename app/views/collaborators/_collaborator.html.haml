@@ -1,0 +1,9 @@
+%li[collaborator]{:class => (collaborator.active? ? 'active' : 'inactive')}
+  - if collaborator.member
+    = render :partial => '/members/member', :locals => {:member => collaborator.member}
+  - else
+    %p= link_to collaborator.email, "mailto:#{collaborator.email}"
+    %p Collaborator pending.
+  .actions
+    .owner-only{:'data-member-id' => collaborator.collaborable.member_id}
+      = link_to 'Remove', collaborator_path(collaborator), :class => 'button', :icon => 'ui-icon-closethick', :remote => true, :method => 'delete', :confirm => 'Are yuo sure?'

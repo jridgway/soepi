@@ -6,6 +6,7 @@ class Report < ActiveRecord::Base
   has_and_belongs_to_many :surveys
   has_many :notifications, :as => :notifiable, :dependent => :destroy
   belongs_to :job, :class_name => '::Delayed::Job', :foreign_key => :job_id 
+  has_many :collaborators, :as => :collaborable, :dependent => :destroy
   
   accepts_nested_attributes_for :plots
 

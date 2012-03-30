@@ -1,0 +1,10 @@
+%p Hi,
+%p %{<strong>#{link_to @member.nickname, main_app.member_path(@member, :only_path => false)}</strong> has added you as a collaborator on his/her #{@collaborator.collaborable.class.to_s.downcase}.
+%p Click the link below to accept this:
+%p= link_to @collaborator.collaborable.title, main_app.collaborator_path(@collaborator, :key => @collaborator.key, :only_path => false)
+%p If you don't want to collaborate, simply ignore this email.
+%p
+  Thanks,
+  %br/
+  #{link_to 'SoEpi.org', main_app.root_path, :only_path => false}
+%p= Refinery::Setting.find_or_set :email_footer, %{<em><a href="http://soepi.org">SoEpi</a> is a 501(c)(3) nonprofit dedicated to improving health via online social epidemiology.</em>}.html_safe

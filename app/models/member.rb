@@ -1,7 +1,8 @@
 class Member < ActiveRecord::Base
   has_many :tokens, :class_name => 'MemberToken', :dependent => :destroy
-  has_many :surveys, :dependent => :destroy
+  has_many :surveys, :dependent => :destroy 
   has_many :reports, :dependent => :destroy
+  has_many :collaborations, :dependent => :destroy, :class_name => 'Collaboration'
   has_many :notifications, :dependent => :destroy
   has_many :messages, :dependent => :nullify
   has_many :message_members, :class_name => 'MessageMember', :dependent => :nullify
@@ -25,7 +26,6 @@ class Member < ActiveRecord::Base
 
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable,
     :omniauthable, :token_authenticatable, :lockable
-    
 
   searchable do
     text :nickname, :boost => 10.0
@@ -63,6 +63,11 @@ class Member < ActiveRecord::Base
   after_update :set_mailchimp_2!
   before_destroy :destroy_ec2_instance!
   
+  def surveys_owned_and_collaborating(page=nil)
+    Survey.joins("join collaborators on collaborators.collaborable_type = 'Survey' and collaborable_id = surveys.id").
+      where('surveys.member_id = :id or collaborators.member_id = :id', :id => id).page(page)
+  end
+  
   def owner?(object)
     true if id == object.try(:member_id)
   end
@@ -78,13 +83,11 @@ class Member < ActiveRecord::Base
   end
   
   def notify!(notifiable, message, seen=false)
-    notification = Notification.new 
-    notification.member = self
-    notification.notifiable = notifiable
-    notification.message = message
-    notification.seen = seen
-    notification.save!
-    notification
+    notifications.create :notifiable => notifiable, :message => message, :seen => seen
+  end
+  
+  def message!(from, recipients, body)
+    from.messages.create :body => body, :recipient_nicknames => ([self] + recipients).collect(&:nickname).join(',')
   end
   
   def may_follow?(followable)
@@ -210,5 +213,9 @@ class Member < ActiveRecord::Base
     else
       h.list_unsubscribe(Refinery::Setting.find_or_set('mailchimp_newsletter_list_id', '8d5bc6cad8'), email, true, true, true)
     end
+  end
+  
+  def apply_collaborator(collaborator)
+    collaborator.update_attributes :active => true, :member_id => id, :email => nil, :key => nil
   end
 end

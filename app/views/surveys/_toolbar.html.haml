@@ -1,6 +1,6 @@
 - content_for :body_content_toolbar do 
   = followable_link @survey
-  %span.owner-only-until-published{:'data-member-id' => @survey.member_id, :'data-state' => @survey.state}
+  %span.owner-and-collaborators-only-until-published{:'data-member-id' => @survey.member_id, :'data-state' => @survey.state, :'data-collaborator-ids' => @survey.collaborator_ids}
     - unless @survey.new_record?
       %button{:id => 'forkit', :icon => 'ui-icon-shuffle', :class => 'button restrict-to-members'} Fork
       #forkit-message{:style => 'display:none', :title => 'Fork this Survey'}

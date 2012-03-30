@@ -3,7 +3,7 @@
 = render :partial => '/surveys/toolbar'
 = render :partial => '/surveys/details'
   
-- content_for :body_content do
+- content_for :body_content_left do
   - if @forks.empty?
     %p No forks found.
   - else
@@ -12,5 +12,11 @@
         %li
           = render :partial => 'survey', :locals => {:survey => survey}
     = will_paginate @forks
+    
+- content_for :body_content_right do
+  %h3 Unbiased Results: 
+  %p
+    For the sake of not revealing the questions and purposes of surveys not yet published,
+    only <strong>published</strong> forks appear in this list.
     
 = render :partial => "/shared/content_page"

@@ -1,0 +1,6 @@
+$('#collaborator_<%= params[:id] %>').hide('explode').remove();
+<% if @no_collaborators %>
+  $('#no-collaborators').show();
+<% else %>
+  $('#no-collaborators').hide();
+<% end %>

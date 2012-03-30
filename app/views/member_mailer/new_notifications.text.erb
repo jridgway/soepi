@@ -1,0 +1,11 @@
+<%= @member.nickname %>,
+
+Below are your latest notifications:
+
+<%= @notifications.collect {|n| main_app.url_for(notification.notifiable)}.join("\n") %>
+
+Thanks,
+SoEpi.org
+
+--
+<%= Refinery::Setting.find_or_set :email_footer_text, %{SoEpi is a 501(c)(3) nonprofit dedicated to improving health via online social epidemiology.}.html_safe

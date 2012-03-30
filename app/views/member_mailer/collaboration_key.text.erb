@@ -1,0 +1,15 @@
+Hi,
+
+<%= @member.nickname %> has added you as a collaborator on his/her <%= @collaborator.collaborable.class.to_s.downcase %>.
+
+Use the url below to accept this:
+
+<%= main_app.collaborator_url(@collaborator, :key => @collaborator.key, :only_path => false) %>
+
+If you don't want to collaborate, simply ignore this email.
+
+Thanks,
+SoEpi.org
+
+--
+<%= Refinery::Setting.find_or_set :email_footer_text, %{SoEpi is a 501(c)(3) nonprofit dedicated to improving health via online social epidemiology.}.html_safe

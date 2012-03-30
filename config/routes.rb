@@ -1,9 +1,10 @@
 Soepi::Application.routes.draw do
   get '/search(/:page)', :controller => 'search', :action => 'index', :as => :search
   get '/quick_search', :controller => 'search', :action => 'quick_search'
-
+  
   get '/subscribe', :controller => 'welcome', :action => 'subscribe', :as => :subscribe
   post '/subscribe', :controller => 'welcome', :action => 'subscribe', :as => :new_subscriber
+  
   get '/your/notifications', :controller => 'welcome', :action => 'notifications', :as => :your_notifications
   get '/your/surveys', :controller => 'welcome', :action => 'surveys', :as => :your_surveys
   get '/your/reports', :controller => 'welcome', :action => 'reports', :as => :your_reports
@@ -15,7 +16,6 @@ Soepi::Application.routes.draw do
   get '/addresses/cities_for_country_and_state_autocomplete', :to => 'addresses#cities_for_country_and_state_autocomplete'
 
   devise_for :members, :path => '/account', :controllers => {:registrations => 'members/accounts', :sessions => 'members/sessions', :passwords => 'members/passwords', :omniauth_callbacks => 'members/omniauth_callbacks'} 
-  
   devise_scope :member do
     match '/account/change_password', :controller => 'members/accounts', :action => 'change_password', :as => :member_change_password
     put '/account/update_password', :controller => 'members/accounts', :action => 'update_password', :as => :member_update_password
@@ -33,75 +33,11 @@ Soepi::Application.routes.draw do
     get '/account/participant/enter_your_pin', :controller => 'participants', :action => 'enter_your_pin', :as => :member_enter_your_pin_participant 
     put '/account/participant/store_pin', :controller => 'participants', :action => 'store_pin', :as => :member_store_pin_participant
   end
-
-  resources :members, :controller => 'members/profiles', :path => '/members', :only => [:index, :show] do 
-    collection do
-      get '(page/:page)', :action => 'index'
-      get 'publishers(/page/:page)', :action => 'publishers', :as => :publishers
-      get 'tagged/:tag(/page/:page)', :action => 'by_tag'
-      get 'autocomplete', :action => 'autocomplete'
-    end
-    member do
-      get '(page/:page)', :action => 'show'
-      get 'surveys(/page/:page)', :action => 'surveys', :as => :surveys
-      get 'reports(/page/:page)', :action => 'reports', :as => :reports
-      get 'following', :action => 'following', :as => :following
-      get 'followed-by', :action => 'followed_by', :as => :followed_by
-    end
-  end
-  
-  resources :member_statuses, :controller => 'members/statuses', :path => '/statuses', :only => [:index, :show, :new, :create, :destroy] do 
-    collection do
-      get '(page/:page)', :action => 'index'
-      get 'tagged/:tag(/page/:page)', :action => 'by_tag'
-    end
-  end
-
-  match '/~', :controller => 'members/profiles', :action => 'your_profile', :as => :member_your_profile
-
   resources :member_tokens, :only => [:index, :destroy], :controller => 'members/tokens', :path => '/account/sign-in-tokens'
-
-  resources :participants, :only => [:index, :show] do 
-    member do 
-      get 'show_responses/:survey_taken_id', :action => 'show_responses', :as => :show_responses
-    end
-    collection do 
-      get 'gmap'
-      match 'by_city'
-      match 'by_anonymous_key'
-      get 'by_categories'
-    end
-  end
   
   resources :messages, :only => [:index, :show, :new, :create] do 
     collection do 
       get 'unread'
-    end
-  end
-  
-  resources :reports do 
-    member do
-      put 'save_and_run'
-      put 'save_and_continue'
-      put 'save_and_exit'
-      put 'forkit' 
-      get 'output'
-      get 'surveys(/page/:page)', :action => 'surveys', :as => :surveys
-      get 'forks(/page/:page)', :action => 'forks', :as => :forks
-      get 'code'
-      get 'results'
-      get 'view_code'
-      get 'versions(/page/:page)', :action => 'versions', :as => :versions
-      get 'compare_versions'
-      put 'revert_to_version'
-    end
-    collection do 
-      get '(page/:page)', :action => 'index'
-      get 'pending(/page/:page)', :action => 'pending', :as => :pending
-      get 'published(/page/:page)', :action => 'published', :as => :published
-      get 'passing(/page/:page)', :action => 'passing', :as => :passing
-      get 'failing(/page/:page)', :action => 'failing', :as => :failing
-      get 'tagged/:tag(/page/:page)', :action => 'by_tag', :as => :tagged
     end
   end
 
@@ -137,6 +73,7 @@ Soepi::Application.routes.draw do
       get 'versions(/page/:page)', :action => 'versions', :as => :versions
       get 'compare_versions'
       put 'revert_to_version'
+      get 'collaborators(/page/:page)', :action => 'collaborators', :as => :collaborators
     end
     resources :survey_questions, :path => 'questions', :as => :questions do
       member do        
@@ -147,7 +84,71 @@ Soepi::Application.routes.draw do
         get 'survey_question_choice_id_options'
       end
     end
-    resources :participant_responses
+  end
+  
+  resources :reports do 
+    member do
+      put 'save_and_run'
+      put 'save_and_continue'
+      put 'save_and_exit'
+      put 'forkit' 
+      get 'output'
+      get 'surveys(/page/:page)', :action => 'surveys', :as => :surveys
+      get 'forks(/page/:page)', :action => 'forks', :as => :forks
+      get 'code'
+      get 'results'
+      get 'view_code'
+      get 'versions(/page/:page)', :action => 'versions', :as => :versions
+      get 'compare_versions'
+      put 'revert_to_version'
+      get 'collaborators(/page/:page)', :action => 'collaborators', :as => :collaborators
+    end
+    collection do 
+      get '(page/:page)', :action => 'index'
+      get 'pending(/page/:page)', :action => 'pending', :as => :pending
+      get 'published(/page/:page)', :action => 'published', :as => :published
+      get 'passing(/page/:page)', :action => 'passing', :as => :passing
+      get 'failing(/page/:page)', :action => 'failing', :as => :failing
+      get 'tagged/:tag(/page/:page)', :action => 'by_tag', :as => :tagged
+    end
+  end
+  
+  resources :collaborators, :only => [:new, :create, :destroy, :show]
+
+  resources :participants, :only => [:index, :show] do 
+    member do 
+      get 'show_responses/:survey_taken_id', :action => 'show_responses', :as => :show_responses
+    end
+    collection do 
+      get 'gmap'
+      match 'by_city'
+      match 'by_anonymous_key'
+      get 'by_categories'
+    end
+  end
+
+  resources :members, :controller => 'members/profiles', :path => '/members', :only => [:index, :show] do 
+    collection do
+      get '(page/:page)', :action => 'index'
+      get 'publishers(/page/:page)', :action => 'publishers', :as => :publishers
+      get 'tagged/:tag(/page/:page)', :action => 'by_tag'
+      get 'autocomplete', :action => 'autocomplete'
+    end
+    member do
+      get '(page/:page)', :action => 'show'
+      get 'surveys(/page/:page)', :action => 'surveys', :as => :surveys
+      get 'reports(/page/:page)', :action => 'reports', :as => :reports
+      get 'following', :action => 'following', :as => :following
+      get 'followed-by', :action => 'followed_by', :as => :followed_by
+    end
+  end
+  match '/~', :controller => 'members/profiles', :action => 'your_profile', :as => :member_your_profile
+  
+  resources :member_statuses, :controller => 'members/statuses', :path => '/statuses', :only => [:index, :show, :new, :create, :destroy] do 
+    collection do
+      get '(page/:page)', :action => 'index'
+      get 'tagged/:tag(/page/:page)', :action => 'by_tag'
+    end
   end
    
   root :to => 'welcome#index'

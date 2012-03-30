@@ -3,6 +3,9 @@
   %strong= @member.nickname
   - unless @member.privacy_dont_list_me?
     %ul.attributes
+      - if @member.admin?
+        %li 
+          %strong SoEpi Admin
       - unless @member.tags.empty?
         %li Tagged: #{tag_list_links(@member)}
 

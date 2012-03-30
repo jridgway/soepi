@@ -1,0 +1,7 @@
+.block
+  = link_to 'Add a Collaborator', new_collaborator_path(:collaborable_type => collaborable.class, :collaborable_id => collaborable.id), :remote => true, :class => 'button', :icon => 'ui-icon-plusthick'
+%p Add a collaborator by nickname or email, so that he/she can help you with this #{collaborable.class.to_s.downcase}.
+- if collaborable.class.to_s == 'Survey'
+  %p Collaborators <strong>cannot launch, close or delete</strong> this survey, nor can they add or remove other collaborators.
+- elsif collaborable.class.to_s == 'Report'
+  %p Collaborators <strong>cannot publish or delete</strong> this report, nor can they add or remove other collaborators.

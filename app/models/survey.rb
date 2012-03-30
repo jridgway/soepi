@@ -10,6 +10,9 @@ class Survey < ActiveRecord::Base
   has_many :notifications, :as => :notifiable, :dependent => :destroy
   has_many :downloads, :class_name => 'SurveyDownload', :dependent => :destroy
   has_and_belongs_to_many :reports
+  has_many :collaborators, :as => :collaborable, :dependent => :destroy
+  
+  attr_accessor :changes_requested_by
 
   accepts_nested_attributes_for :target
 
@@ -19,6 +22,7 @@ class Survey < ActiveRecord::Base
   scope :rejected, where(:state => 'rejected')
   scope :live, where(['state in (?)', %w{published launched closed}])
   scope :live_or_drafting, where(['state in (?)', %w{drafting published launched closed}])
+  scope :closed_or_published, where(['state in (?)', %w{published closed}])
   scope :launched, where(:state => 'launched')
   scope :closed, where(:state => 'closed')
   scope :published, where(:state => 'published')
@@ -129,6 +133,12 @@ class Survey < ActiveRecord::Base
       survey.member.delay.notify!(survey, 'Your survey was received for review')
     end
 
+    after_transition :review_requested => :drafting do |survey, transition|
+      survey.member.delay.notify!(survey, 'Your survey did not pass our review')
+      survey.member.delay.message!(survey.changes_requested_by, Member.admins.all, "As your survey, #{survey.title}, did not pass our review, please see our survey guidelines in the Docs section of our site, make changes accordingly, and launch your survey once again. Please contact us if you have any questions or comments.")
+      survey.member_followers.each {|m| m.delay.notify!(self, "#{survey.member.nickname}'s survey did not pass our review")}
+    end
+
     after_transition any => :rejected do |survey, transition|
       survey.member.delay.notify!(survey, 'Sorry, your survey was rejected')
       survey.member_followers.each {|m| m.delay.notify!(self, "#{survey.member.nickname}'s survey was rejected")}
@@ -158,10 +168,10 @@ class Survey < ActiveRecord::Base
   end
 
   def editable?(member)
-    if member  
-      if member.id != member_id
+    if member
+      if member.admin? and member.id != member_id
         true unless live? or rejected?
-      else
+      elsif member.id == member_id or collaborator_ids_a.include?(member.id)
         true unless live? or review_requested? or rejected?
       end
     end
@@ -169,34 +179,27 @@ class Survey < ActiveRecord::Base
 
   def forkit!(member_id)
     Survey.transaction do 
-      new_survey = self.dup :include => [:target]
+      new_survey = self.dup
       new_survey.forked_from = self
       new_survey.member_id = member_id 
       new_survey.state = 'drafting'
-      new_survey.tag_list = tag_list
-      unless new_survey.target.nil?
-        new_survey.target.age_groups = self.target.age_groups
-        new_survey.target.genders = self.target.genders
-        new_survey.target.ethnicities = self.target.ethnicities
-        new_survey.target.races = self.target.races
-        new_survey.target.educations = self.target.educations
-      end
+      new_survey.root_questions.clear
       new_survey.save!
-      forkit_questions_helper(new_survey, self.questions.roots)
+      forkit_questions_helper(new_survey, root_questions)
       return new_survey
     end
   end
   
-  def forkit_questions_helper(survey, questions, parent_choice=nil)
+  def forkit_questions_helper(new_survey, questions, parent_choice=nil)
     questions.each do |question|
-      new_question = question.dup :include => [:choices]
-      new_question.survey = survey
+      new_question = new_survey.questions.build question.attributes
+      new_question.survey = new_survey
       new_question.parent_choice = parent_choice
       new_question.save!
       if question.qtype == 'Select Multiple' or question.qtype = 'Select One'
         question.choices.each_with_index do |choice, index|
           new_choice = new_question.choices[index]
-          forkit_questions_helper(survey, choice.child_questions, new_choice)
+          forkit_questions_helper(new_survey, choice.child_questions, new_choice)
         end
       end
     end

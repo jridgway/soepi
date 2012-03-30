@@ -1,8 +1,8 @@
 %div[status]
   .actions
     .restrict-to-members
-      .owner-only-not-admins{:'data-member-id' => status.member_id}
-        = link_to 'Remove', member_status_path(status), :remote => true, :method => 'delete', :class => 'button', :icon => 'ui-icon-closethick'
+      .owner-only{:'data-member-id' => status.member_id}
+        = link_to 'Remove', member_status_path(status), :remote => true, :method => 'delete', :class => 'button', :icon => 'ui-icon-closethick', :confirm => 'Are you sure?'
       .not-owner{:'data-member-id' => status.member_id}
         = link_to 'Reply', new_member_status_path(:reply_to_members => status.reply_to_members), :remote => true, :class => 'button', :icon => 'ui-icon-arrowreturnthick-1-w'
   = avatar(status.member, 60)

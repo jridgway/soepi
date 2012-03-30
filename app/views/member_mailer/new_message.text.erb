@@ -1,0 +1,15 @@
+<%= @member.nickname %>,
+
+You've received the following message from <%= @message.member.nickname %>:
+
+<%= @message.body %>
+
+Use the url below to respond:
+
+<%= main_app.message_url((@message.parent_message || @message), :anchor => 'new') %>
+
+Thanks,
+SoEpi.org
+
+--
+<%= Refinery::Setting.find_or_set :email_footer_text, %{SoEpi is a 501(c)(3) nonprofit dedicated to improving health via online social epidemiology.}.html_safe

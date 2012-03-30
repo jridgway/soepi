@@ -19,7 +19,7 @@ $(document).ready(function () {
   select_nav_item();
   init_sidebar();
   init_common_elements();
-  init_nickname_autocomplete();
+  init_message_recipient_nicknames();
   init_external_links();
   Shadowbox.init({overlayColor:'#999'});
 });
@@ -233,7 +233,7 @@ function extractLast(term) {
 	return split(term).pop();
 }
 
-function init_nickname_autocomplete() {
+function init_message_recipient_nicknames() {
 	if($('#message_recipient_nicknames').length > 0) {
 	  $("#message_recipient_nicknames").bind("keydown", function(event) {
     	if(event.keyCode === $.ui.keyCode.TAB && $(this).data("autocomplete").menu.active) {

@@ -1,0 +1,8 @@
+#no-collaborators{:style => 'display:none'}
+  %p No collaborators found.
+- if @collaborators.empty?
+  = javascript_tag %{$('#no-collaborators').show();}
+%ul#collaborators.listing.reset
+  - @collaborators.each do |collaborator|
+    = render :partial => '/collaborators/collaborator', :locals => {:collaborator => collaborator}
+= will_paginate @collaborators

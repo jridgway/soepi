@@ -1,5 +1,8 @@
 = avatar(member, 60)
-%h3
-  = link_to member.nickname, member
+%h3= link_to member.nickname, member
+- if member.admin?
+  %small
+    %strong SoEpi Admin
+  %br
 - unless member.tags.empty?
-  %small Tagged: #{tag_list_links(member)}
+  %small= tag_list_links(member)

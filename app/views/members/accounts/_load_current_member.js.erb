@@ -45,23 +45,48 @@
     }
   });
   
+  function hide_all_member_related() {
+    $('.members-only, .visitors-only, ' +
+    '.owner-only, .not-owner, ' +
+    '.owner-only-until-published, ' +
+    '.owner-and-collaborators-only, .not-owner-or-collaborators, ' +
+    '.owner-and-collaborators-only-until-published, ' +
+    '.admins-only, .not-admins').hide();
+  }
+  
   <% if current_member %> 
     function show_hide_member_related() {
-      set_followable_toggle();
+      set_followable_toggle();      
+      hide_all_member_related();
       $('.members-only').show();
-      $('.visitors-only').hide();
       $('.owner-only[data-member-id=<%= current_member.id %>]').show();
       $('.owner-only-until-published[data-member-id=<%= current_member.id %>]').show();
-      $('.owner-only-not-admins[data-member-id=<%= current_member.id %>]').show();
-      $('.not-owner[data-member-id=<%= current_member.id %>]').hide();
-      $('.not-owner[data-member-id!=<%= current_member.id %>]').show(); 
-      $('.owner-only-until-published[data-state=published], .owner-only-until-published[data-state=closed]').show(); 
+      $('.not-owner[data-member-id!=<%= current_member.id %>]').show();  
+      $('.owner-only-until-published[data-member-id=<%= current_member.id %>').each(function() {
+        if($(this).attr('data-state') == 'published' || $(this).attr('data-state') == 'closed') {
+          $(this).show();
+        }
+      });
+      $('.owner-and-collaborators-only, .owner-and-collaborators-only-until-published').each(function() {
+        if($.inArray(<%= current_member.id %>, $(this).attr('data-collaborator-ids').split(','))) {
+          $(this).show();
+        }
+      });
+      $('.not-owner-or-collaborators').each(function() {
+        if(! $.inArray(<%= current_member.id %>, $(this).attr('data-collaborator-ids').split(','))) {
+          $(this).show();
+        }
+      });
+      $('.owner-and-collaborators-only-until-published[data-member-id=<%= current_member.id %>]').show();
+      $('.owner-and-collaborators-only-until-published').each(function() {
+        if($.inArray(<%= current_member.id %>, $(this).attr('data-collaborator-ids').split(','))) {
+          $(this).show();
+        }
+      });
       <% if current_member.admin? %>
-        $('.owner-only').show();
-        $('.owner-only-not-admins[data-member-id!=<%= current_member.id %>]').hide();
-        $('.owner-only-until-published').show(); 
-        $('.admins-only').show();
-        $('.not-admin').hide();
+        $('.owner-only, .owner-only-until-published, ' +
+        '.owner-and-collaborators-only, .owner-and-collaborators-only-until-published, ' +
+        '.admins-only').show();
       <% end %> 
     }
      
@@ -73,14 +98,13 @@
       <% end %>
     }
   <% else %>
-    function show_hide_member_related() {
-      $('.members-only').hide();
-      $('.visitors-only').show();
-      $('.owner-only').hide();
-      $('.not-owner').show();
+    function show_hide_member_related() {    
+      hide_all_member_related();
+      $('.visitors-only, .not-owner, .not-owner-or-collaborators, .not-admins').show();
+      $('.owner-only-until-published[data-state=published], .owner-only-until-published[data-state=closed],' +
+      '.owner-and-collaborators-only-until-published[data-state=published], ' +
+      '.owner-and-collaborators-only-until-published[data-state=closed]').show();
       restrict_to_members();
-      $('.admins-only').hide();
-      $('.not-admin').show();
     }
     
     $('#follow-toggle').show();

@@ -218,8 +218,12 @@
     color: $brown;
     }
     
-  .owner-only, .members-only, .visitors-only, .not-owner, .admins-only, .not-admin, 
-  .owner-only-not-admins, .owner-only-until-published
+  .members-only, .visitors-only, 
+  .owner-only, .not-owner, 
+  .owner-only-until-published, 
+  .owner-and-collaborators-only, .not-owner-or-collaborators, 
+  .owner-and-collaborators-only-until-published, 
+  .admins-only, .not-admins
     {
     display: none;
     }
@@ -289,9 +293,9 @@
         border: none;
         border-bottom: 1px solid #DDD;
         background-color: #fff;
-        -moz-border-radius: 1px !important;
-        -webkit-border-radius: 1px !important;
-        border-radius: 1px !important;
+        -moz-border-radius: 0px !important;
+        -webkit-border-radius: 0px !important;
+        border-radius: 0px !important;
         background: none;
         
         li.ui-state-default
@@ -312,7 +316,7 @@
           
           a, a:hover
             {
-            color: #222;
+            color: #222 !important;
             }
           }
         }

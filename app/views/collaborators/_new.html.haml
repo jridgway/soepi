@@ -1,0 +1,12 @@
+#new-collaborator{:title => 'Add a Collaborator'}
+  = simple_form_for @collaborator, :url => collaborators_path(:collaborable_type => @collaborable.class, :collaborable_id => @collaborable.id), :remote => true, :html => {:novalidate => true} do |f|
+    %fieldset
+      %legend Add by Nickname
+      = f.input :nickname do
+        = f.input_field :nickname
+        = f.error :member_id      
+    %fieldset
+      %legend Or, Add by Email
+      = f.input :email
+    .actions
+      = f.submit 'Add', :class => 'button'

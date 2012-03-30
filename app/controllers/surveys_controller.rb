@@ -1,15 +1,15 @@
 class SurveysController < ApplicationController
-  prepend_before_filter :load_survey, :only => [:edit, :update, :destroy, :show, :revert_to_version, :versions, :compare_versions, 
-    :forks, :demographics, :downloads, :reports, :forkit, :launch, :reject, :request_changes, :participate, 
-    :create_response, :store_pin, :new_participant, :create_participant, :followed_by, :close, :submit_for_review]
-  before_filter :load_open_graph_meta, :only => [:show, :versions, :forks, :forkit, :launch, :reject, :participate,
-    :create_response, :update_pin, :generate_and_send_new_pin, :followed_by]
-  before_filter :authenticate_member_2!, :except => [:index, :launched, :published, :show, :forks, :sharing, 
-    :by_tag, :followed_by, :edit, :questions, :demographics, :downloads, :reports]
+  prepend_before_filter :load_survey, :except => [:new, :create, :add_target_survey, 
+    :index, :drafting, :review_requested, :rejected, :launched, :published, :by_tag]
+  before_filter :authenticate_member_2!, :except => [:index, :launched, :published, :by_tag, 
+    :show, :edit, :forks, :followed_by, :demographics, :downloads, :reports, :collaborators]
   before_filter :admin_only!, :only => [:drafting, :review_requested, :rejected, :launch, :reject, :request_changes]
-  before_filter :owner_or_admins_only!, :only => [:update, :destroy, :revert_to_version, :versions, :compare_versions, 
-    :close, :submit_for_review]
-  before_filter :owner_or_admins_only_until_published!, :only => [:edit, :forks, :followed_by, :demographics, :downloads, :reports]
+  before_filter :owner_only!, :only => [:submit_for_review, :destroy, :close]
+  before_filter :owner_or_collaborators_only!, :only => [:update, :revert_to_version, :versions, :compare_versions]
+  before_filter :owner_or_collaborators_only_until_published!, :only => [:collaborators, :edit, :forks, :followed_by, 
+    :demographics, :downloads, :reports, :forkit]
+  before_filter :load_open_graph_meta, :only => [:show, :versions, :forks, :forkit, :launch, :reject, :participate,
+    :create_response, :update_pin, :generate_and_send_new_pin, :followed_by, :collaborators]
   before_filter :load_tags, :only => [:index, :by_tag]
   
   caches_action :index, :drafting, :rejected, :review_requested, :launched, :published, :by_tag, :show, :edit, 
@@ -59,8 +59,8 @@ class SurveysController < ApplicationController
   end
 
   def forks
-    @forks = @survey.forks.live_or_drafting.page(params[:page])
-    render :layout => 'one_column'
+    @forks = @survey.forks.closed_or_published.page(params[:page])
+    render :layout => 'two_column'
   end
   
   def downloads
@@ -143,12 +143,21 @@ class SurveysController < ApplicationController
   def revert_to_version
     if @survey.drafting?
       @version = @survey.versions.find(params[:version_id]) 
-      @survey.revert_to_version!(params[:version_id])
+      @survey.revert_to_version!(params[:version_id], current_member)
       flash[:notice] = "You have reverted this survey to version #{@version.position}."
     else
       flash[:notice] = "You cannot edit this survey."
     end
     redirect_to versions_survey_path(@survey)
+  end
+  
+  def collaborators
+    @collaborators = @survey.collaborators.page(params[:page])
+    if member_signed_in? and (current_member.admin? or current_member.owner?(@survey)) 
+      render :layout => 'two_column'
+    else
+      render :layout => 'one_column'
+    end
   end
   
   def find_and_add_target_survey
@@ -181,13 +190,13 @@ class SurveysController < ApplicationController
   end
 
   def request_changes
+    @survey.changes_requested_by = current_member
     if @survey.request_changes!
-      flash[:alert] = 'The status of the survey is now "Drafting." Please compose a message to the member describing your requests.'
-      redirect_to new_message_path(:members => @survey.member.nickname)
+      flash[:alert] = 'The status of the survey is now Drafting, and the member has been notified.'
     else
       flash[:alert] = 'Changes to the survey have NOT been requested.'
-      redirect_to_back_or(survey_path(@survey))
     end
+    redirect_to_back_or(survey_path(@survey))
   end
 
   def reject
@@ -222,7 +231,8 @@ class SurveysController < ApplicationController
   def forkit
     new_survey = @survey.forkit!(current_member.id)
     flash[:alert] = %{You forked survey, #{@survey.title}. You now have your own copy of the survey.
-      You can make any edits you wish before launching it.}
+      You can make any edits you wish before launching it. For the sake of not revealing the questions and purpose
+      of your new survey, it will not appear as a fork until you close and publish it.}
     redirect_to survey_path(new_survey)
   end
 
@@ -355,28 +365,14 @@ class SurveysController < ApplicationController
     def cache_expirary_key(params)
       params.merge :cache_expirary_key => Rails.cache.read(:surveys_cache_expirary_key)
     end
-  
-    def owner_only!
-      if member_signed_in? and current_member.id != @survey.member_id
-        flash[:alert] = 'Insufficient privileges.'
-        redirect_to survey_path(@survey)
-        false
-      end
-    end
-  
-    def owner_or_admins_only!
-      if member_signed_in? and current_member.id != @survey.member_id and not current_member.admin?
-        flash[:alert] = 'Insufficient privileges.'
-        redirect_to survey_path(@survey)
-        false
-      end
-    end
     
-    def owner_or_admins_only_until_published!
-      unless @survey.published? or @survey.closed? or 
-      (member_signed_in? and (current_member.id == @survey.member_id or current_member.admin?))
-        flash[:alert] = 'Insufficient privileges. You must wait until this survey has been closed.'
+    def owner_or_collaborators_only_until_published!
+      if not (@survey.published? or @survey.closed?) and 
+      member_signed_in? and not (current_member.admin? or current_member.id == @survey.member_id or 
+      @survey.collaborators.collect(&:member_id).include?(current_member.id))
+        flash[:alert] = 'Insufficient privileges.'
         redirect_to survey_path(@survey)
+        false
       end
     end
 end

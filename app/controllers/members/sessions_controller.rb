@@ -6,12 +6,12 @@ class Members::SessionsController < Devise::SessionsController
 
   def create
     super
-    flash.discard
-  end
-
-  def destroy
-    super
-    flash.discard
+    unless cookies.encrypted[:collaborator_key].blank?
+      if collaborator = Collaborator.find_by_key(cookies.encrypted[:collaborator_key])
+        current_member.apply_collaborator(collaborator)
+        cookies.encrypted[:collaborator_key] = nil
+      end
+    end
   end
 end
 

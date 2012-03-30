@@ -125,26 +125,25 @@ function init_survey_question_form() {
   $('#cancel-ordering-questions').click(function() {
     cancel_ordering_questions();
   });
-  $('.survey_question_body').live('blur', function() {
-    if($('.survey_question_label').val() == '') {
+  $('#survey_question_body, .survey_question_body').live('blur', function() {
+    if($('#survey_question_label').val() == '') {
       if($(this).val().length > 50) {
-        $('.survey_question_label').val($(this).val().substr(0, 49));
+        $('#survey_question_label').val($(this).val().substr(0, 49));
       } else {
-        $('.survey_question_label').val($(this).val());
+        $('#survey_question_label').val($(this).val());
       }
     }
   });
   $('#add-question').click(function() {    
-    if($('#new-question-dialog').length == 0) {
-      $('body').append('<div id="new-question-dialog" style="display:none" title="New Question">' +
-        '<img src="/assets/ajax-loader.gif" class="ajax-loader" /></div>');
-      $('#new-question-dialog').load('questions/new', function () {
-        init_common_elements();
-        init_choices();
-        init_form_tips();
-        $('.question-type').change();
-      });
-    } 
+    $('#new-question-dialog, #edit-question-dialog').remove();
+    $('body').append('<div id="new-question-dialog" style="display:none" title="New Question">' +
+      '<img src="/assets/ajax-loader.gif" class="ajax-loader" /></div>');
+    $('#new-question-dialog').load('questions/new', function () {
+      init_common_elements();
+      init_choices();
+      init_form_tips();
+      $('.question-type').change();
+    });
     $('#new-question-dialog').dialog({
       width:750, 
       height:450, 
@@ -165,10 +164,9 @@ function init_survey_question_form() {
     return false;
   });
   $('.button.edit').live('click', function() {  
-    if($('#edit-question-dialog').length == 0) {
-      $('body').append('<div id="edit-question-dialog" style="display:none" title="Edit Question">' +
-        '<img src="/assets/ajax-loader.gif" class="ajax-loader" /></div>');
-    } 
+    $('#new-question-dialog, #edit-question-dialog').remove();
+    $('body').append('<div id="edit-question-dialog" style="display:none" title="Edit Question">' +
+      '<img src="/assets/ajax-loader.gif" class="ajax-loader" /></div>');
     $('#edit-question-dialog').dialog({
       width:750, 
       height:450, 

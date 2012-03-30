@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  collaborable_id: 1
+  collaborable_type: MyString
+  member_id: 1
+
+two:
+  collaborable_id: 1
+  collaborable_type: MyString
+  member_id: 1

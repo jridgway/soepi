@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120326230501) do
+ActiveRecord::Schema.define(:version => 20120329115030) do
 
   create_table "age_groups", :force => true do |t|
     t.string   "label"
@@ -327,6 +327,17 @@ ActiveRecord::Schema.define(:version => 20120326230501) do
 
   create_table "censuses", :force => true do |t|
     t.integer "year", :null => false
+  end
+
+  create_table "collaborators", :force => true do |t|
+    t.integer  "collaborable_id"
+    t.string   "collaborable_type"
+    t.integer  "member_id"
+    t.string   "key"
+    t.string   "email"
+    t.boolean  "active",            :default => false
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
   end
 
   create_table "delayed_jobs", :force => true do |t|
