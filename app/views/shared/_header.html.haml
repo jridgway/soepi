@@ -16,9 +16,9 @@
             %li.spacer
               %span.ui-icon.ui-icon-grip-dotted-vertical
             %li.visitors-only
-              = link_to 'Sign Up', main_app.new_member_registration_path
+              = link_to 'Sign Up', main_app.new_member_registration_path(:member_return_to => request.url)
             %li.visitors-only
-              = link_to 'Sign In', main_app.new_member_session_path
+              = link_to 'Sign In', main_app.new_member_session_path(:member_return_to => request.url)
             %li.members-only
               = link_to 'Sign out', main_app.destroy_member_session_path(:member_return_to => request.url), :method => 'delete'
             %li#account-quick-look.members-only.pop-nav
