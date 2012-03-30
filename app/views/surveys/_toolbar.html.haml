@@ -43,7 +43,7 @@
               = link_to 'Launch', launch_survey_path(@survey), :class => 'button', :method => 'put'
               %button{:id => 'cancel-launch2', :class => 'button'} Cancel
     .owner-only{:'data-member-id' => @survey.member_id}
-      - if @survey.editable?(current_member)
+      - if @survey.may_edit?(current_member)
         %button{:id => 'delete', :icon => 'ui-icon-trash', :class => 'button'} Delete
         #delete-message{:style => 'display:none', :title => 'Delete this Survey'}
           %p 

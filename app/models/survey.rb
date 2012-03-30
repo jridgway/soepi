@@ -167,7 +167,7 @@ class Survey < ActiveRecord::Base
     %w{published launched closed}.include? state
   end
 
-  def editable?(member)
+  def may_edit?(member)
     if member
       if member.admin? and member.id != member_id
         true unless live? or rejected?

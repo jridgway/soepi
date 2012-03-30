@@ -101,7 +101,7 @@ class SurveysController < ApplicationController
   end
 
   def update
-    if @survey.editable?(current_member)
+    if @survey.may_edit?(current_member)
       if @survey.update_attributes params[:survey]
         @survey.version!(current_member.id)
         flash[:alert] = 'Your survey was successfully updated.'
@@ -116,7 +116,7 @@ class SurveysController < ApplicationController
   end
 
   def destroy
-    if @survey.editable?(current_member)
+    if @survey.may_edit?(current_member)
       @survey.destroy
       flash[:alert] = 'Your survey was deleted.'
       redirect_to root_path

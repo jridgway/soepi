@@ -9,7 +9,7 @@
 - content_for :body_content_left do
   %p#no-questions.text-align-center{:style => 'display:none'} You have not added any questions yet. Click "Add a Question" to the right to begin.
   #results{:style => 'display:none'}
-  #root-questions-container.not-ordering{:class => (@survey.editable?(current_member) ? 'editable' : 'not-editable') + ' ' + ((@survey.published? or @survey.closed? or @survey.launched?) ? 'results-available' : 'results-not-available')}
+  #root-questions-container.not-ordering{:class => (@survey.may_edit?(current_member) ? 'editable' : 'not-editable') + ' ' + ((@survey.published? or @survey.closed? or @survey.launched?) ? 'results-available' : 'results-not-available')}
     %ol#root-questions
       - @questions.each do |question|
         = render :partial => 'question', :locals => {:question => question}
@@ -24,7 +24,7 @@
         %small
           Left Arrow = Previous Question
           Right Arrow = Next Question
-  - if @survey.editable?(current_member)
+  - if @survey.may_edit?(current_member)
     %button{:id => 'order-questions', :class => 'button', :icon => 'ui-icon-arrow-4'} Order Questions
     %button{:id => 'done-ordering-questions', :class => 'button', :icon => 'ui-icon-check', :style => 'display:none'} Done Ordering
     %button{:id => 'cancel-ordering-questions', :class => 'button', :icon => 'ui-icon-close', :style => 'display:none'} Cancel Ordering

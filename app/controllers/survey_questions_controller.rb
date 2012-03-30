@@ -92,7 +92,7 @@ class SurveyQuestionsController < ApplicationController
     end
     
     def authorize_edit!
-      unless @survey.editable?(current_member)
+      unless @survey.may_edit?(current_member)
         if request.xhr?
           render :text => "alert('You cannot edit this survey.')"
         else
