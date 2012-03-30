@@ -5,5 +5,5 @@
 %p
   Thanks,
   %br/
-  #{link_to 'SoEpi.org', main_app.root_path, :only_path => false}
-%p= Refinery::Setting.find_or_set :email_footer, %{<em><a href="http://soepi.org">SoEpi</a> is a 501(c)(3) nonprofit dedicated to improving health via online social epidemiology.</em>}.html_safe
+  #{link_to 'SoEpi.org', 'SoEpi.org'}
+%p= Refinery::Setting.find_or_set(:email_footer, %{<em><a href="http://soepi.org">SoEpi</a> is a 501(c)(3) nonprofit dedicated to improving health via online social epidemiology.</em>}).html_safe
