@@ -209,7 +209,7 @@
                               .std_footer
                                 %em Copyright © #{Time.now.year} SoEpi LLC, All rights reserved.
                                 %br/
-                                Our mailing address is: P.O. Box , Princeton, NJ 08540
+                                Our mailing address is: #{Refinery::Setting.find_or_set(:mailing_address, '22 Cleaview Ave, Princeton, NJ 08540')}
                                 %br/
                                 %br/
                                 = link_to 'update subscription preferences', member_subscriptions_url
