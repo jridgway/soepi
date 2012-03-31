@@ -28,12 +28,12 @@ class Members::ProfilesController < ApplicationController
   end
 
   def surveys
-    @surveys = @member.surveys.live.page(params[:page])
+    @surveys = Survey.live.owned_or_collaborating(@member.id).page(params[:page])
     render :layout => 'one_column'
   end
 
   def reports
-    @reports = @member.reports.published.page(params[:page])
+    @reports = Report.owned_or_collaborating(@member.id).page(params[:page])
     render :layout => 'one_column'
   end
 

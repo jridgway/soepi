@@ -25,7 +25,11 @@ class Survey < ActiveRecord::Base
   scope :launched, where(:state => 'launched')
   scope :closed, where(:state => 'closed')
   scope :published, where(:state => 'published')
-
+  scope :owned_or_collaborating, lambda {|member_id|
+    where('surveys.member_id = :id or collaborators.member_id = :id', :id => member_id).
+    joins("left outer join collaborators on collaborators.collaborable_type = 'Survey' and collaborable_id = surveys.id")
+  }
+  
   acts_as_taggable
   acts_as_followable
   include Extensions::Versionable

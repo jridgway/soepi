@@ -63,16 +63,6 @@ class Member < ActiveRecord::Base
   after_update :set_mailchimp_2!
   before_destroy :destroy_ec2_instance!
   
-  def surveys_owned_and_collaborating(page=nil)
-    Survey.joins("left outer join collaborators on collaborators.collaborable_type = 'Survey' and collaborable_id = surveys.id").
-      where('surveys.member_id = :id or collaborators.member_id = :id', :id => id).page(page)
-  end
-  
-  def reports_owned_and_collaborating(page=nil)
-    Report.joins("left outer join collaborators on collaborators.collaborable_type = 'Report' and collaborable_id = reports.id").
-      where('reports.member_id = :id or collaborators.member_id = :id', :id => id).page(page)
-  end
-  
   def owner?(object)
     true if id == object.try(:member_id)
   end

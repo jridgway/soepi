@@ -21,9 +21,9 @@
       %li
         = link_to "Statuses (#{@member.statuses.count})", member_path(@member)
       %li
-        = link_to "Surveys (#{@member.surveys.live.count})", surveys_member_path(@member)
+        = link_to "Surveys (#{Survey.live.owned_or_collaborating(@member.id).count})", surveys_member_path(@member)
       %li
-        = link_to "Reports (#{@member.reports.published.count})", reports_member_path(@member)
+        = link_to "Reports (#{Report.owned_or_collaborating(@member.id).count})", reports_member_path(@member)
       %li
         = link_to "Following (#{@member.follows.count})", following_member_path(@member)
       %li
