@@ -42,7 +42,7 @@ class Collaborator < ActiveRecord::Base
       puts "#{member_id} == #{collaborable.member_id}"
       unless member_id.blank?
         if member_id == collaborable.member_id
-          errors.add :nickname, 'You cannot add yourself as a collaborator'
+          errors.add :nickname, 'You cannot add the owner as a collaborator'
         end
       end
     end
