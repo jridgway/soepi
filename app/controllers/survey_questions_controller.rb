@@ -1,6 +1,7 @@
 class SurveyQuestionsController < ApplicationController
   before_filter :authenticate_member_2!, :except => [:index, :results]
   before_filter :load_survey
+  before_filter :load_question, :except => [:new, :create, :index]
   before_filter :owner_or_collaborators_only_until_published!
   before_filter :authorize_edit!, :only => [:new, :create, :edit, :update, :destroy]
   layout Proc.new {|controller| controller.request.xhr? ? 'ajax' : 'two_column'}
@@ -18,7 +19,6 @@ class SurveyQuestionsController < ApplicationController
   end
 
   def show
-    @question = @survey.questions.find(params[:id])
     @participant_response = ParticipantResponse.new
   end
   
@@ -42,12 +42,9 @@ class SurveyQuestionsController < ApplicationController
   end
 
   def edit
-    @question = @survey.questions.find(params[:id])
   end
 
   def update
-    @question = @survey.questions.find(params[:id])
-    @choice_changed = (@question.survey_question_choice_id.to_i != params[:survey_question][:survey_question_choice_id].to_i)
     if @question.update_attributes params[:survey_question]
       @survey.version!(current_member.id)
       @question.reload
@@ -55,30 +52,28 @@ class SurveyQuestionsController < ApplicationController
     @participant_response = ParticipantResponse.new
   end
 
-  def update_positions
-    @survey.update_question_positions! params[:survey_question]
+  def update_position
+    @question.update_position! params[:survey_question_choice_id], params[:before_question_id]
     @survey.version!(current_member.id)
     render :nothing => true
   end
 
   def destroy
-    @question = @survey.questions.find(params[:id])
     @survey.version!(current_member.id)
     @question.destroy
   end
-
-  def survey_question_choice_id_options
-    render :layout => false
-  end
   
   def results
-    @question = @survey.questions.find(params[:id])
   end
 
   protected
 
     def load_survey
       @survey = Survey.find params[:survey_id]
+    end
+
+    def load_question
+      @question = @survey.questions.find params[:id]
     end
     
     def owner_or_collaborators_only_until_published!

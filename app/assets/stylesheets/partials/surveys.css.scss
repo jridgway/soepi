@@ -365,18 +365,8 @@
     {
     border: 1px dashed #606060;
     }
-    
-  #root-questions-container.ordering
-    {
-    -moz-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
-    -webkit-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
-    -o-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
-    box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
-    padding: 10px 0;
-    margin: 15px 0;
-    }
 
-  #root-questions-container.ordering li.survey_question .handle 
+  #root-questions-container li.survey_question .handle 
     {
     cursor: move;
     

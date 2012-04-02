@@ -12,6 +12,8 @@
           = question.body
     %p
       %small #{question.qtype} | #{question.required? ? 'Required' : 'Optional'}
+      - if @survey.closed? or @survey.published?
+        | Question #{question.path}
   - unless question.choices.empty? 
     %ol.choices
       - question.choices.each do |choice|

@@ -308,17 +308,6 @@ class Survey < ActiveRecord::Base
     ]
   end
 
-  def survey_question_choice_id_options(current_question_id=nil, questions=questions.roots, level=0)
-    options = []
-    index = 1
-    questions.each do |question|
-      options << ["#{'&nbsp;&nbsp;' * level}#{index}. QUESTION: #{question.body}".html_safe, {:disabled => 'disabled', :value => 0}]
-      options += survey_question_choice_id_options_helper(current_question_id, question.choices, level+1)
-      index += 1
-    end
-    options
-  end
-
   def posted_by
     member.nickname if member
   end
@@ -455,22 +444,16 @@ class Survey < ActiveRecord::Base
   def to_param
     "#{id} #{title}".parameterize
   end
-
-  protected
-
-    def survey_question_choice_id_options_helper(current_question_id, choices, level)
-      options = []
-      index = 1
-      choices.each do |choice|
-        if current_question_id == choice.survey_question_id
-          options << ["#{'&nbsp;&nbsp;' * (level)}#{index}. CHOICE: #{choice.label}".html_safe, 
-            {:disabled => 'disabled', :value => choice.id}]
-        else
-          options << ["#{'&nbsp;&nbsp;' * (level)}#{index}. CHOICE: #{choice.label}".html_safe, choice.id]
-        end
-        options += survey_question_choice_id_options(current_question_id, choice.child_questions, level+1)
-        index += 1
+  
+  def tidy_positions!(questions=root_questions, parent_question_position=0)
+    questions.each_with_index do |question, index|
+      position = parent_question_position + index + 1
+      if question.position != position
+        question.update_attribute :position, position
       end
-      options
+      question.choices.each do |choice|
+        tidy_positions!(choice.child_questions, position)
+      end
     end
+  end  
 end

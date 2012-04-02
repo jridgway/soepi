@@ -116,24 +116,7 @@ function init_survey_form() {
 
 function init_survey_question_form() {
   no_questions_message();
-  $('#order-questions').click(function() {
-    make_questions_sortable();
-  });
-  $('#done-ordering-questions').click(function() {
-    save_question_positions();
-  });
-  $('#cancel-ordering-questions').click(function() {
-    cancel_ordering_questions();
-  });
-  $('#survey_question_body, .survey_question_body').live('blur', function() {
-    if($('#survey_question_label').val() == '') {
-      if($(this).val().length > 50) {
-        $('#survey_question_label').val($(this).val().substr(0, 49));
-      } else {
-        $('#survey_question_label').val($(this).val());
-      }
-    }
-  });
+  init_questions_sortable();
   $('#add-question').click(function() {    
     $('#new-question-dialog, #edit-question-dialog').remove();
     $('body').append('<div id="new-question-dialog" style="display:none" title="New Question">' +
@@ -351,7 +334,7 @@ function root(ref) {
 
 var initial_sorting = '';
 
-function make_questions_sortable() {
+function init_questions_sortable() {
   $('#questions').find('.button').button('destroy')
   initial_sorting = $('#questions').html();
   $('#root-questions').surveySortable({
@@ -364,50 +347,22 @@ function make_questions_sortable() {
 		forcePlaceholderSize: true,
 		helper:	'clone',
 		opacity: .6,
-		revert: 250
+		revert: 0,
+		update: function(event, ui) {
+		  $.ajax({
+        type: 'PUT', 
+        data: {
+          survey_question_choice_id: $(ui.item).closest('.survey_question_choice').attr('data-choice-id'),
+          before_question_id: $(ui.item).next('.survey_question').attr('data-question-id'),
+        },
+        url: 'questions/' + ui.item.attr('data-question-id') + '/update_position',
+        error: function() {
+          alert('Sorry, an error occurred. Please refresh this page and try again.');
+        }
+      });
+		}
   });
   $('#root-questions').surveySortable('enable');
-  $('#add-question, #order-questions').hide('blind');
-  $('#done-ordering-questions, #cancel-ordering-questions').show('blind');
-  $('#done-ordering-questions-alert').show('blind').delay(50).show('highlight', {color:'#49c4f7'});
-  $('#root-questions-container').removeClass('not-ordering');
-  $('#root-questions-container').addClass('ordering');
-}
-
-function save_question_positions() {
-  disable_button('#done-ordering-questions');
-  $.ajax({
-    type: 'PUT', 
-    data: $('#root-questions').surveySortable('serialize'),
-    url: 'questions/update_positions',
-    success: function() {
-      done_ordering_questions();
-      load_new_choice_options();
-    },
-    error: function() {
-      alert('Sorry, an error occurred. Please try again.')
-      enable_button('#done-ordering-questions');
-    }
-  });
-}
-
-function cancel_ordering_questions() {
-  if(confirm('Are you sure?')) {
-    $('#questions').html(initial_sorting);
-    done_ordering_questions();
-    initial_sorting = '';
-  }
-}
-
-function done_ordering_questions() {
-  enable_button('#done-ordering-questions');
-  $('#root-questions').surveySortable('disable');
-  $('#add-question, #order-questions').show('blind');
-  $('#done-ordering-questions, #cancel-ordering-questions, #done-ordering-questions-alert').hide('blind');
-  $('#root-questions-container').addClass('not-ordering');
-  $('#root-questions-container').removeClass('ordering');
-  init_common_elements();
-  $('.question-type').change();
 }
 
 function no_questions_message() {
@@ -418,12 +373,6 @@ function no_questions_message() {
     $('#no-questions').show();
     $('#order-questions').hide();
   }
-}
-
-function load_new_choice_options(current) {
-  $('select[name="survey_question[survey_question_choice_id]"]').load('questions/survey_question_choice_id_options', function() {
-    $(this).val(current);
-  });
 }
 
 function init_targeting() {

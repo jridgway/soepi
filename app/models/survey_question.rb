@@ -14,22 +14,17 @@ class SurveyQuestion < ActiveRecord::Base
 
   accepts_nested_attributes_for :choices, :allow_destroy => true
 
-  default_scope order('position asc, created_at asc')
+  default_scope order('position asc')
 
-  validates_presence_of :body, :qtype, :label
-  validates_length_of :label, :maximum => 50
+  validates_presence_of :body, :qtype
   validates_length_of :choices, :minimum => 2, :if => proc {|a| ['Select One', 'Select Multiple'].include? a['qtype']},
     :message => 'you must provide at least 2 choices'
   validate :uniq_choices
   validates_uniqueness_of :body, :message => 'you already added this question', :scope => :survey_id
-  validates_uniqueness_of :label, :scope => :survey_id
-
+  
   before_create :init_position
   before_save :set_boolean_choices
-  before_update :update_position
-  after_create :init_other_positions
-  after_update :update_other_positions, :tidy_positions
-  after_destroy :tidy_positions
+  after_destroy :tidy_positions!
   after_save :clear_choices!, :unless => Proc.new {|q| ['Yes/No', 'True/False', 'Select One', 'Select Multiple'].include? q.qtype}
 
   scope :roots, where('survey_question_choice_id is null or survey_question_choice_id = 0')
@@ -161,48 +156,45 @@ class SurveyQuestion < ActiveRecord::Base
   def previous_question
     survey.questions.where('position = ?', position - 1).first
   end
+    
+  def update_position!(survey_question_choice_id, before_question_id)
+    transaction do
+      if survey_question_choice_id != self.survey_question_choice_id
+        update_attribute :survey_question_choice_id, survey_question_choice_id
+      end
+      if before_question = survey.questions.where(:id => before_question_id).first
+        update_attribute :position, before_question.position
+        increment_following_positions!
+      elsif parent_choice
+        update_attribute :position, parent_choice.position + parent_choice.child_questions.where('survey_question_choice_id != ?', id).count + 1
+      else
+        update_attribute :position, survey.questions.count + 1
+      end
+      tidy_positions!
+    end
+  end
+    
+  def descendant_questions_count
+    choices.collect {|c| c.child_questions.count + c.child_questions.sum(&:descendant_questions_count)}.sum
+  end
 
   private
+
+    def init_position
+      self.position = survey.questions.count + 1
+    end
+    
+    def increment_following_positions!
+      survey.questions.where('position >= ? and id != ?', position, id).
+        update_all "position = position + 1 + #{descendant_questions_count}"
+    end
+    
+    def tidy_positions!
+      survey.tidy_positions!
+    end
     
     def r_format(s)
       s2 = s.strip.gsub(/\s+/, ' ').gsub(/\W/, '.')
-    end
-
-    def init_position
-      if parent_choice
-        if parent_choice.child_questions.count == 0
-          self.position = parent_choice.question.position + 1
-        else
-          self.position = parent_choice.child_questions.last.position + 1
-        end
-      else
-        self.position = survey.questions.count + 1
-      end
-    end
-
-    def init_other_positions
-      survey.questions.update_all('position = position + 1', ['position >= ? and id != ?', position, id])
-    end
-    
-    def update_position
-      if survey_question_choice_id_changed?
-        init_position
-      end
-    end
-    
-    def update_other_positions
-      if survey_question_choice_id_changed?
-        init_other_positions
-      end
-    end
-    
-    def tidy_positions
-      survey.questions.each_with_index do |question, index|
-        index_2 = index + 1 
-        if question.position != index_2
-          question.update_attribute :position, index_2
-        end
-      end
     end
     
     def set_boolean_choices

@@ -78,10 +78,7 @@ Soepi::Application.routes.draw do
     resources :survey_questions, :path => 'questions', :as => :questions do
       member do        
         get 'results' 
-      end
-      collection do
-        put 'update_positions'
-        get 'survey_question_choice_id_options'
+        put 'update_position'
       end
     end
   end
