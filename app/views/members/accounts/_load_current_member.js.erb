@@ -38,11 +38,11 @@
     $('.current-member-nickname-linked').html(current_member['nickname_linked']);
     $('.current-member-pic').html(current_member['pic']);
     $('.current-member-unseen-messages-count').html(current_member['unseen_messages_count']);
-    $('body').append("<%= escape_javascript(render(:partial => '/members/accounts/flash')) %>");
-    $('#alert').dialog({modal:true, zIndex:9, minWidth:400}).show('blind');
     if($('#more-details').find(':visible').length == 0) {
       $('#more-details').hide();
     }
+    $('body').append("<%= escape_javascript(render(:partial => '/members/accounts/flash')) %>");
+    setTimeout("$('#alert').dialog({modal:true, zIndex:9, minWidth:400}).show('blind');", 100);
   });
   
   function hide_all_member_related() {

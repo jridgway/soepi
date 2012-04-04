@@ -1,7 +1,8 @@
-var previousDocTop;
-
 $(document).ready(function () {
-  previousDocTop = $(window).scrollTop();
+  setTimeout('init_main()', 100);
+});
+
+function init_main() {
   $('.ui-widget-overlay').live('click', function () {
     $('.ui-dialog-content').dialog('close');
   });
@@ -17,12 +18,11 @@ $(document).ready(function () {
   init_pop_navs();
   load_quick_search();
   select_nav_item();
-  init_sidebar();
   init_common_elements();
   init_message_recipient_nicknames();
   init_external_links();
   Shadowbox.init({overlayColor:'#999'});
-});
+}
 
 function member_return_to() {
   if(controller_name != 'sessions' && controller_name != 'registrations' && controller_name != 'passwords' && 
@@ -127,56 +127,6 @@ function disable_button(button) {
 function enable_button(button) {
   $(button).button('enable');
   $('#please-wait').remove();
-}
-
-function init_sidebar() {
-  var initial_sidebar_width = $('#sidebar').width() + 'px';
-  $(window).scroll(function() {
-    var height = $('#sidebar').height();
-    var begin_at = $('#content-top').position({my:'top'}).top + $('#content-top').outerHeight();
-    var docHeight, docTop, docBottom, top, bottom, movingUp, movingDown;
-    if($(this).scrollTop() >= begin_at && $('#body_content_left').height() > height) {
-      docHeight = $(window).height();
-      docTop = $(window).scrollTop();
-      docBottom = docTop + docHeight;
-      top = $('#sidebar').offset().top;
-      bottom = top + height;
-      movingUp = previousDocTop > docTop;
-      movingDown = !movingUp;
-      previousDocTop = docTop;
-      if(height + 75 > docHeight && docBottom + 75 > $(document).height()) {
-        $('#sidebar').css({
-          position: 'fixed', 
-          bottom: (95 - ($(document).height() - docBottom)) + 'px', 
-          top: 'auto', 
-          width: initial_sidebar_width
-        });
-      } else if(height <= docHeight || (top >= docTop && movingUp)) {
-        $('#sidebar').css({
-          position: 'fixed', 
-          top: '10px', 
-          bottom: 'auto', 
-          width:initial_sidebar_width
-        });
-      } else if(bottom <= docBottom && movingDown) {
-        $('#sidebar').css({
-          position: 'fixed', 
-          bottom: '10px', 
-          top: 'auto', 
-          width: initial_sidebar_width
-        });
-      } else if(bottom > docBottom || top < docTop) {
-        $('#sidebar').css({
-          position: 'absolute', 
-          top: $('#sidebar').position().top + 'px', 
-          bottom: 'auto', 
-          width: initial_sidebar_width
-        });
-      }
-    } else {
-      $('#sidebar').css({position:'static'});
-    }
-  });
 }
 
 function isWhollyVisible(elem) {

@@ -59,6 +59,8 @@ class Participant < ActiveRecord::Base
     end
     integer :id
   end
+  
+  handle_asynchronously :solr_index
 
   def location
     [city, state, postal_code, country].compact.join(', ')

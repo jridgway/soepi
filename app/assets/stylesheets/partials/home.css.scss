@@ -1,4 +1,5 @@
 @import "common";
+@import "compass/css3/opacity";
 
 .bp.home
   {  
@@ -28,120 +29,159 @@
       }
     }
   
-  #tree-bg
-    {
-    background: transparent url(/assets/tree-spring-bg.png) no-repeat;
-    position: fixed;
-    top: 50%;
-    left: -600px;
-    display: block;
-    height: 876px;
-    width: 991px;
-    margin: -500px 0 0 0;
-    z-index: -100;
-    }
-  
   
   #welcome
-    {    
-    -moz-box-shadow: 0 0 15px #111;
-    -webkit-box-shadow: 0 0 15px #111;
-    -o-box-shadow: 0 0 15px #111;
-    box-shadow: 0px 0px 15px #111;
-    -moz-border-radius: 4px;
-    -webkit-border-radius: 4px;
-    border-radius: 4px;
-    width: 660px;
-    height: 440px;
-    margin: -235px 0 0 -260px;
-    padding: 15px;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    background: #222;
-  
-    #top
+    {
+    #steps
       {
-      @include clearfix;
+      @include container;
+      padding-bottom: 50px;
+      overflow-x: visible;
       
-      h1#logo
-        {
-        @include column(4);
-        margin: 0;
-        padding: 0;
-        
-        a 
-          { 
-          background: url(/assets/soepi-logo-dark-bg.png) no-repeat;
-          text-indent: -99999px;
-          display: block;
-          height: 75px;
-          width: 135px;
+      .step
+        {          
+        h1 
+          {
+          font-size: 1.5em;
+          font-weight: 100;
+          color: #c6c6c6;
+          margin-left: 40px;
+          vertical-align: middle;
+          
+          strong
+            {
+            font-weight: bold;
+            color: #fff;
+            }
+          }
+          
+        .inner-container
+          {
+          height: 200px;
+          @include clearfix;
+          border-radius: 4px;
+          -moz-box-shadow: 5px 5px 5px #222;
+          -webkit-box-shadow: 5px 5px 5px #222;
+          box-shadow: 5px 5px 5px #222;
+          
+          .inner
+            {
+            position: relative;
+            top: 162px;
+            width: 280px;
+            background: rgba(0, 0, 0, 0.65);
+            font-size: 0.8em;
+            color: #fff;
+            padding: 10px;            
+            -moz-border-radius-bottomleft: 4px;
+            -moz-border-radius-bottomright: 4px;
+            -webkit-border-bottom-left-radius: 4px;
+            -webkit-border-bottom-right-radius: 4px;
+            border-bottom-left-radius: 4px;
+            border-bottom-right-radius: 4px;
+            }
           }
         }
       
-      #sign-in-links
+      #step-1
         {
-        float: right;
+        @include column(8);
+        background: url(/assets/step-1-blue.png) no-repeat 0 14px;
+        
+        .inner-container
+          {
+          background: url(/assets/home-step-1.png) no-repeat;
+          }
+        }
+      
+      #step-2
+        {
+        @include column(8);
+        background: url(/assets/step-2-blue.png) no-repeat 0 14px;
+        
+        .inner-container
+          {
+          background: url(/assets/home-step-2.png) no-repeat;
+          }
+        }
+      
+      #step-3
+        {
+        @include column(8, true);
+        background: url(/assets/step-3-blue.png) no-repeat 0 14px;
+        
+        .inner-container
+          {
+          background: url(/assets/home-step-3.png) no-repeat;
+          }
+        }
+      }
+    
+    #take-action
+      {
+      @include column(24, true);
+      text-align: center;
+      margin-bottom: 50px;
+      
+      .button
+        {
+        font-size: 1.2em;
+        width: 300px;
+        -moz-box-shadow: 5px 5px 5px #222;
+        -webkit-box-shadow: 5px 5px 5px #222;
+        box-shadow: 5px 5px 5px #222;
         }
       }
       
-    #inner
+    #extra
       {
-      margin-top: 15px;
+      @include container;
+        
+      #browse-surveys
+        {
+        @include column(16, true);
+        
+        #drafting
+          {
+          margin-top: 15px;
+          
+          strong
+            {
+            font-size: 3em;
+            float: left;
+            position: relative;
+            top: -11px;
+            margin-right: 10px;
+            }
+          }
+          
+        .listing .inner
+          {
+          width: 550px;
+          }
+        }
       
       #about
         {
-        width: 260px;
-        margin: 0 15px 0 0;
-        float: left;
+        @include column(8);
+        
+        h1
+          {
+          font-size: 1.2em;
+          }
+          
+        #like-buttons
+          {
+          @include column(3, true);
+          float: right;
+    
+          .inner
+            {
+            margin-top: 15px;
+            clear: both;
+            }
+          }
         }
-      
-      #features 
-        {
-        width: 385px;
-        float: right;
-        
-        .ui-accordion-header
-          {
-          background: transparent; 
-          border: none;
-          
-          a 
-            {
-            color: $blue;
-            padding: 5px 0 5px 5px;
-            font-size: 1.2em;
-            }
-          
-          &.ui-state-active a
-            {
-            color: white;
-            }
-          
-          .ui-icon
-            {
-            background-image: url(/assets/ui-icons_ffffff_256x240.png);
-            }
-          }
-        
-        .ui-accordion-content
-          {
-          border: none;
-          }
-        } 
-      }
-      
-    #footer
-      {
-      width: auto;
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      margin: 0 0 0 -155px;
-      padding: 10px 0;
-      height: auto;
-      font-size: 0.7em;
-      }
+      }      
     }
   }

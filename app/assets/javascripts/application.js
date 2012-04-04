@@ -14,6 +14,7 @@
 //= require simple-hint
 //= require r-hint
 //= require main
+//= require sidebar
 //= require pages
 //= require home
 //= require forms

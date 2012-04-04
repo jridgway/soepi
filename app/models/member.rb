@@ -193,12 +193,14 @@ class Member < ActiveRecord::Base
   end
   
   def set_mailchimp_1!
+    return if Rails.env.development?
     if subscription_news?
       delay.set_mailchimp_helper!
     end 
   end
   
   def set_mailchimp_2!
+    return if Rails.env.development?
     if subscription_news_changed?
       delay.set_mailchimp_helper!
     end 

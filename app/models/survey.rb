@@ -43,7 +43,8 @@ class Survey < ActiveRecord::Base
     include_field :taggings
   end
 
-  validates_presence_of :title, :description, :purpose_of_survey, :uses_of_results, :member_id
+  validates_presence_of :title, :description, :purpose_of_survey, :uses_of_results
+  validates_presence_of :member_id, :on => :update
   validates_length_of :title, :minimum => 3
   validates_numericality_of :cohort_interval_in_days, :cohort_range_in_days, :minimum => 1, :allow_blank => true
   validates_numericality_of :cohort_range_in_days, :minimum => 1, :allow_blank => true
@@ -456,4 +457,8 @@ class Survey < ActiveRecord::Base
       end
     end
   end  
+  
+  def self.destroy_old_visitor_surveys!
+    Survey.where('member_id = 0 or member_id is null and created_at < ?', 1.month.ago).destroy_all
+  end
 end

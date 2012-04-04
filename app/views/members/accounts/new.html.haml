@@ -1,7 +1,14 @@
 - content_for :body_content_title do 
-  Sign up
+  - if @surveys
+    Sign up to continue drafting the following surveys:
+  - else
+    Sign up
 
 - content_for :body_content_left do
+  - if @surveys
+    %ol
+      - @surveys.each do |survey|
+        %li= survey.title
   - if session[:omniauth].nil?
     %h2 Sign up through:
     = render :partial => '/members/shared/auth_providers' 

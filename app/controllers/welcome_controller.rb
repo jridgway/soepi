@@ -12,7 +12,7 @@ class WelcomeController < ApplicationController
         render :layout => 'two_column'   
       end
     else
-      render :layout => 'blank'
+      render :layout => 'one_column'
     end
   end
   

@@ -1,6 +1,6 @@
 - if @survey.drafting?
   - content_for :body_content_above_top do 
-    %span.owner-only-until-published{:'data-member-id' => @survey.member_id, :'data-state' => @survey.state}
+    %span{:class => (@survey.new_record? ? '' : 'owner-only-until-published'), :'data-member-id' => @survey.member_id, :'data-state' => @survey.state}
       #step-1
         - if @survey.new_record?
           .inner{:class => (controller_name == 'surveys' and %w(new create edit update).include?(action_name) ? 'current' : '')}

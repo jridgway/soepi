@@ -1,5 +1,6 @@
 class Members::AccountsController < Devise::RegistrationsController
   prepend_before_filter :authenticate_member_2!, :except => [:new, :create, :load_current_member]
+  before_filter :load_surveys, :only => [:new, :create]
   layout Proc.new { |controller| 
     %w{new create}.include?(controller.action_name) ? 'two_column' : (controller.request.xhr? ? 'ajax' : 'one_column')
   }
@@ -15,6 +16,11 @@ class Members::AccountsController < Devise::RegistrationsController
         @member.apply_collaborator(collaborator)
         cookies.encrypted[:collaborator_key] = nil
       end
+    end
+    unless session[:survey_ids].empty?
+      Survey.where('id in (?) and (member_id = 0 or member_id is null)', session[:survey_ids]).
+        update_all "member_id = #{@member.id}"
+      session[:survey_ids] = nil
     end
   end
 
@@ -104,5 +110,11 @@ class Members::AccountsController < Devise::RegistrationsController
 
     def redirect_location(resource_name, resource)
       member_return_to
+    end
+    
+    def load_surveys
+      if session[:survey_ids] and session[:survey_ids].length > 1
+        @surveys = Survey.where('id in (?) and (member_id = 0 or member_id is null)', session[:survey_ids]).limit(3)
+      end
     end
 end

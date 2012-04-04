@@ -1,50 +1,40 @@
-- cache('home', :expires_in => cache_expirary) do
-  #tree-bg
-  #welcome
-    #top
-      %h1#logo
-        = link_to 'SoEpi', root_path, :title => 'SoEpi'
-      #sign-in-links
-        = link_to 'Sign In', new_member_session_path, :class => 'button', :icon => 'ui-icon-key'
-        = link_to 'Sign Up', new_member_registration_path, :class => 'button', :icon => 'ui-icon-arrowthick-1-n'
-        = link_to 'Learn More', '/docs/about', :class => 'button', :icon => 'ui-icon-zoomin'
-    #inner
-      #about
-        %h2 Connecting Communities and Health Investigators...
-        %p 
-          SoEpi is a 501(c)(3) non-profit organization committed to better health via online social epidemiology.
-          %a{:href => '/docs/about'} Learn More &raquo;
-      #features
-        #home-accordian
-          %h3
-            %a{:href => '#anonymous-surveys'} Anonymous Surveys
-          #anonymous-surveys
-            %p 
-              Rigorous, well-designed, -streamlined and -tested&mdash;our survey tool is completely
-              <strong>free</strong> and <strong>anonymous</strong>. It's available for <strong>anyone</strong> to use,
-              and it includes advanced features, such as <strong>targeting</strong>&mdash;based on age, gender, 
-              location, surveys taken, education, race and ethnicity&mdash;and <strong>question branching</strong>.
-              %a{:href => '/docs/about/anonymous-surveys'} Learn More &raquo;
-          %h3
-            %a{:href => '#open-database'} Open Database
-          #open-database
-            %p
-              As our participants are completely anonymous, all survey <strong>results</strong> are available for 
-              <strong>browsing</strong> and <strong>download</strong>. 
-              %a{:href => '/docs/about/open-database'} Learn More &raquo;
-          %h3
-            %a{:href => '#r-based-reports'} R-based Reports
-          #r-based-reports
-            %p
-              Write unadulterated <strong>R</strong> scripts to generate plots, then annotate and publish them 
-              as reports. We've integrated R into our site, so that analyzing surveys results couldn't be easier. 
-              %a{:href => '/docs/about/r-based-reports'} Learn More &raquo;
-          %h3
-            %a{:href => '#communication-and-collaboration'} Communication and Collaboration
-          #communication-and-collaboration
-            %p
-              Communicate, plan, organize and take action by <strong>following</strong> your fellow SoEpi members and posting
-              your own <strong>status updates</strong>, <strong>surveys</strong>, and <strong>reports</strong>.
-              %a{:href => '/docs/about/communication-and-collaboration'} Learn More &raquo;
-    %footer#footer
-      = render :partial => "/shared/footer"
+- content_for :body_content do 
+  - cache 'home-visitor', :expires_in => 1.hour do 
+    #welcome
+      #steps
+        #step-1.step
+          %h1= Refinery::Setting.find_or_set(:home_step_1_title, %{Create a <strong>Survey</strong>.}).html_safe
+          .inner-container
+            .inner= Refinery::Setting.find_or_set(:home_step_1_description, %{Change begins with you. We’re here to help.}).html_safe
+        #step-2.step
+          %h1= Refinery::Setting.find_or_set(:home_step_2_title, %{Get <strong>Support</strong>.}).html_safe
+          .inner-container
+            .inner= Refinery::Setting.find_or_set(:home_step_2_description, %{Charts inspire your community to change.}).html_safe
+        #step-3.step
+          %h1= Refinery::Setting.find_or_set(:home_step_3_title, %{Improve <strong>Health</strong>.}).html_safe
+          .inner-container
+            .inner= Refinery::Setting.find_or_set(:home_step_3_description, %{Healthy communities, healthy individuals.}).html_safe
+      #take-action
+        = link_to 'Create a Survey', new_survey_path, :class => 'button', :id => 'create-a-survey-button'
+      #extra
+        #browse-surveys
+          %h2 Browse Surveys
+          %ul.listing.reset
+            - Survey.live.limit(3).each do |survey|
+              %li
+                = render :partial => '/surveys/survey', :locals => {:survey => survey}
+          #drafting 
+            %strong #{Survey.drafting.count} 
+            surveys are currently being drafted. 
+            %br Come back soon to participate.
+        #about
+          %h2 About SoEpi
+          %p= Refinery::Setting.find_or_set(:home_about, %{Connecting Communities and Health Researchers, SoEpi is a 501(c)(3) non-profit organization committed to better health via online social epidemiology. <a href="/about">Learn More &raquo;</a>}).html_safe
+          #like-buttons
+            .inner
+              #fb-root
+              .fb-like{"data-href" => "https://www.facebook.com/pages/SoEpi/203689719658843", "data-layout" => "button_count", "data-send" => "false", "data-show-faces" => "false", "data-width" => "100"}
+              .g-plusone{"data-href" => "https://secure.soepi.org"}
+              &nbsp;
+    
+= render :partial => '/shared/content_page'

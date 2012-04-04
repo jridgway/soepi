@@ -1,12 +1,27 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
+  enable_esi
   layout Proc.new { |controller| controller.request.xhr? ? 'ajax' : 'two_column' }
   before_filter :set_member_return_to, :force_no_cache_control
   helper_method :cache_expirary, :cache_expirary_in_seconds, :current_participant, :current_member_pin, :member_return_to,
     :avatar_url, :member_contact_us_path,  :message_members_path
-  enable_esi
 
   protected
+
+    def error_404(exception=nil)
+      if (@page = ::Refinery::Page.where(:menu_match => "^/404$").includes(:parts).first).present?
+        # render the application's custom 404 page with layout and meta.
+        render :template => '/refinery/pages/show', :formats => [:html], :status => 404
+      else
+        # fallback to the default 404.html page.
+        file = Rails.root.join('public', '404.html')
+        file = Refinery.roots(:'refinery/core').join('public', '404.html') unless file.exist?
+        render :file => file.cleanpath.to_s.gsub(%r{#{file.extname}$}, ''),
+               :layout => false, :status => 404, :formats => [:html]
+      end
+      render_esi
+      return false
+    end
     
     def authenticate_member_2!
       unless current_member

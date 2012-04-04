@@ -1,8 +1,9 @@
 class SurveysController < ApplicationController
-  before_filter :load_survey, :except => [:new, :create, :add_target_survey, 
-    :index, :drafting, :review_requested, :rejected, :launched, :published, :by_tag]
+  before_filter :load_survey, :except => [:find_and_add_target_survey, :add_target_survey,
+    :new, :create, :add_target_survey, :index, :drafting, :review_requested, :rejected, :launched, :published, :by_tag]
   
-  before_filter :authenticate_member_2!, :except => [:index, :launched, :published, :by_tag, 
+  before_filter :authenticate_member_2!, :except => [:find_and_add_target_survey, :add_target_survey,
+    :new, :create, :index, :launched, :published, :by_tag, 
     :show, :edit, :forks, :followed_by, :demographics, :downloads, :reports, :collaborators]
   before_filter :admin_only!, :only => [:drafting, :review_requested, :rejected, :launch, :reject, :request_changes]
   before_filter :owner_only!, :only => [:submit_for_review, :destroy, :close]
@@ -80,19 +81,37 @@ class SurveysController < ApplicationController
   end
 
   def new
-    @survey = current_member.surveys.new params[:survey]
-    @survey.target = Target.new
+    if member_signed_in?
+      @survey = current_member.surveys.new params[:survey]
+      @survey.target = Target.new
+    else
+      @survey = Survey.new params[:survey]
+      @survey.target = Target.new
+    end
     render :layout => 'one_column'
   end
 
   def create
-    @survey = current_member.surveys.new params[:survey]
-    if @survey.save
-      @survey.version!(current_member.id)
-      flash[:notice] = 'Your survey has been saved. You can add questions now, or come back later when you are ready.'
-      redirect_to survey_questions_path(@survey)
+    if member_signed_in?
+      @survey = current_member.surveys.new params[:survey]
+      if @survey.save
+        @survey.version!(current_member.id)
+        flash[:notice] = 'Your survey has been saved. You can add questions now, or come back later when you are ready.'
+        redirect_to survey_questions_path(@survey)
+      else
+        render :action => 'new', :layout => 'one_column'
+      end
     else
-      render :action => 'new', :layout => 'one_column'
+      @survey = Survey.new params[:survey]
+      if @survey.save
+        session[:survey_ids] ||= []
+        session[:survey_ids] << @survey.id 
+        session[:survey_ids] = session[:survey_ids][0..2] if session[:survey_ids].length > 3
+        flash[:notice] = 'Your survey has been saved. Please sign up to continue.'
+        redirect_to main_app.new_member_registration_path(:member_return_to => survey_questions_path(@survey))
+      else
+        render :action => 'new', :layout => 'one_column'
+      end
     end
   end
 

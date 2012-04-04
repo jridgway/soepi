@@ -28,5 +28,5 @@
     /[if lt IE 9]
       %script{:src => 'https://html5shiv.googlecode.com/svn/trunk/html5.js'}
     %link{:rel => "shortcut icon", :href => "/favicon.ico", :type => "image/x-icon"}
-    - unless (page_code = Refinery::Setting.find_or_set(:analytics_page_code, 'UA-xxxxxx-x').to_s.strip).blank?
+    - if Rails.env.production? and not (page_code = Refinery::Setting.find_or_set(:analytics_page_code, 'UA-xxxxxx-x').to_s.strip).blank?
       = render :template => '/shared/_analytics.js.erb', :locals => {:page_code => page_code}

@@ -26,17 +26,6 @@
           width: 135px;
           }
         }
-        
-      #like-buttons
-        {
-        @include column(4);
-        
-        .inner
-          {
-          margin-top: 15px;
-          clear: both;
-          }
-        }
       
       #start  
         {   
@@ -44,7 +33,7 @@
           {        
           .primary 
             {      
-            @include column(15, true);
+            @include column(19, true);
             position: relative;
             height: 33px;
             
@@ -96,8 +85,7 @@
                 }
               
               .welcome
-                {
-                
+                {                
                 a 
                   {
                   float: left;
@@ -199,7 +187,7 @@
             
           .secondary
             {
-            @include column(15, true);
+            @include column(19, true);
             margin-top: 10px;
             
             ul
