@@ -15,7 +15,7 @@
 /tmp
 /log
 
-solr/data
+solr
 lib/tasks/generate_survey_data.rake
 .sass-cache/
 public/system/
