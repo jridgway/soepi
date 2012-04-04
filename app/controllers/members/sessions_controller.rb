@@ -14,7 +14,7 @@ class Members::SessionsController < Devise::SessionsController
         cookies.encrypted[:collaborator_key] = nil
       end
     end
-    unless session[:survey_ids].empty?
+    if session[:survey_ids] and not session[:survey_ids].empty?
       Survey.where('id in (?) and (member_id = 0 or member_id is null)', session[:survey_ids]).
         update_all "member_id = #{current_member.id}"
       session[:survey_ids] = nil

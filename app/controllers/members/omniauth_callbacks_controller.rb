@@ -7,7 +7,7 @@ class Members::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       member_token = MemberToken.find_by_provider_and_uid(omniauth['provider'], omniauth['uid'].to_s)
       if member_token
         sign_in_and_redirect(:member, member_token.member)        
-        unless session[:survey_ids].empty?
+        if session[:survey_ids] and not session[:survey_ids].empty?
           Survey.where('id in (?) and (member_id = 0 or member_id is null)', session[:survey_ids]).
             update_all "member_id = #{current_member.id}"
           session[:survey_ids] = nil
