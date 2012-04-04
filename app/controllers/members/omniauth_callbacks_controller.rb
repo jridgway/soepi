@@ -6,7 +6,12 @@ class Members::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       omniauth = request.env["omniauth.auth"]
       member_token = MemberToken.find_by_provider_and_uid(omniauth['provider'], omniauth['uid'].to_s)
       if member_token
-        sign_in_and_redirect(:member, member_token.member)
+        sign_in_and_redirect(:member, member_token.member)        
+        unless session[:survey_ids].empty?
+          Survey.where('id in (?) and (member_id = 0 or member_id is null)', session[:survey_ids]).
+            update_all "member_id = #{current_member.id}"
+          session[:survey_ids] = nil
+        end
       elsif member_signed_in?
         current_member.tokens.create(:provider => omniauth['provider'], :uid => omniauth['uid'].to_s)
         flash[:notice] = "Sign in token created."

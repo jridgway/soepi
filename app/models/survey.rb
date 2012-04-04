@@ -29,6 +29,7 @@ class Survey < ActiveRecord::Base
     where('surveys.member_id = :id or collaborators.member_id = :id', :id => member_id).
     joins("left outer join collaborators on collaborators.collaborable_type = 'Survey' and collaborable_id = surveys.id")
   }
+  scope :not_by_visitor, where('member_id != 0 and member_id is not null')
   
   acts_as_taggable
   acts_as_followable

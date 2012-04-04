@@ -36,7 +36,7 @@ class SurveysController < ApplicationController
   end
 
   def drafting
-    @surveys = Survey.drafting.page(params[:page])
+    @surveys = Survey.drafting.not_by_visitor.page(params[:page])
     render :action => 'index', :layout => 'one_column'
   end
 

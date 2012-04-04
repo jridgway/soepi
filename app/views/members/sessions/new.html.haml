@@ -1,8 +1,15 @@
-- unless request.xhr?
-  - content_for :body_content_title do 
+- content_for :body_content_title do 
+  - if @surveys
+    Sign in to continue drafting the following surveys:
+  - else
     Sign in
 
-- content_for :body_content_left do 
+- content_for :body_content_left do
+  - if @surveys
+    %ol
+      - @surveys.each do |survey|
+        %li= survey.title 
+        
   %h2 Sign in through:
   = render :partial => 'members/shared/auth_providers'
 

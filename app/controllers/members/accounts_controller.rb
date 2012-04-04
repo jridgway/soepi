@@ -113,7 +113,7 @@ class Members::AccountsController < Devise::RegistrationsController
     end
     
     def load_surveys
-      if session[:survey_ids] and session[:survey_ids].length > 1
+      if session[:survey_ids] and session[:survey_ids].length > 0
         @surveys = Survey.where('id in (?) and (member_id = 0 or member_id is null)', session[:survey_ids]).limit(3)
       end
     end

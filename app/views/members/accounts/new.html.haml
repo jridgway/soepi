@@ -9,6 +9,7 @@
     %ol
       - @surveys.each do |survey|
         %li= survey.title
+        
   - if session[:omniauth].nil?
     %h2 Sign up through:
     = render :partial => '/members/shared/auth_providers' 
