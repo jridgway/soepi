@@ -17,19 +17,19 @@
       #take-action
         = link_to 'Create a Survey', new_survey_path, :class => 'button', :id => 'create-a-survey-button'
       #extra
-        #browse-surveys
-          %h2 Browse Surveys
-          %ul.listing.reset
-            - Survey.live.limit(3).each do |survey|
-              %li
-                = render :partial => '/surveys/survey', :locals => {:survey => survey}
-          #drafting 
-            %strong #{Survey.drafting.count} 
-            surveys are currently being drafted. 
-            %br Come back soon to participate.
         #about
-          %h2 About SoEpi
-          %p= Refinery::Setting.find_or_set(:home_about, %{Connecting Communities and Health Researchers, SoEpi is a 501(c)(3) non-profit organization committed to better health via online social epidemiology. <a href="/about">Learn More &raquo;</a>}).html_safe
+          %h4= Refinery::Setting.find_or_set(:home_about, %{Connecting Communities and Health Researchers, SoEpi is a 501(c)(3) non-profit organization committed to better health via online social epidemiology. <a href="/about">Learn More &raquo;</a>}).html_safe
+        #extra-bottom
+          #browse-surveys
+            %h2 Browse Surveys
+            %ul.listing.reset
+              - Survey.live.limit(3).each do |survey|
+                %li
+                  = render :partial => '/surveys/survey', :locals => {:survey => survey}
+            #drafting 
+              %strong #{Survey.drafting.count} 
+              surveys are currently being drafted. 
+              %br Come back soon to participate.
           #like-buttons
             .inner
               #fb-root

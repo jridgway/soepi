@@ -121,7 +121,7 @@
       {
       @include column(24, true);
       text-align: center;
-      margin-bottom: 50px;
+      margin-bottom: 30px;
       
       .button
         {
@@ -136,49 +136,55 @@
     #extra
       {
       @include container;
-        
-      #browse-surveys
-        {
-        @include column(16, true);
-        
-        #drafting
-          {
-          margin-top: 15px;
-          
-          strong
-            {
-            font-size: 3em;
-            float: left;
-            position: relative;
-            top: -11px;
-            margin-right: 10px;
-            }
-          }
-          
-        .listing .inner
-          {
-          width: 550px;
-          }
-        }
       
       #about
         {
-        @include column(8);
+        @include column(24, true);
         
-        h1
+        h4
           {
-          font-size: 1.2em;
+          font-style: italic;
+          font-weight: 100;
+          color: #c6c6c6;
           }
+        }
+        
+      #extra-bottom
+        {
+        @include container;
+        
+        #browse-surveys
+          {
+          @include column(20, true);
           
+          #drafting
+            { 
+            margin-top: 15px;
+                     
+            strong
+              {
+              font-size: 3em;
+              float: left;
+              position: relative;
+              top: -11px;
+              margin-right: 10px;
+              }
+            }
+            
+          .listing .inner
+            {
+            width: 700px;
+            }
+          }
+            
         #like-buttons
           {
           @include column(3, true);
-          float: right;
     
           .inner
             {
-            margin-top: 15px;
             clear: both;
+            padding-left: 80px;
             }
           }
         }
