@@ -1,6 +1,6 @@
 class ParticipantsController < ApplicationController
   prepend_before_filter :authenticate_member_2!, :except => [:index, :gmap, :by_city, :by_categories, :by_anonymous_key, :show, :show_responses]
-  before_filter :load_default_facets, :only => [:index, :gmap, :by_city, :by_categories, :by_anonymous_key]
+  before_filter :load_default_facets, :only => [:show, :index, :gmap, :by_city, :by_categories, :by_anonymous_key]
   layout Proc.new { |controller| controller.request.xhr? ? 'ajax' : 'one_column' }
   caches_action :index, :gmap, :by_categories, :show, :show_responses, 
     :cache_path => Proc.new {|controller| controller.params}, 
@@ -11,8 +11,9 @@ class ParticipantsController < ApplicationController
   end
   
   def gmap
-    @participants = Participant.group('lat, lng, city, state, postal_code, country').
-      select('count(*) as total, lat, lng, city, state, postal_code, country')
+    @participants = Participant.listable
+      .group('participants.lat, participants.lng, participants.city, participants.state, participants.postal_code, participants.country').
+      select('count(*) as total, participants.lat, participants.lng, participants.city, participants.state, participants.postal_code, participants.country')
   end
   
   def by_city
@@ -22,7 +23,7 @@ class ParticipantsController < ApplicationController
     where_statement[:state] = @participant.state unless @participant.state.blank?
     where_statement[:postal_code] = @participant.postal_code unless @participant.postal_code.blank?
     where_statement[:country] = @participant.country unless @participant.country.blank?
-    @participants = Participant.where(where_statement).page(params[:page]) unless where_statement.blank?
+    @participants = Participant.listable.where(where_statement).page(params[:page]) unless where_statement.blank?
     render :layout => 'two_column'
   end
   
@@ -32,6 +33,7 @@ class ParticipantsController < ApplicationController
         with f, params[f] unless params[f].blank?
       end
       facet :gender, :age_group, :races, :ethnicities, :education
+      with :listable, true
       paginate :page => params[:page], :per_page => 10
     end
     render :layout => 'two_column'
@@ -39,7 +41,7 @@ class ParticipantsController < ApplicationController
   
   def by_anonymous_key
     if params[:participant] and params[:participant][:anonymous_key] and 
-    (@participant = Participant.find_by_anonymous_key(params[:participant][:anonymous_key]))  
+    (@participant = Participant.listable.find_by_anonymous_key(params[:participant][:anonymous_key]))  
       redirect_to participant_path(@participant)
     else
       @participant = Participant.new params[:participant]
@@ -49,17 +51,17 @@ class ParticipantsController < ApplicationController
   end
   
   def show
-    @participant = Participant.find params[:id]
+    @participant = Participant.listable.find params[:id]
     render :layout => 'two_column'
   rescue 
     error_404
   end
   
   def show_responses
-    @participant = Participant.find params[:id]
+    @participant = Participant.listable.find params[:id]
     @survey_taken = @participant.surveys.find params[:survey_taken_id]
   rescue 
-    error_404
+    render :text => "alert('This survey has not been published yet.')"
   end
   
   def new 
@@ -139,12 +141,13 @@ class ParticipantsController < ApplicationController
 
     def set_pin_cookie_helper(pin)
       cookies.permanent.encrypted["pin_#{current_member.id}"] = pin
-      flash[:alert] = "<h2>Your PIN is: #{pin}</h2><p>Don't forget it! We highly suggest you store it on your computer or write it down.</p>".html_safe
+      flash[:alert] = "<h4>Your PIN is:</h4><h1>#{pin}</h1><p>Don't forget it! We highly suggest you store it on your computer or write it down.</p>".html_safe
     end
     
     def load_default_facets
       @facets = Participant.search do 
         facet :gender, :age_group, :races, :ethnicities, :education
+        with :listable, true
       end
     end
 end

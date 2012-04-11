@@ -1,6 +1,10 @@
+#print-header
+  .description= Refinery::Setting.find_or_set(:site_short_description, 'SoEpi is a 501(c)(3) non-profit organization committed to better health via online, social epidemiology.')
+  = link_to image_tag('/assets/soepi-logo-light-bg.png'), main_app.root_path
+  
 #header-inner
   %h1#logo
-    = link_to 'SoEpi', main_app.root_path, :title => 'SoEpi', :title => 'SoEpi is a 501(c)(3) non-profit organization committed to better health via online, social epidemiology.'
+    = link_to 'SoEpi', main_app.root_path, :title => Refinery::Setting.find_or_set(:site_short_description, 'SoEpi is a 501(c)(3) non-profit organization committed to better health via online, social epidemiology.')
   #start
     #menu
       .primary

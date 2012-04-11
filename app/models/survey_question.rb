@@ -81,7 +81,7 @@ class SurveyQuestion < ActiveRecord::Base
     end
   end
   
-  def response_totals(page=1, per=10)
+  def response_totals(page=1)
     case qtype
       when 'Select One', 'Yes/No', 'True/False' then
         totals = ParticipantSurvey.joins('join participant_responses pr on pr.participant_id = participant_surveys.participant_id').
@@ -145,7 +145,7 @@ class SurveyQuestion < ActiveRecord::Base
         end
         totals
       when 'Text' then
-        responses.page(page).per(per)
+        responses.page(page)
     end
   end
   
@@ -156,39 +156,13 @@ class SurveyQuestion < ActiveRecord::Base
   def previous_question
     survey.questions.where('position = ?', position - 1).first
   end
-    
-  def update_position!(survey_question_choice_id, before_question_id)
-    transaction do
-      if survey_question_choice_id != self.survey_question_choice_id
-        update_attribute :survey_question_choice_id, survey_question_choice_id
-      end
-      if before_question = survey.questions.where(:id => before_question_id).first
-        update_attribute :position, before_question.position
-        increment_following_positions!
-      elsif parent_choice
-        update_attribute :position, parent_choice.position + parent_choice.child_questions.where('survey_question_choice_id != ?', id).count + 1
-      else
-        update_attribute :position, survey.questions.count + 1
-      end
-      tidy_positions!
-    end
-  end
-    
-  def descendant_questions_count
-    choices.collect {|c| c.child_questions.count + c.child_questions.sum(&:descendant_questions_count)}.sum
-  end
 
   private
 
     def init_position
       self.position = survey.questions.count + 1
     end
-    
-    def increment_following_positions!
-      survey.questions.where('position >= ? and id != ?', position, id).
-        update_all "position = position + 1 + #{descendant_questions_count}"
-    end
-    
+        
     def tidy_positions!
       survey.tidy_positions!
     end

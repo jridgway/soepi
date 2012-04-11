@@ -1,0 +1,21 @@
+<% if @participant_response.errors.count > 0 %>
+  $('#question-slider .inner .question').remove();
+  $('#question-slider .inner').html("<%= escape_javascript(render(:partial => '/participant_responses/question')) %>");
+  $('#question-slider .inner .question').show();
+  init_common_elements();
+  init_form_tips();
+  init_form_errors($('.new_participant_response .input'));
+<% else %>
+  $('#question-slider .inner .question').hide('slide', function() {
+    $(this).remove();
+  });
+  function next_question() {
+    $('#question-slider .inner').html("<%= escape_javascript(render(:partial => '/participant_responses/question')) %>");
+    $('#question-slider .inner .question').show('slide', {direction:'right'});
+    $('#percent-complete').html("<%= escape_javascript(render(:partial => '/participant_responses/percent_complete')) %>");
+    init_common_elements();
+    init_form_tips();
+    init_form_errors($('.participant_response .input'));
+  }
+  setTimeout('next_question();', 200);
+<% end %>

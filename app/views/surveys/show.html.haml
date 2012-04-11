@@ -7,15 +7,16 @@
   - if @survey.launched?
     #survey-sidebar
       #survey-participation.highlight
-        %h1 Participate in Survey: 
-        %h2= @survey.title
+        %h2 Participate in this Survey
         %p#survey-participation-agreement-container
           %input{:type => 'checkbox', :id => 'survey-participation-agreement'} 
           %label{:for => 'survey-participation-agreement'}= Refinery::Setting.find_or_set(:survey_participation_agreement, 'I agree to participate in this survey and I acknowledge that I have been informed of the risks and benefits of doing so.')
-        %p= link_to 'Participate in this Survey', participate_survey_path(@survey), :icon => 'ui-icon-play', :class => 'button restrict-to-members', :id => 'participate', :method => 'put', :remote => true
+        %p= link_to 'Participate in this Survey', new_participant_response_path(:survey_id => @survey.id), :icon => 'ui-icon-play', :class => 'button restrict-to-members', :id => 'participate', :remote => true
       #survey-share
         %h4 Please share this survey!
         = render :partial => '/shared/sharing_large'
+    %h1#page-title-actual= @survey.title
+    = simple_format @survey.description
     - cache 'survey-informed-consent' do 
       %h1#page-title-actual= Refinery::Page.find('informed-consent').title
       #page-content= Refinery::Page.find('informed-consent').content_for(:body).html_safe

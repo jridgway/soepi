@@ -1,5 +1,21 @@
 @import "common";
 
+#tester
+  {
+  margin: 0 0 30px 0;
+  text-align: center;
+  
+  p
+    {
+    margin: 0 0 5px 0;
+    }
+  }
+
+.previous-question
+  {
+  font-size: 0.7em;
+  }
+
 #survey-sidebar
   {
   float: right;
@@ -366,16 +382,16 @@
     border: 1px dashed #606060;
     }
 
-  #root-questions-container li.survey_question .handle 
+  #root-questions-container.editable li.survey_question .handle 
     {
     cursor: move;
-    
-    &:hover .top-actions
-      {
-      display: none;
-      }
     }
-  
+
+  #root-questions-container li.survey_question .handle:hover .top-actions
+    {
+    display: none;
+    }
+      
 .two-column #body_content_right .posted-by .inner
   {
   width: 125px;
@@ -497,7 +513,7 @@
     }
   }
   
-form.participant_response, form.new_participant_response
+form.participant_response, form.new_participant_response, form.edit_participant_response
   {    
   button.full.ui-button.ui-widget.ui-state-default
     {
@@ -514,6 +530,11 @@ form.participant_response, form.new_participant_response
   fieldset 
     {
     padding-top: 0;
+    
+    legend 
+      {
+      text-align: right;
+      }
     }
     
   .hint 

@@ -97,6 +97,9 @@ function init_survey_form() {
       $('#irb-inner').hide('blind');
     }
   }).change();
+  if($('#survey_irb').attr('checked')) {
+    $('#irb-inner').show('blind');
+  }
   $('#survey_organization').change(function () {
     if($(this).attr('checked')) {
       $('#organization-inner').show('blind');
@@ -104,6 +107,9 @@ function init_survey_form() {
       $('#organization-inner').hide('blind');
     }
   }).change();
+  if($('#survey_organization').attr('checked')) {
+    $('#organization-inner').show('blind');
+  }
   $('#survey_cohort').change(function () {
     if($(this).attr('checked')) {
       $('#cohort-inner').show('blind');
@@ -111,6 +117,9 @@ function init_survey_form() {
       $('#cohort-inner').hide('blind');
     }
   }).change();
+  if($('#survey_cohort').attr('checked')) {
+    $('#cohort-inner').show('blind');
+  }
   init_targeting();
 }
 
@@ -332,37 +341,30 @@ function root(ref) {
   return $(ref).closest('form');
 }
 
-var initial_sorting = '';
-
 function init_questions_sortable() {
-  $('#questions').find('.button').button('destroy')
-  initial_sorting = $('#questions').html();
-  $('#root-questions').surveySortable({
-    items: 'li',
-    placeholder: 'placeholder',
-    handle: '.handle',
-    tolerance: 'pointer',
-    toleranceElement: '> div',
-    scroll: true,
-		forcePlaceholderSize: true,
-		helper:	'clone',
-		opacity: .6,
-		revert: 0,
-		update: function(event, ui) {
-		  $.ajax({
-        type: 'PUT', 
-        data: {
-          survey_question_choice_id: $(ui.item).closest('.survey_question_choice').attr('data-choice-id'),
-          before_question_id: $(ui.item).next('.survey_question').attr('data-question-id'),
-        },
-        url: 'questions/' + ui.item.attr('data-question-id') + '/update_position',
-        error: function() {
-          alert('Sorry, an error occurred. Please refresh this page and try again.');
-        }
-      });
-		}
-  });
-  $('#root-questions').surveySortable('enable');
+  if($('#root-questions').closest('.not-editable').length == 0) {
+    $('#root-questions').surveySortable({
+      items: 'li',
+      placeholder: 'placeholder',
+      handle: '.handle',
+      tolerance: 'pointer',
+      toleranceElement: '> div',
+      scroll: true,
+  		forcePlaceholderSize: true,
+  		helper:	'clone',
+  		opacity: .6,
+  		revert: 0,
+  		update: function(event, ui) {
+  		  $.ajax({
+          type: 'PUT', 
+          data: $('#root-questions').surveySortable('serialize'),
+          dataType: 'script',
+          url: 'questions/update_positions'
+        });
+  		}
+    });
+    $('#root-questions').surveySortable('enable');
+  }
 }
 
 function no_questions_message() {
@@ -383,6 +385,9 @@ function init_targeting() {
       $(this).closest('.target').find('.inner').hide('blind');
     }
   });
+  if($('.check').attr('checked')) {
+    $(this).closest('.target').find('.inner').show('blind');
+  }
   $('.check').change();
   $('#survey_target_attributes_ethnicity_ids_1').change(function() {
     if($(this).attr('checked')) {

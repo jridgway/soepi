@@ -44,7 +44,7 @@ class Survey < ActiveRecord::Base
     include_field :taggings
   end
 
-  validates_presence_of :title, :description, :purpose_of_survey, :uses_of_results
+  validates_presence_of :title, :description
   validates_presence_of :member_id, :on => :update
   validates_length_of :title, :minimum => 3
   validates_numericality_of :cohort_interval_in_days, :cohort_range_in_days, :minimum => 1, :allow_blank => true
@@ -60,7 +60,7 @@ class Survey < ActiveRecord::Base
     text :irb_name
     text :tag_list
     text :nickname do 
-      member.nickname
+      member.try :nickname
     end
     text :questions do 
       questions.collect do |question|
@@ -246,6 +246,14 @@ class Survey < ActiveRecord::Base
         question.update_attributes :position => index, :survey_question_choice_id => choice_id
       end
       index += 1
+    end
+  end
+  
+  def tidy_positions!
+    questions.each_with_index do |question, index|
+      if question.position != index + 1
+        question.update_attribute :position, index + 1
+      end
     end
   end
 
@@ -446,18 +454,6 @@ class Survey < ActiveRecord::Base
   def to_param
     "#{id} #{title}".parameterize
   end
-  
-  def tidy_positions!(questions=root_questions, parent_question_position=0)
-    questions.each_with_index do |question, index|
-      position = parent_question_position + index + 1
-      if question.position != position
-        question.update_attribute :position, position
-      end
-      question.choices.each do |choice|
-        tidy_positions!(choice.child_questions, position)
-      end
-    end
-  end  
   
   def self.destroy_old_visitor_surveys!
     Survey.where('member_id = 0 or member_id is null and created_at < ?', 1.month.ago).destroy_all

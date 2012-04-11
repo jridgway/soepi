@@ -1,0 +1,6 @@
+$('#require-pin').remove();
+$('body').append("<%= escape_javascript(render(:partial => '/participant_responses/require_pin')) %>");
+$('#require-pin').dialog({modal:true, height:300, width:520, close: function(){$('.error2').qtip('destroy');}});
+init_common_elements();
+init_form_tips();
+init_form_errors($('#require-pin .input'));

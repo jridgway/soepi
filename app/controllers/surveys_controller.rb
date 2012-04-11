@@ -256,90 +256,6 @@ class SurveysController < ApplicationController
     redirect_to survey_path(new_survey)
   end
 
-  def participate
-    if request.put?
-      if @survey.launched? and current_participant
-        if current_member.id != @survey.member_id
-          if current_participant.qualifies_for_survey?(@survey)
-            unless current_participant.has_taken_survey?(@survey.id)
-              if find_or_create_participant_survey(@survey.id)
-                if @question = @participant_survey.next_question
-                  @participant_response = current_participant.responses.build :question_id => @question.id
-                end
-              end
-            end
-          else
-            render :text => "alert('We are sorry, you do not qualify for this survey.'); enable_button($('#participate')); enable_button($('#participate2'));"
-          end
-        else
-          render :text => "alert('You cannot participate in your own survey.');"
-        end
-      end
-    else
-      redirect_to_back_or(survey_path(@survey))
-    end
-  end
-
-  def create_response
-    if request.post? and current_participant
-      if find_or_create_participant_survey(@survey)
-        @participant_response = current_participant.responses.build(params[:participant_response])  
-        @participant_response.participant_survey = @participant_survey
-        if @participant_response.save
-          if @question = @participant_survey.next_question
-            @participant_response = current_participant.responses.build :question_id => @question.id
-          end
-        else
-          @question = @participant_response.question
-        end
-        render :action => 'participate'
-      end
-    else
-      render :text => "window.onbeforeunload = null; alert('An error occurred. Please refresh this page and try again.');"
-    end
-  end
-
-  def store_pin
-    current_member.pin = params[:member][:pin]
-    if @current_participant = Participant.find_by_member(current_member)
-      cookies.permanent.encrypted["pin_#{current_member.id}"] = current_member.pin
-      unless current_participant.has_taken_survey?(@survey.id)
-        if @question = find_or_create_participant_survey(@survey.id).next_question
-          @participant_response = current_participant.responses.build :question_id => @question.id
-        end
-      end
-    else
-      current_member.errors.add :pin, 'Invalid PIN. Please try again.'
-    end
-    render :action => 'participate'
-  end
-  
-  def new_participant
-    @participant = Participant.new
-  end
-
-  def create_participant
-    current_member.pin = params[:participant][:pin]
-    if @participant = Participant.find_by_member(current_member)
-      @participant.attributes = params[:participant].except(:pin)
-    else
-      @participant = Participant.new params[:participant]
-    end
-    @participant.member = current_member
-    if @participant.save
-      cookies.permanent.encrypted["pin_#{current_member.id}"] = current_member.pin     
-      @current_participant = @participant
-      unless current_participant.has_taken_survey?(@survey)
-        if @question = find_or_create_participant_survey(@survey.id).next_question
-          @participant_response = current_participant.responses.build :question_id => @question.id
-        end
-      end
-      render :action => 'participate'
-    else
-      render :action => 'new_participant'
-    end
-  end
-
   protected
 
     def load_survey
@@ -364,18 +280,6 @@ class SurveysController < ApplicationController
         render :action => 'edit',  :layout => 'one_column'
         false
       end
-    end
-
-    def find_or_create_participant_survey(survey_id)
-      unless @participant_survey
-        unless @participant_survey = current_participant.surveys.find_by_survey_id(survey_id)
-          @participant_survey = current_participant.surveys.build :survey_id => survey_id
-          @participant_survey.set_next_question
-          @participant_survey.apply_participant
-          @participant_survey.save!
-        end
-      end
-      @participant_survey
     end
 
     def load_tags

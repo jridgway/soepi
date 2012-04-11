@@ -8,7 +8,7 @@
   %h2 Question #{question.path}
   = simple_format question.body
   %p
-    %small #{question.qtype} | #{question.required? ? 'Required' : 'Optional'} | ID=#{question.id}
+    %small #{question.qtype} | #{question.required? ? 'Required' : 'Optional'}
   - case question.qtype when 'Select One', 'Select Multiple', 'Yes/No', 'True/False' then
     %div{:id => "question-#{question.id}-chart"}
     %script{:type => "text/javascript", :charset => "utf-8"}

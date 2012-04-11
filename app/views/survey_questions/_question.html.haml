@@ -2,6 +2,7 @@
   .handle
     - if @survey.may_edit?(current_member)
       .top-actions
+        = link_to 'Preview', new_participant_response_path(:survey_id => question.survey, :question_id => question.id), :class => 'button preview', :remote => true
         = link_to 'Edit', edit_survey_question_path(:survey_id => question.survey, :id => question.id), :class => 'button edit', :remote => true
         = link_to 'Delete', survey_question_path(:survey_id => question.survey, :id => question.id), :class => 'button destroy'
     .expandable

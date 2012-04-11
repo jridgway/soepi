@@ -8,7 +8,7 @@
       %th Response
     - @survey_taken.responses.each do |response|
       %tr
-        %td= response.question.position + 1
+        %td= response.question.path
         %td= simple_format response.question.body
         %td
           - case response.question.qtype

@@ -9,8 +9,8 @@ class ParticipantResponse < ActiveRecord::Base
   validates_uniqueness_of :question_id, :scope => :participant_id
   validates_numericality_of :numeric_response, :allow_blank => true, :only_integer => true
   validate :question_required
-
   after_create :set_next_question, :check_and_set_complete
+  after_destroy :set_next_question, :check_and_set_complete
 
   def choices
     (multiple_choices + [single_choice]).compact
@@ -32,10 +32,25 @@ class ParticipantResponse < ActiveRecord::Base
       end
     end
   end
+  
+  def previous_response
+    participant.responses.
+      joins('join survey_questions on survey_questions.id = participant_responses.question_id').
+      where('survey_questions.position < ?', question.position).
+      order('survey_questions.position desc').
+      first
+  end
+  
+  def destroy_following_responses!
+    participant.responses.
+      joins('join survey_questions on survey_questions.id = participant_responses.question_id').
+      where('survey_questions.position > ? and survey_questions.survey_id = ?', question.position, question.survey_id).
+      destroy_all
+  end
 
   protected
 
-    def set_next_question
+    def set_next_question    
       next_question = nil
       questions_unanswered = question.survey.questions.where('position > ?', question.position)
       questions_unanswered.each do |question|

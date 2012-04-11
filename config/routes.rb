@@ -59,11 +59,6 @@ Soepi::Application.routes.draw do
       put 'reject'
       put 'request_changes'
       put 'close'
-      match 'participate'
-      put 'store_pin'
-      match 'new_participant'
-      post 'create_participant'
-      post 'create_response'
       get 'demographics'
       get 'downloads(/page/:page)', :action => 'downloads', :as => 'downloads'
       get 'reports(/page/:page)', :action => 'reports', :as => 'reports'
@@ -78,7 +73,9 @@ Soepi::Application.routes.draw do
     resources :survey_questions, :path => 'questions', :as => :questions do
       member do        
         get 'results' 
-        put 'update_position'
+      end
+      collection do 
+        put 'update_positions'
       end
     end
   end
@@ -120,6 +117,15 @@ Soepi::Application.routes.draw do
       match 'by_city'
       match 'by_anonymous_key'
       get 'by_categories'
+    end
+  end
+  
+  resources :participant_responses, :only => [:new, :create, :edit, :update] do 
+    collection do 
+      delete 'destroy_all'
+      match 'new_participant'
+      post 'create_participant'
+      put 'store_pin'
     end
   end
 

@@ -11,9 +11,10 @@ class ParticipantSurvey < ActiveRecord::Base
   has_many :responses, :class_name => 'ParticipantResponse'
 
   validates_presence_of :participant_id, :survey_id, :country,
-    :age_group_id, :gender_id, :ethnicity_ids, :race_ids, :education_id, :next_question_id
+    :age_group_id, :gender_id, :ethnicity_ids, :race_ids, :education_id, :next_question_id, 
+    :unless => Proc.new {|ps| ps.participant.tester?}
 
-  before_create :apply_participant, :set_next_question
+  before_validation :apply_participant, :set_next_question
   
   scope :for_survey, lambda {|survey_id| where(:survey_id => survey_id, :complete => true)}
   scope :completes, where(:complete => true)
@@ -21,25 +22,6 @@ class ParticipantSurvey < ActiveRecord::Base
 
   def complete?
     true unless next_question
-  end
-  
-  def apply_participant
-    self.gender_id = participant.gender_id
-    self.age_group_id = participant.age_group.id
-    self.city = participant.city
-    self.state = participant.state
-    self.postal_code = participant.postal_code
-    self.country = participant.country
-    self.region_id = participant.region.try(:id)
-    self.lat = participant.lat
-    self.lng = participant.lng
-    self.ethnicity_ids = participant.ethnicity_ids
-    self.race_ids = participant.race_ids
-    self.education_id = participant.education_id
-  end
-
-  def set_next_question
-    self.next_question_id = survey.questions.first.id
   end
 
   def responses
@@ -50,4 +32,27 @@ class ParticipantSurvey < ActiveRecord::Base
   def self.compute_weights_for_survey!(survey)
     ParticipantSurvey.for_survey(survey.id).update_all 'weight = 1.0'
   end
+  
+  protected 
+      
+    def apply_participant
+      unless participant.tester?
+        self.gender_id = participant.gender_id
+        self.age_group_id = participant.age_group.id
+        self.city = participant.city
+        self.state = participant.state
+        self.postal_code = participant.postal_code
+        self.country = participant.country
+        self.region_id = participant.region.try(:id)
+        self.lat = participant.lat
+        self.lng = participant.lng
+        self.ethnicity_ids = participant.ethnicity_ids
+        self.race_ids = participant.race_ids
+        self.education_id = participant.education_id
+      end
+    end
+  
+    def set_next_question
+      self.next_question_id = survey.questions.first.id
+    end
 end

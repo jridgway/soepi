@@ -1,0 +1,22 @@
+<% if @participant.tester? %>
+  $('#container').append("<%= escape_javascript(render(:partial => '/participant_responses/tester')) %>");
+  $('#cancel-preview').click(function() {
+    $('#question-slider, #tester').remove();
+    $('#header, #breadcrumbs, #content-above-top, #content-top, #body_content, #body_content_left, #body_content_right, ' +
+    '#menu-footer, #uservoice-feedback').show('blind');
+    window.onbeforeunload = null;
+  });
+<% end %>
+$('#require-pin, #new-participant, #question-slider').remove();
+$('#container').append("<%= escape_javascript(render(:partial => '/participant_responses/question_slider')) %>");
+$('#question-slider .inner').html("<%= escape_javascript(render(:partial => '/participant_responses/question')) %>");
+$('#question-slider .inner .question').show('blind');
+init_common_elements();
+init_form_tips();
+init_form_errors($('.new_participant_response .input'));
+if($('#header').is(':visible')) {
+  window.onbeforeunload = function(){return "As long as you remember your PIN, you can come back to this survey to continue where you left off.";};
+  $('#header, #breadcrumbs, #content-above-top, #content-top, #body_content, #body_content_left, #body_content_right, ' +
+  '#menu-footer, #uservoice-feedback').hide('blind');
+}
+init_common_elements();

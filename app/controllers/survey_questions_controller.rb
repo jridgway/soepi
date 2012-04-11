@@ -1,7 +1,7 @@
 class SurveyQuestionsController < ApplicationController
   before_filter :authenticate_member_2!, :except => [:index, :results]
   before_filter :load_survey
-  before_filter :load_question, :except => [:new, :create, :index]
+  before_filter :load_question, :except => [:new, :create, :index, :update_positions]
   before_filter :owner_or_collaborators_only_until_published!
   before_filter :authorize_edit!, :only => [:new, :create, :edit, :update, :destroy]
   layout Proc.new {|controller| controller.request.xhr? ? 'ajax' : 'two_column'}
@@ -52,10 +52,13 @@ class SurveyQuestionsController < ApplicationController
     @participant_response = ParticipantResponse.new
   end
 
-  def update_position
-    @question.update_position! params[:survey_question_choice_id], params[:before_question_id]
-    @survey.version!(current_member.id)
-    render :nothing => true
+  def update_positions
+    if @survey.may_edit?(current_member)
+      @survey.update_question_positions! params[:survey_question]
+      render :nothing => true
+    else
+      render :text => "alert('You cannot edit this survey.');"
+    end
   end
 
   def destroy

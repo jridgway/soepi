@@ -1,9 +1,9 @@
 #require-pin{:style => 'display:none', :title => 'Please enter your PIN'}
-  = simple_form_for current_member, :url => store_pin_survey_path(@survey), :remote => true do |f|
+  = simple_form_for current_member, :url => store_pin_participant_responses_path(:survey_id => @survey.id), :remote => true do |f|
     %h3.clear To participate in this survey, you must enter your PIN:
     = f.input :pin, :label => false do 
       = f.input_field :pin, :style => 'width:300px', :value => ''
       = f.submit 'Submit', :class => 'button'
   %h3.clear Don't have a PIN or forgot your PIN?
   %p
-    = link_to 'Create a New Participant Record', new_participant_survey_path(@survey), :method => 'put', :class => 'button', :remote => true, :id => 'send-pin'
+    = link_to 'Create a New Participant Record', new_participant_participant_responses_path(:survey_id => @survey.id), :method => 'put', :class => 'button', :remote => true, :id => 'send-pin'

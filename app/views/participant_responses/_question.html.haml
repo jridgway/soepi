@@ -1,5 +1,6 @@
 .question{:style => 'display:none;'}
-  = simple_form_for @participant_response, :url => create_response_survey_path(@survey), :remote => true do |f|
+  = simple_form_for @participant_response, :remote => true do |f|
+    = hidden_field_tag :survey_id, @survey.id
     = f.hidden_field :question_id
     = field_set_tag "Question #{@question.path} - #{@question.qtype} - #{@question.required? ? '<strong>Required</strong>' : '<strong>Optional</strong>'}".html_safe do
       = simple_format @question.body
@@ -24,4 +25,9 @@
       - when 'Numeric' then 
         = f.input :numeric_response, :label => false, :hint => 'Must be a number. Periods and commas are not allowed.'
       = f.submit 'Submit', :class => 'button' unless ['Select One', 'True/False', 'Yes/No'].include?(@question.qtype)
-  
+  .actions
+    - if @participant_response.previous_response
+      = link_to '&laquo; Previous Question'.html_safe, edit_participant_response_path(@participant_response.previous_response, :survey_id => @survey.id), :remote => true
+    - if @participant.responses.where('question_id in (?)', @survey.question_ids).count > 0
+      | 
+      = link_to 'Remove my responses for this survey and get me out of here.'.html_safe, destroy_all_participant_responses_path(:survey_id => @survey.id), :method => 'delete', :remote => true, :confirm => 'Are you sure?'

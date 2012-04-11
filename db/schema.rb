@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120329115030) do
+ActiveRecord::Schema.define(:version => 20120405135852) do
 
   create_table "age_groups", :force => true do |t|
     t.string   "label"
@@ -602,6 +602,8 @@ ActiveRecord::Schema.define(:version => 20120329115030) do
     t.string  "country"
     t.float   "lat"
     t.float   "lng"
+    t.boolean "tester",        :default => false
+    t.boolean "piloter",       :default => false
   end
 
   add_index "participants", ["anonymous_key"], :name => "index_participants_on_anonymous_key", :unique => true
