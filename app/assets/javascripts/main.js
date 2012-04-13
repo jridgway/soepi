@@ -1,7 +1,3 @@
-$(document).ready(function () {
-  setTimeout('init_main()', 100);
-});
-
 function init_main() {
   $('.ui-widget-overlay').live('click', function () {
     $('.ui-dialog-content').dialog('close');

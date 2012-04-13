@@ -33,7 +33,7 @@ input:focus:-moz-placeholder {
   
 .bp .input.hidden
   {
-  display: none;
+  display: none !important;
   }
 
 .simple_form.report
