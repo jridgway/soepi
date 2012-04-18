@@ -104,7 +104,8 @@
       $('.restrict-to-members').unbind('click');
       $('.restrict-to-members').click(function(e) {
         e.preventDefault();
-        if($(this).attr('data-method') == null || $(this).attr('data-method') == 'get') {
+        if(($(this).attr('data-method') == null || $(this).attr('data-method') == 'get') && 
+        ($(this).attr('data-remote') == null || $(this).attr('data-remote') == false)) {
           sign_in_dialog($(this).attr('href'));
         } else {
           sign_in_dialog();
