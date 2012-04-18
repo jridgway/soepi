@@ -172,7 +172,9 @@ class SurveyQuestion < ActiveRecord::Base
     end
     
     def set_boolean_choices
-      choices.destroy_all if not new_record? and qtype_changed?
+      if not new_record? and qtype_changed? and not ['Yes/No', 'True/False', 'Select One', 'Select Multiple'].include?(qtype)
+        choices.destroy_all 
+      end
       if choices.empty?
         case qtype
           when 'Yes/No' then
