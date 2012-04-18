@@ -70,6 +70,19 @@ $(document).ready(function() {
     $('#cancel-forkit').click(function() {
       $('#forkit-message').dialog('destroy');
     }); 
+    $('#open-questions').click(function() {
+      $('.choices').show('blind');
+      $('#close-questions').show();
+      $(this).hide();
+    });
+    $('#close-questions').click(function() {
+      $('.choices').hide('blind');
+      $('#open-questions').show();
+      $(this).hide();
+    });
+    $('.handle').live('click', function() { 
+      $(this).siblings('.choices').toggle('blind');
+    });
   }
   if(controller_name == 'surveys' && action_name == 'downloads') {
     $('#downloads a.copy').each(function() {

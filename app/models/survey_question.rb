@@ -172,18 +172,39 @@ class SurveyQuestion < ActiveRecord::Base
     end
     
     def set_boolean_choices
-      if not new_record? and qtype_changed? and not ['Yes/No', 'True/False', 'Select One', 'Select Multiple'].include?(qtype)
-        choices.destroy_all 
-      end
-      if choices.empty?
-        case qtype
-          when 'Yes/No' then
-            choices.build :label => 'Yes', :value => 1, :position => 1
-            choices.build :label => 'No', :value => 0, :position => 2
-          when 'True/False' then
-            choices.build :label => 'True', :value => 1, :position => 1
-            choices.build :label => 'False', :value => 0, :position => 2
+      if qtype == 'Yes/No' or qtype == 'True/False'
+        if qtype == 'Yes/No'
+          true_label = 'Yes'
+          false_label = 'No'
+        elsif qtype == 'True/False'
+          true_label = 'True'
+          false_label = 'False'
         end
+        if choices.length > 2
+          choices.delete(choices[2..-1])
+        end
+        if choices.length == 2
+          puts "2222222222222222222"
+          puts choices.to_yaml 
+          choices[0].label = true_label
+          choices[0].value = 1
+          choices[0].position = 1
+          choices[1].label = false_label
+          choices[1].value = 0
+          choices[1].position = 2
+        elsif choices.length == 1
+          puts "1111111111111111111111"
+          puts choices.to_yaml
+          choices[0].label = true_label
+          choices[0].value = 1
+          choices[0].position = 1
+          choices.build :label => false_label, :value => 0, :position => 2
+        else
+          puts "0000000000000000000"
+          puts choices.to_yaml
+          choices.build :label => true_label, :value => 1, :position => 1
+          choices.build :label => false_label, :value => 0, :position => 2
+        end 
       end
     end
 

@@ -40,7 +40,7 @@ function focus_first_form_field() {
 }
 
 function init_tagit() {
-  $('input.tags, textarea.tags').tagit({allowSpaces:true});
+  $('input.tags, textarea.tags').tagit({allowSpaces:true, caseSensitive:false});
   $('input.tags, textarea.tags').each(function() {
     if($(this).closest('.input').find('[placeholder]').length > 0) {
       $(this).closest('.input').find('.tagit-new input').attr(
