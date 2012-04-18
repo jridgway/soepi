@@ -14,7 +14,7 @@ class SurveysController < ApplicationController
     :create_response, :update_pin, :generate_and_send_new_pin, :followed_by, :collaborators]
   before_filter :load_tags, :only => [:index, :by_tag]
   
-  caches_action :index, :drafting, :rejected, :review_requested, :launched, :published, :by_tag, :show, :edit, 
+  caches_action :index, :drafting, :rejected, :review_requested, :launched, :published, :by_tag, :show, 
     :cache_path => Proc.new {|controller| cache_expirary_key(controller.params)}, 
     :expires_in => 2.hours
   cache_sweeper :surveys_sweeper, :only => [:create, :update, :destroy, :submit_for_review, :request_changes, 
