@@ -13,7 +13,7 @@ module Extensions
       end
       
       def wrap_text(s, col=80)
-        s.gsub(/(.{1,#{col}})( +|$\n?)|(.{1,#{col}})/, "\\1\\3\n") 
+        s.to_s.gsub(/(.{1,#{col}})( +|$\n?)|(.{1,#{col}})/, "\\1\\3\n") 
       end
     end
   end

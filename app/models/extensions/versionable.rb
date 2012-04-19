@@ -14,9 +14,9 @@ module Extensions
       def version!(member_id_2)
         if current_version and current_version.member_id == member_id_2 and 
         current_version.updated_at >= 10.minutes.ago and current_version.position == versions.count
-          update_version!(current_version)
+          delay.update_version!(current_version)
         else
-          create_version!(member_id_2)
+          delay.create_version!(member_id_2)
         end
       end
       
