@@ -20,7 +20,7 @@
               - if @versions.length > 1
                 = link_to 'Compare Changes', compare_versions_survey_path(@survey, :version_a_id => version.id), :class => 'button', :icon => 'ui-icon-zoomin', :remote => true
             - elsif @survey.drafting?
-              = link_to 'Revert to this Version', revert_to_version_survey_path(:version_id => version.id), :method => 'put', :class => 'button', :icon => 'ui-icon-arrowreturnthick-1-w'
+              = link_to 'Revert to this Version', revert_to_version_survey_path(:version_id => version.id), :method => 'put', :class => 'button', :icon => 'ui-icon-arrowreturnthick-1-w', :confirm => 'Are you sure?'
     = will_paginate @versions
     
 = render :partial => "/shared/content_page"
