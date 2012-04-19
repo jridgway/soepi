@@ -24,7 +24,7 @@ class Member < ActiveRecord::Base
   acts_as_taggable
   acts_as_followable
 
-  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable,
+  devise :database_authenticatable, :registerable, :recoverable, :validatable,
     :omniauthable, :token_authenticatable, :lockable
 
   searchable do
