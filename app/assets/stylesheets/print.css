@@ -21,6 +21,7 @@
  *= require partials/sign_in
  *= require partials/reports
  *= require partials/home
+ *= require partials/steps
  *= require partials/misc
  *= require codemirror
  *= require codemirror/themes/night
