@@ -7,7 +7,7 @@ class SurveyQuestionsController < ApplicationController
   layout Proc.new {|controller| controller.request.xhr? ? 'ajax' : 'two_column'}
 
   def index
-    @questions = @survey.questions.roots.all
+    @questions = @survey.questions.roots.includes(:choices => [:child_questions]).all
     @question = @survey.questions.new params[:survey_question]
     @open_graph_meta = {
       :url => survey_url(@survey),

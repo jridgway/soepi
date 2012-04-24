@@ -156,6 +156,15 @@ class SurveyQuestion < ActiveRecord::Base
   def previous_question
     survey.questions.where('position = ?', position - 1).first
   end
+  
+  def cache_key
+    child_questions = choices.collect(&:child_questions).flatten
+    if child_questions.empty?
+      super
+    else
+      super + '-' + child_questions.collect(&:cache_key).join('-')
+    end
+  end
 
   private
 
@@ -184,8 +193,6 @@ class SurveyQuestion < ActiveRecord::Base
           choices.delete(choices[2..-1])
         end
         if choices.length == 2
-          puts "2222222222222222222"
-          puts choices.to_yaml 
           choices[0].label = true_label
           choices[0].value = 1
           choices[0].position = 1
@@ -193,15 +200,11 @@ class SurveyQuestion < ActiveRecord::Base
           choices[1].value = 0
           choices[1].position = 2
         elsif choices.length == 1
-          puts "1111111111111111111111"
-          puts choices.to_yaml
           choices[0].label = true_label
           choices[0].value = 1
           choices[0].position = 1
           choices.build :label => false_label, :value => 0, :position => 2
         else
-          puts "0000000000000000000"
-          puts choices.to_yaml
           choices.build :label => true_label, :value => 1, :position => 1
           choices.build :label => false_label, :value => 0, :position => 2
         end 

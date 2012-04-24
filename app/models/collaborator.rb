@@ -49,7 +49,7 @@ class Collaborator < ActiveRecord::Base
     
     def set_key
       unless email.blank?
-        self.key = SecureRandom.base64(100).gsub(/[^a-z-A-Z0-9]/, '')[0..49]
+        self.key = SecureRandom.base64(100).gsub(/[^a-zA-Z0-9]/, '')[0..49]
       end
     end
     

@@ -1,27 +1,28 @@
-%li[question]{:'data-question-id' => question.id, :'data-question-required' => question.required.to_s, :'data-question-qtype' => question.qtype}
-  .handle
-    - if @survey.may_edit?(current_member)
-      .top-actions
-        = link_to 'Preview', new_participant_response_path(:survey_id => question.survey, :question_id => question.id), :class => 'button preview', :remote => true
-        = link_to 'Edit', edit_survey_question_path(:survey_id => question.survey, :id => question.id), :class => 'button edit', :remote => true
-        = link_to 'Delete', survey_question_path(:survey_id => question.survey, :id => question.id), :class => 'button destroy'
-    .expandable
-      %strong
-        - if @survey.published? or @survey.closed? or @survey.launched?
-          %a{:href => "##{question.id}"}= question.body
-        - else
-          = question.body
-    %p
-      %small #{question.qtype} | #{question.required? ? 'Required' : 'Optional'}
-      - if @survey.closed? or @survey.published?
-        | Question #{question.path}
-  - unless question.choices.empty? 
-    %ol.choices
-      - question.choices.each do |choice|
-        %li[choice]{:'data-choice-id' => choice.id}          
-          %div
-            = choice.label
-          - unless choice.child_questions.empty?
-            %ol.nested-questions{:id => "nested-questions-#{choice.id}"}
-              - choice.child_questions.each do |question2|
-                = render :partial => 'question', :locals => {:question => question2}
+- cache question.cache_key do 
+  %li[question]{:'data-question-id' => question.id, :'data-question-required' => question.required.to_s, :'data-question-qtype' => question.qtype}
+    .handle
+      - if @survey.may_edit?(current_member)
+        .top-actions
+          = link_to 'Preview', new_participant_response_path(:survey_id => question.survey, :question_id => question.id), :class => 'button preview', :remote => true
+          = link_to 'Edit', edit_survey_question_path(:survey_id => question.survey, :id => question.id), :class => 'button edit', :remote => true
+          = link_to 'Delete', survey_question_path(:survey_id => question.survey, :id => question.id), :class => 'button destroy'
+      .expandable
+        %strong
+          - if @survey.published? or @survey.closed? or @survey.launched?
+            %a{:href => "##{question.id}"}= question.body
+          - else
+            = question.body
+      %p
+        %small #{question.qtype} | #{question.required? ? 'Required' : 'Optional'}
+        - if @survey.closed? or @survey.published?
+          | Question #{question.path}
+    - unless question.choices.empty? 
+      %ol.choices
+        - question.choices.each do |choice|
+          %li[choice]{:'data-choice-id' => choice.id}          
+            %div
+              = choice.label
+            - unless choice.child_questions.empty?
+              %ol.nested-questions{:id => "nested-questions-#{choice.id}"}
+                - choice.child_questions.each do |question2|
+                  = render :partial => 'question', :locals => {:question => question2}
