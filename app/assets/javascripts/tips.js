@@ -125,7 +125,7 @@ function init_form_errors(input_divs) {
           adjust: {
             y: 15
           },
-          viewport: $(window),
+          viewport: $(window)
         },
         show: {
           event: true,
