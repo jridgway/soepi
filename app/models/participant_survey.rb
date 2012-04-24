@@ -15,6 +15,7 @@ class ParticipantSurvey < ActiveRecord::Base
     :unless => Proc.new {|ps| ps.participant.tester?}
 
   before_validation :apply_participant, :set_next_question
+  before_destroy :destroy_survey_responses
   
   scope :for_survey, lambda {|survey_id| where(:survey_id => survey_id, :complete => true)}
   scope :completes, where(:complete => true)
@@ -54,5 +55,9 @@ class ParticipantSurvey < ActiveRecord::Base
   
     def set_next_question
       self.next_question_id = survey.questions.first.id
+    end
+    
+    def destroy_survey_responses
+      responses.each(&:destroy)
     end
 end

@@ -11,7 +11,7 @@ class SurveysController < ApplicationController
   before_filter :owner_or_collaborators_only_until_published!, :only => [:collaborators, :edit, :forks, :followed_by, 
     :demographics, :downloads, :reports, :forkit]
   before_filter :load_open_graph_meta, :only => [:show, :versions, :forks, :forkit, :launch, :reject, :participate,
-    :create_response, :update_pin, :generate_and_send_new_pin, :followed_by, :collaborators]
+    :followed_by, :collaborators]
   before_filter :load_tags, :only => [:index, :by_tag]
   
   caches_action :index, :drafting, :rejected, :review_requested, :launched, :published, :by_tag, :show, 

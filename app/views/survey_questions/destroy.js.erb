@@ -3,4 +3,4 @@ $('#survey_question_<%= @question.id %>').remove();
 $('#edit_survey_question_<%= @question.id %>').remove();
 no_questions_message();
 $('.questions-count').html('<%= @question.survey.questions.count %>');
-$('#please-wait').remove();
+

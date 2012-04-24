@@ -37,7 +37,7 @@ function init_code_editor(readOnly, val) {
     editor.setValue($('#report_code').val());
   }
   $('#report-save-and-run, #report-save-and-continue, #report-save-and-exit').submit(function() {
-    $('body').append('<div id="please-wait">Please wait...</div>');
+    wait();
     $('input[name="report[code]"]').val(editor.getValue());
   });
 }

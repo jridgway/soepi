@@ -1,4 +1,5 @@
-$('#please-wait, #run-results').remove();
+finished();
+$('#run-results').remove();
 $('body').append("<%= escape_javascript(render(:partial => 'running')) %>");
 $('#run-results').dialog({width:500, height:200, modal:true, zIndex:9, resizable:false}).show('blind');
 

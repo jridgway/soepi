@@ -30,5 +30,6 @@
     - if @participant_response.previous_response
       = link_to '&laquo; Previous Question'.html_safe, edit_participant_response_path(@participant_response.previous_response, :survey_id => @survey.id), :remote => true
     - if @participant.responses.where('question_id in (?)', @survey.question_ids).count > 0
-      | 
+      - if @participant_response.previous_response
+        | 
       = link_to 'Remove my responses for this survey and get me out of here.'.html_safe, destroy_all_participant_responses_path(:survey_id => @survey.id), :method => 'delete', :remote => true, :confirm => 'Are you sure?'

@@ -115,16 +115,6 @@ function init_common_elements() {
   });
 }
 
-function disable_button(button) {
-  $(button).button('disable');
-  $('body').append('<div id="please-wait">Please wait...</div>');
-}
-
-function enable_button(button) {
-  $(button).button('enable');
-  $('#please-wait').remove();
-}
-
 function isWhollyVisible(elem) {
   var docViewTop = $(window).scrollTop();
   var docViewBottom = docViewTop + $(window).height();
@@ -243,4 +233,14 @@ function init_external_links() {
       }
     }
   });
+}
+
+function wait() {
+  $('#wait').remove();
+  $('body').append('<div id="wait" title="Please Wait"><img src="/assets/ajax-loader.gif"  class="ajax-loader" /></div>');
+  $('#wait').dialog({width:250, height:125, modal:true, resizable:false, close:wait});
+}
+
+function finished() {
+  $('#wait').remove();
 }

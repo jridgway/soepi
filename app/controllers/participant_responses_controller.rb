@@ -56,7 +56,7 @@ class ParticipantResponsesController < ApplicationController
   end
 
   def destroy_all
-    @participant.responses.where('question_id in (?)', @survey.question_ids).destroy_all
+    @participant_survey.destroy
   end
 
   def store_pin

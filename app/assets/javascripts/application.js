@@ -20,6 +20,7 @@
 //= require forms
 //= require tips
 //= require surveys
+//= require participant_responses
 //= require reports
 //= require addresses
 //= require markerclusterer

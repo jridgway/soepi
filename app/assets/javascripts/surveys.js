@@ -158,7 +158,6 @@ function init_survey_question_form() {
   });
   $('.button.destroy').live('click', function(e) {
     if(confirm("Are you sure?")) {
-      disable_button($(this));
       $.post(this.href, {_method:'delete'}, null, "script");
     }
     e.preventDefault();

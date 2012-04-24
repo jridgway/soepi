@@ -50,28 +50,32 @@ class ParticipantResponse < ActiveRecord::Base
 
   protected
 
-    def set_next_question    
-      next_question = nil
-      questions_unanswered = question.survey.questions.where('position > ?', question.position)
-      questions_unanswered.each do |question|
-        if question.parent_choice
-          if earlier_response = participant.responses.find_by_question_id(question.parent_choice.question.id)
-            if earlier_response.choices.collect(&:id).include? question.parent_choice.id
-              next_question = question
-              break
+    def set_next_question   
+      if participant_survey 
+        next_question = nil
+        questions_unanswered = question.survey.questions.where('position > ?', question.position)
+        questions_unanswered.each do |question|
+          if question.parent_choice
+            if earlier_response = participant.responses.find_by_question_id(question.parent_choice.question.id)
+              if earlier_response.choices.collect(&:id).include? question.parent_choice.id
+                next_question = question
+                break
+              end
             end
+          else
+            next_question = question
+            break
           end
-        else
-          next_question = question
-          break
         end
+        participant_survey.update_attribute :next_question, next_question
       end
-      participant_survey.update_attribute :next_question, next_question
     end
     
     def check_and_set_complete
-      if participant_survey.next_question.nil? or all_required_questions_answered?
-        participant_survey.update_attribute :complete, true
+      if participant_survey 
+        if participant_survey.next_question.nil? or all_required_questions_answered?
+          participant_survey.update_attribute :complete, true
+        end
       end
     end
     
