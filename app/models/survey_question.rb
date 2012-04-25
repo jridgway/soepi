@@ -160,9 +160,9 @@ class SurveyQuestion < ActiveRecord::Base
   def cache_key
     child_questions = choices.collect(&:child_questions).flatten
     if child_questions.empty?
-      super
+      survey.cache_key + '-' + super
     else
-      super + '-' + child_questions.collect(&:cache_key).join('-')
+      survey.cache_key + '-' + super + '-' + child_questions.collect(&:cache_key).join('-')
     end
   end
 

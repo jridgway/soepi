@@ -246,3 +246,12 @@ function wait() {
 function finished() {
   $('#wait').remove();
 }
+
+function load_sharethis() {
+  if(typeof stLight === 'undefined') {
+    var switchTo5x=true;
+    $.getScript('https://ws.sharethis.com/button/buttons.js', function() {
+      stLight.options({publisher: 'f83b9100-5d77-4829-9992-248efad6aa95', onhover: false});
+    });
+  }
+}

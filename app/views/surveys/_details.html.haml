@@ -1,5 +1,5 @@
 - content_for :body_content_details do
-  - cache "survey-details-#{@survey.id}-#{@survey.updated_at}-#{@survey.state}-#{@survey.questions.count}-#{@survey.versions.count}-#{@survey.collaborators.count}", :expires_in => 15.minutes do 
+  - cache "survey-details-#{@survey.cache_key}", :expires_in => 15.minutes do 
     %ul.menu.owner-and-collaborators-only-until-published{:'data-member-id' => @survey.member_id, :'data-state' => @survey.state, :'data-collaborator-ids' => @survey.collaborator_ids}
       %li
         = link_to 'Settings', edit_survey_path(@survey)
@@ -7,9 +7,9 @@
         = link_to "Questions (<span class='questions-count'>#{@survey.questions.count}</span>)".html_safe, survey_questions_path(:survey_id => @survey)
       %li.state-not-drafting.state-not-review-requested{:'data-state' => @survey.state}
         = link_to "Demographics (#{number_with_delimiter @survey.participants.completes.count})".html_safe, demographics_survey_path(@survey)
-      %li.state-not-drafting.state-not-review-requested{:'data-state' => @survey.state}
+      %li.state-not-drafting.state-not-review-requested.state-not-piloting{:'data-state' => @survey.state}
         = link_to "Downloads (<span>#{@survey.downloads.count}</span>)".html_safe, downloads_survey_path(@survey)
-      %li.state-not-drafting.state-not-review-requested{:'data-state' => @survey.state}
+      %li.state-not-drafting.state-not-review-requested.state-not-piloting{:'data-state' => @survey.state}
         = link_to "Reports (<span>#{@survey.reports.count}</span>)".html_safe, reports_survey_path(@survey)
       %li
         = link_to "Forks (#{@survey.forks.closed_or_published.count})", forks_survey_path(@survey)

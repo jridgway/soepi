@@ -54,6 +54,8 @@ Soepi::Application.routes.draw do
       put 'add_target_survey', :action => 'add_target_survey', :as => :add_target_survey
     end
     member do
+      put 'pilot'
+      put 'stop_pilot'
       put 'submit_for_review'
       put 'launch'
       put 'reject'

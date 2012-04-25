@@ -17,10 +17,10 @@ class Survey < ActiveRecord::Base
 
   default_scope order('surveys.created_at desc')
   scope :drafting, where(:state => 'drafting')
+  scope :piloting, where(:state => 'piloting')
   scope :review_requested, where(:state => 'review_requested')
   scope :rejected, where(:state => 'rejected')
   scope :live, where(['state in (?)', %w{published launched closed}])
-  scope :live_or_drafting, where(['state in (?)', %w{drafting published launched closed}])
   scope :closed_or_published, where(['state in (?)', %w{published closed}])
   scope :launched, where(:state => 'launched')
   scope :closed, where(:state => 'closed')
@@ -103,6 +103,7 @@ class Survey < ActiveRecord::Base
 
   state_machine :state, :initial => :drafting do
     state :drafting
+    state :piloting
     state :review_requested
     state :rejected
     state :launched
@@ -112,6 +113,14 @@ class Survey < ActiveRecord::Base
 
     event :request_review do
       transition :drafting => :review_requested
+    end
+
+    event :pilot do
+      transition :drafting => :piloting
+    end
+
+    event :stop_pilot do
+      transition :piloting => :drafting
     end
 
     event :request_changes do
@@ -134,6 +143,14 @@ class Survey < ActiveRecord::Base
       transition :closed => :published
     end
 
+    after_transition :drafting => :piloting do |survey, transition|
+      survey.participants.destroy_all
+    end
+
+    after_transition :piloting => :drafting do |survey, transition|
+      survey.participants.destroy_all
+    end
+
     after_transition any => :review_requested do |survey, transition|
       Member.admins.each {|m| m.delay.notify!(survey, "#{survey.member.nickname} submitted a survey for review")}
       survey.member.delay.notify!(survey, 'Your survey was received for review')
@@ -151,6 +168,7 @@ class Survey < ActiveRecord::Base
     end
 
     after_transition any => :launched do |survey, transition|
+      survey.participants.destroy_all
       survey.member.notify!(survey, 'Yay, your survey has launched')
       survey.member_followers.each {|m| m.notify!(self, "#{survey.member.nickname}'s survey was opened for participation")}
     end
@@ -176,9 +194,27 @@ class Survey < ActiveRecord::Base
   def may_edit?(member)
     if member
       if member.admin? and member.id != member_id
-        true unless live? or rejected?
+        true unless live? or rejected? or piloting?
       elsif member.id == member_id or collaborator_ids_a.include?(member.id)
-        true unless live? or review_requested? or rejected?
+        true unless live? or review_requested? or rejected? or piloting?
+      end
+    end
+  end
+  
+  def may_access?(member)
+    true if member and (member.admin? or member.id == member_id or collaborator_ids_a.include?(member.id))
+  end
+  
+  def pilot_open?
+    true if piloting? and completes < 30
+  end
+  
+  def results_available?(member)
+    if member
+      if member.admin? or member.id == member_id or collaborators.collect(:member_id).includes?(member.id)
+        true if published? or closed? or launched? or piloting?
+      else
+        true if published? or closed?
       end
     end
   end
@@ -226,6 +262,7 @@ class Survey < ActiveRecord::Base
   def state_human
     case state
       when 'drafting' then 'Drafting'
+      when 'piloting' then 'Piloting'
       when 'review_requested' then 'Review requested'
       when 'launched' then 'Open'
       when 'rejected' then 'Rejected'
@@ -457,5 +494,9 @@ class Survey < ActiveRecord::Base
   
   def self.destroy_old_visitor_surveys!
     Survey.where('member_id = 0 or member_id is null and created_at < ?', 1.month.ago).destroy_all
+  end
+  
+  def cache_key
+    "#{super}-#{state}-#{questions.count}-#{versions.count}-#{collaborators.count}"
   end
 end

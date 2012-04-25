@@ -2,13 +2,10 @@
   .sharing
     %span.st_facebook{:st_title => @open_graph_meta[:title], :st_url => @open_graph_meta[:url], :st_image => @open_graph_meta[:image_url], :st_summary => @open_graph_meta[:description]}
     %span.st_twitter{:st_title => @open_graph_meta[:title], :st_url => @open_graph_meta[:url], :st_image => @open_graph_meta[:image_url], :st_summary => @open_graph_meta[:description]}
-    %span.st_yahoo{:st_title => @open_graph_meta[:title], :st_url => @open_graph_meta[:url], :st_image => @open_graph_meta[:image_url], :st_summary => @open_graph_meta[:description]}
-    %span.st_gbuzz{:st_title => @open_graph_meta[:title], :st_url => @open_graph_meta[:url], :st_image => @open_graph_meta[:image_url], :st_summary => @open_graph_meta[:description]}
+    %span.st_google{:st_title => @open_graph_meta[:title], :st_url => @open_graph_meta[:url], :st_image => @open_graph_meta[:image_url], :st_summary => @open_graph_meta[:description]}
+    %span.st_linkedin{:st_title => @open_graph_meta[:title], :st_url => @open_graph_meta[:url], :st_image => @open_graph_meta[:image_url], :st_summary => @open_graph_meta[:description]}
     %span.st_email{:st_title => @open_graph_meta[:title], :st_url => @open_graph_meta[:url], :st_image => @open_graph_meta[:image_url], :st_summary => @open_graph_meta[:description]}
     %span.st_sharethis{:st_title => @open_graph_meta[:title], :st_url => @open_graph_meta[:url], :st_image => @open_graph_meta[:image_url], :st_summary => @open_graph_meta[:description]}
   
   :javascript
-    var switchTo5x=true;
-  %script{:src => "https://ws.sharethis.com/button/buttons.js", :type => "text/javascript"}
-  :javascript
-    stLight.options({publisher: 'a8434776-7e47-4d40-8a73-3ac5d106f1f1', onhover: false});
+    load_sharethis()

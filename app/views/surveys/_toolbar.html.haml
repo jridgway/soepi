@@ -66,6 +66,25 @@
             .bottom-actions
               = link_to 'Submit for Review', submit_for_review_survey_path(@survey), :class => 'button', :method => 'put'
               %button{:id => 'cancel-launch', :class => 'button'} Cancel
+          %button{:id => 'pilot', :icon => 'ui-icon-notice', :class => 'button'} Pilot
+          #pilot-message{:style => 'display:none', :title => 'Pilot this Survey'}
+            %p 
+              Pilot this survey before launching it in order to determine the effectiveness of each question.
+              After starting the pilot, you need to share the URL of this survey with others in order to get responses.
+            %p
+              The pilot will end once 30 members have participated, or, alternateively, you can monitor the responses
+              as they come in and end the pilot when you're ready to change the questions or launch the survey.
+            %p Once you have stopped the pilot, the results will be removed and the survey will be put back into drafting mode.
+            .bottom-actions
+              = link_to 'Pilot', pilot_survey_path(@survey), :class => 'button', :method => 'put'
+              %button{:id => 'cancel-pilot', :class => 'button'} Cancel
+        - when 'piloting' then
+          %button{:id => 'stop-pilot', :icon => 'ui-icon-notice', :class => 'button'} Stop Piloting
+          #stop-pilot-message{:style => 'display:none', :title => 'Stop Piloting this Survey'}
+            %p Once you have stopped the pilot, the results will be removed and the survey will be put back into drafting mode.
+            .bottom-actions
+              = link_to 'Stop Piloting', stop_pilot_survey_path(@survey), :class => 'button', :method => 'put'
+              %button{:id => 'cancel-stop-pilot', :class => 'button'} Cancel
         - when 'launched' then
           %button{:id => 'close', :icon => 'ui-icon-locked', :secondary_icon => 'ui-icon-signal-diag', :class => 'button'} Close and Publish
           #close-message{:style => 'display:none', :title => 'Close and Publish this Survey'}

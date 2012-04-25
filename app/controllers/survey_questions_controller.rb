@@ -7,15 +7,19 @@ class SurveyQuestionsController < ApplicationController
   layout Proc.new {|controller| controller.request.xhr? ? 'ajax' : 'two_column'}
 
   def index
-    @questions = @survey.questions.roots.includes(:choices => [:child_questions]).all
-    @question = @survey.questions.new params[:survey_question]
-    @open_graph_meta = {
-      :url => survey_url(@survey),
-      :title => @survey.title,
-      :description => @survey.description,
-      :image_url => "#{request.protocol}#{request.host_with_port}/assets/soepi-logo-light-bg.png",
-      :type => 'Survey'
-    }
+    if (member_signed_in? and @survey.may_access?(current_member)) or @survey.closed? or @survey.published?
+      @questions = @survey.questions.roots.includes(:choices => [:child_questions]).all
+      @question = @survey.questions.new params[:survey_question]
+      @open_graph_meta = {
+        :url => survey_url(@survey),
+        :title => @survey.title,
+        :description => @survey.description,
+        :image_url => "#{request.protocol}#{request.host_with_port}/assets/soepi-logo-light-bg.png",
+        :type => 'Survey'
+      }
+    else
+      redirect_to survey_path(@survey)
+    end
   end
 
   def show
@@ -83,7 +87,6 @@ class SurveyQuestionsController < ApplicationController
       if not (@survey.published? or @survey.closed?) and 
       member_signed_in? and not (current_member.admin? or current_member.id == @survey.member_id or 
       @survey.collaborators.collect(&:member_id).include?(current_member.id))
-        flash[:alert] = 'Insufficient privileges.'
         redirect_to survey_path(@survey)
         false
       end
@@ -94,7 +97,6 @@ class SurveyQuestionsController < ApplicationController
         if request.xhr?
           render :text => "alert('You cannot edit this survey.')"
         else
-          flash[:alert] = 'You cannot edit this survey.'
           redirect_to survey_questions_path(:survey_id => @survey)
         end
         false

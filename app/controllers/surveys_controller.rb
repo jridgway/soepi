@@ -6,7 +6,7 @@ class SurveysController < ApplicationController
     :new, :create, :index, :launched, :published, :by_tag, 
     :show, :edit, :forks, :followed_by, :demographics, :downloads, :reports, :collaborators]
   before_filter :admin_only!, :only => [:drafting, :review_requested, :rejected, :launch, :reject, :request_changes]
-  before_filter :owner_only!, :only => [:submit_for_review, :destroy, :close]
+  before_filter :owner_only!, :only => [:pilot, :stop_pilot, :submit_for_review, :destroy, :close]
   before_filter :owner_or_collaborators_only!, :only => [:update, :revert_to_version, :versions, :compare_versions]
   before_filter :owner_or_collaborators_only_until_published!, :only => [:collaborators, :edit, :forks, :followed_by, 
     :demographics, :downloads, :reports, :forkit]
@@ -209,6 +209,28 @@ class SurveysController < ApplicationController
     end
   end
 
+  def pilot
+    if @survey.pilot!
+      flash[:alert] = ('Your pilot has begun, but is hidden from the public. ' +
+        'You must share the following URL (the URL of this survey) with anyone that you want to participate in this pilot: <br/><br/>' +
+        '<a href="' + survey_url(@survey) + '">' + survey_url(@survey) + '</a>').html_safe
+      redirect_to survey_path(@survey)
+    else
+      flash[:alert] = 'Your pilot has not begun. Please contact us for help.'
+      redirect_to_back_or survey_path(@survey)
+    end
+  end
+
+  def stop_pilot
+    if @survey.stop_pilot!
+      flash[:alert] = 'Your pilot has stopped, the results were removed, and your survey is back in drafting mode. You may make changes and start another pilot, or launch your survey as is.'
+      redirect_to survey_questions_path(@survey)
+    else
+      flash[:alert] = 'Your pilot was not stopped. Please contact us for help.'
+      redirect_to_back_or survey_path(@survey)
+    end
+  end
+
   def request_changes
     @survey.changes_requested_by = current_member
     if @survey.request_changes!
@@ -292,7 +314,6 @@ class SurveysController < ApplicationController
   
     def owner_only!
       if not member_signed_in? or not (current_member.admin? or current_member.id == @survey.member_id)
-        flash[:alert] = 'Insufficient privileges.'
         redirect_to survey_path(@survey)
         false
       end
@@ -301,7 +322,6 @@ class SurveysController < ApplicationController
     def owner_or_collaborators_only!
       if not member_signed_in? or 
       not (current_member.admin? or current_member.owner?(@survey) or current_member.collaborator?(@survey))
-        flash[:alert] = 'Insufficient privileges.'
         redirect_to survey_path(@survey)
         false
       end
@@ -311,7 +331,6 @@ class SurveysController < ApplicationController
       unless @survey.published? or @survey.closed?
         if not member_signed_in? or 
         not (current_member.admin? or current_member.owner?(@survey) or current_member.collaborator?(@survey))
-          flash[:alert] = 'Insufficient privileges.'
           redirect_to survey_path(@survey)
           false
         end

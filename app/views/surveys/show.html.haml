@@ -4,10 +4,15 @@
 = render :partial => '/surveys/details'
   
 - content_for :body_content do
-  - if @survey.launched?
+  - if @survey.launched? or (@survey.piloting? and @survey.pilot_open?)
     #survey-sidebar
       #survey-participation.highlight
-        %h2 Participate in this Survey
+        %h2 Participate in this #{@survey.piloting? ? '*Pilot*' : ''} Survey
+        - if @survey.piloting?
+          %p 
+            This is a pilot survey. Please participate to help the creators of the survey determine the effectiveness of the questions. 
+            Once the pilot has ended, the results will be destroyed and you will be able to participate in this survey 
+            as a normal participant.
         %p#survey-participation-agreement-container
           %input{:type => 'checkbox', :id => 'survey-participation-agreement'} 
           %label{:for => 'survey-participation-agreement'}= Refinery::Setting.find_or_set(:survey_participation_agreement, 'I agree to participate in this survey and I acknowledge that I have been informed of the risks and benefits of doing so.')

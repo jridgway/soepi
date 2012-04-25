@@ -25,6 +25,18 @@ $(document).ready(function() {
     init_survey_question_form();
   }
   if(controller_name == 'survey_questions' || controller_name == 'surveys') {    
+    $('#pilot').click(function() {
+      $('#pilot-message').dialog({width:520, height:350, modal:true, zIndex:9, resizable:false}).show('blind');
+    });
+    $('#cancel-pilot').click(function() {
+      $('#pilot-message').dialog('destroy');
+    });  
+    $('#stop-pilot').click(function() {
+      $('#stop-pilot-message').dialog({width:520, height:175, modal:true, zIndex:9, resizable:false}).show('blind');
+    });
+    $('#cancel-stop-pilot').click(function() {
+      $('#stop-pilot-message').dialog('destroy');
+    });    
     $('#launch, #launch3').click(function() {
       $('#launch-message').dialog({width:520, height:250, modal:true, zIndex:9, resizable:false}).show('blind');
     });
@@ -71,10 +83,10 @@ $(document).ready(function() {
       $('#forkit-message').dialog('destroy');
     }); 
     $('#open-questions').click(function() {
-      $('.choices').show('blind');
+      $('.choices:hidden').show('blind');
     });
     $('#close-questions').click(function() {
-      $('.choices').hide('blind');
+      $('.choices:visible').hide('blind');
     });
     $('.handle').live('click', function() { 
       $(this).siblings('.choices').toggle('blind');
@@ -212,36 +224,10 @@ function init_survey_question_form() {
     $('#root-questions li.survey_question:containsi("' + $(this).val() + '")').css({height:'auto', borderTop:'none', overflow:'visible'});
   });
   $('#question-search').focus(function() {
-    remove_question_results_tip();
     if($('#root-questions:visible').length == 0) {
       $.history.load('all');
     }
   });
-  $('.not-editable #root-questions a').first().qtip({
-    content:'<p>Click a question to view its results.</p>',
-    position: {
-      at: 'top middle',
-      my: 'bottom middle',
-      viewport: $(window),
-      adjust: {
-        method: 'flip flip'
-      }
-    },
-    show: {
-      event: true,
-      ready: true
-    },
-    hide: false,
-    style: {
-      classes: 'tip',
-      tip: {
-       border: 5,
-       offset: 10,
-       height: 7
-      }
-    }
-  });
-  setTimeout("$('#ui-tooltip-0').remove();", 5000);
   if($('.results-available').length > 0) {
     $(document).keydown(function(e) {
       if(!stop_arrows) {
@@ -285,14 +271,11 @@ function show_all_questions() {
   if($('#root-questions:visible').length == 0) {
     $('#results').hide('slide', function() {
       $('#root-questions').show('slide'); 
-      $('#all-questions').hide()
+      $('#all-questions').hide();
+      $('#close-questions, #open-questions').show();
       stop_arrows = false;
     });
   }
-}
-
-function remove_question_results_tip() {
-  $('#root-questions a').first().qtip('destroy');
 }
 
 function init_choices() {

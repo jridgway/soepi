@@ -1,5 +1,10 @@
 #thanks{:style => 'display:none', :title => "Survey Complete"}
   %h3 Thanks for your help!
-  %p Please share this survey with your friends:
-  = render :partial => '/shared/sharing_large'
+  - if @survey.piloting?
+    %p 
+      Please come back to take this survey when it opens for everyone. The 
+      responses you gave today will be destroyed when the pilot ends.
+  - else
+    %p Please share this survey with your friends:
+    = render :partial => '/shared/sharing_large'
     

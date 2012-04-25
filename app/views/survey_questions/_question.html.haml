@@ -6,12 +6,12 @@
           = link_to 'Preview', new_participant_response_path(:survey_id => question.survey, :question_id => question.id), :class => 'button preview', :remote => true, :onclick => "wait()"
           = link_to 'Edit', edit_survey_question_path(:survey_id => question.survey, :id => question.id), :class => 'button edit', :remote => true
           = link_to 'Delete', survey_question_path(:survey_id => question.survey, :id => question.id), :class => 'button destroy'
+      - elsif @survey.results_available?(current_member)
+        .top-actions
+          = link_to 'View Results', "##{question.id}", :class => 'button'
       .expandable
         %strong
-          - if @survey.published? or @survey.closed? or @survey.launched?
-            %a{:href => "##{question.id}"}= question.body
-          - else
-            = question.body
+          = question.body
       %p
         %small #{question.qtype} | #{question.required? ? 'Required' : 'Optional'}
         - if @survey.closed? or @survey.published?

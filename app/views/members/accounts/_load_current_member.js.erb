@@ -25,6 +25,7 @@
     show_hide_member_related();  
     $('.state-not-pending[data-state="pending"]').hide();
     $('.state-not-drafting[data-state="drafting"]').hide();
+    $('.state-not-piloting[data-state="piloting"]').hide();
     $('.state-not-review-requested[data-state="review_requested"]').hide();
     $('.state-not-launched[data-state="launched"]').hide();
     $('.state-not-closed[data-state="closed"]').hide();
@@ -43,7 +44,7 @@
       $('#more-details').hide();
     }
     $('body').append("<%= escape_javascript(render(:partial => '/members/accounts/flash')) %>");
-    setTimeout("$('#alert').dialog({modal:true, zIndex:9, minWidth:400}).show('blind');", 100);
+    setTimeout("$('#alert').dialog({modal:true, zIndex:9, minWidth:400}).show('blind');", 500);
   });
   
   function hide_all_member_related() {
@@ -64,13 +65,13 @@
       $('.owner-only-until-published[data-member-id=<%= current_member.id %>]').show();
       $('.owner-and-collaborators-only-until-published[data-member-id=<%= current_member.id %>]').show();
       $('.not-owner[data-member-id!=<%= current_member.id %>]').show();  
-      $('.owner-and-collaborators-only, .owner-and-collaborators-only-until-published[data-collaborator-ids!=""]').each(function() {
-        if($.inArray(<%= current_member.id %>, $(this).attr('data-collaborator-ids').split(','))) {
+      $('.owner-and-collaborators-only[data-collaborator-ids!=""], .owner-and-collaborators-only-until-published[data-collaborator-ids!=""]').each(function() {
+        if($.inArray(<%= current_member.id %>, $(this).attr('data-collaborator-ids').split(',')) >= 0) {
           $(this).show();
         }
       });
       $('.not-owner-or-collaborators[data-collaborator-ids!=""]').each(function() {
-        if(! $.inArray(<%= current_member.id %>, $(this).attr('data-collaborator-ids').split(','))) {
+        if($.inArray(<%= current_member.id %>, $(this).attr('data-collaborator-ids').split(',')) < 0) {
           $(this).show();
         }
       });

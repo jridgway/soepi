@@ -1,5 +1,10 @@
 @import "common";
 
+#key-mappings
+  {
+  margin-top: 15px;
+  }
+
 #tester
   {
   margin: 0 0 30px 0;
@@ -161,9 +166,8 @@
 
 .top
   {
-  margin: 0 0 10px 0;
-  float: left;
-  width: 100%;
+  @include container;
+  margin-bottom: 15px;
 
   #survey-title
     {
@@ -296,11 +300,12 @@
     }
   }
   
-.editable #root-questions li.survey_question .handle:hover 
+#root-questions li.survey_question .handle:hover 
   {
   strong
     {
     text-decoration: underline;
+    cursor: pointer;
     }
   
   .top-actions
@@ -385,11 +390,6 @@
   #root-questions-container.editable li.survey_question .handle 
     {
     cursor: move;
-    }
-
-  #root-questions-container li.survey_question .handle:hover .top-actions
-    {
-    display: none;
     }
       
 .two-column #body_content_right .posted-by .inner

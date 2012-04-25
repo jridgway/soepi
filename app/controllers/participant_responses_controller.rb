@@ -2,19 +2,39 @@ class ParticipantResponsesController < ApplicationController
   before_filter :authenticate_member_2!
   before_filter :load_survey
   before_filter :authorize!
+  before_filter :check_max_piloters!
   before_filter :load_participant
   before_filter :require_participant!, :except => [:new_participant, :create_participant, :store_pin]
   before_filter :load_participant_survey
   before_filter :load_open_graph_meta
 
   def new
-    if @participant.tester?  
-      @participant_survey.responses.destroy_all
-      @participant_survey.update_attribute :complete, false
-      @question = @participant_survey.next_question = @survey.questions.find(params[:question_id])
-      @participant_response = @participant.responses.build :question_id => @question.id
+    if request.xhr?
+      if @participant.tester?  
+        @participant_survey.responses.destroy_all
+        @participant_survey.update_attribute :complete, false
+        @question = @survey.questions.find(params[:question_id])
+        @participant_response = @participant.responses.build :question_id => @question.id
+        create_parent_responses_for_tester_starting_in_the_middle(@question.parent_choice)
+      else
+        init_first_question
+      end
     else
-      init_first_question
+      redirect_to survey_path(@survey)
+    end
+  end
+  
+  def create_parent_responses_for_tester_starting_in_the_middle(parent_choice)
+    if parent_choice
+      if parent_choice.question.parent_choice
+        create_parent_responses_for_tester_starting_in_the_middle(parent_choice.question.parent_choice) 
+      end
+      case parent_choice.question.qtype
+        when 'Yes/No', 'True/False', 'Select One' then
+          @participant.responses.create :question_id => parent_choice.question.id, :single_choice => parent_choice
+        when 'Select Multiple' then
+          @participant.responses.create :question_id => parent_choice.question.id, :multiple_choices => [parent_choice]
+      end
     end
   end
 
@@ -62,7 +82,9 @@ class ParticipantResponsesController < ApplicationController
   def store_pin
     current_member.pin = params[:member][:pin]
     if @participant = Participant.find_by_member(current_member)
+      @current_participant = @participant
       cookies.permanent.encrypted["pin_#{current_member.id}"] = current_member.pin
+      load_participant_survey
       init_first_question
     else
       current_member.errors.add :pin, 'Invalid PIN. Please try again.'
@@ -83,7 +105,9 @@ class ParticipantResponsesController < ApplicationController
     end
     @participant.member = current_member
     if @participant.save
+      @current_participant = @participant
       cookies.permanent.encrypted["pin_#{current_member.id}"] = current_member.pin    
+      load_participant_survey
       init_first_question
     else
       render :action => 'new_participant'
@@ -102,8 +126,15 @@ class ParticipantResponsesController < ApplicationController
           render :text => "alert('Sorry, only the owner and collaborators of this survey can preview it.');"
           false
         end
-      elsif not @survey.launched?
+      elsif not @survey.launched? and not @survey.piloting?
         render :text => "alert('Sorry, this survey is not open for participation.');"
+        false
+      end
+    end
+    
+    def check_max_piloters!
+      if @survey.piloting? and not @survey.pilot_open?
+        render :action => 'pilot_no_longer_open'
         false
       end
     end
@@ -171,7 +202,7 @@ class ParticipantResponsesController < ApplicationController
             render :action => 'new'
           end
         else
-          render :text => "alert('We are sorry, you do not qualify for this survey.');"
+          render :action => 'does_not_qualify'
         end
       else
         render :text => "alert('You cannot participate in your own survey.');"

@@ -179,7 +179,6 @@ class ReportsController < ApplicationController
   
     def owner_only!
       if not member_signed_in? or not (current_member.admin? or current_member.owner?(@report))
-        flash[:alert] = 'Insufficient privileges.'
         redirect_to report_path(@report)
         false
       end
@@ -188,7 +187,6 @@ class ReportsController < ApplicationController
     def owner_or_collaborators_only!
       if not member_signed_in? or 
       not (current_member.admin? or current_member.owner?(@report) or current_member.collaborator?(@report))
-        flash[:alert] = 'Insufficient privileges.'
         redirect_to report_path(@report)
         false
       end
