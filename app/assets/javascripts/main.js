@@ -237,8 +237,10 @@ function init_external_links() {
 
 function wait() {
   $('#wait').remove();
-  $('body').append('<div id="wait" title="Please Wait"><img src="/assets/ajax-loader.gif"  class="ajax-loader" /></div>');
-  $('#wait').dialog({width:250, height:125, modal:true, resizable:false, close:wait});
+  $('body').append('<div id="wait" class="ui-widget-overlay"><div id="wait-inner"><img src="/assets/ajax-loader.gif" /> Please Wait</div></div>');
+  $('#wait').css('height', $(document).height());
+  $('#wait').css('z-index', '999999');
+  $('#wait-inner').css('z-index', '1000000');
 }
 
 function finished() {
