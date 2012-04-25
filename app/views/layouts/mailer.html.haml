@@ -63,8 +63,6 @@
 
       #headerImage{
         height:auto;
-        margin:30px;
-        float:right;
       }
       
       #templateContainer, .bodyContent{
@@ -189,7 +187,7 @@
                           %tr
                             %td{:valign => "top"}
                               %a{:href => '/', :title => 'SoEpi : Home'}
-                                = image_tag attachments['header.png'].url, :title => 'SoEpi', :alt => 'SoEpi', :id => 'headerImage', :style => 'margin:30px; float:right;'
+                                = image_tag attachments['header.png'].url, :title => 'SoEpi', :alt => 'SoEpi', :id => 'headerImage'
                               = yield
               %tr
                 %td{:align => "center", :valign => "top"}
