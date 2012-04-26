@@ -8,7 +8,10 @@
       - totals.each do |response|
         %li
           %h4
-            = link_to "Participant #{response.participant.anonymous_key}", participant_path(response.participant)
+            - if response.participant.listable?
+              = link_to "Participant #{response.participant.anonymous_key}", participant_path(response.participant)
+            - else 
+              Participant #{response.participant.anonymous_key}
             wrote:
           = simple_format response.text_response
   = will_paginate totals, :remote => true

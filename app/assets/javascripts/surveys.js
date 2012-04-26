@@ -9,6 +9,9 @@ $.extend($.expr[':'], {
 });
 
 $(document).ready(function() {
+  $('#root-questions .top-actions').live('click', function(e) {
+    e.stopPropagation();
+  });
   $('#version_b_id').live('change', function () {
     $(this).closest('form').submit();
   });
