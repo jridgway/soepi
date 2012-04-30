@@ -1,9 +1,9 @@
 class SurveysController < ApplicationController
   before_filter :load_survey, :except => [:find_and_add_target_survey, :add_target_survey,
-    :new, :create, :add_target_survey, :index, :drafting, :review_requested, :rejected, :launched, :published, :by_tag]
+    :new, :create, :add_target_survey, :index, :drafting, :review_requested, :rejected, :piloting, :launched, :published, :by_tag]
   
   before_filter :authenticate_member_2!, :except => [:find_and_add_target_survey, :add_target_survey,
-    :new, :create, :index, :launched, :published, :by_tag, 
+    :new, :create, :index, :piloting, :launched, :published, :by_tag, 
     :show, :edit, :forks, :followed_by, :demographics, :downloads, :reports, :collaborators]
   before_filter :admin_only!, :only => [:drafting, :review_requested, :rejected, :launch, :reject, :request_changes]
   before_filter :owner_only!, :only => [:pilot, :stop_pilot, :submit_for_review, :destroy, :close]
@@ -14,7 +14,7 @@ class SurveysController < ApplicationController
     :followed_by, :collaborators]
   before_filter :load_tags, :only => [:index, :by_tag]
   
-  caches_action :index, :drafting, :rejected, :review_requested, :launched, :published, :by_tag, :show, 
+  caches_action :index, :drafting, :rejected, :review_requested, :piloting, :launched, :published, :by_tag, :show, 
     :cache_path => Proc.new {|controller| cache_expirary_key(controller.params)}, 
     :expires_in => 2.hours
   cache_sweeper :surveys_sweeper, :only => [:create, :update, :destroy, :submit_for_review, :request_changes, 
@@ -23,6 +23,11 @@ class SurveysController < ApplicationController
   def index
     @surveys = Survey.live.page(params[:page])
     render :layout => 'two_column'
+  end
+  
+  def piloting
+    @surveys = Survey.piloting.page(params[:page])
+    render :action => 'index', :layout => 'one_column'
   end
 
   def launched
@@ -211,9 +216,7 @@ class SurveysController < ApplicationController
 
   def pilot
     if @survey.pilot!
-      flash[:alert] = ('Your pilot has begun, but is hidden from the public. ' +
-        'You must share the following URL (the URL of this survey) with anyone that you want to participate in this pilot: <br/><br/>' +
-        '<a href="' + survey_url(@survey) + '">' + survey_url(@survey) + '</a>').html_safe
+      flash[:alert] = 'Your pilot has begun.'
       redirect_to survey_path(@survey)
     else
       flash[:alert] = 'Your pilot has not begun. Please contact us for help.'
@@ -223,7 +226,7 @@ class SurveysController < ApplicationController
 
   def stop_pilot
     if @survey.stop_pilot!
-      flash[:alert] = 'Your pilot has stopped, the results were removed, and your survey is back in drafting mode. You may make changes and start another pilot, or launch your survey as is.'
+      flash[:alert] = 'Your pilot was stopped, the results were removed, and your survey is back in drafting mode. You may make changes and start another pilot, or launch your survey as is.'
       redirect_to survey_questions_path(@survey)
     else
       flash[:alert] = 'Your pilot was not stopped. Please contact us for help.'

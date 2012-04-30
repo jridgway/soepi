@@ -47,6 +47,7 @@ Soepi::Application.routes.draw do
       get 'drafting(/page/:page)', :action => 'drafting', :as => :drafting
       get 'review_requested(/page/:page)', :action => 'review_requested', :as => :review_requested
       get 'rejected(/page/:page)', :action => 'rejected', :as => :rejected
+      get 'piloting(/page/:page)', :action => 'piloting', :as => :piloting
       get 'open(/page/:page)', :action => 'launched', :as => :launched
       get 'published(/page/:page)', :action => 'published', :as => :published
       get 'tagged/:tag(/page/:page)', :action => 'by_tag', :as => :tagged
