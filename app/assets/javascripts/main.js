@@ -20,6 +20,11 @@ function init_main() {
   Shadowbox.init({overlayColor:'#999'});
 }
 
+function alert(message) {
+  $('body').append('<div id="js-alert" title="Alert">' + message + '</div>');
+  $('#js-alert').dialog({modal:true, zIndex:9, minWidth:400, close:function() {$('#js-alert').remove();}}).show('blind');
+}
+
 function member_return_to() {
   if(controller_name != 'sessions' && controller_name != 'registrations' && controller_name != 'passwords' && 
   (controller_name != 'authentications' || action_name == 'index') && 

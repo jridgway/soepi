@@ -211,7 +211,7 @@ class Survey < ActiveRecord::Base
   
   def results_available?(member)
     if member
-      if member.admin? or member.id == member_id or collaborators.collect(:member_id).includes?(member.id)
+      if member.admin? or member.id == member_id or collaborator_ids_a.include?(member.id)
         true if published? or closed? or launched? or piloting?
       else
         true if published? or closed?

@@ -66,12 +66,12 @@
       $('.owner-and-collaborators-only-until-published[data-member-id=<%= current_member.id %>]').show();
       $('.not-owner[data-member-id!=<%= current_member.id %>]').show();  
       $('.owner-and-collaborators-only[data-collaborator-ids!=""], .owner-and-collaborators-only-until-published[data-collaborator-ids!=""]').each(function() {
-        if($.inArray(<%= current_member.id %>, $(this).attr('data-collaborator-ids').split(',')) >= 0) {
+        if($.inArray('<%= current_member.id %>', $(this).attr('data-collaborator-ids').split(',')) >= 0) {
           $(this).show();
         }
       });
       $('.not-owner-or-collaborators[data-collaborator-ids!=""]').each(function() {
-        if($.inArray(<%= current_member.id %>, $(this).attr('data-collaborator-ids').split(',')) < 0) {
+        if($.inArray('<%= current_member.id %>', $(this).attr('data-collaborator-ids').split(',')) < 0) {
           $(this).show();
         }
       });
