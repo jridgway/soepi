@@ -21,15 +21,10 @@
           pic: '',
           unseen_messages_count: '0'
         }
-    <% end %>
-    show_hide_member_related();  
-    $('.state-not-pending[data-state="pending"]').hide();
-    $('.state-not-drafting[data-state="drafting"]').hide();
-    $('.state-not-piloting[data-state="piloting"]').hide();
-    $('.state-not-review-requested[data-state="review_requested"]').hide();
-    $('.state-not-launched[data-state="launched"]').hide();
-    $('.state-not-closed[data-state="closed"]').hide();
-    $('.state-not-published[data-state="published"]').hide();
+    <% end %> 
+    hide_states();  
+    show_hide_member_related(); 
+    hide_states();
     init_sign_in_links();
     select_details_menu_item();
     if($('#content-above-top :visible').length == 0) {
@@ -47,6 +42,13 @@
     setTimeout("$('#alert').dialog({modal:true, zIndex:9, minWidth:400}).show('blind');", 500);
   });
   
+  function hide_states() {
+    $('.state-not-pending[data-state="pending"], .state-not-drafting[data-state="drafting"], ' +
+    '.state-not-piloting[data-state="piloting"], .state-not-review-requested[data-state="review_requested"], ' +
+    '.state-not-launched[data-state="launched"], .state-not-closed[data-state="closed"], ' + 
+    '.state-not-published[data-state="published"]').hide();
+  }
+  
   function hide_all_member_related() {
     $('.members-only, .visitors-only, ' +
     '.owner-only, .not-owner, ' +
@@ -63,6 +65,7 @@
       $('.members-only').show();
       $('.owner-only[data-member-id=<%= current_member.id %>]').show();
       $('.owner-only-until-published[data-member-id=<%= current_member.id %>]').show();
+      $('.owner-and-collaborators-only[data-member-id=<%= current_member.id %>]').show();
       $('.owner-and-collaborators-only-until-published[data-member-id=<%= current_member.id %>]').show();
       $('.not-owner[data-member-id!=<%= current_member.id %>]').show();  
       $('.owner-and-collaborators-only[data-collaborator-ids!=""], .owner-and-collaborators-only-until-published[data-collaborator-ids!=""]').each(function() {

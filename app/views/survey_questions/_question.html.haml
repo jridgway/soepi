@@ -1,28 +1,26 @@
-- cache question.cache_key do 
-  %li[question]{:'data-question-id' => question.id, :'data-question-required' => question.required.to_s, :'data-question-qtype' => question.qtype}
-    .handle
-      - if @survey.may_edit?(current_member)
-        .top-actions
-          = link_to 'Preview', new_participant_response_path(:survey_id => question.survey, :question_id => question.id), :class => 'button preview', :remote => true, :onclick => "wait()"
-          = link_to 'Edit', edit_survey_question_path(:survey_id => question.survey, :id => question.id), :class => 'button edit', :remote => true
-          = link_to 'Delete', survey_question_path(:survey_id => question.survey, :id => question.id), :class => 'button destroy'
-      - elsif @survey.results_available?(current_member)
-        .top-actions
-          = link_to 'View Results', "##{question.id}", :class => 'button'
-      .expandable
-        %strong
-          = question.body
-      %p
-        %small #{question.qtype} | #{question.required? ? 'Required' : 'Optional'}
-        - if @survey.closed? or @survey.published?
-          | Question #{question.path}
-    - unless question.choices.empty? 
-      %ol.choices
-        - question.choices.each do |choice|
-          %li[choice]{:'data-choice-id' => choice.id}          
-            %div
-              = choice.label
-            - unless choice.child_questions.empty?
-              %ol.nested-questions{:id => "nested-questions-#{choice.id}"}
-                - choice.child_questions.each do |question2|
-                  = render :partial => 'question', :locals => {:question => question2}
+%li[question]{:'data-question-id' => question.id, :'data-question-required' => question.required.to_s, :'data-question-qtype' => question.qtype}
+  .handle
+    .top-actions
+      .owner-and-collaborators-only.state-not-piloting.state-not-review-requested.state-not-launched.state-not-closed.state-not-published{:'data-member-id' => @survey.member_id, :'data-state' => @survey.state, :'data-collaborator-ids' => @survey.collaborator_ids}
+        = link_to 'Preview', new_participant_response_path(:survey_id => question.survey, :question_id => question.id), :class => 'button preview', :remote => true, :onclick => "wait()"
+        = link_to 'Edit', edit_survey_question_path(:survey_id => question.survey, :id => question.id), :class => 'button edit', :remote => true
+        = link_to 'Delete', survey_question_path(:survey_id => question.survey, :id => question.id), :class => 'button destroy'
+      .owner-and-collaborators-only-until-published.state-not-drafting.state-not-review-requested{:'data-member-id' => @survey.member_id, :'data-state' => @survey.state, :'data-collaborator-ids' => @survey.collaborator_ids}
+        = link_to 'View Results', "##{question.id}", :class => 'button'
+    .expandable
+      %strong
+        = question.body
+    %p
+      %small #{question.qtype} | #{question.required? ? 'Required' : 'Optional'}
+      %small.state-not-drafting.state-not-review-requested.state-not-launched{:'data-state' => @survey.state}
+        | Question #{question.path}
+  - unless question.choices.empty? 
+    %ol.choices
+      - question.choices.each do |choice|
+        %li[choice]{:'data-choice-id' => choice.id}          
+          %div
+            = choice.label
+          - unless choice.child_questions.empty?
+            %ol.nested-questions{:id => "nested-questions-#{choice.id}"}
+              - choice.child_questions.each do |question2|
+                = render :partial => 'question', :locals => {:question => question2}

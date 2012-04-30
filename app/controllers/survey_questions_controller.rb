@@ -1,10 +1,13 @@
 class SurveyQuestionsController < ApplicationController
   before_filter :authenticate_member_2!, :except => [:index, :results]
   before_filter :load_survey
+  before_filter :may_access?, :only => [:index]
   before_filter :load_question, :except => [:new, :create, :index, :update_positions]
   before_filter :owner_or_collaborators_only_until_published!
   before_filter :authorize_edit!, :only => [:new, :create, :edit, :update, :destroy]
   layout Proc.new {|controller| controller.request.xhr? ? 'ajax' : 'two_column'}
+  
+  caches_action :index, :expires_in => 2.hours
 
   def index
     if (member_signed_in? and @survey.may_access?(current_member)) or @survey.closed? or @survey.published?
@@ -42,6 +45,7 @@ class SurveyQuestionsController < ApplicationController
       @question = @survey.questions.build params[:survey_question]
       @question.body = '' 
       @question.label = '' 
+      expire_action :action => :index
     end
   end
 
@@ -52,6 +56,7 @@ class SurveyQuestionsController < ApplicationController
     if @question.update_attributes params[:survey_question]
       @survey.version!(current_member.id)
       @question.reload
+      expire_action :action => :index
     end
     @participant_response = ParticipantResponse.new
   end
@@ -59,6 +64,7 @@ class SurveyQuestionsController < ApplicationController
   def update_positions
     if @survey.may_edit?(current_member)
       @survey.update_question_positions! params[:survey_question]
+      expire_action :action => :index
       render :nothing => true
     else
       render :text => "alert('You cannot edit this survey.');"
@@ -68,6 +74,7 @@ class SurveyQuestionsController < ApplicationController
   def destroy
     @survey.version!(current_member.id)
     @question.destroy
+    expire_action :action => :index
   end
   
   def results
@@ -100,6 +107,12 @@ class SurveyQuestionsController < ApplicationController
           redirect_to survey_questions_path(:survey_id => @survey)
         end
         false
+      end
+    end
+    
+    def may_access?
+      unless (member_signed_in? and @survey.may_access?(current_member)) or @survey.closed? or @survey.published?
+        redirect_to survey_path(@survey)
       end
     end
 end
