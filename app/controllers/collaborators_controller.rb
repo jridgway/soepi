@@ -6,8 +6,10 @@ class CollaboratorsController < ApplicationController
   def show
     if collaborator = Collaborator.find_by_id_and_key(params[:id], params[:key])
       if collaborator.active? 
-        if member_signed_in? and collaborator.member_id != current_member.id
-          flash[:notice] = 'Sorry, this collaboration link has been actived for another member already.'
+        if member_signed_in?
+          if collaborator.member_id != current_member.id
+            flash[:notice] = 'Sorry, this collaboration link has been actived for another member already.'
+          end
         else
           flash[:notice] = "Please sign in for full access to this #{collaborator.collaborable_type.downcase}."
         end
