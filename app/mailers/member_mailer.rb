@@ -14,7 +14,11 @@ class MemberMailer < ActionMailer::Base
   def new_message(member, message)
     @member = member
     @message = message
-    attachments.inline['respond.gif'] = File.read(Rails.root.join('app', 'assets', 'images', 'respond.gif'))
+    attachments.inline['respond.gif'] = {
+      :data => File.read(Rails.root.join('app', 'assets', 'images', 'respond.gif')),
+      :mime_type => "image/png",
+      :encoding => "base64"
+    }
     inline_layout_images
     mail(:to => member.email, :subject => "New Message")
   end
@@ -27,7 +31,11 @@ class MemberMailer < ActionMailer::Base
   end
 
   def inline_layout_images(others={})
-    attachments.inline['header.png'] = File.read(Rails.root.join('app', 'assets', 'images', 'soepi-logo-light-bg.png'))
+    attachments.inline['header.png'] = {
+      :data => File.read(Rails.root.join('app', 'assets', 'images', 'soepi-logo-light-bg.png')),
+      :mime_type => "image/png",
+      :encoding => "base64"
+    }
   end  
 
   def avatar_url(member, size=100)
