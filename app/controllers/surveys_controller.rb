@@ -18,7 +18,7 @@ class SurveysController < ApplicationController
     :cache_path => Proc.new {|controller| cache_expirary_key(controller.params)}, 
     :expires_in => 2.hours
   cache_sweeper :surveys_sweeper, :only => [:create, :update, :destroy, :submit_for_review, :request_changes, 
-    :launch, :reject, :close]
+    :launch, :reject, :close, :pilot, :stop_pilot]
 
   def index
     @surveys = Survey.live.page(params[:page])
