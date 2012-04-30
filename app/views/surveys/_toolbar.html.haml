@@ -43,7 +43,7 @@
               = link_to 'Launch', launch_survey_path(@survey), :class => 'button', :method => 'put'
               %button{:id => 'cancel-launch2', :class => 'button'} Cancel
     .owner-only{:'data-member-id' => @survey.member_id}
-      - if @survey.may_edit?(current_member)
+      .state-not-review-requested.state-not-launched.state-not-closed.state-not-published{:'data-state' => @survey.state}
         %button{:id => 'delete', :icon => 'ui-icon-trash', :class => 'button'} Delete
         #delete-message{:style => 'display:none', :title => 'Delete this Survey'}
           %p 
@@ -70,7 +70,6 @@
           #pilot-message{:style => 'display:none', :title => 'Pilot this Survey'}
             %p 
               Pilot this survey before launching it in order to determine the effectiveness of each question.
-              After starting the pilot, you need to share the URL of this survey with others in order to get responses.
             %p
               The pilot will end once 30 members have participated, or, alternateively, you can monitor the responses
               as they come in and end the pilot when you're ready to change the questions or launch the survey.
