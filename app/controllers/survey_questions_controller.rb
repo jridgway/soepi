@@ -10,19 +10,15 @@ class SurveyQuestionsController < ApplicationController
   caches_action :index, :expires_in => 2.hours
 
   def index
-    if (member_signed_in? and @survey.may_access?(current_member)) or @survey.closed? or @survey.published?
-      @questions = @survey.questions.roots.includes(:choices => [:child_questions]).all
-      @question = @survey.questions.new params[:survey_question]
-      @open_graph_meta = {
-        :url => survey_url(@survey),
-        :title => @survey.title,
-        :description => @survey.description,
-        :image_url => "#{request.protocol}#{request.host_with_port}/assets/soepi-logo-light-bg.png",
-        :type => 'Survey'
-      }
-    else
-      redirect_to survey_path(@survey)
-    end
+    @questions = @survey.questions.roots.includes(:choices => [:child_questions]).all
+    @question = @survey.questions.new params[:survey_question]
+    @open_graph_meta = {
+      :url => survey_url(@survey),
+      :title => @survey.title,
+      :description => @survey.description,
+      :image_url => "#{request.protocol}#{request.host_with_port}/assets/soepi-logo-light-bg.png",
+      :type => 'Survey'
+    }
   end
 
   def show
