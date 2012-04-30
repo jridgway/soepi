@@ -3,9 +3,11 @@ class SurveysSweeper < ActionController::Caching::Sweeper
 
   def after_save(survey)
     Rails.cache.write :surveys_cache_expirary_key, rand.to_s[2..-1]
+    expire_action(:controller => 'survey_questions', :action => 'index', :survey_id => survey.id)
   end
 
   def after_destroy(survey)
     Rails.cache.write :surveys_cache_expirary_key, rand.to_s[2..-1]
+    expire_action(:controller => 'survey_questions', :action => 'index', :survey_id => survey.id)
   end
 end

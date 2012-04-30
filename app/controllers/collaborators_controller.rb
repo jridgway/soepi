@@ -3,6 +3,8 @@ class CollaboratorsController < ApplicationController
   before_filter :load_collaborable, :except => [:show]
   before_filter :authorize!, :except => [:show]
   
+  cache_sweeper :collaborators_sweeper, :only => [:create, :destroy]
+  
   def show
     if collaborator = Collaborator.find_by_id_and_key(params[:id], params[:key])
       if collaborator.active? 
