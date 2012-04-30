@@ -5,29 +5,30 @@ class CollaboratorsController < ApplicationController
   
   def show
     if collaborator = Collaborator.find_by_id_and_key(params[:id], params[:key])
-      if member_signed_in?
-        current_member.apply_collaborator(collaborator)
-        case collaborator.collaborable_type.downcase
-          when 'survey' then
-            redirect_to survey_path(collaborator.collaborable)
-          when 'report' then
-            redirect_to survey_path(collaborator.collaborable)
+      if collaborator.active? 
+        if member_signed_in? and collaborator.member_id != current_member.id
+          flash[:notice] = 'Sorry, this collaboration link has been actived for another member already.'
+        else
+          flash[:notice] = "Please sign in for full access to this #{collaborator.collaborable_type.downcase}."
         end
-        flash[:notice] = "Yay, you are now a collaborator for this #{collaborator.collaborable_type.downcase}."
       else
-        cookies.encrypted[:collaborator_key] = collaborator.key
-        flash[:notice] = "Almost finished... but first you must sign in or sign up to *collaborate* on this " +
-          "#{collaborator.collaborable_type.downcase}."
-        case collaborator.collaborable_type.downcase
-          when 'survey' then
-            redirect_to survey_path(collaborator.collaborable)
-          when 'report' then
-            redirect_to survey_path(collaborator.collaborable)
+        if member_signed_in?
+          current_member.apply_collaborator(collaborator)
+          flash[:notice] = "Yay, you are now a collaborator for this #{collaborator.collaborable_type.downcase}."
+        else
+          cookies.encrypted[:collaborator_key] = collaborator.key
+          flash[:notice] = "Almost finished... but first you must sign in or sign up to *collaborate* on this " +
+            "#{collaborator.collaborable_type.downcase}."
         end
       end
     else 
-      flash[:notice] = 'Sorry, your collaboration link has expired or it is not valid. Please try again or contact us for help.'
-      redirect_to root_path
+      flash[:notice] = 'Sorry, your collaboration link is not valid. Please try again or contact us for help.'
+    end
+    case collaborator.collaborable_type.downcase
+      when 'survey' then
+        redirect_to survey_path(collaborator.collaborable)
+      when 'report' then
+        redirect_to survey_path(collaborator.collaborable)
     end
   end
   

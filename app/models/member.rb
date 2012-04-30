@@ -217,6 +217,6 @@ class Member < ActiveRecord::Base
   end
   
   def apply_collaborator(collaborator)
-    collaborator.update_attributes :active => true, :member_id => id, :email => nil, :key => nil
+    collaborator.update_attributes :active => true, :member_id => id, :email => nil
   end
 end
