@@ -8,7 +8,7 @@
   %ul.listing.reset
     - @notifications.each do |notification|
       %li[notification]
-        %h4= "#{notification.message}:"
+        %h4= "#{timeago notification.created_at}, #{notification.message}:".html_safe
         - case notification.notifiable.class.to_s when 'Survey' then
           = render :partial => '/surveys/survey', :locals => {:survey => notification.notifiable}
         - when 'Report' then
