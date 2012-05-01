@@ -41,8 +41,8 @@ class Report < ActiveRecord::Base
   scope :failing, where(:state => 'failing')
   scope :published, where(:state => 'published')
   scope :owned_or_collaborating, lambda {|member_id|
-    where('reports.member_id = :id or collaborators.member_id = :id', :id => member_id).
-    joins("left outer join collaborators on collaborators.collaborable_type = 'Report' and collaborable_id = reports.id")
+    joins("left outer join collaborators on collaborators.collaborable_type = 'Report' and collaborable_id = reports.id and collaborators.member_id = #{member_id}").
+    where("reports.member_id = :id or collaborators.member_id = :id", :id => member_id)
   }
 
   def posted_by

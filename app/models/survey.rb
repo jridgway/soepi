@@ -26,8 +26,8 @@ class Survey < ActiveRecord::Base
   scope :closed, where(:state => 'closed')
   scope :published, where(:state => 'published')
   scope :owned_or_collaborating, lambda {|member_id|
-    where('surveys.member_id = :id or collaborators.member_id = :id', :id => member_id).
-    joins("left outer join collaborators on collaborators.collaborable_type = 'Survey' and collaborable_id = surveys.id")
+    joins("left outer join collaborators on collaborators.collaborable_type = 'Survey' and collaborable_id = surveys.id and collaborators.member_id = #{member_id}").
+    where("surveys.member_id = :id or collaborators.member_id = :id", :id => member_id)
   }
   scope :not_by_visitor, where('member_id != 0 and member_id is not null')
   
