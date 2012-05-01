@@ -25,14 +25,15 @@ class CollaboratorsController < ApplicationController
             "#{collaborator.collaborable_type.downcase}."
         end
       end
+      case collaborator.collaborable_type.downcase
+        when 'survey' then
+          redirect_to survey_path(collaborator.collaborable)
+        when 'report' then
+          redirect_to survey_path(collaborator.collaborable)
+      end
     else 
       flash[:notice] = 'Sorry, your collaboration link is not valid. Please try again or contact us for help.'
-    end
-    case collaborator.collaborable_type.downcase
-      when 'survey' then
-        redirect_to survey_path(collaborator.collaborable)
-      when 'report' then
-        redirect_to survey_path(collaborator.collaborable)
+      redirect_to root_path
     end
   end
   
