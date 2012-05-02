@@ -94,6 +94,9 @@ $(document).ready(function() {
     $('.handle').live('click', function() { 
       $(this).siblings('.choices').toggle('blind');
     });
+    $('.new_survey_question, .edit_survey_question').live('submit' function() {
+      wait();
+    });
   }
   if(controller_name == 'surveys' && action_name == 'downloads') {
     $('#downloads a.copy').each(function() {

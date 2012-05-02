@@ -22,10 +22,8 @@
           pic: '',
           unseen_messages_count: '0'
         }
-    <% end %> 
-    hide_states();  
+    <% end %> ;  
     show_hide_member_related(); 
-    hide_states();
     init_sign_in_links();
     select_details_menu_item();
     if($('#content-above-top :visible').length == 0) {
@@ -61,6 +59,7 @@
   
   <% if current_member %> 
     function show_hide_member_related() {
+      hide_states();
       set_followable_toggle();      
       hide_all_member_related();
       $('.members-only').show();
@@ -84,6 +83,7 @@
         '.owner-and-collaborators-only, .owner-and-collaborators-only-until-published, ' +
         '.admins-only').show();
       <% end %> 
+      hide_states();
     }
      
     function set_followable_toggle() {
@@ -95,12 +95,14 @@
     }
   <% else %>
     function show_hide_member_related() {    
+      hide_states();
       hide_all_member_related();
       $('.visitors-only, .not-owner, .not-owner-or-collaborators, .not-admins').show();
       $('.owner-only-until-published[data-state=published], .owner-only-until-published[data-state=closed],' +
       '.owner-and-collaborators-only-until-published[data-state=published], ' +
       '.owner-and-collaborators-only-until-published[data-state=closed]').show();
       restrict_to_members();
+      hide_states();
     }
     
     $('#follow-toggle').show();
