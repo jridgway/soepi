@@ -94,7 +94,7 @@ $(document).ready(function() {
     $('.handle').live('click', function() { 
       $(this).siblings('.choices').toggle('blind');
     });
-    $('.new_survey_question, .edit_survey_question').live('submit' function() {
+    $('.new_survey_question, .edit_survey_question').live('submit', function() {
       wait();
     });
   }
