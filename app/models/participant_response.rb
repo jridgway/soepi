@@ -36,7 +36,7 @@ class ParticipantResponse < ActiveRecord::Base
   def previous_response
     participant.responses.
       joins('join survey_questions on survey_questions.id = participant_responses.question_id').
-      where('survey_questions.position < ?', question.position).
+      where('survey_questions.position < ? and survey_questions.survey_id = ?', question.position, question.survey_id).
       order('survey_questions.position desc').
       first
   end
