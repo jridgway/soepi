@@ -152,8 +152,9 @@
   
   function init_survey_question_listing() {
     <% if @survey %>
-      $('#root-questions-container.not-ordering').addClass('<%= @survey.may_edit?(current_member) ? 'editable' : 'not-editable' %>');
-      $('#root-questions-container.not-ordering').addClass('<%= @survey.results_available?(current_member) ? 'results-available' : 'results-not-available' %>');
+      $('#root-questions-container').addClass('<%= @survey.may_edit?(current_member) ? 'editable' : 'not-editable' %>');
+      $('#root-questions-container').addClass('<%= @survey.results_available?(current_member) ? 'results-available' : 'results-not-available' %>');
+      init_questions_sortable();
     <% end %>
     $('#question-search').focus(function() {
       if($('#root-questions:visible').length == 0) {

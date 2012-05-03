@@ -197,6 +197,9 @@ class Survey < ActiveRecord::Base
     after_transition any => :published do |survey, transition|
       ParticipantSurvey.compute_weights_for_survey! survey
       SurveyDownload.generate_for_survey! survey
+      Member.admins.select {|m| m.id != survey.member.id}.each do |m|
+        m.delay.notify!(survey, "#{survey.member.nickname}'s survey results have been published")
+      end
       survey.member.delay.notify!(survey, 'Your survey results have been published')
       survey.member_followers.each {|m| m.delay.notify!(survey, "#{survey.member.nickname}'s survey results have been published")}
     end

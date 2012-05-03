@@ -155,7 +155,6 @@ function init_survey_form() {
 
 function init_survey_question_form() {
   no_questions_message();
-  init_questions_sortable();
   $('#add-question').click(function() {    
     $('#new-question-dialog, #edit-question-dialog').remove();
     $('body').append('<div id="new-question-dialog" style="display:none" title="New Question">' +
