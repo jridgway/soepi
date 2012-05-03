@@ -146,14 +146,14 @@ class Survey < ActiveRecord::Base
     after_transition :drafting => :piloting do |survey, transition|
       survey.participants.destroy_all
       Member.admins.each {|m| m.delay.notify!(survey, "#{survey.member.nickname} started piloting a survey")}
-      survey.member_followers.each {|m| m.delay.notify!(self, "#{survey.member.nickname} started piloting a survey")}
+      survey.member_followers.each {|m| m.delay.notify!(survey, "#{survey.member.nickname} started piloting a survey")}
       survey.member.delay.notify!(survey, 'Your survey is being piloted')
     end
 
     after_transition :piloting => :drafting do |survey, transition|
       survey.participants.destroy_all
       Member.admins.each {|m| m.delay.notify!(survey, "#{survey.member.nickname} stopped piloting a survey")}
-      survey.member_followers.each {|m| m.delay.notify!(self, "#{survey.member.nickname} stopped piloting a survey")}
+      survey.member_followers.each {|m| m.delay.notify!(survey, "#{survey.member.nickname} stopped piloting a survey")}
       survey.member.delay.notify!(survey, 'Your survey is no longer being piloted')
     end
 
@@ -165,18 +165,18 @@ class Survey < ActiveRecord::Base
     after_transition :review_requested => :drafting do |survey, transition|
       survey.member.delay.notify!(survey, 'Your survey did not pass our review')
       survey.member.delay.message!(survey.changes_requested_by, Member.admins.all, "As your survey, #{survey.title}, did not pass our review, please see our survey guidelines in the Docs section of our site, make changes accordingly, and launch your survey once again. Please contact us if you have any questions or comments.")
-      survey.member_followers.each {|m| m.delay.notify!(self, "#{survey.member.nickname}'s survey did not pass our review")}
+      survey.member_followers.each {|m| m.delay.notify!(survey, "#{survey.member.nickname}'s survey did not pass our review")}
     end
 
     after_transition any => :rejected do |survey, transition|
       survey.member.delay.notify!(survey, 'Sorry, your survey was rejected')
-      survey.member_followers.each {|m| m.delay.notify!(self, "#{survey.member.nickname}'s survey was rejected")}
+      survey.member_followers.each {|m| m.delay.notify!(survey, "#{survey.member.nickname}'s survey was rejected")}
     end
 
     after_transition any => :launched do |survey, transition|
       survey.participants.destroy_all
       survey.member.notify!(survey, 'Yay, your survey has launched')
-      survey.member_followers.each {|m| m.notify!(self, "#{survey.member.nickname}'s survey was opened for participation")}
+      survey.member_followers.each {|m| m.notify!(survey, "#{survey.member.nickname}'s survey was opened for participation")}
     end
 
     after_transition any => :closed do |survey, transition|
