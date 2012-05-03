@@ -76,7 +76,7 @@ class Participant < ActiveRecord::Base
   end
 
   def self.find_by_member(member)
-    find_by_anonymous_key generate_anonymous_key(member)
+    where(:anonymous_key => generate_anonymous_key(member)).first
   end
   
   def has_taken_survey?(survey_id)
