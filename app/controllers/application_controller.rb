@@ -52,7 +52,7 @@ class ApplicationController < ActionController::Base
       if member_signed_in? and cookies.encrypted["pin_#{current_member.id}"]
         unless @current_participant
           current_member.pin = cookies.encrypted["pin_#{current_member.id}"]
-          unless @current_participant = Participant.find_by_member current_member
+          unless (@current_participant = Participant.find_by_member current_member)
             current_member.pin = cookies.encrypted["pin_#{current_member.id}"] = nil
           end
         end
