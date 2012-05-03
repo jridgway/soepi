@@ -32,7 +32,8 @@
     .block
       = link_to 'Create a Survey', new_survey_path, :class => 'restrict-to-members button', :icon => 'ui-icon-document'        
       = link_to 'Create a Report', new_report_path, :class => 'restrict-to-members button', :icon => 'ui-icon-document'    
-    %h3 Browse Surveys
+    %h3 Open Surveys
+    = "<p>No surveys are currently open. Come back soon as there are <strong>#{Survey.drafting.count}</strong> surveys being drafted.</p>".html_safe if Survey.live.empty?
     %ul.listing.small.reset
       - Survey.live.limit(3).each do |survey|
         %li

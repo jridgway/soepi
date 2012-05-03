@@ -145,10 +145,16 @@ class Survey < ActiveRecord::Base
 
     after_transition :drafting => :piloting do |survey, transition|
       survey.participants.destroy_all
+      Member.admins.each {|m| m.delay.notify!(survey, "#{survey.member.nickname} started piloting a survey")}
+      survey.member_followers.each {|m| m.delay.notify!(self, "#{survey.member.nickname} started piloting a survey")}
+      survey.member.delay.notify!(survey, 'Your survey is being piloted')
     end
 
     after_transition :piloting => :drafting do |survey, transition|
       survey.participants.destroy_all
+      Member.admins.each {|m| m.delay.notify!(survey, "#{survey.member.nickname} stopped piloting a survey")}
+      survey.member_followers.each {|m| m.delay.notify!(self, "#{survey.member.nickname} stopped piloting a survey")}
+      survey.member.delay.notify!(survey, 'Your survey is no longer being piloted')
     end
 
     after_transition any => :review_requested do |survey, transition|

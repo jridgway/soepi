@@ -1,0 +1,6 @@
+%div[survey]
+  %a{:href => survey_path(survey), :title => survey.title}
+    = avatar(survey.member, 30, false)
+    = survey.member.nickname
+    \/
+    %strong= survey.title

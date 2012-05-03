@@ -40,31 +40,45 @@
     }
   }
 
-.bp .listing.small ul
+.bp .listing.small
   {
   margin: 0;
   padding: 0;
   
   li 
     {
-    margin: 0;
+    margin: 0 0 10px 0;
     padding: 0;
     
-    .survey
+    a
       {
+      display: block;
+      @include clearfix;
       margin: 0;
-      padding: 0;
+      padding: 5px;
+      font-size: 1.2em;
+      font-style: none;
       
-      h5
+      &:hover
         {
-        margin: 0 0 15px 0;
-        padding: 5px 0 0 0;
+        -moz-border-radius: 4px;
+        -webkit-border-radius: 4px;
+        border-radius: 4px;
+        border: 1px solid $blue;
+        text-decoration: none;
+        padding: 4px;
         }
     
       .avatar
         {
         position: relative;
         top: 1px;
+        }
+        
+      strong
+        {
+        color: $blue;
+        font-size: 1.25em;
         }
       }
     }
