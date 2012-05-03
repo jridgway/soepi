@@ -26,6 +26,7 @@
               - Survey.live.limit(3).each do |survey|
                 %li
                   = render :partial => '/surveys/survey', :locals => {:survey => survey}
+            %small= link_to 'View All Surveys &raquo;'.html_safe, surveys_path if Survey.live.count > 3
             #drafting 
               %strong #{Survey.drafting.count} 
               surveys are currently being drafted. 

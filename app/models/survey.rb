@@ -20,7 +20,7 @@ class Survey < ActiveRecord::Base
   scope :piloting, where(:state => 'piloting')
   scope :review_requested, where(:state => 'review_requested')
   scope :rejected, where(:state => 'rejected')
-  scope :live, where(['state in (?)', %w{published launched closed}])
+  scope :live, where(['state in (?)', %w{piloting published launched closed}])
   scope :closed_or_published, where(['state in (?)', %w{published closed}])
   scope :launched, where(:state => 'launched')
   scope :closed, where(:state => 'closed')

@@ -31,8 +31,14 @@
       Need help? #{link_to 'Contact us', main_app.new_message_path(:members => Member.admins.collect(&:nickname).join('-'))}!
     .block
       = link_to 'Create a Survey', new_survey_path, :class => 'restrict-to-members button', :icon => 'ui-icon-document'        
-      = link_to 'Create a Report', new_report_path, :class => 'restrict-to-members button', :icon => 'ui-icon-document'     
-    
+      = link_to 'Create a Report', new_report_path, :class => 'restrict-to-members button', :icon => 'ui-icon-document'    
+    %h3 Browse Surveys
+    %ul.listing.small.reset
+      - Survey.live.limit(3).each do |survey|
+        %li
+          = render :partial => '/surveys/survey_small', :locals => {:survey => survey} 
+    %small= link_to 'View All Surveys &raquo;'.html_safe, surveys_path if Survey.live.count > 3
+  
   = render :partial => '/shared/content_page', :locals => {:with_inner_content_div => false}
   
 - else

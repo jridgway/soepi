@@ -5,7 +5,7 @@
       = link_to survey.member.nickname, member_path(survey.member)
       \/
       %strong= link_to survey.title, survey_path(survey)
-    - if survey.launched? or survey.drafting?
+    - if survey.launched? or survey.drafting? or survey.piloting?
       %ul.attributes
         %li Status: #{survey.state_human}
         %li Survey posted: #{timeago survey.created_at}
