@@ -8,7 +8,7 @@
   %strong= link_to @survey.title, survey_path(@survey)
   %ul.attributes
     %li Status: #{@survey.state_human}
-    - unless @survey.launched? or @survey.drafting?
+    - unless @survey.launched? or @survey.drafting? or @survey.piloting?
       - if @survey.forked_from
         %li 
           Forked from: #{link_to @survey.forked_from.member.nickname, member_path(@survey.forked_from.member)} 
