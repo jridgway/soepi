@@ -145,20 +145,26 @@ class Survey < ActiveRecord::Base
 
     after_transition :drafting => :piloting do |survey, transition|
       survey.participants.destroy_all
-      Member.admins.each {|m| m.delay.notify!(survey, "#{survey.member.nickname} started piloting a survey")}
+      Member.admins.select {|m| m.id != survey.member.id}.each do |m| 
+        m.delay.notify!(survey, "#{survey.member.nickname} started piloting a survey")
+      end
       survey.member_followers.each {|m| m.delay.notify!(survey, "#{survey.member.nickname} started piloting a survey")}
       survey.member.delay.notify!(survey, 'Your survey is being piloted')
     end
 
     after_transition :piloting => :drafting do |survey, transition|
       survey.participants.destroy_all
-      Member.admins.each {|m| m.delay.notify!(survey, "#{survey.member.nickname} stopped piloting a survey")}
+      Member.admins.select {|m| m.id != survey.member.id}.each do |m|
+        m.delay.notify!(survey, "#{survey.member.nickname} stopped piloting a survey")
+      end
       survey.member_followers.each {|m| m.delay.notify!(survey, "#{survey.member.nickname} stopped piloting a survey")}
       survey.member.delay.notify!(survey, 'Your survey is no longer being piloted')
     end
 
     after_transition any => :review_requested do |survey, transition|
-      Member.admins.each {|m| m.delay.notify!(survey, "#{survey.member.nickname} submitted a survey for review")}
+      Member.admins.select {|m| m.id != survey.member.id}.each do |m|
+        m.delay.notify!(survey, "#{survey.member.nickname} submitted a survey for review")
+      end
       survey.member.delay.notify!(survey, 'Your survey was received for review')
     end
 
@@ -175,20 +181,23 @@ class Survey < ActiveRecord::Base
 
     after_transition any => :launched do |survey, transition|
       survey.participants.destroy_all
-      survey.member.notify!(survey, 'Yay, your survey has launched')
+      survey.member.notify!(survey, 'Your survey has launched')
       survey.member_followers.each {|m| m.notify!(survey, "#{survey.member.nickname}'s survey was opened for participation")}
     end
 
     after_transition any => :closed do |survey, transition|
-      Member.admins.each {|m| m.delay.notify!(survey, "#{survey.member.nickname}'s survey was closed, results are coming soon")}
-      survey.member_followers.each {|m| m.delay.notify!(survey, "#{survey.member.nickname}'s survey was closed, results are coming soon")}
+      Member.admins.select {|m| m.id != survey.member.id}.each do |m|
+        m.delay.notify!(survey, "#{survey.member.nickname}'s survey was closed, results are coming soon")
+      end
+      survey.member.delay.notify!(survey, 'Your survey was closed (results coming soon)')
+      survey.member_followers.each {|m| m.delay.notify!(survey, "#{survey.member.nickname}'s survey was closed (results coming soon)")}
       survey.delay.publish!
     end
 
     after_transition any => :published do |survey, transition|
       ParticipantSurvey.compute_weights_for_survey! survey
       SurveyDownload.generate_for_survey! survey
-      survey.member.delay.notify!(survey, 'Yay, your survey results have been published')
+      survey.member.delay.notify!(survey, 'Your survey results have been published')
       survey.member_followers.each {|m| m.delay.notify!(survey, "#{survey.member.nickname}'s survey results have been published")}
     end
   end

@@ -37,6 +37,7 @@ module Extensions
             members_to_notifiy << member
           end 
           members_to_notifiy.each {|m| m.delay.notify!(self, "#{member_2.nickname} reverted to version #{version.position}")}
+          member_2.delay.notify!(self, "You reverted to version #{version.position}")
         end
       end
       
