@@ -19,6 +19,9 @@
     = f.input :password
     .actions
       = f.submit "Sign in", :class => 'button'
+      %em
+        Don't have an account?
+        %strong= link_to 'Sign Up!', main_app.new_member_registration_path
 
 - content_for :body_content_right do     
   = render :partial => "/members/shared/links"
