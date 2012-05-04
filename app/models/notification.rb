@@ -26,4 +26,11 @@ class Notification < ActiveRecord::Base
       logger.info "Delivered #{notifications.length} notifications to #{member.nickname}"
     end
   end
+  
+  def message_long
+    case notifiable_type 
+      when 'Survey', 'Report' then "#{message}, #{notifiable.title}"
+      else message
+    end
+  end
 end

@@ -2,7 +2,7 @@
 
 Below are your latest notifications:
 
-<%= @notifications.collect {|n| main_app.url_for(n.notifiable)}.join("\n") %>
+<%= @notifications.collect {|n| "#{n.message_long}: #{main_app.url_for(n.notifiable)}"}.join("\n") %>
 
 Thanks,
 SoEpi.org
